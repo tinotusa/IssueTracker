@@ -9,9 +9,54 @@ import SwiftUI
 
 struct AddProjectView: View {
     @Environment(\.managedObjectContext) private var viewContext
+    @StateObject private var viewModel = AddProjectViewModel()
+    @Environment(\.dismiss) private var dismiss
     
     var body: some View {
-        Text("Hello, World!")
+        VStack {
+            header
+            
+            ScrollView(showsIndicators: false) {
+                VStack(alignment: .leading) {
+                    Text(viewModel.title)
+                        .titleStyle()
+                        .padding(.bottom)
+                    
+                    Text(viewModel.projectNamePrompt)
+                    CustomTextField(viewModel.projectNamePlaceholder, text: $viewModel.projectName)
+                    
+                    Text(viewModel.datePrompt)
+                    DatePicker("Start date", selection: $viewModel.startDate, displayedComponents: [.date])
+                        .labelsHidden()
+                        .padding(.bottom)
+                    
+                    ProminentButton(viewModel.addButtonTitle) {
+                        viewModel.addProject()
+                    }
+                    .disabled(viewModel.addButtonDisabled)
+                    .frame(maxWidth: .infinity, alignment: .center)
+                }
+            }
+        }
+        .bodyStyle()
+        .padding()
+        .background(Color.customBackground)
+        .presentationDragIndicator(.visible)
+    }
+}
+
+private extension AddProjectView {
+    var header: some View {
+        HStack {
+            PlainButton("Close") {
+                dismiss()
+            }
+            Spacer()
+            PlainButton("Add project") {
+                
+            }
+            .disabled(viewModel.addButtonDisabled)
+        }
     }
 }
 
