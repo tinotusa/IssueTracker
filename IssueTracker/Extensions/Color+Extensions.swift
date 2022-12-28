@@ -13,6 +13,7 @@ extension Color {
     static let buttonDisabled = Color("buttonDisabled")
     static let buttonTextDisabled = Color("buttonTextDisabled")
     static let buttonLabel = Color("buttonLabel")
+    static let buttonLabelDisabled = Color("buttonLabelDisabled")
     static let buttonText = Color("buttonText")
     static let customSecondary = Color("customSecondary")
     static let deleteColour = Color("deleteColour")
