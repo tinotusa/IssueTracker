@@ -31,6 +31,11 @@
 		21E6D2AD295BDFBF00BB4AA6 /* ButtonStyles.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21E6D2AC295BDFBF00BB4AA6 /* ButtonStyles.swift */; };
 		21E6D2AF295BEA6800BB4AA6 /* SF-Pro-Text-Light.otf in Resources */ = {isa = PBXBuildFile; fileRef = 21E6D2AE295BEA6800BB4AA6 /* SF-Pro-Text-Light.otf */; };
 		21E6D2B3295BF94800BB4AA6 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21E6D2B2295BF94800BB4AA6 /* HomeView.swift */; };
+		21E6D2B6295BF9D900BB4AA6 /* HomeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21E6D2B5295BF9D900BB4AA6 /* HomeViewModel.swift */; };
+		21E6D2BA295C010400BB4AA6 /* AddProjectViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21E6D2B9295C010400BB4AA6 /* AddProjectViewModel.swift */; };
+		21E6D2BD295C4B8400BB4AA6 /* CustomTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21E6D2BC295C4B8400BB4AA6 /* CustomTextField.swift */; };
+		21E6D2BF295C4DD900BB4AA6 /* AddProjectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21E6D2BE295C4DD900BB4AA6 /* AddProjectView.swift */; };
+		21E6D2C1295C5B4900BB4AA6 /* ProjectRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21E6D2C0295C5B4900BB4AA6 /* ProjectRowView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -78,6 +83,11 @@
 		21E6D2AC295BDFBF00BB4AA6 /* ButtonStyles.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonStyles.swift; sourceTree = "<group>"; };
 		21E6D2AE295BEA6800BB4AA6 /* SF-Pro-Text-Light.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SF-Pro-Text-Light.otf"; sourceTree = "<group>"; };
 		21E6D2B2295BF94800BB4AA6 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
+		21E6D2B5295BF9D900BB4AA6 /* HomeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewModel.swift; sourceTree = "<group>"; };
+		21E6D2B9295C010400BB4AA6 /* AddProjectViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddProjectViewModel.swift; sourceTree = "<group>"; };
+		21E6D2BC295C4B8400BB4AA6 /* CustomTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTextField.swift; sourceTree = "<group>"; };
+		21E6D2BE295C4DD900BB4AA6 /* AddProjectView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddProjectView.swift; sourceTree = "<group>"; };
+		21E6D2C0295C5B4900BB4AA6 /* ProjectRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProjectRowView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -128,6 +138,7 @@
 		2150C83C295972E0006CD7D2 /* IssueTracker */ = {
 			isa = PBXGroup;
 			children = (
+				21E6D2B4295BF9CF00BB4AA6 /* View models */,
 				21E6D2B1295BF89700BB4AA6 /* Views */,
 				21E6D2A9295BD9A800BB4AA6 /* Extensions */,
 				21E6D2A8295BD8BC00BB4AA6 /* Resources */,
@@ -212,10 +223,30 @@
 		21E6D2B1295BF89700BB4AA6 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				21E6D2BB295C4B7900BB4AA6 /* Components */,
 				2150C83F295972E0006CD7D2 /* ContentView.swift */,
 				21E6D2B2295BF94800BB4AA6 /* HomeView.swift */,
+				21E6D2BE295C4DD900BB4AA6 /* AddProjectView.swift */,
 			);
 			path = Views;
+			sourceTree = "<group>";
+		};
+		21E6D2B4295BF9CF00BB4AA6 /* View models */ = {
+			isa = PBXGroup;
+			children = (
+				21E6D2B5295BF9D900BB4AA6 /* HomeViewModel.swift */,
+				21E6D2B9295C010400BB4AA6 /* AddProjectViewModel.swift */,
+			);
+			path = "View models";
+			sourceTree = "<group>";
+		};
+		21E6D2BB295C4B7900BB4AA6 /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				21E6D2BC295C4B8400BB4AA6 /* CustomTextField.swift */,
+				21E6D2C0295C5B4900BB4AA6 /* ProjectRowView.swift */,
+			);
+			path = Components;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -349,6 +380,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				21E6D2BA295C010400BB4AA6 /* AddProjectViewModel.swift in Sources */,
+				21E6D2B6295BF9D900BB4AA6 /* HomeViewModel.swift in Sources */,
 				21E6D29C295BC85700BB4AA6 /* Attachment+CoreDataProperties.swift in Sources */,
 				21E6D2A0295BC85700BB4AA6 /* Issue+CoreDataProperties.swift in Sources */,
 				21E6D29F295BC85700BB4AA6 /* Issue+CoreDataClass.swift in Sources */,
@@ -358,10 +391,13 @@
 				2150C840295972E0006CD7D2 /* ContentView.swift in Sources */,
 				2150C84A295972E2006CD7D2 /* IssueTracker.xcdatamodeld in Sources */,
 				2150C83E295972E0006CD7D2 /* IssueTrackerApp.swift in Sources */,
+				21E6D2BD295C4B8400BB4AA6 /* CustomTextField.swift in Sources */,
 				21E6D2B3295BF94800BB4AA6 /* HomeView.swift in Sources */,
 				21E6D2AD295BDFBF00BB4AA6 /* ButtonStyles.swift in Sources */,
+				21E6D2BF295C4DD900BB4AA6 /* AddProjectView.swift in Sources */,
 				21E6D2A3295BC85700BB4AA6 /* Tag+CoreDataClass.swift in Sources */,
 				21E6D29D295BC85700BB4AA6 /* Comment+CoreDataClass.swift in Sources */,
+				21E6D2C1295C5B4900BB4AA6 /* ProjectRowView.swift in Sources */,
 				21E6D2AB295BD9B500BB4AA6 /* Color+Extensions.swift in Sources */,
 				21E6D2A1295BC85700BB4AA6 /* Project+CoreDataClass.swift in Sources */,
 				21E6D2A7295BD4C500BB4AA6 /* TextStyles.swift in Sources */,

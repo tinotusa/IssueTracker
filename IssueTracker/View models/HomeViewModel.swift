@@ -5,8 +5,12 @@
 //  Created by Tino on 28/12/2022.
 //
 
-import Foundation
+import os
+import SwiftUI
+import CoreData
 
 final class HomeViewModel: ObservableObject {
-    
+    let title: LocalizedStringKey = "Projects"
+    @Published var showingAddProjectView = false
+    let log = Logger(subsystem: "com.tinotusa.IssueTracker", category: "HomeViewModel")
 }
