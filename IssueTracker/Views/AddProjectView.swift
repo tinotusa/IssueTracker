@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Combine
 
 struct AddProjectView: View {
     @Environment(\.managedObjectContext) private var viewContext
@@ -24,6 +25,7 @@ struct AddProjectView: View {
                     
                     Text(viewModel.projectNamePrompt)
                     CustomTextField(viewModel.projectNamePlaceholder, text: $viewModel.projectName)
+                        .onReceive(Just(viewModel.projectName), perform: viewModel.filterName)
                     
                     Text(viewModel.datePrompt)
                     DatePicker("Start date", selection: $viewModel.startDate, displayedComponents: [.date])

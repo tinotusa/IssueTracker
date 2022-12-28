@@ -27,4 +27,16 @@ final class AddProjectViewModel: ObservableObject {
     func addProject() {
         
     }
+    
+    /// Filters the given name by removing non alphanumerics and non spaces.
+    /// - Parameter name: The name to filter.
+    func filterName(_ name: String) {
+        var invalidCharacters = CharacterSet.alphanumerics
+        invalidCharacters.formUnion(.whitespaces)
+        invalidCharacters.invert()
+        let filteredValue = name.components(separatedBy: invalidCharacters).joined(separator: "")
+        if projectName != filteredValue {
+            projectName = filteredValue
+        }
+    }
 }
