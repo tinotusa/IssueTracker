@@ -22,6 +22,10 @@ extension Project {
     @NSManaged public var startDate: Date?
     @NSManaged public var issues: NSOrderedSet?
 
+    
+    var latestIssue: Issue? {
+        issues?.lastObject as? Issue
+    }
 }
 
 // MARK: Generated accessors for issues
