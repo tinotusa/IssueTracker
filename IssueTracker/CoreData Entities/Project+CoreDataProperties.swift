@@ -19,6 +19,7 @@ extension Project {
     @NSManaged public var dateCreated: Date?
     @NSManaged public var id: UUID?
     @NSManaged public var name: String?
+    @NSManaged public var startDate: Date?
     @NSManaged public var issues: NSOrderedSet?
 
 }
