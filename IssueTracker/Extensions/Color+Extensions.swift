@@ -8,7 +8,7 @@
 import SwiftUI
 
 extension Color {
-    static let background = Color("background")
+    static let customBackground = Color("customBackground")
     static let buttonBackground = Color("buttonBackground")
     static let buttonLabel = Color("buttonLabel")
     static let buttonText = Color("buttonText")
