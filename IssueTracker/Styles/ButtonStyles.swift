@@ -91,6 +91,7 @@ struct PlainButton: View {
             action()
         }
         .foregroundColor(!isEnabled ? .buttonLabelDisabled : .buttonLabel)
+        .bodyStyle()
     }
 }
 
