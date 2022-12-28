@@ -30,32 +30,29 @@ private struct TextStyle: ViewModifier {
     /// The fonts in the app.
     enum FontType {
         case courierNew
+        case sfPro
         
         var fontName: String {
             switch self {
             case .courierNew: return "Courier New"
+            case .sfPro: return "SFProText-Light"
             }
         }
     }
     
     private let size: Double
-    private let font: FontType?
+    private let font: FontType
     private let textStyle: Font.TextStyle
     
-    init(size: Double, font: FontType? = nil, relativeTo textStyle: Font.TextStyle) {
+    init(size: Double, font: FontType = .sfPro, relativeTo textStyle: Font.TextStyle) {
         self.size = size
         self.font = font
         self.textStyle = textStyle
     }
     
     func body(content: Content) -> some View {
-        if let font {
-            content
-                .font(.custom(font.fontName, size: size, relativeTo: textStyle))
-        } else {
-            content
-                .font(.system(size: size))
-        }
+        content
+            .font(.custom(font.fontName, size: size, relativeTo: textStyle))
     }
 }
 
@@ -78,7 +75,13 @@ extension View {
             .fontWeight(.light)
             .foregroundColor(.text)
     }
-            
+    
+    func buttonTextStyle() -> some View {
+        modifier(TextStyle(size: 18, relativeTo: .body))
+            .fontWeight(.light)
+            .foregroundColor(.buttonText)
+    }
+    
     func footerStyle() -> some View {
         modifier(TextStyle(size: 12, relativeTo: .footnote))
             .fontWeight(.light)
