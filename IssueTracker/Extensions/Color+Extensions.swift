@@ -10,6 +10,8 @@ import SwiftUI
 extension Color {
     static let customBackground = Color("customBackground")
     static let buttonBackground = Color("buttonBackground")
+    static let buttonDisabled = Color("buttonDisabled")
+    static let buttonTextDisabled = Color("buttonTextDisabled")
     static let buttonLabel = Color("buttonLabel")
     static let buttonText = Color("buttonText")
     static let customSecondary = Color("customSecondary")
