@@ -24,9 +24,55 @@ struct ButtonStyles: View {
                 
             }
             .disabled(true)
+            
+            TagButton("Todo1") {
+                
+            }
+            
+            TagButton("Todo") {
+                
+            }
+            .disabled(true)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(Color.customBackground)
+    }
+}
+
+struct TagButton: View {
+    private let title: String
+    private let action: () -> Void
+    @State private var isSelected = false
+    @Environment(\.isEnabled) private var isEnabled
+    
+    init(_ title: String, action: @escaping () -> Void) {
+        self.title = title
+        self.action = action
+    }
+    
+    var body: some View {
+        Button {
+            isSelected.toggle()
+            action()
+        } label: {
+            Text(title)
+                .foregroundColor(isSelected ? .tagTextSelected : .tagTextUnselected)
+                .bodyStyle()
+                .padding(.vertical, 2)
+                .padding(.horizontal, 10)
+                .background(isSelected ? Color.tagSelected : Color.tagUnselected)
+                .cornerRadius(Constants.cornerRadius)
+                .background {
+                    RoundedRectangle(cornerRadius: Constants.cornerRadius)
+                        .stroke(lineWidth: 1)
+                        .opacity(0.4)
+                        .foregroundColor(.black)
+                }
+        }
+    }
+    
+    private enum Constants {
+        static let cornerRadius = 5.0
     }
 }
 
