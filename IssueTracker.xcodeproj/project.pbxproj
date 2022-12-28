@@ -28,6 +28,8 @@
 		21E6D2A4295BC85700BB4AA6 /* Tag+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21E6D29A295BC85700BB4AA6 /* Tag+CoreDataProperties.swift */; };
 		21E6D2A7295BD4C500BB4AA6 /* TextStyles.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21E6D2A6295BD4C500BB4AA6 /* TextStyles.swift */; };
 		21E6D2AB295BD9B500BB4AA6 /* Color+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21E6D2AA295BD9B500BB4AA6 /* Color+Extensions.swift */; };
+		21E6D2AD295BDFBF00BB4AA6 /* ButtonStyles.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21E6D2AC295BDFBF00BB4AA6 /* ButtonStyles.swift */; };
+		21E6D2AF295BEA6800BB4AA6 /* SF-Pro-Text-Light.otf in Resources */ = {isa = PBXBuildFile; fileRef = 21E6D2AE295BEA6800BB4AA6 /* SF-Pro-Text-Light.otf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -72,6 +74,8 @@
 		21E6D29A295BC85700BB4AA6 /* Tag+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Tag+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		21E6D2A6295BD4C500BB4AA6 /* TextStyles.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextStyles.swift; sourceTree = "<group>"; };
 		21E6D2AA295BD9B500BB4AA6 /* Color+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Color+Extensions.swift"; sourceTree = "<group>"; };
+		21E6D2AC295BDFBF00BB4AA6 /* ButtonStyles.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonStyles.swift; sourceTree = "<group>"; };
+		21E6D2AE295BEA6800BB4AA6 /* SF-Pro-Text-Light.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SF-Pro-Text-Light.otf"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -182,6 +186,7 @@
 			isa = PBXGroup;
 			children = (
 				21E6D2A6295BD4C500BB4AA6 /* TextStyles.swift */,
+				21E6D2AC295BDFBF00BB4AA6 /* ButtonStyles.swift */,
 			);
 			path = Styles;
 			sourceTree = "<group>";
@@ -189,6 +194,7 @@
 		21E6D2A8295BD8BC00BB4AA6 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				21E6D2AE295BEA6800BB4AA6 /* SF-Pro-Text-Light.otf */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -307,6 +313,7 @@
 			files = (
 				2150C845295972E2006CD7D2 /* Preview Assets.xcassets in Resources */,
 				2150C842295972E2006CD7D2 /* Assets.xcassets in Resources */,
+				21E6D2AF295BEA6800BB4AA6 /* SF-Pro-Text-Light.otf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -340,6 +347,7 @@
 				2150C840295972E0006CD7D2 /* ContentView.swift in Sources */,
 				2150C84A295972E2006CD7D2 /* IssueTracker.xcdatamodeld in Sources */,
 				2150C83E295972E0006CD7D2 /* IssueTrackerApp.swift in Sources */,
+				21E6D2AD295BDFBF00BB4AA6 /* ButtonStyles.swift in Sources */,
 				21E6D2A3295BC85700BB4AA6 /* Tag+CoreDataClass.swift in Sources */,
 				21E6D29D295BC85700BB4AA6 /* Comment+CoreDataClass.swift in Sources */,
 				21E6D2AB295BD9B500BB4AA6 /* Color+Extensions.swift in Sources */,
@@ -508,6 +516,8 @@
 				DEVELOPMENT_TEAM = SVNZBC4323;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = IssueTracker/Info.plist;
+				INFOPLIST_KEY_LSApplicationCategoryType = "";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -537,6 +547,8 @@
 				DEVELOPMENT_TEAM = SVNZBC4323;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = IssueTracker/Info.plist;
+				INFOPLIST_KEY_LSApplicationCategoryType = "";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
