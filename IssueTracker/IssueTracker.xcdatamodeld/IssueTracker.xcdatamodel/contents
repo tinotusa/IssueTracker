@@ -44,6 +44,7 @@
         <attribute name="dateCreated" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
         <attribute name="name" optional="YES" attributeType="String" minValueString="1" maxValueString="50"/>
+        <attribute name="startDate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <relationship name="issues" optional="YES" toMany="YES" deletionRule="Cascade" ordered="YES" destinationEntity="Issue" inverseName="project" inverseEntity="Issue"/>
         <uniquenessConstraints>
             <uniquenessConstraint>
