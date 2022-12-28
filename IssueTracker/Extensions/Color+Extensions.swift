@@ -18,7 +18,10 @@ extension Color {
     static let customSecondary = Color("customSecondary")
     static let deleteColour = Color("deleteColour")
     static let popup = Color("popup")
+    static let tag = Color("tag")
     static let tagSelected = Color("tagSelected")
     static let tagUnselected = Color("tagUnselected")
+    static let tagTextSelected = Color("tagTextSelected")
+    static let tagTextUnselected = Color("tagTextUnselected")
     static let text = Color("text")
 }
