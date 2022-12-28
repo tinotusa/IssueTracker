@@ -33,7 +33,10 @@ struct AddProjectView: View {
                         .padding(.bottom)
                     
                     ProminentButton(viewModel.addButtonTitle) {
-                        viewModel.addProject()
+                        let savedSuccessfully = viewModel.addProject()
+                        if savedSuccessfully {
+                            dismiss()
+                        }
                     }
                     .disabled(viewModel.addButtonDisabled)
                     .frame(maxWidth: .infinity, alignment: .center)
@@ -65,5 +68,9 @@ private extension AddProjectView {
 struct AddProjectView_Previews: PreviewProvider {
     static var previews: some View {
         AddProjectView()
+            .environment(
+                \.managedObjectContext,
+                 PersistenceController.shared.container.viewContext
+            )
     }
 }
