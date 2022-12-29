@@ -10,7 +10,7 @@ import CoreData
 extension Project {
     convenience init(name: String, startDate: Date, context: NSManagedObjectContext) {
         self.init(context: context)
-        self.name = name.trimmingCharacters(in: .whitespacesAndNewlines)
+        self.name = name.filterWhitespace()
         self.startDate = startDate
     }
     
