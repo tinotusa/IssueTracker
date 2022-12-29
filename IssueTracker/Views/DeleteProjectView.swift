@@ -32,17 +32,20 @@ struct DeleteProjectView: View {
                     Text("Delete project")
                         .titleStyle()
                         .padding(.bottom)
-                    
-                    ForEach(projects) { project in
-                        Button {
-                            selectedProject = project
-                            showingDeleteProjectDialog = true
-                            
-                        } label: {
-                            HStack {
-                                Image(systemName: "trash")
-                                    .foregroundColor(.red)
-                                ProjectRowView(project: project)
+                    if projects.isEmpty {
+                        Text("No projects to delete")
+                    } else {
+                        ForEach(projects) { project in
+                            Button {
+                                selectedProject = project
+                                showingDeleteProjectDialog = true
+                                
+                            } label: {
+                                HStack {
+                                    Image(systemName: "trash")
+                                        .foregroundColor(.red)
+                                    ProjectRowView(project: project)
+                                }
                             }
                         }
                     }
