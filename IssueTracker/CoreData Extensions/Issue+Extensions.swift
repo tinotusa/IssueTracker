@@ -7,30 +7,47 @@
 
 import Foundation
 import CoreData
+import SwiftUI
 
 extension Issue {
     convenience init(
         name: String,
         issueDescription: String,
         priority: Priority,
-        status: Status,
+        tags: Set<Tag>,
         context: NSManagedObjectContext
     ) {
         self.init(context: context)
         self.name = name
         self.issueDescription = issueDescription
         self.priority = priority
-        self.status = status
+        self.addToTags(NSOrderedSet(set: tags))
+    }
+    
+    public override func awakeFromInsert() {
+        self.id = UUID()
+        self.dateCreated = .now
+        self.status = .open
     }
 }
 
 // MARK: Enums
 extension Issue {
     /// The priority level of the issue.
-    enum Priority: Int16 {
+    enum Priority: Int16, CaseIterable, Identifiable {
         case low
         case medium
         case high
+        
+        var id: Self { self }
+        
+        var title: LocalizedStringKey {
+            switch self {
+            case .low: return "Low"
+            case .medium: return "Medium"
+            case .high: return "High"
+            }
+        }
     }
     
     /// The status of the issue.
