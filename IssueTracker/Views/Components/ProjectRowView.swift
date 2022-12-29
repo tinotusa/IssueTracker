@@ -18,7 +18,7 @@ struct ProjectRowView: View {
                 .multilineTextAlignment(.leading)
             Group {
                 if let latestIssue = project.latestIssue {
-                    Text(latestIssue.name ?? "no name")
+                    Text(latestIssue.name)
                     if let date = latestIssue.dateCreated {
                         Text(date.formatted(date: .abbreviated, time: .omitted))
                     }
