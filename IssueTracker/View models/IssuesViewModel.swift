@@ -6,3 +6,11 @@
 //
 
 import Foundation
+
+final class IssuesViewModel: ObservableObject {
+    @Published var showingAddIssueView = false
+}
+
+extension IssuesViewModel {
+    
+}

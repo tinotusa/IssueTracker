@@ -59,7 +59,7 @@
         <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
         <attribute name="name" optional="YES" attributeType="String" minValueString="1" maxValueString="50"/>
         <attribute name="opacity" optional="YES" attributeType="Double" minValueString="0" maxValueString="1" defaultValueString="0.0" usesScalarValueType="YES"/>
-        <relationship name="issues" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Issue" inverseName="tags" inverseEntity="Issue"/>
+        <relationship name="issues" optional="YES" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="Issue" inverseName="tags" inverseEntity="Issue"/>
         <uniquenessConstraints>
             <uniquenessConstraint>
                 <constraint value="name"/>

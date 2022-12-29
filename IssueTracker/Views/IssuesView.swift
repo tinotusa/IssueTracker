@@ -15,6 +15,8 @@ struct IssuesView: View {
     @FetchRequest(sortDescriptors: [])
     private var issues: FetchedResults<Issue>
 
+    @StateObject private var viewModel = IssuesViewModel()
+    
     init(project: Project) {
         self.project = project
         _issues = FetchRequest<Issue>(
@@ -42,13 +44,17 @@ struct IssuesView: View {
             }
             .safeAreaInset(edge: .bottom) {
                 ProminentButton("Add Issue") {
-                    
+                    viewModel.showingAddIssueView = true
                 }
             }
         }
         .padding()
         .bodyStyle()
         .background(Color.customBackground)
+        .sheet(isPresented: $viewModel.showingAddIssueView) {
+            AddIssueView(project: project)
+                .environment(\.managedObjectContext, viewContext)
+        }
     }
 }
 
