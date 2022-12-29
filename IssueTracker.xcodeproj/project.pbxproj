@@ -28,6 +28,7 @@
 		21E6D2C1295C5B4900BB4AA6 /* ProjectRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21E6D2C0295C5B4900BB4AA6 /* ProjectRowView.swift */; };
 		21F1DA27295D90CF00076D73 /* AddProjectViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21F1DA26295D90CF00076D73 /* AddProjectViewModelTests.swift */; };
 		21F1DA29295D9C0E00076D73 /* String+filterWhitespace.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21F1DA28295D9C0E00076D73 /* String+filterWhitespace.swift */; };
+		21F1DA2B295D9E8000076D73 /* EditProjectViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21F1DA2A295D9E8000076D73 /* EditProjectViewModel.swift */; };
 		21FDE718295D64F10006C24A /* Project+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21FDE717295D64F10006C24A /* Project+Extensions.swift */; };
 		21FDE71A295D67EB0006C24A /* EditProjectsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21FDE719295D67EB0006C24A /* EditProjectsView.swift */; };
 		21FDE757295D80D30006C24A /* EditProjectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21FDE756295D80D30006C24A /* EditProjectView.swift */; };
@@ -76,6 +77,7 @@
 		21E6D2C0295C5B4900BB4AA6 /* ProjectRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProjectRowView.swift; sourceTree = "<group>"; };
 		21F1DA26295D90CF00076D73 /* AddProjectViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddProjectViewModelTests.swift; sourceTree = "<group>"; };
 		21F1DA28295D9C0E00076D73 /* String+filterWhitespace.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+filterWhitespace.swift"; sourceTree = "<group>"; };
+		21F1DA2A295D9E8000076D73 /* EditProjectViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProjectViewModel.swift; sourceTree = "<group>"; };
 		21FDE717295D64F10006C24A /* Project+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Project+Extensions.swift"; sourceTree = "<group>"; };
 		21FDE719295D67EB0006C24A /* EditProjectsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProjectsView.swift; sourceTree = "<group>"; };
 		21FDE756295D80D30006C24A /* EditProjectView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProjectView.swift; sourceTree = "<group>"; };
@@ -224,6 +226,7 @@
 			children = (
 				21E6D2B5295BF9D900BB4AA6 /* HomeViewModel.swift */,
 				21E6D2B9295C010400BB4AA6 /* AddProjectViewModel.swift */,
+				21F1DA2A295D9E8000076D73 /* EditProjectViewModel.swift */,
 			);
 			path = "View models";
 			sourceTree = "<group>";
@@ -380,6 +383,7 @@
 				21FDE71A295D67EB0006C24A /* EditProjectsView.swift in Sources */,
 				21E6D2B3295BF94800BB4AA6 /* HomeView.swift in Sources */,
 				21E6D2AD295BDFBF00BB4AA6 /* ButtonStyles.swift in Sources */,
+				21F1DA2B295D9E8000076D73 /* EditProjectViewModel.swift in Sources */,
 				21FDE759295D82DF0006C24A /* DeleteProjectView.swift in Sources */,
 				21E6D2BF295C4DD900BB4AA6 /* AddProjectView.swift in Sources */,
 				21E6D2C1295C5B4900BB4AA6 /* ProjectRowView.swift in Sources */,
