@@ -36,3 +36,19 @@ struct PersistenceController {
         container.viewContext.automaticallyMergesChangesFromParent = true
     }
 }
+
+extension PersistenceController {
+    static var projectsPreview: Self {
+        let controller = PersistenceController(inMemory: true)
+        let viewContext = controller.container.viewContext
+        for i in 0 ..< 4 {
+            _ = Project(name: "name\(i)", startDate: .now, context: viewContext)
+        }
+        do {
+            try viewContext.save()
+        } catch {
+            fatalError("Failed to save preview projects. \(error)")
+        }
+        return controller
+    }
+}
