@@ -35,18 +35,9 @@ struct ProjectRowView: View {
 }
 
 struct ProjectRowView_Previews: PreviewProvider {
-    static let viewContext = PersistenceController.shared.container.viewContext
-    static let project = {
-        let project = Project(context: viewContext)
-        project.name = "preview project"
-        project.id = UUID()
-        project.startDate = .now
-        project.dateCreated = .now
-        
-        return project
-    }()
+    static let viewContext = PersistenceController.empty.container.viewContext
     
     static var previews: some View {
-        ProjectRowView(project: project)
+        ProjectRowView(project: Project.example(context: viewContext))
     }
 }
