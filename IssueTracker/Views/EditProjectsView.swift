@@ -21,7 +21,7 @@ struct EditProjectsView: View {
                 header
                 ScrollView {
                     VStack(alignment: .leading) {
-                        Text("Select project")
+                        Text("Edit project")
                             .titleStyle()
                             .padding(.bottom)
                         

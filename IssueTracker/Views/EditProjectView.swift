@@ -27,6 +27,7 @@ struct EditProjectView: View {
                 PlainButton("Cancel", action: cancel)
                 Spacer()
                 PlainButton("Save", action: save)
+                    .disabled(!projectHasChanges)
             }
             ScrollView {
                 VStack(alignment: .leading) {
@@ -39,13 +40,15 @@ struct EditProjectView: View {
                     DatePicker("Project start date", selection: $startDate, displayedComponents: [.date])
                         .padding(.bottom)
                     ProminentButton("Save changes", action: save)
-                    .frame(maxWidth: .infinity, alignment: .center)
+                        .frame(maxWidth: .infinity, alignment: .center)
+                        .disabled(!projectHasChanges)
                 }
             }
         }
         .padding()
         .navigationBarBackButtonHidden(true)
         .bodyStyle()
+        .background(Color.customBackground)
         .confirmationDialog("Changes not saved.", isPresented: $showingHasChangesConfirmationDialog) {
             Button("Dont save changes", role: .destructive) {
                 dismiss()
@@ -56,7 +59,7 @@ struct EditProjectView: View {
     }
     
     func cancel() {
-        if self.name != project.name || self.startDate != project.startDate {
+        if projectHasChanges {
             showingHasChangesConfirmationDialog = true
         } else {
             dismiss()
@@ -68,6 +71,11 @@ struct EditProjectView: View {
         project.startDate = startDate
         try? viewContext.save()
         dismiss()
+    }
+    
+    var projectHasChanges: Bool {
+        let dateOrder = Calendar.current.compare(self.startDate, to: project.startDate, toGranularity: .day)
+        return self.name != project.name || dateOrder != .orderedSame
     }
 }
 struct EditProjectView_Previews: PreviewProvider {
