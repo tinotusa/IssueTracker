@@ -33,6 +33,10 @@ extension AddProjectViewModel {
     /// - Returns: `true` if the project was added; `false` otherwise.
     func addProject() -> Bool {
         log.debug("Adding a project")
+        guard !addButtonDisabled else {
+            log.debug("Failed to add project, the add button is disabled.")
+            return false
+        }
         let project = Project(context: viewContext)
         project.name = projectName
         project.startDate = startDate
