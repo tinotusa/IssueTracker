@@ -42,6 +42,10 @@ struct HomeView: View {
                         .environment(\.managedObjectContext, viewContext)
                         .presentationDragIndicator(.visible)
                 }
+                .sheet(isPresented: $viewModel.showingEditProjectView) {
+                    EditProjectsView()
+                        .environment(\.managedObjectContext, viewContext)
+                }
             }
             .padding()
             .background(Color.customBackground)
@@ -65,7 +69,7 @@ private extension HomeView {
                     Label("Add", systemImage: "plus")
                 }
                 Button {
-                    
+                    viewModel.showingEditProjectView = true
                 } label: {
                     Label("Edit", systemImage: "pencil")
                 }
