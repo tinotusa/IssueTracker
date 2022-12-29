@@ -31,6 +31,7 @@
 		21F1DA2B295D9E8000076D73 /* EditProjectViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21F1DA2A295D9E8000076D73 /* EditProjectViewModel.swift */; };
 		21F1DA2D295DA1C200076D73 /* EditProjectViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21F1DA2C295DA1C200076D73 /* EditProjectViewModelTests.swift */; };
 		21F1DA2F295DA58400076D73 /* DeleteProjectViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21F1DA2E295DA58400076D73 /* DeleteProjectViewModel.swift */; };
+		21F1DA31295DA7E300076D73 /* DeleteProjectViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21F1DA30295DA7E300076D73 /* DeleteProjectViewModelTests.swift */; };
 		21FDE718295D64F10006C24A /* Project+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21FDE717295D64F10006C24A /* Project+Extensions.swift */; };
 		21FDE71A295D67EB0006C24A /* EditProjectsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21FDE719295D67EB0006C24A /* EditProjectsView.swift */; };
 		21FDE757295D80D30006C24A /* EditProjectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21FDE756295D80D30006C24A /* EditProjectView.swift */; };
@@ -82,6 +83,7 @@
 		21F1DA2A295D9E8000076D73 /* EditProjectViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProjectViewModel.swift; sourceTree = "<group>"; };
 		21F1DA2C295DA1C200076D73 /* EditProjectViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProjectViewModelTests.swift; sourceTree = "<group>"; };
 		21F1DA2E295DA58400076D73 /* DeleteProjectViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteProjectViewModel.swift; sourceTree = "<group>"; };
+		21F1DA30295DA7E300076D73 /* DeleteProjectViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteProjectViewModelTests.swift; sourceTree = "<group>"; };
 		21FDE717295D64F10006C24A /* Project+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Project+Extensions.swift"; sourceTree = "<group>"; };
 		21FDE719295D67EB0006C24A /* EditProjectsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProjectsView.swift; sourceTree = "<group>"; };
 		21FDE756295D80D30006C24A /* EditProjectView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProjectView.swift; sourceTree = "<group>"; };
@@ -165,6 +167,7 @@
 				2150C853295972E2006CD7D2 /* HomeViewModelTests.swift */,
 				21F1DA26295D90CF00076D73 /* AddProjectViewModelTests.swift */,
 				21F1DA2C295DA1C200076D73 /* EditProjectViewModelTests.swift */,
+				21F1DA30295DA7E300076D73 /* DeleteProjectViewModelTests.swift */,
 			);
 			path = IssueTrackerTests;
 			sourceTree = "<group>";
@@ -407,6 +410,7 @@
 				21F1DA2D295DA1C200076D73 /* EditProjectViewModelTests.swift in Sources */,
 				21F1DA27295D90CF00076D73 /* AddProjectViewModelTests.swift in Sources */,
 				2150C854295972E2006CD7D2 /* HomeViewModelTests.swift in Sources */,
+				21F1DA31295DA7E300076D73 /* DeleteProjectViewModelTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
