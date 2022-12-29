@@ -1,5 +1,5 @@
 //
-//  EditProjectView.swift
+//  EditProjectsView.swift
 //  IssueTracker
 //
 //  Created by Tino on 29/12/2022.
@@ -8,7 +8,7 @@
 import SwiftUI
 import CoreData
 
-struct EditProjectView: View {
+struct EditProjectsView: View {
     @Environment(\.managedObjectContext) private var viewContext
     @Environment(\.dismiss) private var dismiss
 
@@ -116,7 +116,7 @@ struct EditView: View {
 }
 
 
-private extension EditProjectView {
+private extension EditProjectsView {
     var header: some View {
         HStack {
             Spacer()
@@ -128,7 +128,7 @@ private extension EditProjectView {
 }
 struct EditProjectView_Previews: PreviewProvider {
     static var previews: some View {
-        EditProjectView()
+        EditProjectsView()
             .environment(
                 \.managedObjectContext,
                  PersistenceController.projectsPreview.container.viewContext
