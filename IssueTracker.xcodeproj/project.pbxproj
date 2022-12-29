@@ -13,7 +13,7 @@
 		2150C845295972E2006CD7D2 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2150C844295972E2006CD7D2 /* Preview Assets.xcassets */; };
 		2150C847295972E2006CD7D2 /* Persistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2150C846295972E2006CD7D2 /* Persistence.swift */; };
 		2150C84A295972E2006CD7D2 /* IssueTracker.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 2150C848295972E2006CD7D2 /* IssueTracker.xcdatamodeld */; };
-		2150C854295972E2006CD7D2 /* IssueTrackerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2150C853295972E2006CD7D2 /* IssueTrackerTests.swift */; };
+		2150C854295972E2006CD7D2 /* HomeViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2150C853295972E2006CD7D2 /* HomeViewModelTests.swift */; };
 		2150C85E295972E2006CD7D2 /* IssueTrackerUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2150C85D295972E2006CD7D2 /* IssueTrackerUITests.swift */; };
 		2150C860295972E2006CD7D2 /* IssueTrackerUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2150C85F295972E2006CD7D2 /* IssueTrackerUITestsLaunchTests.swift */; };
 		21E6D2A7295BD4C500BB4AA6 /* TextStyles.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21E6D2A6295BD4C500BB4AA6 /* TextStyles.swift */; };
@@ -58,7 +58,7 @@
 		2150C846295972E2006CD7D2 /* Persistence.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Persistence.swift; sourceTree = "<group>"; };
 		2150C849295972E2006CD7D2 /* IssueTracker.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = IssueTracker.xcdatamodel; sourceTree = "<group>"; };
 		2150C84F295972E2006CD7D2 /* IssueTrackerTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = IssueTrackerTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		2150C853295972E2006CD7D2 /* IssueTrackerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IssueTrackerTests.swift; sourceTree = "<group>"; };
+		2150C853295972E2006CD7D2 /* HomeViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewModelTests.swift; sourceTree = "<group>"; };
 		2150C859295972E2006CD7D2 /* IssueTrackerUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = IssueTrackerUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		2150C85D295972E2006CD7D2 /* IssueTrackerUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IssueTrackerUITests.swift; sourceTree = "<group>"; };
 		2150C85F295972E2006CD7D2 /* IssueTrackerUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IssueTrackerUITestsLaunchTests.swift; sourceTree = "<group>"; };
@@ -152,7 +152,7 @@
 		2150C852295972E2006CD7D2 /* IssueTrackerTests */ = {
 			isa = PBXGroup;
 			children = (
-				2150C853295972E2006CD7D2 /* IssueTrackerTests.swift */,
+				2150C853295972E2006CD7D2 /* HomeViewModelTests.swift */,
 			);
 			path = IssueTrackerTests;
 			sourceTree = "<group>";
@@ -386,7 +386,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2150C854295972E2006CD7D2 /* IssueTrackerTests.swift in Sources */,
+				2150C854295972E2006CD7D2 /* HomeViewModelTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
