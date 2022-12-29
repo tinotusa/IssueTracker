@@ -13,5 +13,6 @@ final class HomeViewModel: ObservableObject {
     let title: LocalizedStringKey = "Projects"
     @Published var showingAddProjectView = false
     @Published var showingEditProjectView = false
+    @Published var showingDeleteProjectView = false
     let log = Logger(subsystem: "com.tinotusa.IssueTracker", category: "HomeViewModel")
 }

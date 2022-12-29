@@ -46,6 +46,10 @@ struct HomeView: View {
                     EditProjectsView()
                         .environment(\.managedObjectContext, viewContext)
                 }
+                .sheet(isPresented: $viewModel.showingDeleteProjectView) {
+                    DeleteProjectView()
+                        .environment(\.managedObjectContext, viewContext)
+                }
             }
             .padding()
             .background(Color.customBackground)
@@ -74,7 +78,7 @@ private extension HomeView {
                     Label("Edit", systemImage: "pencil")
                 }
                 Button {
-                    
+                    viewModel.showingDeleteProjectView = true
                 } label: {
                     Label("Delete", systemImage: "trash")
                 }
