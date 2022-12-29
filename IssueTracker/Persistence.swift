@@ -51,4 +51,9 @@ extension PersistenceController {
         }
         return controller
     }
+    
+    static var empty: Self {
+        let controller = PersistenceController(inMemory: true)
+        return controller
+    }
 }
