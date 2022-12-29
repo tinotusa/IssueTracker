@@ -7,9 +7,10 @@
 
 import os
 import SwiftUI
+import CoreData
 
 final class AddProjectViewModel: ObservableObject {
-    private let viewContext = PersistenceController.shared.container.viewContext
+    private let viewContext: NSManagedObjectContext
     let projectNamePrompt: LocalizedStringKey = "Project name:"
     let datePrompt: LocalizedStringKey = "Start date:"
     let projectNamePlaceholder: LocalizedStringKey = "Project name"
@@ -19,6 +20,10 @@ final class AddProjectViewModel: ObservableObject {
     @Published var projectName = ""
     @Published var startDate = Date()
 
+    init(context: NSManagedObjectContext = PersistenceController.shared.container.viewContext) {
+        self.viewContext = context
+    }
+    
     private let log = Logger(subsystem: "com.tinotusa.IssueTracker", category: "AddProjectViewModel")
 }
 
