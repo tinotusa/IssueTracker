@@ -12,7 +12,7 @@ struct ProjectRowView: View {
     
     var body: some View {
         VStack(alignment: .leading) {
-            Text(project.name ?? "no name")
+            Text(project.name)
                 .headerStyle()
             Group {
                 if let latestIssue = project.latestIssue {

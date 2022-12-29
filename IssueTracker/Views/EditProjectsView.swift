@@ -12,7 +12,7 @@ struct EditProjectsView: View {
     @Environment(\.managedObjectContext) private var viewContext
     @Environment(\.dismiss) private var dismiss
 
-    @FetchRequest(sortDescriptors: [.init(\.dateCreated, order: .reverse)])
+    @FetchRequest(sortDescriptors: [.init(\.dateCreated_, order: .reverse)])
     var projects: FetchedResults<Project>
     
     var body: some View {

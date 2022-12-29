@@ -12,7 +12,7 @@ struct DeleteProjectView: View {
     @Environment(\.managedObjectContext) private var viewContext
     @Environment(\.dismiss) private var dismiss
     
-    @FetchRequest(sortDescriptors: [.init(\.dateCreated, order: .reverse)])
+    @FetchRequest(sortDescriptors: [.init(\.dateCreated_, order: .reverse)])
     private var projects: FetchedResults<Project>
     
     @State private var selectedProject: Project?
@@ -58,7 +58,7 @@ struct DeleteProjectView: View {
                 dismiss()
             }
         } message: { project in
-            Text("Are you sure you want to delete \(project.name ?? "not set")")
+            Text("Are you sure you want to delete \(project.name)")
         }
     }
 }

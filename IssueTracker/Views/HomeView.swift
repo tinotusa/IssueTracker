@@ -11,7 +11,7 @@ struct HomeView: View {
     @Environment(\.managedObjectContext) private var viewContext
     @StateObject private var viewModel = HomeViewModel()
     
-    @FetchRequest(sortDescriptors: [.init(\.dateCreated, order: .reverse)])
+    @FetchRequest(sortDescriptors: [.init(\.dateCreated_, order: .reverse)])
     private var projects: FetchedResults<Project>
     
     var body: some View {

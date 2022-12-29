@@ -17,8 +17,8 @@ struct EditProjectView: View {
     
     init(project: Project) {
         self.project = project
-        _name = State(wrappedValue: project.name ?? "Name not set")
-        _startDate = State(wrappedValue: project.startDate ?? Date())
+        _name = State(wrappedValue: project.name)
+        _startDate = State(wrappedValue: project.startDate)
     }
     
     var body: some View {
@@ -56,13 +56,7 @@ struct EditProjectView: View {
     }
     
     func cancel() {
-        guard let projectName = project.name else {
-            return
-        }
-        guard let startDate = project.startDate else {
-            return
-        }
-        if self.name != projectName || self.startDate != startDate {
+        if self.name != project.name || self.startDate != project.startDate {
             showingHasChangesConfirmationDialog = true
         } else {
             dismiss()
