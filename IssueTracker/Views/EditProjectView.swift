@@ -29,7 +29,7 @@ struct EditProjectView: View {
                 }
                 Spacer()
                 PlainButton("Save") {
-                    viewModel.save()
+                    _ = viewModel.save()
                     dismiss()
                 }
                 .disabled(!viewModel.projectHasChanges)
@@ -45,7 +45,7 @@ struct EditProjectView: View {
                     DatePicker("Project start date", selection: $viewModel.startDate, displayedComponents: [.date])
                         .padding(.bottom)
                     ProminentButton("Save changes") {
-                        viewModel.save()
+                        _ = viewModel.save()
                         dismiss()
                     }
                     .frame(maxWidth: .infinity, alignment: .center)

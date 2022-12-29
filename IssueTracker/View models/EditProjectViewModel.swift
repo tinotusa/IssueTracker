@@ -32,15 +32,21 @@ extension EditProjectViewModel {
         }
     }
     
-    func save() {
+    func save() -> Bool {
         log.debug("Starting to save project edits...")
+        guard projectHasChanges else {
+            log.debug("Failed to save changes. Project has no changes.")
+            return false
+        }
         project.name = projectName
         project.startDate = startDate
         do {
             try viewContext.save()
             log.debug("Successfully saved project edits.")
+            return true
         } catch {
             log.error("Failed to save changes. \(error)")
+            return false
         }
     }
     
