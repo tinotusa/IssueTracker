@@ -14,6 +14,8 @@ struct ProjectRowView: View {
         VStack(alignment: .leading) {
             Text(project.name)
                 .headerStyle()
+                .lineLimit(2)
+                .multilineTextAlignment(.leading)
             Group {
                 if let latestIssue = project.latestIssue {
                     Text(latestIssue.name ?? "no name")
