@@ -42,11 +42,7 @@ extension AddProjectViewModel {
             log.debug("Failed to add project, the add button is disabled.")
             return false
         }
-        let project = Project(context: viewContext)
-        project.name = projectName
-        project.startDate = startDate
-        project.id = UUID()
-        project.dateCreated = .now
+        let _ = Project(name: projectName, startDate: startDate, context: viewContext)
         
         do {
             try viewContext.save()
