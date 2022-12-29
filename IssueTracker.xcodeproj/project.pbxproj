@@ -29,6 +29,7 @@
 		21F1DA27295D90CF00076D73 /* AddProjectViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21F1DA26295D90CF00076D73 /* AddProjectViewModelTests.swift */; };
 		21F1DA29295D9C0E00076D73 /* String+filterWhitespace.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21F1DA28295D9C0E00076D73 /* String+filterWhitespace.swift */; };
 		21F1DA2B295D9E8000076D73 /* EditProjectViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21F1DA2A295D9E8000076D73 /* EditProjectViewModel.swift */; };
+		21F1DA2D295DA1C200076D73 /* EditProjectViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21F1DA2C295DA1C200076D73 /* EditProjectViewModelTests.swift */; };
 		21FDE718295D64F10006C24A /* Project+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21FDE717295D64F10006C24A /* Project+Extensions.swift */; };
 		21FDE71A295D67EB0006C24A /* EditProjectsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21FDE719295D67EB0006C24A /* EditProjectsView.swift */; };
 		21FDE757295D80D30006C24A /* EditProjectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21FDE756295D80D30006C24A /* EditProjectView.swift */; };
@@ -78,6 +79,7 @@
 		21F1DA26295D90CF00076D73 /* AddProjectViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddProjectViewModelTests.swift; sourceTree = "<group>"; };
 		21F1DA28295D9C0E00076D73 /* String+filterWhitespace.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+filterWhitespace.swift"; sourceTree = "<group>"; };
 		21F1DA2A295D9E8000076D73 /* EditProjectViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProjectViewModel.swift; sourceTree = "<group>"; };
+		21F1DA2C295DA1C200076D73 /* EditProjectViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProjectViewModelTests.swift; sourceTree = "<group>"; };
 		21FDE717295D64F10006C24A /* Project+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Project+Extensions.swift"; sourceTree = "<group>"; };
 		21FDE719295D67EB0006C24A /* EditProjectsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProjectsView.swift; sourceTree = "<group>"; };
 		21FDE756295D80D30006C24A /* EditProjectView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProjectView.swift; sourceTree = "<group>"; };
@@ -160,6 +162,7 @@
 			children = (
 				2150C853295972E2006CD7D2 /* HomeViewModelTests.swift */,
 				21F1DA26295D90CF00076D73 /* AddProjectViewModelTests.swift */,
+				21F1DA2C295DA1C200076D73 /* EditProjectViewModelTests.swift */,
 			);
 			path = IssueTrackerTests;
 			sourceTree = "<group>";
@@ -397,6 +400,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				21F1DA2D295DA1C200076D73 /* EditProjectViewModelTests.swift in Sources */,
 				21F1DA27295D90CF00076D73 /* AddProjectViewModelTests.swift in Sources */,
 				2150C854295972E2006CD7D2 /* HomeViewModelTests.swift in Sources */,
 			);
