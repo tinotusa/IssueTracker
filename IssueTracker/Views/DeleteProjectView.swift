@@ -55,7 +55,6 @@ struct DeleteProjectView: View {
         .confirmationDialog("Are you sure", isPresented: $showingDeleteProjectDialog, presenting: selectedProject) { _ in
             Button("Delete", role: .destructive) {
                 deleteProject()
-                dismiss()
             }
         } message: { project in
             Text("Are you sure you want to delete \(project.name)")
