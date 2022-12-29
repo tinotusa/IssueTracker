@@ -11,37 +11,45 @@ struct EditProjectView: View {
     @ObservedObject var project: Project
     @Environment(\.managedObjectContext) private var viewContext
     @Environment(\.dismiss) private var dismiss
-    @State private var name = ""
-    @State private var startDate = Date()
-    @State private var showingHasChangesConfirmationDialog = false
+    @StateObject private var viewModel: EditProjectViewModel
     
     init(project: Project) {
-        self.project = project
-        _name = State(wrappedValue: project.name)
-        _startDate = State(wrappedValue: project.startDate)
+        _project = ObservedObject(wrappedValue: project)
+        _viewModel = StateObject(wrappedValue: EditProjectViewModel(project: project))
     }
     
     var body: some View {
         VStack(alignment: .leading) {
             HStack {
-                PlainButton("Cancel", action: cancel)
+                PlainButton("Cancel") {
+                    viewModel.cancel()
+                    if !viewModel.showingHasChangesConfirmationDialog {
+                        dismiss()
+                    }
+                }
                 Spacer()
-                PlainButton("Save", action: save)
-                    .disabled(!projectHasChanges)
+                PlainButton("Save") {
+                    viewModel.save()
+                    dismiss()
+                }
+                .disabled(!viewModel.projectHasChanges)
             }
             ScrollView {
                 VStack(alignment: .leading) {
                     Text("Editing Project")
                         .titleStyle()
                     Text("Project name:")
-                    CustomTextField("Project name", text: $name)
+                    CustomTextField("Project name", text: $viewModel.projectName)
                     
                     Text("Project start date:")
-                    DatePicker("Project start date", selection: $startDate, displayedComponents: [.date])
+                    DatePicker("Project start date", selection: $viewModel.startDate, displayedComponents: [.date])
                         .padding(.bottom)
-                    ProminentButton("Save changes", action: save)
-                        .frame(maxWidth: .infinity, alignment: .center)
-                        .disabled(!projectHasChanges)
+                    ProminentButton("Save changes") {
+                        viewModel.save()
+                        dismiss()
+                    }
+                    .frame(maxWidth: .infinity, alignment: .center)
+                    .disabled(!viewModel.projectHasChanges)
                 }
             }
         }
@@ -49,33 +57,13 @@ struct EditProjectView: View {
         .navigationBarBackButtonHidden(true)
         .bodyStyle()
         .background(Color.customBackground)
-        .confirmationDialog("Changes not saved.", isPresented: $showingHasChangesConfirmationDialog) {
-            Button("Dont save changes", role: .destructive) {
+        .confirmationDialog("Changes not saved.", isPresented: $viewModel.showingHasChangesConfirmationDialog) {
+            Button("Don't save changes", role: .destructive) {
                 dismiss()
             }
         } message: {
             Text("You have changes that haven't been saved.")
         }
-    }
-    
-    func cancel() {
-        if projectHasChanges {
-            showingHasChangesConfirmationDialog = true
-        } else {
-            dismiss()
-        }
-    }
-    
-    func save() {
-        project.name = name
-        project.startDate = startDate
-        try? viewContext.save()
-        dismiss()
-    }
-    
-    var projectHasChanges: Bool {
-        let dateOrder = Calendar.current.compare(self.startDate, to: project.startDate, toGranularity: .day)
-        return self.name != project.name || dateOrder != .orderedSame
     }
 }
 struct EditProjectView_Previews: PreviewProvider {
