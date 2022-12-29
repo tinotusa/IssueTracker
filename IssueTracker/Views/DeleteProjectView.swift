@@ -15,8 +15,7 @@ struct DeleteProjectView: View {
     @FetchRequest(sortDescriptors: [.init(\.dateCreated_, order: .reverse)])
     private var projects: FetchedResults<Project>
     
-    @State private var selectedProject: Project?
-    @State private var showingDeleteProjectDialog = false
+    @StateObject private var viewModel = DeleteProjectViewModel()
     
     var body: some View {
         VStack(alignment: .leading) {
@@ -37,9 +36,7 @@ struct DeleteProjectView: View {
                     } else {
                         ForEach(projects) { project in
                             Button {
-                                selectedProject = project
-                                showingDeleteProjectDialog = true
-                                
+                                viewModel.selectedProject = project
                             } label: {
                                 HStack {
                                     Image(systemName: "trash")
@@ -55,23 +52,13 @@ struct DeleteProjectView: View {
         .padding()
         .bodyStyle()
         .background(Color.customBackground)
-        .confirmationDialog("Are you sure", isPresented: $showingDeleteProjectDialog, presenting: selectedProject) { _ in
+        .confirmationDialog("Delete project", isPresented: $viewModel.showingDeleteProjectDialog, presenting: viewModel.selectedProject) { _ in
             Button("Delete", role: .destructive) {
-                deleteProject()
+                _ = viewModel.deleteProject()
             }
         } message: { project in
             Text("Are you sure you want to delete \(project.name)")
         }
-    }
-}
-
-private extension DeleteProjectView {
-    func deleteProject() {
-        guard let selectedProject else {
-            return
-        }
-        viewContext.delete(selectedProject)
-        try? viewContext.save()
     }
 }
 
