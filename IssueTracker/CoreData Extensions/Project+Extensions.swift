@@ -23,4 +23,14 @@ extension Project {
     var latestIssue: Issue? {
         self.issues?.lastObject as? Issue
     }
+    
+    static func example(context: NSManagedObjectContext) -> Project {
+        let project = Project(name: "Example", startDate: Date(), context: context)
+        do {
+            try context.save()
+        } catch {
+            print("failed to save example project. \(error)")
+        }
+        return project
+    }
 }
