@@ -10,7 +10,7 @@ import CoreData
 extension Project {
     convenience init(name: String, startDate: Date, context: NSManagedObjectContext) {
         self.init(context: context)
-        self.name = name
+        self.name = name.trimmingCharacters(in: .whitespacesAndNewlines)
         self.startDate = startDate
     }
     
@@ -32,6 +32,18 @@ extension Project {
             print("failed to save example project. \(error)")
         }
         return project
+    }
+    
+    
+    /// Filters the given name by removing non alphanumerics and non spaces.
+    /// - Parameter name: The name to filter.
+    /// - Returns: The filtered name or the name unchanged.
+    static func filterName(_ name: String) -> String {
+        var invalidCharacters = CharacterSet.alphanumerics
+        invalidCharacters.formUnion(.whitespaces)
+        invalidCharacters.invert()
+        let filteredValue = name.components(separatedBy: invalidCharacters).joined(separator: "")
+        return filteredValue
     }
 }
 
