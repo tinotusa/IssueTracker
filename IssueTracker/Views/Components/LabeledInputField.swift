@@ -18,7 +18,7 @@ struct LabeledInputField<Content: View>: View {
     }
     
     var body: some View {
-        VStack(alignment: .leading, spacing: 0) {
+        VStack(alignment: .leading, spacing: 4) {
             Text(label)
             content()
         }
