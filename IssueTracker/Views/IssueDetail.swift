@@ -61,16 +61,7 @@ struct IssueDetail: View {
                         }
                     }
                     ForEach($issue.wrappedComments) { $comment in
-                        VStack(alignment: .leading) {
-                            TextEditor(text: $comment.comment)
-                                .scrollContentBackground(.hidden)
-                                .frame(minHeight: 40)
-                            Text(comment.dateCreated.formatted(date: .abbreviated, time: .omitted))
-                                .footerStyle()
-                        }
-                        .padding()
-                        .background(Color.popup)
-                        .cornerRadius(10)
+                        CommentBoxView(comment: comment, issue: issue)
                     }
                     
                 }
