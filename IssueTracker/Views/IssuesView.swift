@@ -28,7 +28,7 @@ struct IssuesView: View {
     var body: some View {
         VStack(alignment: .leading) {
             header
-            
+            // TODO: add swipe actions
             ScrollView {
                 VStack(alignment: .leading) {
                     if issues.isEmpty {
@@ -41,6 +41,7 @@ struct IssuesView: View {
                             IssueRowView(issue: issue)
                                 .padding(.bottom)
                         }
+                        .frame(maxWidth: .infinity, alignment: .leading)
                     }
                 }
             }
@@ -48,6 +49,7 @@ struct IssuesView: View {
                 ProminentButton("Add Issue") {
                     viewModel.showingAddIssueView = true
                 }
+                .frame(maxWidth: .infinity, alignment: .center)
             }
         }
         .padding()
