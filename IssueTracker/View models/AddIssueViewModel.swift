@@ -25,7 +25,8 @@ final class AddIssueViewModel: ObservableObject {
 
 extension AddIssueViewModel {
     var allFieldsFilled: Bool {
-        false
+        let name = name.trimmingCharacters(in: .whitespacesAndNewlines)
+        return !name.isEmpty
     }
     
     func addIssue() {
