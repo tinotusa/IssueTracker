@@ -20,7 +20,7 @@ struct IssuesView: View {
     init(project: Project) {
         self.project = project
         _issues = FetchRequest<Issue>(
-            sortDescriptors: [.init(\.dateCreated_, order: .reverse)],
+            sortDescriptors: [.init(\.dateCreated_, order: .forward)],
             predicate: NSPredicate(format: "%K == %@", "project", project)
         )
     }
