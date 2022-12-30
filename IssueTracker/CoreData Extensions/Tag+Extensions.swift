@@ -6,9 +6,18 @@
 //
 
 import Foundation
+import CoreData
 
 extension Tag {
+    convenience init(name: String, context: NSManagedObjectContext) {
+        self.init(context: context)
+        self.name = name
+    }
     
+    public override func awakeFromInsert() {
+        self.dateCreated_ = .now
+        self.id_ = UUID()
+    }
 }
 
 // MARK: Properties
