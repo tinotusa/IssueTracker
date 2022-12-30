@@ -27,7 +27,7 @@
     <entity name="Issue" representedClassName="Issue" syncable="YES" codeGenerationType="class">
         <attribute name="dateCreated_" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="id_" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
-        <attribute name="issueDescription_" optional="YES" attributeType="String" minValueString="1" maxValueString="400"/>
+        <attribute name="issueDescription_" optional="YES" attributeType="String" minValueString="0" maxValueString="2000"/>
         <attribute name="name_" optional="YES" attributeType="String"/>
         <attribute name="priority_" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="status_" optional="YES" attributeType="String"/>
