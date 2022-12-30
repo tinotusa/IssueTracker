@@ -13,7 +13,7 @@
         </uniquenessConstraints>
     </entity>
     <entity name="Comment" representedClassName="Comment" syncable="YES" codeGenerationType="class">
-        <attribute name="comment_" optional="YES" attributeType="String" minValueString="1" maxValueString="400"/>
+        <attribute name="comment_" optional="YES" attributeType="String" minValueString="0" maxValueString="400"/>
         <attribute name="dateCreated_" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="id_" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
         <relationship name="attachments" optional="YES" toMany="YES" deletionRule="Cascade" ordered="YES" destinationEntity="Attachment" inverseName="comment" inverseEntity="Attachment"/>
