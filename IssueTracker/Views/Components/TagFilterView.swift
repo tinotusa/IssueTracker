@@ -34,7 +34,7 @@ struct TagFilterView: View {
                 }
             }
             ForEach(allTags) { tag in
-                TagButton(tag.name ?? "Not set") {
+                TagButton(tag.name) {
                     action(tag)
                 }
             }

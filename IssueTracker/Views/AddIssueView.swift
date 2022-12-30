@@ -55,7 +55,7 @@ struct AddIssueView: View {
                         // TODO: add custom layout here
                         LazyHGrid(rows: [.init(.adaptive(minimum: 100))]) {
                             ForEach(Array(viewModel.tags)) { tag in
-                                Text(tag.name ?? "N/A")
+                                Text(tag.name)
                             }
                         }
                     }
