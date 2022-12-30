@@ -13,8 +13,8 @@ struct TagFilterView: View {
     @FetchRequest(sortDescriptors: [.init(\.dateCreated_, order: .reverse)])
     private var allTags: FetchedResults<Tag>
     
-    let filterText: String
-    let action: (Tag) -> Void
+    private let filterText: String
+    private let action: (Tag) -> Void
     
     init(filterText: String, action: @escaping (Tag) -> Void) {
         self.filterText = filterText
@@ -26,22 +26,30 @@ struct TagFilterView: View {
     }
     
     var body: some View {
-        // TODO: add custom layout here
-        LazyVGrid(columns: [.init(.adaptive(minimum: 100))]) {
-            if allTags.isEmpty {
+        VStack(alignment: .leading) {
+            if allTags.isEmpty && filterText.isEmpty {
+                Text("No tags.\nType a new tag.")
+                    .foregroundColor(.customSecondary)
+                    .multilineTextAlignment(.center)
+                    .frame(maxWidth: .infinity, alignment: .center)
+            } else if allTags.isEmpty {
                 PlainButton("Add new tag") {
                     addNewTag(named: filterText)
                 }
             }
-            ForEach(allTags) { tag in
-                TagButton(tag.name) {
-                    action(tag)
+            // TODO: add custom layout here
+            LazyVGrid(columns: [.init(.adaptive(minimum: 100))]) {
+                ForEach(allTags) { tag in
+                    TagButton(tag.name) {
+                        action(tag)
+                    }
                 }
             }
         }
+        .bodyStyle()
     }
     
-    func addNewTag(named name: String) {
+    private func addNewTag(named name: String) {
         let tag = Tag(context: viewContext)
         tag.name = name
         tag.id = UUID()

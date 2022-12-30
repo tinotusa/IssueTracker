@@ -60,7 +60,6 @@ struct AddIssueView: View {
                         }
                     }
                 }
-                .frame(maxWidth: .infinity, alignment: .leading)
                 .padding(.horizontal)
             }
             .safeAreaInset(edge: .bottom) {
