@@ -10,7 +10,7 @@ import SwiftUI
 struct TagFilterView: View {
     @Environment(\.managedObjectContext) private var viewContext
     
-    @FetchRequest(sortDescriptors: [.init(\.dateCreated, order: .reverse)])
+    @FetchRequest(sortDescriptors: [.init(\.dateCreated_, order: .reverse)])
     private var allTags: FetchedResults<Tag>
     
     let filterText: String
@@ -20,7 +20,7 @@ struct TagFilterView: View {
         self.filterText = filterText
         self.action = action
         _allTags = FetchRequest(
-            sortDescriptors: [.init(\.dateCreated, order: .reverse)],
+            sortDescriptors: [.init(\.dateCreated_, order: .reverse)],
             predicate: filterText.isEmpty ? nil : .init(format: "%K CONTAINS[cd] %@", "name", filterText)
         )
     }

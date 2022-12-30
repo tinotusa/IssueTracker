@@ -14,7 +14,7 @@ struct AddIssueView: View {
     @StateObject private var viewModel = AddIssueViewModel()
     let project: Project
     
-    @FetchRequest(sortDescriptors: [.init(\.dateCreated, order: .reverse)])
+    @FetchRequest(sortDescriptors: [.init(\.dateCreated_, order: .reverse)])
     private var allTags: FetchedResults<Tag>
     
     var body: some View {
