@@ -81,11 +81,13 @@ private extension IssuesView {
                 Button("test") { }
             } label: {
                 Text("Sort")
+                    .foregroundColor(.buttonLabel)
             }
             Menu {
                 Button("test") { }
             } label: {
                 Text("Filter")
+                    .foregroundColor(.buttonLabel)
             }
         }
     }
