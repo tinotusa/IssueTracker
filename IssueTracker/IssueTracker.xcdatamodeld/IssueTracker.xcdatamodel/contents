@@ -13,14 +13,14 @@
         </uniquenessConstraints>
     </entity>
     <entity name="Comment" representedClassName="Comment" syncable="YES" codeGenerationType="class">
-        <attribute name="comment" optional="YES" attributeType="String" minValueString="1" maxValueString="400"/>
-        <attribute name="dateCreated" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
-        <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="comment_" optional="YES" attributeType="String" minValueString="1" maxValueString="400"/>
+        <attribute name="dateCreated_" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="id_" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
         <relationship name="attachments" optional="YES" toMany="YES" deletionRule="Cascade" ordered="YES" destinationEntity="Attachment" inverseName="comment" inverseEntity="Attachment"/>
         <relationship name="issue" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Issue" inverseName="comments" inverseEntity="Issue"/>
         <uniquenessConstraints>
             <uniquenessConstraint>
-                <constraint value="id"/>
+                <constraint value="id_"/>
             </uniquenessConstraint>
         </uniquenessConstraints>
     </entity>
