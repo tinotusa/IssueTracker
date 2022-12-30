@@ -20,6 +20,7 @@ struct IssueDetail: View {
     var body: some View {
         VStack(alignment: .leading) {
             header
+                .padding([.horizontal, .top])
             ScrollView {
                 VStack(alignment: .leading) {
                     Text(issue.name)
@@ -28,7 +29,7 @@ struct IssueDetail: View {
                         Text(issue.issueDescription)
                             .padding(.bottom)
                     } else {
-                        Text("N/A")
+                        Text("No Description")
                             .foregroundColor(.customSecondary)
                     }
                     Text("Created: \(issue.dateCreated.formatted(date: .abbreviated, time: .omitted))")
@@ -67,9 +68,11 @@ struct IssueDetail: View {
                     }
                     
                 }
+                .padding(.horizontal)
             }
+            
         }
-        .padding()
+        
         .bodyStyle()
         .background(Color.customBackground)
     }
