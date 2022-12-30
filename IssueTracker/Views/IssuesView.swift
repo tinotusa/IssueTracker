@@ -26,18 +26,20 @@ struct IssuesView: View {
     }
     
     var body: some View {
-        VStack {
+        VStack(alignment: .leading) {
             header
             
             ScrollView {
-                VStack {
+                VStack(alignment: .leading) {
                     if issues.isEmpty {
                         Text("No issues to see.\nTap the Add issue button below to start.")
                             .multilineTextAlignment(.center)
                             .foregroundColor(.customSecondary)
+                            .frame(maxWidth: .infinity, alignment: .center)
                     } else {
                         ForEach(issues) { issue in
-                            Text(issue.name)
+                            IssueRowView(issue: issue)
+                                .padding(.bottom)
                         }
                     }
                 }
