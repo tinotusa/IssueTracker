@@ -21,7 +21,7 @@ struct TagFilterView: View {
         self.action = action
         _allTags = FetchRequest(
             sortDescriptors: [.init(\.dateCreated_, order: .reverse)],
-            predicate: filterText.isEmpty ? nil : .init(format: "%K CONTAINS[cd] %@", "name", filterText)
+            predicate: filterText.isEmpty ? nil : .init(format: "%K CONTAINS[cd] %@", "name_", filterText)
         )
     }
     
