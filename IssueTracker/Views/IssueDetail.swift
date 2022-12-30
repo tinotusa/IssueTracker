@@ -55,7 +55,7 @@ struct IssueDetail: View {
                         }
                     }
                     ForEach(issue.comments?.array as? [Comment] ?? []) { comment in
-                        Text(comment.comment ?? "N/A")
+                        Text(comment.comment)
                     }
                     
                 }
