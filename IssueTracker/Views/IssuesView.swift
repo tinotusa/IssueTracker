@@ -16,6 +16,7 @@ struct IssuesView: View {
     private var issues: FetchedResults<Issue>
 
     @StateObject private var viewModel = IssuesViewModel()
+    @State private var selectedIssue: Issue?
     
     init(project: Project) {
         self.project = project
@@ -38,8 +39,12 @@ struct IssuesView: View {
                             .frame(maxWidth: .infinity, alignment: .center)
                     } else {
                         ForEach(issues) { issue in
-                            IssueRowView(issue: issue)
-                                .padding(.bottom)
+                            Button {
+                                selectedIssue = issue
+                            } label: {
+                                IssueRowView(issue: issue)
+                                    .padding(.bottom)
+                            }
                         }
                         .frame(maxWidth: .infinity, alignment: .leading)
                     }
@@ -58,6 +63,9 @@ struct IssuesView: View {
         .sheet(isPresented: $viewModel.showingAddIssueView) {
             AddIssueView(project: project)
                 .environment(\.managedObjectContext, viewContext)
+        }
+        .sheet(item: $selectedIssue) { selectedIssue in
+            IssueDetail(issue: selectedIssue)
         }
     }
 }
