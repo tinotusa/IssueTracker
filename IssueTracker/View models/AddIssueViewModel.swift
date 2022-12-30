@@ -17,9 +17,11 @@ final class AddIssueViewModel: ObservableObject {
     @Published var newTag = ""
     private let log = Logger(subsystem: "com.tinotusa.IssueTracker", category: "AddIssueViewModel")
     private let viewContext: NSManagedObjectContext
+    private let project: Project
     
-    init(viewContext: NSManagedObjectContext = PersistenceController.shared.container.viewContext) {
+    init(project: Project, viewContext: NSManagedObjectContext = PersistenceController.shared.container.viewContext) {
         self.viewContext = viewContext
+        self.project = project
     }
 }
 
@@ -29,9 +31,27 @@ extension AddIssueViewModel {
         return !name.isEmpty
     }
     
+    /// Adds an Issue entity to Core Data.
     func addIssue() {
+        log.debug("Adding issue to core data...")
         guard allFieldsFilled else {
+            log.debug("Failed to add issue. Not all fields have input.")
             return
+        }
+        let issue = Issue(
+            name: name,
+            issueDescription: description,
+            priority: priority,
+            tags: tags,
+            context: viewContext
+        )
+        project.addToIssues(issue)
+        
+        do {
+            try viewContext.save()
+            log.debug("Successfully saved issue to core data.")
+        } catch {
+            log.error("Failed to save issue to disk. \(error)")
         }
     }
     

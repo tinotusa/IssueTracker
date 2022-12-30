@@ -11,11 +11,16 @@ import CoreData
 struct AddIssueView: View {
     @Environment(\.managedObjectContext) private var viewContext
     @Environment(\.dismiss) private var dismiss
-    @StateObject private var viewModel = AddIssueViewModel()
-    let project: Project
+    @StateObject private var viewModel: AddIssueViewModel
+    @ObservedObject var project: Project
     
     @FetchRequest(sortDescriptors: [.init(\.dateCreated_, order: .reverse)])
     private var allTags: FetchedResults<Tag>
+    
+    init(project: Project) {
+        self.project = project
+        _viewModel = StateObject(wrappedValue: AddIssueViewModel(project: project))
+    }
     
     var body: some View {
         VStack(alignment: .leading) {
@@ -64,7 +69,7 @@ struct AddIssueView: View {
             }
             .safeAreaInset(edge: .bottom) {
                 ProminentButton("Add Issue") {
-                    
+                    viewModel.addIssue()
                 }
                 .frame(maxWidth: .infinity, alignment: .center)
                 .disabled(!viewModel.allFieldsFilled)
