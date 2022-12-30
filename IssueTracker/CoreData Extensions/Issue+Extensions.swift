@@ -94,4 +94,9 @@ extension Issue {
         }
         set { self.status_ = newValue.rawValue }
     }
+    
+    var wrappedComments: [Comment] {
+        get { self.comments?.array as? [Comment] ?? [] }
+        set { self.comments = NSOrderedSet(array: newValue) }
+    }
 }
