@@ -70,7 +70,7 @@ struct AddProjectView_Previews: PreviewProvider {
         AddProjectView()
             .environment(
                 \.managedObjectContext,
-                 PersistenceController.shared.container.viewContext
+                 PersistenceController.projectsPreview.container.viewContext
             )
     }
 }

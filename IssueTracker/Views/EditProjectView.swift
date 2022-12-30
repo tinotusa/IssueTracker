@@ -68,6 +68,6 @@ struct EditProjectView: View {
 }
 struct EditProjectView_Previews: PreviewProvider {
     static var previews: some View {
-        EditProjectView(project: .example(context: PersistenceController.empty.container.viewContext))
+        EditProjectView(project: .example(context: PersistenceController.projectsPreview.container.viewContext))
     }
 }

@@ -92,9 +92,9 @@ private extension AddIssueView {
 }
 
 struct AddIssueView_Previews: PreviewProvider {
-    static var viewContext = PersistenceController.shared.container.viewContext
+    static var viewContext = PersistenceController.tagsPreview.container.viewContext
     static var previews: some View {
         AddIssueView(project: .example(context: viewContext))
-            .environment(\.managedObjectContext, PersistenceController.shared.container.viewContext)
+            .environment(\.managedObjectContext, viewContext)
     }
 }

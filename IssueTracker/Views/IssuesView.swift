@@ -79,11 +79,12 @@ private extension IssuesView {
 }
 
 struct IssuesView_Previews: PreviewProvider {
+    static var viewContext = PersistenceController.issuesPreview.container.viewContext
     static var previews: some View {
-        IssuesView(project: .example(context: PersistenceController.shared.container.viewContext))
+        IssuesView(project: .example(context: viewContext))
             .environment(
                 \.managedObjectContext,
-                 PersistenceController.shared.container.viewContext
+                 viewContext
             )
     }
 }

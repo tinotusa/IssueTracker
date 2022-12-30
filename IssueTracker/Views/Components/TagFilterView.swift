@@ -52,7 +52,7 @@ struct TagFilterView: View {
 
 
 struct TagFilterView_Previews: PreviewProvider {
-    static var viewContext = PersistenceController.shared.container.viewContext
+    static var viewContext = PersistenceController.tagsPreview.container.viewContext
     
     static var previews: some View {
         TagFilterView(filterText: "") { _ in

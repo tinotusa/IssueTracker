@@ -38,6 +38,34 @@ struct PersistenceController {
 }
 
 extension PersistenceController {
+    static var tagsPreview: Self {
+        let controller = PersistenceController(inMemory: true)
+        let viewContext = controller.container.viewContext
+        for i in 0 ..< 4 {
+            _ = Tag(name: "Tag\(i)", context: viewContext)
+        }
+        do {
+            try viewContext.save()
+        } catch {
+            fatalError("Failed to save preview tags. \(error)")
+        }
+        return controller
+    }
+    
+    static var issuesPreview: Self {
+        let controller = PersistenceController(inMemory: true)
+        let viewContext = controller.container.viewContext
+        for i in 0 ..< 10 {
+            _ = Issue(name: "Issue#\(i)", issueDescription: "testing", priority: .low, tags: [], context: viewContext)
+        }
+        do {
+            try viewContext.save()
+        } catch {
+            fatalError("Failed to save preview issues. \(error)")
+        }
+        return controller
+    }
+    
     static var projectsPreview: Self {
         let controller = PersistenceController(inMemory: true)
         let viewContext = controller.container.viewContext
