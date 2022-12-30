@@ -54,7 +54,7 @@ struct HomeView: View {
             .padding()
             .background(Color.customBackground)
             .navigationDestination(for: Project.self) { project in
-                Text("Project view")
+                IssuesView(project: project)
             }
         }
     }
