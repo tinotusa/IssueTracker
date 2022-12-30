@@ -44,8 +44,10 @@ struct IssueDetail: View {
                                 Text("No tags")
                                     .foregroundColor(.customSecondary)
                             } else {
-                                ForEach(tags) { tag in
-                                    Text(tag.name)
+                                HStack {
+                                    ForEach(tags) { tag in
+                                        TagView(tag: tag)
+                                    }
                                 }
                             }
                         }
