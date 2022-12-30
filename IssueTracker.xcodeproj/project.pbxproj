@@ -19,6 +19,7 @@
 		21BBEBF1295E8176008F237B /* TagFilterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21BBEBF0295E8176008F237B /* TagFilterView.swift */; };
 		21BBEBF3295E8465008F237B /* Tag+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21BBEBF2295E8465008F237B /* Tag+Extensions.swift */; };
 		21BBEBF5295E9A5E008F237B /* IssueRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21BBEBF4295E9A5E008F237B /* IssueRowView.swift */; };
+		21BBEBF7295EC963008F237B /* IssueDetail.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21BBEBF6295EC963008F237B /* IssueDetail.swift */; };
 		21E6D2A7295BD4C500BB4AA6 /* TextStyles.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21E6D2A6295BD4C500BB4AA6 /* TextStyles.swift */; };
 		21E6D2AB295BD9B500BB4AA6 /* Color+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21E6D2AA295BD9B500BB4AA6 /* Color+Extensions.swift */; };
 		21E6D2AD295BDFBF00BB4AA6 /* ButtonStyles.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21E6D2AC295BDFBF00BB4AA6 /* ButtonStyles.swift */; };
@@ -80,6 +81,7 @@
 		21BBEBF0295E8176008F237B /* TagFilterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagFilterView.swift; sourceTree = "<group>"; };
 		21BBEBF2295E8465008F237B /* Tag+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Tag+Extensions.swift"; sourceTree = "<group>"; };
 		21BBEBF4295E9A5E008F237B /* IssueRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IssueRowView.swift; sourceTree = "<group>"; };
+		21BBEBF6295EC963008F237B /* IssueDetail.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IssueDetail.swift; sourceTree = "<group>"; };
 		21E6D2A6295BD4C500BB4AA6 /* TextStyles.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextStyles.swift; sourceTree = "<group>"; };
 		21E6D2AA295BD9B500BB4AA6 /* Color+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Color+Extensions.swift"; sourceTree = "<group>"; };
 		21E6D2AC295BDFBF00BB4AA6 /* ButtonStyles.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonStyles.swift; sourceTree = "<group>"; };
@@ -247,6 +249,7 @@
 				21FDE758295D82DF0006C24A /* DeleteProjectView.swift */,
 				21F1DA32295DABB700076D73 /* IssuesView.swift */,
 				21F1DA38295DB47100076D73 /* AddIssueView.swift */,
+				21BBEBF6295EC963008F237B /* IssueDetail.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -411,6 +414,7 @@
 				21E6D2BA295C010400BB4AA6 /* AddProjectViewModel.swift in Sources */,
 				21BBEBF3295E8465008F237B /* Tag+Extensions.swift in Sources */,
 				21BBEBF5295E9A5E008F237B /* IssueRowView.swift in Sources */,
+				21BBEBF7295EC963008F237B /* IssueDetail.swift in Sources */,
 				21F1DA33295DABB700076D73 /* IssuesView.swift in Sources */,
 				21E6D2B6295BF9D900BB4AA6 /* HomeViewModel.swift in Sources */,
 				2150C847295972E2006CD7D2 /* Persistence.swift in Sources */,
