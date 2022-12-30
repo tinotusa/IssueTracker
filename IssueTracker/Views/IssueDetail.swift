@@ -10,6 +10,12 @@ import SwiftUI
 struct IssueDetail: View {
     @Environment(\.dismiss) private var dismiss
     @ObservedObject var issue: Issue
+    @StateObject private var viewModel: IssueDetailViewModel
+    
+    init(issue: Issue) {
+        self.issue = issue
+        _viewModel = StateObject(wrappedValue: IssueDetailViewModel(issue: issue))
+    }
     
     var body: some View {
         VStack(alignment: .leading) {
@@ -49,13 +55,22 @@ struct IssueDetail: View {
                             .headerStyle()
                         Spacer()
                         Button {
-                            
+                            viewModel.addNewEmptyComment()
                         } label: {
                             Image(systemName: "plus")
                         }
                     }
-                    ForEach(issue.comments?.array as? [Comment] ?? []) { comment in
-                        Text(comment.comment)
+                    ForEach($issue.wrappedComments) { $comment in
+                        VStack(alignment: .leading) {
+                            TextEditor(text: $comment.comment)
+                                .scrollContentBackground(.hidden)
+                                .frame(minHeight: 40)
+                            Text(comment.dateCreated.formatted(date: .abbreviated, time: .omitted))
+                                .footerStyle()
+                        }
+                        .padding()
+                        .background(Color.popup)
+                        .cornerRadius(10)
                     }
                     
                 }
