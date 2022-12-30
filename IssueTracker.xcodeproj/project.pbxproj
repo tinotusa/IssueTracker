@@ -16,6 +16,7 @@
 		2150C854295972E2006CD7D2 /* HomeViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2150C853295972E2006CD7D2 /* HomeViewModelTests.swift */; };
 		2150C85E295972E2006CD7D2 /* IssueTrackerUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2150C85D295972E2006CD7D2 /* IssueTrackerUITests.swift */; };
 		2150C860295972E2006CD7D2 /* IssueTrackerUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2150C85F295972E2006CD7D2 /* IssueTrackerUITestsLaunchTests.swift */; };
+		21BBEBF1295E8176008F237B /* TagFilterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21BBEBF0295E8176008F237B /* TagFilterView.swift */; };
 		21E6D2A7295BD4C500BB4AA6 /* TextStyles.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21E6D2A6295BD4C500BB4AA6 /* TextStyles.swift */; };
 		21E6D2AB295BD9B500BB4AA6 /* Color+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21E6D2AA295BD9B500BB4AA6 /* Color+Extensions.swift */; };
 		21E6D2AD295BDFBF00BB4AA6 /* ButtonStyles.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21E6D2AC295BDFBF00BB4AA6 /* ButtonStyles.swift */; };
@@ -74,6 +75,7 @@
 		2150C859295972E2006CD7D2 /* IssueTrackerUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = IssueTrackerUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		2150C85D295972E2006CD7D2 /* IssueTrackerUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IssueTrackerUITests.swift; sourceTree = "<group>"; };
 		2150C85F295972E2006CD7D2 /* IssueTrackerUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IssueTrackerUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		21BBEBF0295E8176008F237B /* TagFilterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagFilterView.swift; sourceTree = "<group>"; };
 		21E6D2A6295BD4C500BB4AA6 /* TextStyles.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextStyles.swift; sourceTree = "<group>"; };
 		21E6D2AA295BD9B500BB4AA6 /* Color+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Color+Extensions.swift"; sourceTree = "<group>"; };
 		21E6D2AC295BDFBF00BB4AA6 /* ButtonStyles.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonStyles.swift; sourceTree = "<group>"; };
@@ -263,6 +265,7 @@
 				21E6D2BC295C4B8400BB4AA6 /* CustomTextField.swift */,
 				21E6D2C0295C5B4900BB4AA6 /* ProjectRowView.swift */,
 				21F1DA3C295DBD6500076D73 /* LabeledInputField.swift */,
+				21BBEBF0295E8176008F237B /* TagFilterView.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -415,6 +418,7 @@
 				21E6D2AD295BDFBF00BB4AA6 /* ButtonStyles.swift in Sources */,
 				21F1DA2B295D9E8000076D73 /* EditProjectViewModel.swift in Sources */,
 				21F1DA2F295DA58400076D73 /* DeleteProjectViewModel.swift in Sources */,
+				21BBEBF1295E8176008F237B /* TagFilterView.swift in Sources */,
 				21FDE759295D82DF0006C24A /* DeleteProjectView.swift in Sources */,
 				21E6D2BF295C4DD900BB4AA6 /* AddProjectView.swift in Sources */,
 				21E6D2C1295C5B4900BB4AA6 /* ProjectRowView.swift in Sources */,

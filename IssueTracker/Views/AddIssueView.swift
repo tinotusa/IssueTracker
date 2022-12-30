@@ -28,6 +28,7 @@ struct AddIssueView: View {
                     LabeledInputField("Issue name:") {
                         CustomTextField("Issue name", text: $viewModel.name)
                     }
+                    // TODO: description needs to be a bigger text box
                     LabeledInputField("Description:") {
                         CustomTextField("Issue description", text: $viewModel.description)
                     }
@@ -39,19 +40,22 @@ struct AddIssueView: View {
                         }
                         .pickerStyle(.segmented)
                     }
-                    LabeledInputField("Tags:") {
-                        HStack {
-                            CustomTextField("New tag", text: $viewModel.newTag)
-                            PlainButton("Add tag") {
-                                
-                            }
+                    LabeledInputField("Add tags:") {
+                        CustomTextField("Search tag", text: $viewModel.newTag)
+                        TagFilterView(filterText: viewModel.newTag) { tag in
+                            viewModel.addTag(tag)
                         }
-                        .padding(.bottom)
+                    }
+                    LabeledInputField("Selected tags:") {
+                        if viewModel.tags.isEmpty {
+                            Text("No tags selected.")
+                                .foregroundColor(.customSecondary)
+                                .frame(maxWidth: .infinity, alignment: .center)
+                        }
+                        // TODO: add custom layout here
                         LazyHGrid(rows: [.init(.adaptive(minimum: 100))]) {
-                            ForEach(allTags) { tag in
-                                TagButton(tag.name ?? "Not set") {
-                                    viewModel.addTag(tag)
-                                }
+                            ForEach(Array(viewModel.tags)) { tag in
+                                Text(tag.name ?? "N/A")
                             }
                         }
                     }
