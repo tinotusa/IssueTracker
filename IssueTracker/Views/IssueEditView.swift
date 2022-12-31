@@ -41,7 +41,7 @@ struct IssueEditView: View {
                         .pickerStyle(.segmented)
                     }
                     LabeledInputField("Tags:") {
-                        TagFilterView(selectedTags: viewModel.issueCopy.tags?.set as? Set<Tag> ?? [])
+                        TagFilterView(selectedTags: $viewModel.selectedTags)
                     }
                 }
                 .padding(.horizontal)

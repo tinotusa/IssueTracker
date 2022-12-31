@@ -46,10 +46,7 @@ struct AddIssueView: View {
                         .pickerStyle(.segmented)
                     }
                     LabeledInputField("Add tags:") {
-                        CustomTextField("Search tag", text: $viewModel.newTag)
-                        TagFilterView(filterText: viewModel.newTag) { tag in
-                            viewModel.addTag(tag)
-                        }
+                        TagFilterView(selectedTags: $viewModel.tags)
                     }
                     LabeledInputField("Selected tags:") {
                         if viewModel.tags.isEmpty {

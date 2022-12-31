@@ -10,6 +10,7 @@ import CoreData
 
 final class IssueEditViewModel: ObservableObject {
     @Published var issueCopy: Issue
+    @Published var selectedTags: Set<Tag> = []
     
     init(issue: Issue, viewContext: NSManagedObjectContext = PersistenceController.shared.container.viewContext) {
         issueCopy = Issue(
@@ -19,6 +20,7 @@ final class IssueEditViewModel: ObservableObject {
             tags: issue.tags?.set as! Set<Tag>,
             context: issue.managedObjectContext!
         )
+        self.selectedTags = issue.tags?.set as? Set<Tag> ?? []
     }
 }
 
