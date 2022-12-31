@@ -13,6 +13,7 @@ struct IssueEditView: View {
     @Environment(\.dismiss) private var dismiss
     @Environment(\.managedObjectContext) private var viewContext
     @StateObject private var viewModel: IssueEditViewModel
+    @State private var showingCancelDialog = false
     
     init(issue: Issue) {
         self.issue = issue
@@ -47,13 +48,20 @@ struct IssueEditView: View {
                 .padding(.horizontal)
             }
         }
+        .confirmationDialog("Cancel changes", isPresented: $showingCancelDialog) {
+            Button("Don't save", role: .destructive) {
+                dismiss()
+            }
+        } message: {
+            Text("You haven't saved these changes.")
+        }
     }
 }
 private extension IssueEditView {
     var header: some View {
         HStack {
-            Button("Close") {
-                dismiss()
+            Button("Cancel") {
+                showingCancelDialog = true
             }
             Spacer()
             Button("Save") {
