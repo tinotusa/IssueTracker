@@ -47,7 +47,14 @@ struct IssueEditView: View {
                 }
                 .padding(.horizontal)
             }
+            .safeAreaInset(edge: .bottom) {
+                ProminentButton("Save Changes") {
+                    viewModel.saveChanges()
+                }
+                .disabled(!viewModel.hasChanges)
+            }
         }
+        .navigationBarBackButtonHidden(true)
         .confirmationDialog("Cancel changes", isPresented: $showingCancelDialog) {
             Button("Don't save", role: .destructive) {
                 dismiss()
@@ -61,12 +68,17 @@ private extension IssueEditView {
     var header: some View {
         HStack {
             Button("Cancel") {
-                showingCancelDialog = true
+                if viewModel.hasChanges {
+                    showingCancelDialog = true
+                } else {
+                    dismiss()
+                }
             }
             Spacer()
             Button("Save") {
-                
+                viewModel.saveChanges()
             }
+            .disabled(!viewModel.hasChanges)
         }
     }
 }
