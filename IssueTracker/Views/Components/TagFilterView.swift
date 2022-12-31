@@ -8,17 +8,29 @@
 import SwiftUI
 
 struct TagFilterView: View {
-    @Environment(\.managedObjectContext) private var viewContext
+    @State private var filterText = ""
+    @Binding var selectedTags: Set<Tag>
     
+    var body: some View {
+        VStack(alignment: .leading) {
+            CustomTextField("Search tags", text: $filterText)
+            TagsView(filterText: filterText, selectedTags: $selectedTags)
+        }
+        .bodyStyle()
+    }
+}
+
+struct TagsView: View {
+    let filterText: String
+    @Binding var selectedTags: Set<Tag>
+    
+    @Environment(\.managedObjectContext) private var viewContext
     @FetchRequest(sortDescriptors: [.init(\.dateCreated_, order: .reverse)])
     private var allTags: FetchedResults<Tag>
     
-    private let filterText: String
-    private let action: (Tag) -> Void
-    
-    init(filterText: String, action: @escaping (Tag) -> Void) {
+    init(filterText: String, selectedTags: Binding<Set<Tag>>) {
+        _selectedTags = selectedTags
         self.filterText = filterText
-        self.action = action
         _allTags = FetchRequest(
             sortDescriptors: [.init(\.dateCreated_, order: .reverse)],
             predicate: filterText.isEmpty ? nil : .init(format: "%K CONTAINS[cd] %@", "name_", filterText)
@@ -26,7 +38,7 @@ struct TagFilterView: View {
     }
     
     var body: some View {
-        VStack(alignment: .leading) {
+        VStack {
             if allTags.isEmpty && filterText.isEmpty {
                 Text("No tags.\nType a new tag.")
                     .foregroundColor(.customSecondary)
@@ -40,15 +52,24 @@ struct TagFilterView: View {
             // TODO: add custom layout here
             LazyVGrid(columns: [.init(.adaptive(minimum: 100))]) {
                 ForEach(allTags) { tag in
-                    TagButton(tag.name) {
-                        action(tag)
+                    Button {
+                        addTagToSelection(tag)
+                    } label: {
+                        ProminentTagView(title: tag.name, isSelected: selectedTags.contains(tag))
                     }
                 }
             }
         }
-        .bodyStyle()
     }
     
+    private func addTagToSelection(_ tag: Tag) {
+        if selectedTags.contains(tag) {
+            selectedTags.remove(tag)
+        } else {
+            selectedTags.insert(tag)
+        }
+    }
+
     private func addNewTag(named name: String) {
         let tag = Tag(context: viewContext)
         tag.name = name
@@ -58,14 +79,19 @@ struct TagFilterView: View {
     }
 }
 
-
 struct TagFilterView_Previews: PreviewProvider {
     static var viewContext = PersistenceController.tagsPreview.container.viewContext
     
-    static var previews: some View {
-        TagFilterView(filterText: "") { _ in
-            // do nothing
+    struct ContainerView: View {
+        @State private var selectedTags: Set<Tag> = []
+        
+        var body: some View {
+            TagFilterView(selectedTags: $selectedTags)
         }
-        .environment(\.managedObjectContext, viewContext)
+    }
+    
+    static var previews: some View {
+        ContainerView()
+            .environment(\.managedObjectContext, viewContext)
     }
 }
