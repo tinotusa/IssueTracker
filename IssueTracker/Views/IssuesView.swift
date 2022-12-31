@@ -10,6 +10,7 @@ import CoreData
 
 struct IssuesView: View {
     @Environment(\.managedObjectContext) private var viewContext
+    @Environment(\.dismiss) private var dismiss
     private let project: Project
     
     @FetchRequest(sortDescriptors: [])
@@ -33,6 +34,9 @@ struct IssuesView: View {
             // TODO: add swipe actions
             ScrollView {
                 VStack(alignment: .leading) {
+                    Text("Issues")
+                        .titleStyle()
+                        .padding(.bottom)
                     if issues.isEmpty {
                         Text("No issues to see.\nTap the Add issue button below to start.")
                             .multilineTextAlignment(.center)
@@ -59,6 +63,7 @@ struct IssuesView: View {
                 .frame(maxWidth: .infinity, alignment: .center)
             }
         }
+        .navigationBarBackButtonHidden(true)
         .bodyStyle()
         .background(Color.customBackground)
         .sheet(isPresented: $viewModel.showingAddIssueView) {
@@ -74,8 +79,13 @@ struct IssuesView: View {
 private extension IssuesView {
     var header: some View {
         HStack {
-            Text("Issues")
-                .titleStyle()
+            Button {
+                dismiss()
+            } label: {
+                Label("Back", systemImage: "chevron.left")
+                    .foregroundColor(.buttonLabel)
+            }
+            
             Spacer()
             Menu {
                 Button("test") { }
