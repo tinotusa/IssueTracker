@@ -28,42 +28,38 @@ struct IssuesView: View {
     }
     
     var body: some View {
-        VStack(alignment: .leading) {
-            header
-                .padding([.horizontal, .top])
-            // TODO: add swipe actions
-            ScrollView {
-                VStack(alignment: .leading) {
-                    Text("Issues")
-                        .titleStyle()
-                        .padding(.bottom)
-                    if issues.isEmpty {
-                        Text("No issues to see.\nTap the Add issue button below to start.")
-                            .multilineTextAlignment(.center)
-                            .foregroundColor(.customSecondary)
-                            .frame(maxWidth: .infinity, alignment: .center)
-                    } else {
-                        ForEach(issues) { issue in
-                            Button {
-                                selectedIssue = issue
-                            } label: {
-                                IssueRowView(issue: issue)
-                                    .padding(.bottom)
-                            }
+        // TODO: add swipe actions
+        List {
+            Group {
+                if issues.isEmpty {
+                    Text("No issues to see.\nTap the Add issue button below to start.")
+                        .multilineTextAlignment(.center)
+                        .foregroundColor(.customSecondary)
+                        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
+                } else {
+                    ForEach(issues) { issue in
+                        Button {
+                            selectedIssue = issue
+                        } label: {
+                            IssueRowView(issue: issue)
                         }
-                        .frame(maxWidth: .infinity, alignment: .leading)
                     }
                 }
-                .padding(.horizontal)
             }
-            .safeAreaInset(edge: .bottom) {
-                ProminentButton("Add Issue") {
-                    viewModel.showingAddIssueView = true
-                }
-                .frame(maxWidth: .infinity, alignment: .center)
-            }
+            .listRowSeparator(.hidden)
+            .listRowBackground(Color.customBackground)
         }
-        .navigationBarBackButtonHidden(true)
+        .listStyle(.plain)
+        .background(Color.customBackground)
+        .scrollContentBackground(.hidden)
+        .safeAreaInset(edge: .bottom) {
+            ProminentButton("Add Issue") {
+                viewModel.showingAddIssueView = true
+            }
+            .frame(maxWidth: .infinity, alignment: .center)
+        }
+        .navigationBarTitle("Issues")
+        .toolbarBackground(Color.customBackground, for: .navigationBar)
         .bodyStyle()
         .background(Color.customBackground)
         .sheet(isPresented: $viewModel.showingAddIssueView) {
@@ -73,31 +69,20 @@ struct IssuesView: View {
         .sheet(item: $selectedIssue) { selectedIssue in
             IssueDetail(issue: selectedIssue)
         }
-    }
-}
-
-private extension IssuesView {
-    var header: some View {
-        HStack {
-            Button {
-                dismiss()
-            } label: {
-                Label("Back", systemImage: "chevron.left")
-                    .foregroundColor(.buttonLabel)
-            }
-            
-            Spacer()
-            Menu {
-                Button("test") { }
-            } label: {
-                Text("Sort")
-                    .foregroundColor(.buttonLabel)
-            }
-            Menu {
-                Button("test") { }
-            } label: {
-                Text("Filter")
-                    .foregroundColor(.buttonLabel)
+        .toolbar {
+            ToolbarItemGroup (placement: .primaryAction) {
+                Menu {
+                    Button("test") { print("hello") }
+                    Button("test") { print("world") }
+                } label: {
+                    Text("Sort")
+                }
+                
+                Menu {
+                    Button("test") { }
+                } label: {
+                    Text("Filter")
+                }
             }
         }
     }
@@ -105,11 +90,14 @@ private extension IssuesView {
 
 struct IssuesView_Previews: PreviewProvider {
     static var viewContext = PersistenceController.issuesPreview.container.viewContext
+    
     static var previews: some View {
-        IssuesView(project: .example(context: viewContext))
-            .environment(
-                \.managedObjectContext,
-                 viewContext
+        NavigationStack {
+            IssuesView(project: .example(context: viewContext))
+                .environment(
+                    \.managedObjectContext,
+                     viewContext
             )
+        }
     }
 }
