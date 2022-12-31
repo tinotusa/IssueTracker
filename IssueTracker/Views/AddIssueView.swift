@@ -36,6 +36,7 @@ struct AddIssueView: View {
                     // TODO: description needs to be a bigger text box
                     LabeledInputField("Description:") {
                         CustomTextField("Issue description", text: $viewModel.description)
+                            .lineLimit(4 ... 8)
                     }
                     LabeledInputField("Priority:") {
                         Picker("Issue priority", selection: $viewModel.priority) {

@@ -18,7 +18,7 @@ struct CustomTextField: View {
     
     var body: some View {
         VStack {
-            TextField(placeholder, text: $text)
+            TextField(placeholder, text: $text, axis: .vertical)
             Rectangle()
                 .frame(height: 1)
                 .opacity(0.2)

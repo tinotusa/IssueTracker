@@ -19,6 +19,7 @@
 		2150C854295972E2006CD7D2 /* HomeViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2150C853295972E2006CD7D2 /* HomeViewModelTests.swift */; };
 		2150C85E295972E2006CD7D2 /* IssueTrackerUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2150C85D295972E2006CD7D2 /* IssueTrackerUITests.swift */; };
 		2150C860295972E2006CD7D2 /* IssueTrackerUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2150C85F295972E2006CD7D2 /* IssueTrackerUITestsLaunchTests.swift */; };
+		21654BC629605245009C434B /* AddIssueView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21654BC529605245009C434B /* AddIssueView.swift */; };
 		21BBEBF1295E8176008F237B /* TagFilterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21BBEBF0295E8176008F237B /* TagFilterView.swift */; };
 		21BBEBF3295E8465008F237B /* Tag+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21BBEBF2295E8465008F237B /* Tag+Extensions.swift */; };
 		21BBEBF5295E9A5E008F237B /* IssueRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21BBEBF4295E9A5E008F237B /* IssueRowView.swift */; };
@@ -47,7 +48,6 @@
 		21F1DA33295DABB700076D73 /* IssuesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21F1DA32295DABB700076D73 /* IssuesView.swift */; };
 		21F1DA35295DB04E00076D73 /* Issue+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21F1DA34295DB04E00076D73 /* Issue+Extensions.swift */; };
 		21F1DA37295DB3EA00076D73 /* IssuesViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21F1DA36295DB3EA00076D73 /* IssuesViewModel.swift */; };
-		21F1DA39295DB47100076D73 /* AddIssueView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21F1DA38295DB47100076D73 /* AddIssueView.swift */; };
 		21F1DA3B295DB55E00076D73 /* AddIssueViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21F1DA3A295DB55E00076D73 /* AddIssueViewModel.swift */; };
 		21F1DA3D295DBD6500076D73 /* LabeledInputField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21F1DA3C295DBD6500076D73 /* LabeledInputField.swift */; };
 		21FDE718295D64F10006C24A /* Project+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21FDE717295D64F10006C24A /* Project+Extensions.swift */; };
@@ -89,6 +89,7 @@
 		2150C859295972E2006CD7D2 /* IssueTrackerUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = IssueTrackerUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		2150C85D295972E2006CD7D2 /* IssueTrackerUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IssueTrackerUITests.swift; sourceTree = "<group>"; };
 		2150C85F295972E2006CD7D2 /* IssueTrackerUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IssueTrackerUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		21654BC529605245009C434B /* AddIssueView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddIssueView.swift; sourceTree = "<group>"; };
 		21BBEBF0295E8176008F237B /* TagFilterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagFilterView.swift; sourceTree = "<group>"; };
 		21BBEBF2295E8465008F237B /* Tag+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Tag+Extensions.swift"; sourceTree = "<group>"; };
 		21BBEBF4295E9A5E008F237B /* IssueRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IssueRowView.swift; sourceTree = "<group>"; };
@@ -117,7 +118,6 @@
 		21F1DA32295DABB700076D73 /* IssuesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IssuesView.swift; sourceTree = "<group>"; };
 		21F1DA34295DB04E00076D73 /* Issue+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Issue+Extensions.swift"; sourceTree = "<group>"; };
 		21F1DA36295DB3EA00076D73 /* IssuesViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IssuesViewModel.swift; sourceTree = "<group>"; };
-		21F1DA38295DB47100076D73 /* AddIssueView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddIssueView.swift; sourceTree = "<group>"; };
 		21F1DA3A295DB55E00076D73 /* AddIssueViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddIssueViewModel.swift; sourceTree = "<group>"; };
 		21F1DA3C295DBD6500076D73 /* LabeledInputField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LabeledInputField.swift; sourceTree = "<group>"; };
 		21FDE717295D64F10006C24A /* Project+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Project+Extensions.swift"; sourceTree = "<group>"; };
@@ -265,9 +265,9 @@
 				21FDE756295D80D30006C24A /* EditProjectView.swift */,
 				21FDE758295D82DF0006C24A /* DeleteProjectView.swift */,
 				21F1DA32295DABB700076D73 /* IssuesView.swift */,
-				21F1DA38295DB47100076D73 /* AddIssueView.swift */,
 				21BBEBF6295EC963008F237B /* IssueDetail.swift */,
 				2127AD61295FB421005893DE /* EditIssueView.swift */,
+				21654BC529605245009C434B /* AddIssueView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -458,6 +458,7 @@
 				21E6D2B3295BF94800BB4AA6 /* HomeView.swift in Sources */,
 				2127AD66295FBD0E005893DE /* ProminentTagView.swift in Sources */,
 				21E6D2AD295BDFBF00BB4AA6 /* ButtonStyles.swift in Sources */,
+				21654BC629605245009C434B /* AddIssueView.swift in Sources */,
 				21F1DA2B295D9E8000076D73 /* EditProjectViewModel.swift in Sources */,
 				21F1DA2F295DA58400076D73 /* DeleteProjectViewModel.swift in Sources */,
 				21BBEBF1295E8176008F237B /* TagFilterView.swift in Sources */,
@@ -465,7 +466,6 @@
 				21BBEBF9295ECD4E008F237B /* IssueDetailViewModel.swift in Sources */,
 				21E6D2BF295C4DD900BB4AA6 /* AddProjectView.swift in Sources */,
 				21E6D2C1295C5B4900BB4AA6 /* ProjectRowView.swift in Sources */,
-				21F1DA39295DB47100076D73 /* AddIssueView.swift in Sources */,
 				21E6D2AB295BD9B500BB4AA6 /* Color+Extensions.swift in Sources */,
 				21F1DA35295DB04E00076D73 /* Issue+Extensions.swift in Sources */,
 				21BBEBFD295EDBE8008F237B /* CommentBoxView.swift in Sources */,
