@@ -20,6 +20,19 @@ final class IssuesViewModel: ObservableObject {
 }
 
 extension IssuesViewModel {
+    /// Closes the given issue.
+    /// - Parameter issue: The `Issue` to close.
+    func closeIssue(_ issue: Issue) {
+        log.debug("Closing issue \"\(issue.name)\" ...")
+        issue.status = .closed
+        do {
+            try viewContext.save()
+            log.debug("Successfully close issue.")
+        } catch {
+            viewContext.rollback()
+            log.error("Failed to close issue. \(error)")
+        }
+    }
     /// Deletes the given issue from core data.
     /// - Parameter issue: The `Issue` to delete.
     func deleteIssue(_ issue: Issue) {
@@ -30,6 +43,7 @@ extension IssuesViewModel {
             try viewContext.save()
             log.debug("Successfully deleted issue.")
         } catch {
+            viewContext.rollback()
             log.error("Failed to delete issue. \(error)")
         }
     }

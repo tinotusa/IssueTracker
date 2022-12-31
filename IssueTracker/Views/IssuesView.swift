@@ -45,7 +45,7 @@ struct IssuesView: View {
                         }
                         .swipeActions {
                             Button {
-                                print("swiped to close issue")
+                                viewModel.closeIssue(issue)
                             } label: {
                                 Label("Close issue", systemImage: "checkmark.circle.fill")
                                     .labelStyle(.iconOnly)
