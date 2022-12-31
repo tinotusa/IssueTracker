@@ -24,8 +24,41 @@ extension Project {
         self.issues?.lastObject as? Issue
     }
     
+    /// Creates an example Project.
+    ///
+    /// Creates an example Project used in previews.
+    ///
+    /// - Parameter context: The context for the project
+    /// - Returns: A new project in the given context.
     static func example(context: NSManagedObjectContext) -> Project {
-        let project = Project(name: "Example", startDate: Date(), context: context)
+        let project = Project(name: "Example project", startDate: .now, context: context)
+        let tags: [Tag] = ["Todo", "UI", "WIP", "Bug", "Fix", "Test", "Feat", "Upgrade", "Update"].map { todoText in
+            Tag.init(name: todoText, context: context)
+        }
+        
+        /// Returns a random selection of tags.
+        /// - Returns: A set of Tags
+        func randomTags() -> Set<Tag> {
+            // how many tags to pick
+            let amount = Int.random(in: 0 ..< tags.count)
+            // randomise the tags indices
+            let indices = tags.enumerated().map { $0.offset }.shuffled()
+            var selectedTags = Set<Tag>()
+            // pick the first n(amount) tags
+            for index in indices where index < amount {
+                selectedTags.insert(tags[index])
+            }
+            return selectedTags
+        }
+        
+        project.issues = NSOrderedSet(set: Set<Issue>([
+            .init(name: "Lorem ipsum dolor", issueDescription: "this is a random description of the issue.", priority: .low, tags: randomTags(), context: context),
+            .init(name: "Sit amet, consectetur", issueDescription: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam ac magna ex. Etiam nec dolor id ex imperdiet ornare.", priority: .low, tags: randomTags(), context: context),
+            .init(name: "Vestibulum at tellus commodo", issueDescription: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.", priority: .low, tags: randomTags(), context: context),
+            .init(name: "Imperdiet ornare", issueDescription: "Etiam nec dolor id ex imperdiet ornare. Proin consectetur est eget suscipit sodales. Cras tempor pharetra pulvinar.", priority: .low, tags: randomTags(), context: context),
+            .init(name: "Adipiscing elit", issueDescription: "Dolor id ex imperdiet ornare. Proin consectetur est eget suscipit sodales. Cras tempor pharetra pulvinar.", priority: .low, tags: randomTags(), context: context),
+        ]))
+        
         do {
             try context.save()
         } catch {
