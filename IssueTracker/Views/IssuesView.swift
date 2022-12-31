@@ -43,6 +43,21 @@ struct IssuesView: View {
                         } label: {
                             IssueRowView(issue: issue)
                         }
+                        .swipeActions {
+                            Button {
+                                print("swiped to close issue")
+                            } label: {
+                                Label("Close issue", systemImage: "checkmark.circle.fill")
+                                    .labelStyle(.iconOnly)
+                            }
+                            .tint(.green)
+                            Button(role: .destructive) {
+                                viewModel.deleteIssue(issue)
+                            } label: {
+                                Label("Delete", systemImage: "trash")
+                                    .labelStyle(.iconOnly)
+                            }
+                        }
                     }
                 }
             }
