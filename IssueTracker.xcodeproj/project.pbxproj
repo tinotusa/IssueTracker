@@ -27,6 +27,7 @@
 		21BBEBFB295ECF8B008F237B /* Comment+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21BBEBFA295ECF8B008F237B /* Comment+Extensions.swift */; };
 		21BBEBFD295EDBE8008F237B /* CommentBoxView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21BBEBFC295EDBE8008F237B /* CommentBoxView.swift */; };
 		21BBEBFF295EE1E9008F237B /* TagView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21BBEBFE295EE1E9008F237B /* TagView.swift */; };
+		21E0CFCA29604E800040C293 /* FilteredIssuesListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21E0CFC929604E800040C293 /* FilteredIssuesListView.swift */; };
 		21E6D2A7295BD4C500BB4AA6 /* TextStyles.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21E6D2A6295BD4C500BB4AA6 /* TextStyles.swift */; };
 		21E6D2AB295BD9B500BB4AA6 /* Color+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21E6D2AA295BD9B500BB4AA6 /* Color+Extensions.swift */; };
 		21E6D2AD295BDFBF00BB4AA6 /* ButtonStyles.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21E6D2AC295BDFBF00BB4AA6 /* ButtonStyles.swift */; };
@@ -96,6 +97,7 @@
 		21BBEBFA295ECF8B008F237B /* Comment+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Comment+Extensions.swift"; sourceTree = "<group>"; };
 		21BBEBFC295EDBE8008F237B /* CommentBoxView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentBoxView.swift; sourceTree = "<group>"; };
 		21BBEBFE295EE1E9008F237B /* TagView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagView.swift; sourceTree = "<group>"; };
+		21E0CFC929604E800040C293 /* FilteredIssuesListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilteredIssuesListView.swift; sourceTree = "<group>"; };
 		21E6D2A6295BD4C500BB4AA6 /* TextStyles.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextStyles.swift; sourceTree = "<group>"; };
 		21E6D2AA295BD9B500BB4AA6 /* Color+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Color+Extensions.swift"; sourceTree = "<group>"; };
 		21E6D2AC295BDFBF00BB4AA6 /* ButtonStyles.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonStyles.swift; sourceTree = "<group>"; };
@@ -296,6 +298,7 @@
 				21BBEBFC295EDBE8008F237B /* CommentBoxView.swift */,
 				21BBEBFE295EE1E9008F237B /* TagView.swift */,
 				2127AD65295FBD0E005893DE /* ProminentTagView.swift */,
+				21E0CFC929604E800040C293 /* FilteredIssuesListView.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -442,6 +445,7 @@
 				21E6D2B6295BF9D900BB4AA6 /* HomeViewModel.swift in Sources */,
 				2150C847295972E2006CD7D2 /* Persistence.swift in Sources */,
 				2127AD64295FB552005893DE /* EditIssueViewModel.swift in Sources */,
+				21E0CFCA29604E800040C293 /* FilteredIssuesListView.swift in Sources */,
 				2150C840295972E0006CD7D2 /* ContentView.swift in Sources */,
 				2150C84A295972E2006CD7D2 /* IssueTracker.xcdatamodeld in Sources */,
 				2150C83E295972E0006CD7D2 /* IssueTrackerApp.swift in Sources */,

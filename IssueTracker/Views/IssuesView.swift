@@ -9,64 +9,29 @@ import SwiftUI
 import CoreData
 
 struct IssuesView: View {
-    @Environment(\.managedObjectContext) private var viewContext
-    @Environment(\.dismiss) private var dismiss
     private let project: Project
     
-    @FetchRequest(sortDescriptors: [])
-    private var issues: FetchedResults<Issue>
-
+    @Environment(\.managedObjectContext) private var viewContext
+    @Environment(\.dismiss) private var dismiss
+    
     @StateObject private var viewModel = IssuesViewModel()
     @State private var selectedIssue: Issue?
+    @State private var sortDescriptor = SortDescriptor<Issue>(\.dateCreated_, order: .forward)
+    @State private var predicate: NSPredicate
     
     init(project: Project) {
         self.project = project
-        _issues = FetchRequest<Issue>(
-            sortDescriptors: [.init(\.dateCreated_, order: .forward)],
-            predicate: NSPredicate(format: "(project == %@) AND (status_ == %@)",  project, "open")
-        )
+        _predicate = State(wrappedValue: NSPredicate(format: "(project == %@) AND (status_ == %@)",  project, "open"))
     }
     
     var body: some View {
-        // TODO: add swipe actions
-        List {
-            Group {
-                if issues.isEmpty {
-                    Text("No issues to see.\nTap the Add issue button below to start.")
-                        .multilineTextAlignment(.center)
-                        .foregroundColor(.customSecondary)
-                        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
-                } else {
-                    ForEach(issues) { issue in
-                        Button {
-                            selectedIssue = issue
-                        } label: {
-                            IssueRowView(issue: issue)
-                        }
-                        .swipeActions {
-                            Button {
-                                viewModel.closeIssue(issue)
-                            } label: {
-                                Label("Close issue", systemImage: "checkmark.circle.fill")
-                                    .labelStyle(.iconOnly)
-                            }
-                            .tint(.green)
-                            Button(role: .destructive) {
-                                viewModel.deleteIssue(issue)
-                            } label: {
-                                Label("Delete", systemImage: "trash")
-                                    .labelStyle(.iconOnly)
-                            }
-                        }
-                    }
-                }
-            }
-            .listRowSeparator(.hidden)
-            .listRowBackground(Color.customBackground)
-        }
-        .listStyle(.plain)
-        .background(Color.customBackground)
-        .scrollContentBackground(.hidden)
+        FilteredIssuesListView(
+            selectedIssue: $selectedIssue,
+            sortDescriptor: sortDescriptor,
+            predicate: predicate,
+            closeAction: viewModel.closeIssue,
+            deleteAction: viewModel.deleteIssue
+        )
         .safeAreaInset(edge: .bottom) {
             ProminentButton("Add Issue") {
                 viewModel.showingAddIssueView = true
@@ -87,8 +52,42 @@ struct IssuesView: View {
         .toolbar {
             ToolbarItemGroup (placement: .primaryAction) {
                 Menu {
-                    Button("test") { print("hello") }
-                    Button("test") { print("world") }
+                    Menu("Title") {
+                        Button {
+                            sortDescriptor = .init(\.name_, order: .forward)
+                        } label: {
+                            Label("Ascending", systemImage: "chevron.up")
+                        }
+                        Button {
+                            sortDescriptor = .init(\.name_, order: .reverse)
+                        } label: {
+                            Label("Descending", systemImage: "chevron.down")
+                        }
+                    }
+                    Menu("Date") {
+                        Button {
+                            sortDescriptor = .init(\.dateCreated_, order: .forward)
+                        } label: {
+                            Label("Ascending", systemImage: "chevron.up")
+                        }
+                        Button {
+                            sortDescriptor = .init(\.dateCreated_, order: .reverse)
+                        } label: {
+                            Label("Descending", systemImage: "chevron.down")
+                        }
+                    }
+                    Menu("Priority") {
+                        Button {
+                            sortDescriptor = .init(\.priority_, order: .reverse)
+                        } label: {
+                            Label("Highest to lowest", systemImage: "chevron.up")
+                        }
+                        Button {
+                            sortDescriptor = .init(\.priority_, order: .forward)
+                        } label: {
+                            Label("Lowest to  highest", systemImage: "chevron.down")
+                        }
+                    }
                 } label: {
                     Text("Sort")
                 }
