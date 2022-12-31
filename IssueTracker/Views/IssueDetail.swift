@@ -77,7 +77,7 @@ struct IssueDetail: View {
             .bodyStyle()
             .background(Color.customBackground)
             .navigationDestination(for: Issue.self) { issue in
-                IssueEditView(issue: issue)
+                EditIssueView(issue: issue)
             }
         }
     }

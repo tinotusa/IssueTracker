@@ -1,5 +1,5 @@
 //
-//  IssueEditViewModel.swift
+//  EditIssueViewModel.swift
 //  IssueTracker
 //
 //  Created by Tino on 31/12/2022.
@@ -9,7 +9,7 @@ import Foundation
 import CoreData
 import os
 
-final class IssueEditViewModel: ObservableObject {
+final class EditIssueViewModel: ObservableObject {
     @Published var issueCopy: Issue
     @Published var selectedTags: Set<Tag> = []
     private var issue: Issue
@@ -30,7 +30,7 @@ final class IssueEditViewModel: ObservableObject {
     }
 }
 
-extension IssueEditViewModel {
+extension EditIssueViewModel {
     var hasChanges: Bool {
         return (
             issue.name != issueCopy.name ||

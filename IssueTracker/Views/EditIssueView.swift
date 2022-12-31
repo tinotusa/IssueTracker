@@ -1,5 +1,5 @@
 //
-//  IssueEditView.swift
+//  EditIssueView.swift
 //  IssueTracker
 //
 //  Created by Tino on 31/12/2022.
@@ -7,17 +7,17 @@
 
 import SwiftUI
 
-struct IssueEditView: View {
+struct EditIssueView: View {
     @ObservedObject var issue: Issue
     
     @Environment(\.dismiss) private var dismiss
     @Environment(\.managedObjectContext) private var viewContext
-    @StateObject private var viewModel: IssueEditViewModel
+    @StateObject private var viewModel: EditIssueViewModel
     @State private var showingCancelDialog = false
     
     init(issue: Issue) {
         self.issue = issue
-        _viewModel = StateObject(wrappedValue: IssueEditViewModel(issue: issue))
+        _viewModel = StateObject(wrappedValue: EditIssueViewModel(issue: issue))
     }
     
     var body: some View {
@@ -64,7 +64,7 @@ struct IssueEditView: View {
         }
     }
 }
-private extension IssueEditView {
+private extension EditIssueView {
     var header: some View {
         HStack {
             Button("Cancel") {
@@ -85,6 +85,6 @@ private extension IssueEditView {
 struct IssueEditView_Previews: PreviewProvider {
     static let viewContext = PersistenceController.issuesPreview.container.viewContext
     static var previews: some View {
-        IssueEditView(issue: Issue(name: "Test issue", issueDescription: "", priority: .low, tags: [], context: viewContext))
+        EditIssueView(issue: Issue(name: "Test issue", issueDescription: "", priority: .low, tags: [], context: viewContext))
     }
 }
