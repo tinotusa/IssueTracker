@@ -17,7 +17,7 @@ final class IssueEditViewModel: ObservableObject {
             name: issue.name,
             issueDescription: issue.description,
             priority: issue.priority,
-            tags: issue.tags?.set as! Set<Tag>,
+            tags: issue.tags?.set as? Set<Tag> ?? [],
             context: issue.managedObjectContext!
         )
         self.selectedTags = issue.tags?.set as? Set<Tag> ?? []
