@@ -100,3 +100,13 @@ extension Issue {
         set { self.comments = NSOrderedSet(array: newValue) }
     }
 }
+
+// MARK: - Functions
+extension Issue {
+    func copyProperties(from issue: Issue) {
+        self.name = issue.name
+        self.issueDescription = issue.issueDescription
+        self.tags = issue.tags
+        self.priority = issue.priority
+    }
+}
