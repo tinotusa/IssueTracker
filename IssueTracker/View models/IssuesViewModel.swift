@@ -8,6 +8,7 @@
 import Foundation
 import CoreData
 import os
+import SwiftUI
 
 final class IssuesViewModel: ObservableObject {
     @Published var showingAddIssueView = false
@@ -26,7 +27,9 @@ extension IssuesViewModel {
         log.debug("Closing issue \"\(issue.name)\" ...")
         issue.status = .closed
         do {
-            try viewContext.save()
+            try withAnimation {
+                try viewContext.save()
+            }
             log.debug("Successfully close issue.")
         } catch {
             viewContext.rollback()
@@ -40,7 +43,9 @@ extension IssuesViewModel {
         // TODO: either set it to some archived state or implement undo ?
         viewContext.delete(issue)
         do {
-            try viewContext.save()
+            try withAnimation {
+                try viewContext.save()
+            }
             log.debug("Successfully deleted issue.")
         } catch {
             viewContext.rollback()

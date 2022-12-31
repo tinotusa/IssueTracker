@@ -23,7 +23,7 @@ struct IssuesView: View {
         self.project = project
         _issues = FetchRequest<Issue>(
             sortDescriptors: [.init(\.dateCreated_, order: .forward)],
-            predicate: NSPredicate(format: "%K == %@", "project", project)
+            predicate: NSPredicate(format: "(project == %@) AND (status_ == %@)",  project, "open")
         )
     }
     
