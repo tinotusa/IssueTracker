@@ -23,6 +23,38 @@ struct IssuesView: View {
         self.project = project
         _predicate = State(wrappedValue: NSPredicate(format: "(project == %@) AND (status_ == %@)",  project, "open"))
     }
+
+    @State private var searchText = ""
+    @State private var searchScope = SearchScopes.name
+    
+    func runSearch(_ searchText: String) {
+        if searchText.isEmpty {
+            predicate = NSPredicate(
+                format: "(project == %@) AND (status_ == %@)", project, "open")
+            return
+        }
+        var format = "(project == %@) AND (status_ == %@)"
+        switch searchScope {
+        case .description:
+            format += "AND (issueDescription_ CONTAINS[cd] %@)"
+            predicate = NSPredicate(format: format,  project, "open", searchText)
+        case .name:
+            format += "AND (name_ CONTAINS[cd] %@)"
+            predicate = NSPredicate(format: format,  project, "open", searchText)
+        }
+    }
+    
+    enum SearchScopes: CaseIterable, Identifiable {
+        case name
+        case description
+        var id: Self { self }
+        var title: LocalizedStringKey {
+            switch self {
+            case .description: return "Description"
+            case .name: return "Name"
+            }
+        }
+    }
     
     var body: some View {
         FilteredIssuesListView(
@@ -50,6 +82,13 @@ struct IssuesView: View {
                 }
             }
         }
+        .searchable(text: $searchText)
+        .searchScopes($searchScope) {
+            ForEach(SearchScopes.allCases) { scope in
+                Text(scope.title).tag(scope)
+            }
+        }
+        .onChange(of: searchText, perform: runSearch)
         .safeAreaInset(edge: .bottom) {
             ProminentButton("Add Issue") {
                 viewModel.showingAddIssueView = true
