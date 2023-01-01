@@ -7,25 +7,20 @@
 
 import SwiftUI
 
-struct FilteredIssuesListView: View {
-    let closeAction: (Issue) -> Void
-    let deleteAction: (Issue) -> Void
+struct FilteredIssuesListView<Content: View>: View {
+    let content: (Issue) -> Content
     
     @FetchRequest(sortDescriptors: [])
     private var issues: FetchedResults<Issue>
     
     @Environment(\.managedObjectContext) private var viewContext
-    @Binding var selectedIssue: Issue?
     
     init(
-        selectedIssue: Binding<Issue?>,
-        sortDescriptor: SortDescriptor<Issue>, predicate: NSPredicate,
-        closeAction: @escaping (Issue) -> Void,
-        deleteAction: @escaping (Issue) -> Void
+        sortDescriptor: SortDescriptor<Issue>,
+        predicate: NSPredicate,
+        @ViewBuilder content: @escaping (Issue) -> Content
     ) {
-        _selectedIssue = selectedIssue
-        self.closeAction = closeAction
-        self.deleteAction = deleteAction
+        self.content = content
         _issues = FetchRequest(
             sortDescriptors: [sortDescriptor],
             predicate: predicate
@@ -43,26 +38,7 @@ struct FilteredIssuesListView: View {
                     .listRowBackground(Color.customBackground)
             } else {
                 ForEach(issues) { issue in
-                    Button {
-                        selectedIssue = issue
-                    } label: {
-                        IssueRowView(issue: issue)
-                    }
-                    .swipeActions {
-                        Button {
-                            closeAction(issue)
-                        } label: {
-                            Label("Close issue", systemImage: "checkmark.circle.fill")
-                                .labelStyle(.iconOnly)
-                        }
-                        .tint(.green)
-                        Button(role: .destructive) {
-                            deleteAction(issue)
-                        } label: {
-                            Label("Delete", systemImage: "trash")
-                                .labelStyle(.iconOnly)
-                        }
-                    }
+                    content(issue)
                 }
                 .listRowSeparator(.hidden)
                 .listRowBackground(Color.customBackground)
@@ -78,12 +54,11 @@ struct FilteredIssuesListView_Previews: PreviewProvider {
     static var viewContext = PersistenceController.issuesPreview.container.viewContext
     static var previews: some View {
         FilteredIssuesListView(
-            selectedIssue: .constant(nil),
             sortDescriptor: .init(\.dateCreated_, order: .forward),
-            predicate: .init(format: "(status_ == %@) AND (TRUEPREDICATE)", "open"),
-            closeAction: { _ in },
-            deleteAction: { _ in }
-        )
+            predicate: .init(format: "(status_ == %@) AND (TRUEPREDICATE)", "open")
+        ) { issue in
+            Text(issue.name)
+        }
         .environment(\.managedObjectContext, viewContext)
     }
 }

@@ -26,12 +26,30 @@ struct IssuesView: View {
     
     var body: some View {
         FilteredIssuesListView(
-            selectedIssue: $selectedIssue,
             sortDescriptor: sortDescriptor,
-            predicate: predicate,
-            closeAction: viewModel.closeIssue,
-            deleteAction: viewModel.deleteIssue
-        )
+            predicate: predicate
+        ) { issue in
+            Button {
+                selectedIssue = issue
+            } label: {
+                IssueRowView(issue: issue)
+            }
+            .swipeActions {
+                Button {
+                    viewModel.closeIssue(issue)
+                } label: {
+                    Label("Close issue", systemImage: "checkmark.circle.fill")
+                        .labelStyle(.iconOnly)
+                }
+                .tint(.green)
+                Button(role: .destructive) {
+                    viewModel.deleteIssue(issue)
+                } label: {
+                    Label("Delete", systemImage: "trash")
+                        .labelStyle(.iconOnly)
+                }
+            }
+        }
         .safeAreaInset(edge: .bottom) {
             ProminentButton("Add Issue") {
                 viewModel.showingAddIssueView = true
