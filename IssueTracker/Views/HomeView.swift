@@ -16,82 +16,87 @@ struct HomeView: View {
     
     var body: some View {
         NavigationStack {
-            VStack {
-                header
-                ScrollView {
-                    VStack(alignment: .leading) {
-                        if projects.isEmpty {
-                            Text("🗒\nNo projects.\nAdd one to start tracking.")
-                                .multilineTextAlignment(.center)
-                                .foregroundColor(.customSecondary)
-                                .frame(maxWidth: .infinity, alignment: .center)
-                        } else {
-                            ForEach(projects) { project in
-                                NavigationLink(value: project) {
-                                    ProjectRowView(project: project)
-                                }
+            List {
+                if projects.isEmpty {
+                    Text("🗒\nNo projects.\nAdd one to start tracking.")
+                        .multilineTextAlignment(.center)
+                        .foregroundColor(.customSecondary)
+                        .frame(maxWidth: .infinity, alignment: .center)
+                        .listRowBackground(Color.customBackground)
+                } else {
+                    ForEach(projects) { project in
+                        NavigationLink(value: project) {
+                            ProjectRowView(project: project)
+                        }
+                        .swipeActions {
+                            Button(role: .destructive) {
+                                viewModel.deleteProject(project)
+                            } label: {
+                                Label("Delete", systemImage: "trash")
                             }
+                            
+                            Button {
+                                viewModel.selectedProject = project
+                            } label: {
+                                Label("Edit", systemImage: "pencil")
+                            }
+                            .tint(.blue)
+                            
                         }
                     }
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                }
-                .bodyStyle()
-                
-                .sheet(isPresented: $viewModel.showingAddProjectView) {
-                    AddProjectView()
-                        .environment(\.managedObjectContext, viewContext)
-                        .presentationDragIndicator(.visible)
-                }
-                .sheet(isPresented: $viewModel.showingEditProjectView) {
-                    EditProjectsView()
-                        .environment(\.managedObjectContext, viewContext)
-                }
-                .sheet(isPresented: $viewModel.showingDeleteProjectView) {
-                    DeleteProjectView()
-                        .environment(\.managedObjectContext, viewContext)
+                    .listRowBackground(Color.customBackground)
+                    .listRowSeparator(.hidden)
                 }
             }
-            .padding()
+            .navigationTitle("Projects")
+            .toolbarBackground(Color.customBackground)
+            .toolbar {
+                ToolbarItemGroup {
+                    Menu {
+                        Button {
+                            viewModel.showingAddProjectView = true
+                        } label: {
+                            Label("Add", systemImage: "plus")
+                        }
+                        Button {
+                            viewModel.showingEditProjectView = true
+                        } label: {
+                            Label("Edit", systemImage: "pencil")
+                        }
+                        Button {
+                            viewModel.showingDeleteProjectView = true
+                        } label: {
+                            Label("Delete", systemImage: "trash")
+                        }
+                    } label: {
+                        Image(systemName: "ellipsis.circle")
+                    }
+                    
+                    Button {
+                        // TODO: make sheet appear?
+                    } label: {
+                        Image(systemName: "gear")
+                    }
+                }
+            }
+            .listStyle(.plain)
+            .bodyStyle()
+            .sheet(isPresented: $viewModel.showingAddProjectView) {
+                AddProjectView()
+                    .environment(\.managedObjectContext, viewContext)
+                    .presentationDragIndicator(.visible)
+            }
+            .sheet(isPresented: $viewModel.showingEditProjectView) {
+                EditProjectsView()
+                    .environment(\.managedObjectContext, viewContext)
+            }
+            .sheet(isPresented: $viewModel.showingDeleteProjectView) {
+                DeleteProjectView()
+                    .environment(\.managedObjectContext, viewContext)
+            }
             .background(Color.customBackground)
             .navigationDestination(for: Project.self) { project in
                 IssuesView(project: project)
-            }
-        }
-    }
-}
-
-private extension HomeView {
-    var header: some View {
-        HStack {
-            Text(viewModel.title)
-                .titleStyle()
-            Spacer()
-            Menu {
-                Button {
-                    viewModel.showingAddProjectView = true
-                } label: {
-                    Label("Add", systemImage: "plus")
-                }
-                Button {
-                    viewModel.showingEditProjectView = true
-                } label: {
-                    Label("Edit", systemImage: "pencil")
-                }
-                Button {
-                    viewModel.showingDeleteProjectView = true
-                } label: {
-                    Label("Delete", systemImage: "trash")
-                }
-            } label: {
-                Image(systemName: "ellipsis.circle")
-                    .bodyStyle()
-            }
-            
-            Button {
-                // TODO: make sheet appear?
-            } label: {
-                Image(systemName: "gear")
-                    .bodyStyle()
             }
         }
     }
