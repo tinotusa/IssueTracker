@@ -56,6 +56,7 @@ extension IssuesViewModel {
     enum SearchScopes: CaseIterable, Identifiable {
         case name
         case description
+        case tag
         
         /// A unique id for the scope.
         var id: Self { self }
@@ -65,6 +66,7 @@ extension IssuesViewModel {
             switch self {
             case .description: return "Description"
             case .name: return "Name"
+            case .tag: return "Tag"
             }
         }
     }
@@ -162,6 +164,9 @@ extension IssuesViewModel {
             predicate = NSPredicate(format: format,  project, showingOpenIssues ? "open" : "closed", searchText)
         case .name:
             format += "AND (name_ CONTAINS[cd] %@)"
+            predicate = NSPredicate(format: format,  project, showingOpenIssues ? "open" : "closed", searchText)
+        case .tag:
+            format += "AND (tags.name_ CONTAINS[cd] %@)"
             predicate = NSPredicate(format: format,  project, showingOpenIssues ? "open" : "closed", searchText)
         }
     }
