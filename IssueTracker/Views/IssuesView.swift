@@ -14,55 +14,23 @@ struct IssuesView: View {
     @Environment(\.managedObjectContext) private var viewContext
     @Environment(\.dismiss) private var dismiss
     
-    @StateObject private var viewModel = IssuesViewModel()
-    @State private var selectedIssue: Issue?
+    @StateObject private var viewModel: IssuesViewModel
     @State private var sortDescriptor = SortDescriptor<Issue>(\.dateCreated_, order: .forward)
-    @State private var predicate: NSPredicate
+   
     
     init(project: Project) {
         self.project = project
-        _predicate = State(wrappedValue: NSPredicate(format: "(project == %@) AND (status_ == %@)",  project, "open"))
-    }
-
-    @State private var searchText = ""
-    @State private var searchScope = SearchScopes.name
-    
-    func runSearch(_ searchText: String) {
-        if searchText.isEmpty {
-            predicate = NSPredicate(
-                format: "(project == %@) AND (status_ == %@)", project, "open")
-            return
-        }
-        var format = "(project == %@) AND (status_ == %@)"
-        switch searchScope {
-        case .description:
-            format += "AND (issueDescription_ CONTAINS[cd] %@)"
-            predicate = NSPredicate(format: format,  project, "open", searchText)
-        case .name:
-            format += "AND (name_ CONTAINS[cd] %@)"
-            predicate = NSPredicate(format: format,  project, "open", searchText)
-        }
-    }
-    
-    enum SearchScopes: CaseIterable, Identifiable {
-        case name
-        case description
-        var id: Self { self }
-        var title: LocalizedStringKey {
-            switch self {
-            case .description: return "Description"
-            case .name: return "Name"
-            }
-        }
+        let predicate = NSPredicate(format: "(project == %@) AND (status_ == %@)",  project, "open")
+        _viewModel = StateObject(wrappedValue: IssuesViewModel(project: project, predicate: predicate))
     }
     
     var body: some View {
         FilteredIssuesListView(
             sortDescriptor: sortDescriptor,
-            predicate: predicate
+            predicate: viewModel.predicate
         ) { issue in
             Button {
-                selectedIssue = issue
+                viewModel.selectedIssue = issue
             } label: {
                 IssueRowView(issue: issue)
             }
@@ -71,24 +39,22 @@ struct IssuesView: View {
                     viewModel.closeIssue(issue)
                 } label: {
                     Label("Close issue", systemImage: "checkmark.circle.fill")
-                        .labelStyle(.iconOnly)
                 }
                 .tint(.green)
                 Button(role: .destructive) {
                     viewModel.deleteIssue(issue)
                 } label: {
                     Label("Delete", systemImage: "trash")
-                        .labelStyle(.iconOnly)
                 }
             }
         }
-        .searchable(text: $searchText)
-        .searchScopes($searchScope) {
-            ForEach(SearchScopes.allCases) { scope in
+        .searchable(text: $viewModel.searchText)
+        .searchScopes($viewModel.searchScope) {
+            ForEach(IssuesViewModel.SearchScopes.allCases) { scope in
                 Text(scope.title).tag(scope)
             }
         }
-        .onChange(of: searchText, perform: runSearch)
+        .onChange(of: viewModel.searchText) { _ in viewModel.runSearch() }
         .safeAreaInset(edge: .bottom) {
             ProminentButton("Add Issue") {
                 viewModel.showingAddIssueView = true
@@ -103,7 +69,7 @@ struct IssuesView: View {
             AddIssueView(project: project)
                 .environment(\.managedObjectContext, viewContext)
         }
-        .sheet(item: $selectedIssue) { selectedIssue in
+        .sheet(item: $viewModel.selectedIssue) { selectedIssue in
             IssueDetail(issue: selectedIssue)
         }
         .toolbar {
@@ -147,12 +113,6 @@ struct IssuesView: View {
                     }
                 } label: {
                     Text("Sort")
-                }
-                
-                Menu {
-                    Button("test") { }
-                } label: {
-                    Text("Filter")
                 }
             }
         }
