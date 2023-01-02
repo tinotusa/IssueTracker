@@ -51,27 +51,15 @@ struct HomeView: View {
             .navigationTitle("Projects")
             .toolbarBackground(Color.customBackground)
             .toolbar {
-                ToolbarItemGroup {
-                    Menu {
-                        Button {
-                            viewModel.showingAddProjectView = true
-                        } label: {
-                            Label("Add", systemImage: "plus")
-                        }
-                        Button {
-                            viewModel.showingEditProjectView = true
-                        } label: {
-                            Label("Edit", systemImage: "pencil")
-                        }
-                        Button {
-                            viewModel.showingDeleteProjectView = true
-                        } label: {
-                            Label("Delete", systemImage: "trash")
-                        }
+                ToolbarItem(placement: .bottomBar) {
+                    Button {
+                        viewModel.showingAddProjectView = true
                     } label: {
-                        Image(systemName: "ellipsis.circle")
+                        Label("Add project", systemImage: "square.and.pencil")
                     }
-                    
+                    .frame(maxWidth: .infinity, alignment: .trailing)
+                }
+                ToolbarItem {
                     Button {
                         // TODO: make sheet appear?
                     } label: {
