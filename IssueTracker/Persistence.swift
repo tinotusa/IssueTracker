@@ -70,7 +70,13 @@ extension PersistenceController {
         let controller = PersistenceController(inMemory: true)
         let viewContext = controller.container.viewContext
         for i in 0 ..< 4 {
-            _ = Project(name: "name\(i)", startDate: .now, context: viewContext)
+            let project = Project(name: "name\(i)", startDate: .now, context: viewContext)
+            
+            for i in 0 ..< Int.random(in: 0 ..< 5) {
+                let issue = Issue(name: "Issue#\(i)", issueDescription: "testing", priority: .init(rawValue: Int16.random(in: 0 ..< 3))!, tags: [], context: viewContext)
+                issue.project = project
+            }
+            
         }
         do {
             try viewContext.save()
