@@ -15,8 +15,6 @@ struct IssuesView: View {
     @Environment(\.dismiss) private var dismiss
     
     @StateObject private var viewModel: IssuesViewModel
-    @State private var sortDescriptor = SortDescriptor<Issue>(\.dateCreated_, order: .forward)
-   
     
     init(project: Project) {
         self.project = project
@@ -26,7 +24,7 @@ struct IssuesView: View {
     
     var body: some View {
         FilteredIssuesListView(
-            sortDescriptor: sortDescriptor,
+            sortDescriptor: viewModel.sortDescriptor,
             predicate: viewModel.predicate
         ) { issue in
             Button {
@@ -74,46 +72,68 @@ struct IssuesView: View {
             IssueDetail(issue: selectedIssue)
         }
         .toolbar {
-            ToolbarItemGroup (placement: .primaryAction) {
+            ToolbarItem(placement: .primaryAction) {
                 Menu {
-                    Menu("Title") {
-                        Button {
-                            sortDescriptor = .init(\.name_, order: .forward)
-                        } label: {
-                            Label("Ascending", systemImage: "chevron.up")
-                        }
-                        Button {
-                            sortDescriptor = .init(\.name_, order: .reverse)
-                        } label: {
-                            Label("Descending", systemImage: "chevron.down")
-                        }
-                    }
-                    Menu("Date") {
-                        Button {
-                            sortDescriptor = .init(\.dateCreated_, order: .forward)
-                        } label: {
-                            Label("Ascending", systemImage: "chevron.up")
-                        }
-                        Button {
-                            sortDescriptor = .init(\.dateCreated_, order: .reverse)
-                        } label: {
-                            Label("Descending", systemImage: "chevron.down")
-                        }
-                    }
-                    Menu("Priority") {
-                        Button {
-                            sortDescriptor = .init(\.priority_, order: .reverse)
-                        } label: {
-                            Label("Highest to lowest", systemImage: "chevron.up")
-                        }
-                        Button {
-                            sortDescriptor = .init(\.priority_, order: .forward)
-                        } label: {
-                            Label("Lowest to  highest", systemImage: "chevron.down")
-                        }
-                    }
+                    sortBySection
+                    sortTypeSection
                 } label: {
                     Text("Sort")
+                }
+            }
+        }
+    }
+}
+
+private extension IssuesView {
+    @ViewBuilder
+    func labelFor(_ sortOrder: SortOrder, title: LocalizedStringKey) -> some View {
+        if viewModel.sortOrder == sortOrder {
+            Label(title, systemImage: "checkmark")
+        } else {
+            Text(title)
+        }
+    }
+    
+    var sortBySection: some View {
+        Section("Sort by") {
+            ForEach(IssuesViewModel.SortType.allCases) { sortType in
+                Button {
+                    viewModel.sortType = sortType
+                } label: {
+                    if viewModel.sortType == sortType {
+                        Label(sortType.title, systemImage: "checkmark")
+                    } else {
+                        Text(sortType.title)
+                    }
+                }
+            }
+        }
+    }
+    
+    var sortTypeSection: some View {
+        Section {
+            switch viewModel.sortType {
+            case .date:
+                Button {
+                    viewModel.setSortOrder(to: .reverse)
+                } label: {
+                    labelFor(.reverse, title: "Newest first")
+                }
+                Button {
+                    viewModel.setSortOrder(to: .forward)
+                } label: {
+                    labelFor(.forward, title: "Oldest first")
+                }
+            case .priority, .title:
+                Button {
+                    viewModel.setSortOrder(to: .forward)
+                } label: {
+                    labelFor(.forward, title: "Ascending")
+                }
+                Button {
+                    viewModel.setSortOrder(to: .reverse)
+                } label: {
+                    labelFor(.reverse, title: "Descending")
                 }
             }
         }

@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2105DC5229628DFD008F940B /* TODO.md in Resources */ = {isa = PBXBuildFile; fileRef = 2105DC5129628DFD008F940B /* TODO.md */; };
 		2127AD62295FB421005893DE /* EditIssueView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2127AD61295FB421005893DE /* EditIssueView.swift */; };
 		2127AD64295FB552005893DE /* EditIssueViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2127AD63295FB552005893DE /* EditIssueViewModel.swift */; };
 		2127AD66295FBD0E005893DE /* ProminentTagView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2127AD65295FBD0E005893DE /* ProminentTagView.swift */; };
@@ -72,6 +73,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		2105DC5129628DFD008F940B /* TODO.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = TODO.md; sourceTree = "<group>"; };
 		2127AD61295FB421005893DE /* EditIssueView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditIssueView.swift; sourceTree = "<group>"; };
 		2127AD63295FB552005893DE /* EditIssueViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditIssueViewModel.swift; sourceTree = "<group>"; };
 		2127AD65295FBD0E005893DE /* ProminentTagView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProminentTagView.swift; sourceTree = "<group>"; };
@@ -181,6 +183,7 @@
 				2150C846295972E2006CD7D2 /* Persistence.swift */,
 				2150C848295972E2006CD7D2 /* IssueTracker.xcdatamodeld */,
 				2150C843295972E2006CD7D2 /* Preview Content */,
+				2105DC5129628DFD008F940B /* TODO.md */,
 			);
 			path = IssueTracker;
 			sourceTree = "<group>";
@@ -401,6 +404,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2105DC5229628DFD008F940B /* TODO.md in Resources */,
 				2150C845295972E2006CD7D2 /* Preview Assets.xcassets in Resources */,
 				2150C842295972E2006CD7D2 /* Assets.xcassets in Resources */,
 				21E6D2AF295BEA6800BB4AA6 /* SF-Pro-Text-Light.otf in Resources */,

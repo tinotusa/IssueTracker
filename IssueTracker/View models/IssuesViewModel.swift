@@ -21,6 +21,12 @@ final class IssuesViewModel: ObservableObject {
     @Published var selectedIssue: Issue?
     /// The predicate used for the FilteredIssuesListView
     @Published var predicate: NSPredicate
+    /// The sorting type for the issues (e.g sort type title)
+    @Published var sortType = SortType.date
+    /// The sort order for the sort type.
+    @Published var sortOrder = SortOrder.forward
+    /// The sort descriptor for the issues.
+    @Published var sortDescriptor = SortDescriptor<Issue>(\.dateCreated_, order: .forward)
     
     /// The current project the issues belong to.
     private let project: Project
@@ -42,7 +48,7 @@ final class IssuesViewModel: ObservableObject {
         self.viewContext = viewContext
     }
 }
-
+// MARK: - Enums
 extension IssuesViewModel {
     /// The search scopes for the IssuesView
     enum SearchScopes: CaseIterable, Identifiable {
@@ -61,7 +67,27 @@ extension IssuesViewModel {
         }
     }
     
+    /// The things that can be used for sorting.
+    enum SortType: CaseIterable, Identifiable {
+        case title
+        case date
+        case priority
+        
+        /// A unique id for the type.
+        var id: Self { self }
+        
+        /// The title for a case.
+        var title: LocalizedStringKey {
+            switch self {
+            case .date: return "Date (Default)"
+            case .priority: return "Priority"
+            case .title: return "Title"
+            }
+        }
+    }
 }
+
+// MARK: - Functions
 extension IssuesViewModel {
     /// Closes the given issue.
     /// - Parameter issue: The `Issue` to close.
@@ -110,6 +136,33 @@ extension IssuesViewModel {
         case .name:
             format += "AND (name_ CONTAINS[cd] %@)"
             predicate = NSPredicate(format: format,  project, "open", searchText)
+        }
+    }
+    
+    /// Sets the sort descriptor's order.
+    /// - Parameter sortOrder: The order to set
+    func setSortOrder(to sortOrder: SortOrder) {
+        self.sortOrder = sortOrder
+        log.debug("Settings sort ...")
+        switch sortType {
+        case .date:
+            sortDescriptor = .init(\.dateCreated_, order: sortOrder)
+            log.debug("sort set to date with sortOrder: \(sortOrder)")
+        case .title:
+            sortDescriptor = .init(\.name_, order: sortOrder)
+            log.debug("sort set to title with sortOrder: \(sortOrder)")
+        case .priority:
+            sortDescriptor = .init(\.priority_, order: sortOrder)
+            log.debug("sort set to priority with sortOrder: \(sortOrder)")
+        }
+    }
+}
+
+extension SortOrder: CustomStringConvertible {
+    public var description: String {
+        switch self {
+        case .reverse: return "Reverse"
+        case .forward: return "Forward"
         }
     }
 }
