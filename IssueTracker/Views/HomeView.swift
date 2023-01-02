@@ -90,10 +90,6 @@ struct HomeView: View {
                 EditProjectView(project: project)
                     .environment(\.managedObjectContext, viewContext)
             }
-            .sheet(isPresented: $viewModel.showingDeleteProjectView) {
-                DeleteProjectView()
-                    .environment(\.managedObjectContext, viewContext)
-            }
             .background(Color.customBackground)
             .navigationDestination(for: Project.self) { project in
                 IssuesView(project: project)
