@@ -27,6 +27,8 @@ final class IssuesViewModel: ObservableObject {
     @Published var sortOrder = SortOrder.forward
     /// The sort descriptor for the issues.
     @Published var sortDescriptor = SortDescriptor<Issue>(\.dateCreated_, order: .forward)
+    /// A boolean value indicating whether or not the issues view is showing open issues.
+    @Published var showingOpenIssues = true
     
     /// The current project the issues belong to.
     private let project: Project
@@ -93,6 +95,10 @@ extension IssuesViewModel {
     /// - Parameter issue: The `Issue` to close.
     func closeIssue(_ issue: Issue) {
         log.debug("Closing issue \"\(issue.name)\" ...")
+        if issue.status == .closed {
+            log.debug("Issue is already closed.")
+            return
+        }
         issue.status = .closed
         do {
             try withAnimation {
@@ -104,6 +110,27 @@ extension IssuesViewModel {
             log.error("Failed to close issue. \(error)")
         }
     }
+    
+    /// Sets the given issue's status to open.
+    /// - Parameter issue: The issue to open.
+    func openIssue(_ issue: Issue) {
+        log.debug("opening issue ...")
+        if issue.status == .open {
+            log.debug("Issue is already opened.")
+            return
+        }
+        do {
+            issue.status = .open
+            try withAnimation {
+                try viewContext.save()
+            }
+            log.debug("Successfully opened issue")
+        } catch {
+            log.error("Failed to open issue. \(error)")
+            viewContext.rollback()
+        }
+    }
+    
     /// Deletes the given issue from core data.
     /// - Parameter issue: The `Issue` to delete.
     func deleteIssue(_ issue: Issue) {
@@ -125,17 +152,17 @@ extension IssuesViewModel {
     func runSearch() {
         if searchText.isEmpty {
             predicate = NSPredicate(
-                format: "(project == %@) AND (status_ == %@)", project, "open")
+                format: "(project == %@) AND (status_ == %@)", project, showingOpenIssues ? "open" : "closed")
             return
         }
         var format = "(project == %@) AND (status_ == %@)"
         switch searchScope {
         case .description:
             format += "AND (issueDescription_ CONTAINS[cd] %@)"
-            predicate = NSPredicate(format: format,  project, "open", searchText)
+            predicate = NSPredicate(format: format,  project, showingOpenIssues ? "open" : "closed", searchText)
         case .name:
             format += "AND (name_ CONTAINS[cd] %@)"
-            predicate = NSPredicate(format: format,  project, "open", searchText)
+            predicate = NSPredicate(format: format,  project, showingOpenIssues ? "open" : "closed", searchText)
         }
     }
     

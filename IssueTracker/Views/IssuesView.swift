@@ -45,6 +45,14 @@ struct IssuesView: View {
                     Label("Delete", systemImage: "trash")
                 }
             }
+            .swipeActions(edge: .leading) {
+                Button {
+                    viewModel.openIssue(issue)
+                } label: {
+                    Label("Open", systemImage: "lock.open")
+                }
+                .tint(.purple)
+            }
         }
         .searchable(text: $viewModel.searchText)
         .searchScopes($viewModel.searchScope) {
@@ -54,14 +62,9 @@ struct IssuesView: View {
         }
         .onChange(of: viewModel.searchText) { _ in viewModel.runSearch() }
         .onChange(of: viewModel.searchScope) { _ in viewModel.runSearch() }
-        .safeAreaInset(edge: .bottom) {
-            ProminentButton("Add Issue") {
-                viewModel.showingAddIssueView = true
-            }
-            .frame(maxWidth: .infinity, alignment: .center)
-        }
-        .navigationBarTitle("Issues")
-        .toolbarBackground(Color.customBackground, for: .navigationBar)
+        .onChange(of: viewModel.showingOpenIssues) { _ in viewModel.runSearch() }
+        .navigationBarTitle(viewModel.showingOpenIssues ? "Open issues" : "Closed issues")
+        .toolbarBackground(Color.customBackground, for: .navigationBar, .bottomBar) // this doesn't seem to change the bottom bar at all.
         .bodyStyle()
         .background(Color.customBackground)
         .sheet(isPresented: $viewModel.showingAddIssueView) {
@@ -78,6 +81,19 @@ struct IssuesView: View {
                     sortTypeSection
                 } label: {
                     Text("Sort")
+                }
+            }
+            ToolbarItemGroup(placement: .bottomBar) {
+                Button {
+                    viewModel.showingOpenIssues.toggle()
+                } label: {
+                    Label("Issue status", systemImage: viewModel.showingOpenIssues ? "book.closed" : "book")
+                }
+                
+                Button {
+                    viewModel.showingAddIssueView = true
+                } label: {
+                    Label("Add Issue", systemImage: "square.and.pencil")
                 }
             }
         }
