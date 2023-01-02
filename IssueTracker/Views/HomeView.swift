@@ -86,8 +86,8 @@ struct HomeView: View {
                     .environment(\.managedObjectContext, viewContext)
                     .presentationDragIndicator(.visible)
             }
-            .sheet(isPresented: $viewModel.showingEditProjectView) {
-                EditProjectsView()
+            .sheet(item: $viewModel.selectedProject) { project in
+                EditProjectView(project: project)
                     .environment(\.managedObjectContext, viewContext)
             }
             .sheet(isPresented: $viewModel.showingDeleteProjectView) {

@@ -51,7 +51,6 @@
 		21F1DA3B295DB55E00076D73 /* AddIssueViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21F1DA3A295DB55E00076D73 /* AddIssueViewModel.swift */; };
 		21F1DA3D295DBD6500076D73 /* LabeledInputField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21F1DA3C295DBD6500076D73 /* LabeledInputField.swift */; };
 		21FDE718295D64F10006C24A /* Project+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21FDE717295D64F10006C24A /* Project+Extensions.swift */; };
-		21FDE71A295D67EB0006C24A /* EditProjectsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21FDE719295D67EB0006C24A /* EditProjectsView.swift */; };
 		21FDE757295D80D30006C24A /* EditProjectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21FDE756295D80D30006C24A /* EditProjectView.swift */; };
 		21FDE759295D82DF0006C24A /* DeleteProjectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21FDE758295D82DF0006C24A /* DeleteProjectView.swift */; };
 /* End PBXBuildFile section */
@@ -121,7 +120,6 @@
 		21F1DA3A295DB55E00076D73 /* AddIssueViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddIssueViewModel.swift; sourceTree = "<group>"; };
 		21F1DA3C295DBD6500076D73 /* LabeledInputField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LabeledInputField.swift; sourceTree = "<group>"; };
 		21FDE717295D64F10006C24A /* Project+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Project+Extensions.swift"; sourceTree = "<group>"; };
-		21FDE719295D67EB0006C24A /* EditProjectsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProjectsView.swift; sourceTree = "<group>"; };
 		21FDE756295D80D30006C24A /* EditProjectView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProjectView.swift; sourceTree = "<group>"; };
 		21FDE758295D82DF0006C24A /* DeleteProjectView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteProjectView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -261,7 +259,6 @@
 				2150C83F295972E0006CD7D2 /* ContentView.swift */,
 				21E6D2B2295BF94800BB4AA6 /* HomeView.swift */,
 				21E6D2BE295C4DD900BB4AA6 /* AddProjectView.swift */,
-				21FDE719295D67EB0006C24A /* EditProjectsView.swift */,
 				21FDE756295D80D30006C24A /* EditProjectView.swift */,
 				21FDE758295D82DF0006C24A /* DeleteProjectView.swift */,
 				21F1DA32295DABB700076D73 /* IssuesView.swift */,
@@ -453,7 +450,6 @@
 				21FDE718295D64F10006C24A /* Project+Extensions.swift in Sources */,
 				21FDE757295D80D30006C24A /* EditProjectView.swift in Sources */,
 				21F1DA3D295DBD6500076D73 /* LabeledInputField.swift in Sources */,
-				21FDE71A295D67EB0006C24A /* EditProjectsView.swift in Sources */,
 				21BBEBFF295EE1E9008F237B /* TagView.swift in Sources */,
 				21E6D2B3295BF94800BB4AA6 /* HomeView.swift in Sources */,
 				2127AD66295FBD0E005893DE /* ProminentTagView.swift in Sources */,
