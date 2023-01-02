@@ -55,6 +55,7 @@ struct IssuesView: View {
             }
         }
         .onChange(of: viewModel.searchText) { _ in viewModel.runSearch() }
+        .onChange(of: viewModel.searchScope) { _ in viewModel.runSearch() }
         .safeAreaInset(edge: .bottom) {
             ProminentButton("Add Issue") {
                 viewModel.showingAddIssueView = true
