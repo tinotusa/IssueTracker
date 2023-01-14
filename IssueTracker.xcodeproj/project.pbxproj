@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		2105DC5229628DFD008F940B /* TODO.md in Resources */ = {isa = PBXBuildFile; fileRef = 2105DC5129628DFD008F940B /* TODO.md */; };
+		2105DC542962CF33008F940B /* TagsEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2105DC532962CF33008F940B /* TagsEditView.swift */; };
 		2127AD62295FB421005893DE /* EditIssueView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2127AD61295FB421005893DE /* EditIssueView.swift */; };
 		2127AD64295FB552005893DE /* EditIssueViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2127AD63295FB552005893DE /* EditIssueViewModel.swift */; };
 		2127AD66295FBD0E005893DE /* ProminentTagView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2127AD65295FBD0E005893DE /* ProminentTagView.swift */; };
@@ -74,6 +75,7 @@
 
 /* Begin PBXFileReference section */
 		2105DC5129628DFD008F940B /* TODO.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = TODO.md; sourceTree = "<group>"; };
+		2105DC532962CF33008F940B /* TagsEditView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagsEditView.swift; sourceTree = "<group>"; };
 		2127AD61295FB421005893DE /* EditIssueView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditIssueView.swift; sourceTree = "<group>"; };
 		2127AD63295FB552005893DE /* EditIssueViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditIssueViewModel.swift; sourceTree = "<group>"; };
 		2127AD65295FBD0E005893DE /* ProminentTagView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProminentTagView.swift; sourceTree = "<group>"; };
@@ -265,6 +267,7 @@
 				21BBEBF6295EC963008F237B /* IssueDetail.swift */,
 				2127AD61295FB421005893DE /* EditIssueView.swift */,
 				21654BC529605245009C434B /* AddIssueView.swift */,
+				2105DC532962CF33008F940B /* TagsEditView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -452,6 +455,7 @@
 				21FDE757295D80D30006C24A /* EditProjectView.swift in Sources */,
 				21F1DA3D295DBD6500076D73 /* LabeledInputField.swift in Sources */,
 				21BBEBFF295EE1E9008F237B /* TagView.swift in Sources */,
+				2105DC542962CF33008F940B /* TagsEditView.swift in Sources */,
 				21E6D2B3295BF94800BB4AA6 /* HomeView.swift in Sources */,
 				2127AD66295FBD0E005893DE /* ProminentTagView.swift in Sources */,
 				21E6D2AD295BDFBF00BB4AA6 /* ButtonStyles.swift in Sources */,

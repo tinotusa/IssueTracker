@@ -13,6 +13,7 @@ import SwiftUI
 final class IssuesViewModel: ObservableObject {
     /// A boolean indicating whether or not the AddIssueView is showing.
     @Published var showingAddIssueView = false
+    @Published var showingEditTagsView = false
     /// The search text for the searchable modifier.
     @Published var searchText = ""
     /// The search scope for the search bar.

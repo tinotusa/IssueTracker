@@ -74,13 +74,20 @@ struct IssuesView: View {
         .sheet(item: $viewModel.selectedIssue) { selectedIssue in
             IssueDetail(issue: selectedIssue)
         }
+        .sheet(isPresented: $viewModel.showingEditTagsView) {
+            TagsEditView()
+                .environment(\.managedObjectContext, viewContext)
+        }
         .toolbar {
-            ToolbarItem(placement: .primaryAction) {
+            ToolbarItemGroup {
                 Menu {
                     sortBySection
                     sortTypeSection
                 } label: {
                     Text("Sort")
+                }
+                Button("Edit tags") {
+                    viewModel.showingEditTagsView = true
                 }
             }
             ToolbarItemGroup(placement: .bottomBar) {
