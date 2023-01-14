@@ -14,53 +14,47 @@ struct AddProjectView: View {
     @Environment(\.dismiss) private var dismiss
     
     var body: some View {
-        VStack {
-            header
-            
+        NavigationStack {
             ScrollView(showsIndicators: false) {
                 VStack(alignment: .leading) {
-                    Text(viewModel.title)
-                        .titleStyle()
-                        .padding(.bottom)
-                    
-                    Text(viewModel.projectNamePrompt)
-                    CustomTextField(viewModel.projectNamePlaceholder, text: $viewModel.projectName)
-                        .onReceive(Just(viewModel.projectName), perform: viewModel.filterName)
-                    
-                    Text(viewModel.datePrompt)
-                    DatePicker("Start date", selection: $viewModel.startDate, displayedComponents: [.date])
-                        .labelsHidden()
-                        .padding(.bottom)
-                    
-                    ProminentButton(viewModel.addButtonTitle) {
-                        let savedSuccessfully = viewModel.addProject()
-                        if savedSuccessfully {
-                            dismiss()
-                        }
+                    LabeledInputField("Project name:") {
+                        CustomTextField("Project name", text: $viewModel.projectName)
+                            .onReceive(Just(viewModel.projectName), perform: viewModel.filterName)
                     }
-                    .disabled(viewModel.addButtonDisabled)
-                    .frame(maxWidth: .infinity, alignment: .center)
+                    
+                    LabeledInputField("Start date:") {
+                        DatePicker("Start date", selection: $viewModel.startDate, displayedComponents: [.date])
+                            .labelsHidden()
+                            .padding(.bottom)
+                    }
                 }
             }
-        }
-        .bodyStyle()
-        .padding()
-        .background(Color.customBackground)
-        .presentationDragIndicator(.visible)
-    }
-}
-
-private extension AddProjectView {
-    var header: some View {
-        HStack {
-            PlainButton("Close") {
-                dismiss()
+            .safeAreaInset(edge: .bottom) {
+                ProminentButton("Add project") {
+                    viewModel.addProject()
+                    dismiss()
+                }
+                .disabled(viewModel.addButtonDisabled)
             }
-            Spacer()
-            PlainButton("Add project") {
-                
+            .bodyStyle()
+            .padding()
+            .background(Color.customBackground)
+            .toolbarBackground(Color.customBackground)
+            .navigationTitle("New project")
+            .toolbar {
+                ToolbarItem(placement: .cancellationAction) {
+                    Button("Close") {
+                        dismiss()
+                    }
+                }
+                ToolbarItem(placement: .confirmationAction) {
+                    Button("Add project") {
+                        viewModel.addProject()
+                        dismiss()
+                    }
+                    .disabled(viewModel.addButtonDisabled)
+                }
             }
-            .disabled(viewModel.addButtonDisabled)
         }
     }
 }

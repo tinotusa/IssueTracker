@@ -11,12 +11,6 @@ import CoreData
 
 final class AddProjectViewModel: ObservableObject {
     private let viewContext: NSManagedObjectContext
-    let projectNamePrompt: LocalizedStringKey = "Project name:"
-    let datePrompt: LocalizedStringKey = "Start date:"
-    let projectNamePlaceholder: LocalizedStringKey = "Project name"
-    let title: LocalizedStringKey = "New project"
-    let addButtonTitle: LocalizedStringKey = "Add project"
-    
     @Published var projectName = ""
     @Published var startDate = Date()
 
@@ -35,23 +29,21 @@ extension AddProjectViewModel {
     }
     
     /// Adds a new Project to CoreData.
-    /// - Returns: `true` if the project was added; `false` otherwise.
-    func addProject() -> Bool {
+    func addProject() {
         log.debug("Adding a project")
         guard !addButtonDisabled else {
             log.debug("Failed to add project, the add button is disabled.")
-            return false
+            return
         }
         let _ = Project(name: projectName, startDate: startDate, context: viewContext)
         
         do {
             try viewContext.save()
             log.debug("Successfully saved Project to view context's store.")
-            return true
         } catch {
             log.error("Failed to save Project to view context's store.")
         }
-        return false
+        return
     }
     
     /// Filters the given name by removing non alphanumerics and non spaces.
