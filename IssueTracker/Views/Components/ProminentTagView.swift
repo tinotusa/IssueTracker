@@ -19,12 +19,6 @@ struct ProminentTagView: View {
             .padding(.horizontal, 10)
             .background(isSelected ? Color.tagSelected : Color.tagUnselected)
             .cornerRadius(Constants.cornerRadius)
-            .background {
-                RoundedRectangle(cornerRadius: Constants.cornerRadius)
-                    .stroke(lineWidth: 1)
-                    .opacity(0.4)
-                    .foregroundColor(.black)
-            }
     }
     
     private enum Constants {
@@ -34,6 +28,9 @@ struct ProminentTagView: View {
 
 struct ProminentTagView_Previews: PreviewProvider {
     static var previews: some View {
-        ProminentTagView(title: "some title")
+        VStack {
+            ProminentTagView(title: "some title")
+            ProminentTagView(title: "some title", isSelected: true)
+        }
     }
 }
