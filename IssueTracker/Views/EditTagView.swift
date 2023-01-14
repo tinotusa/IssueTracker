@@ -31,6 +31,7 @@ struct EditTagView: View {
             .padding()
             .frame(maxHeight: .infinity)
             .background(Color.customBackground)
+            .bodyStyle()
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
                     Button("Cancel", role: .cancel) {
@@ -40,7 +41,6 @@ struct EditTagView: View {
                             dismiss()
                         }
                     }
-                    .foregroundColor(.blue)
                 }
                 
                 ToolbarItem(placement: .primaryAction) {
@@ -52,7 +52,7 @@ struct EditTagView: View {
                 }
             }
         }
-        .bodyStyle()
+        .background(Color.customBackground)
         .confirmationDialog("Discard changes", isPresented: $showingCancelDialog) {
             Button("Discard changes", role: .destructive) {
                 dismiss()
@@ -81,7 +81,21 @@ private extension EditTagView {
 }
 
 struct EditTagView_Previews: PreviewProvider {
+    struct ContainerView: View {
+        @FetchRequest(sortDescriptors: [])
+        private var tags: FetchedResults<Tag>
+        
+        var body: some View {
+            if let tag = tags.first {
+                EditTagView(tag: tag)
+            }
+        }
+    }
+    
+    static var viewContext = PersistenceController.tagsPreview.container.viewContext
+    
     static var previews: some View {
-        EditTagView(tag: .init(name: "Test tag", context: PersistenceController.empty.container.viewContext))
+        ContainerView()
+            .environment(\.managedObjectContext, viewContext)
     }
 }
