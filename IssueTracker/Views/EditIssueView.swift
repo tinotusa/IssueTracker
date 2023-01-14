@@ -21,40 +21,57 @@ struct EditIssueView: View {
     }
     
     var body: some View {
-        VStack {
-            header
-                .padding([.horizontal, .top])
-            
-            ScrollView {
-                VStack(alignment: .leading) {
-                    LabeledInputField("Issue name:") {
-                        CustomTextField("Issue name", text: $viewModel.issueCopy.name)
-                    }
-                    LabeledInputField("Description:") {
-                        CustomTextField("Issue Description", text: $viewModel.issueCopy.issueDescription)
-                    }
-                    LabeledInputField("Priority:") {
-                        Picker("Issue priority", selection: $viewModel.issueCopy.priority) {
-                            ForEach(Issue.Priority.allCases) { priority in
-                                Text(priority.title)
-                            }
+        ScrollView {
+            VStack(alignment: .leading) {
+                LabeledInputField("Issue name:") {
+                    CustomTextField("Issue name", text: $viewModel.issueCopy.name)
+                }
+                LabeledInputField("Description:") {
+                    CustomTextField("Issue Description", text: $viewModel.issueCopy.issueDescription)
+                }
+                LabeledInputField("Priority:") {
+                    Picker("Issue priority", selection: $viewModel.issueCopy.priority) {
+                        ForEach(Issue.Priority.allCases) { priority in
+                            Text(priority.title)
                         }
-                        .pickerStyle(.segmented)
                     }
-                    LabeledInputField("Tags:") {
-                        TagFilterView(selectedTags: $viewModel.selectedTags)
+                    .pickerStyle(.segmented)
+                }
+                LabeledInputField("Tags:") {
+                    TagFilterView(selectedTags: $viewModel.selectedTags)
+                }
+            }
+        }
+        .padding()
+        .bodyStyle()
+        .background(Color.customBackground)
+        .toolbarBackground(Color.customBackground)
+        .navigationBarBackButtonHidden(true)
+        .navigationTitle("Edit issue")
+        .safeAreaInset(edge: .bottom) {
+            ProminentButton("Save Changes") {
+                viewModel.saveChanges()
+            }
+            .disabled(!viewModel.hasChanges)
+        }
+        .toolbar {
+            ToolbarItem(placement: .cancellationAction) {
+                Button("Cancel") {
+                    if viewModel.hasChanges {
+                        showingCancelDialog = true
+                    } else {
+                        dismiss()
                     }
                 }
-                .padding(.horizontal)
             }
-            .safeAreaInset(edge: .bottom) {
-                ProminentButton("Save Changes") {
+            ToolbarItem(placement: .confirmationAction) {
+                Button("Save") {
                     viewModel.saveChanges()
                 }
                 .disabled(!viewModel.hasChanges)
             }
         }
-        .navigationBarBackButtonHidden(true)
+        
         .confirmationDialog("Cancel changes", isPresented: $showingCancelDialog) {
             Button("Don't save", role: .destructive) {
                 dismiss()
@@ -64,27 +81,13 @@ struct EditIssueView: View {
         }
     }
 }
-private extension EditIssueView {
-    var header: some View {
-        HStack {
-            Button("Cancel") {
-                if viewModel.hasChanges {
-                    showingCancelDialog = true
-                } else {
-                    dismiss()
-                }
-            }
-            Spacer()
-            Button("Save") {
-                viewModel.saveChanges()
-            }
-            .disabled(!viewModel.hasChanges)
-        }
-    }
-}
+
 struct IssueEditView_Previews: PreviewProvider {
     static let viewContext = PersistenceController.issuesPreview.container.viewContext
+    
     static var previews: some View {
-        EditIssueView(issue: Issue(name: "Test issue", issueDescription: "", priority: .low, tags: [], context: viewContext))
+        NavigationStack {
+            EditIssueView(issue: Issue(name: "Test issue", issueDescription: "", priority: .low, tags: [], context: viewContext))
+        }
     }
 }
