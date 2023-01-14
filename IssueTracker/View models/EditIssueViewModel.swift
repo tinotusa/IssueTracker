@@ -57,16 +57,18 @@ extension EditIssueViewModel {
     
     /// Saves the changes made to core data.
     func saveChanges() {
-        log.debug("Saving changes ...")
+        log.debug("Saving issue changes ...")
         if !hasChanges {
             log.debug("Failed to save changes. No changes have been made.")
             return
         }
-        issue.copyProperties(from: issueCopy)
+        issue.copyProperties(from: issueCopy) // does this copy the stuff
+        issue.addToTags(NSOrderedSet(set: selectedTags))
         do {
             try viewContext.save()
+            log.debug("Successfully saved issue changes")
         } catch {
-            log.error("Failed to save changes. \(error)")
+            log.error("Failed to save issue changes. \(error)")
         }
     }
 }
