@@ -68,6 +68,7 @@ struct AddIssueView: View {
             .safeAreaInset(edge: .bottom) {
                 ProminentButton("Add Issue") {
                     viewModel.addIssue()
+                    dismiss()
                 }
                 .frame(maxWidth: .infinity, alignment: .center)
                 .disabled(!viewModel.allFieldsFilled)
@@ -86,7 +87,8 @@ private extension AddIssueView {
             }
             Spacer()
             PlainButton("Add issue") {
-                
+                viewModel.addIssue()
+                dismiss()
             }
             .disabled(!viewModel.allFieldsFilled)
         }
