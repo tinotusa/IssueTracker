@@ -23,17 +23,12 @@ struct AddIssueView: View {
     }
     
     var body: some View {
-        VStack(alignment: .leading) {
-            header
-                .padding(.horizontal)
+        NavigationStack {
             ScrollView {
                 VStack(alignment: .leading) {
-                    Text("Add Issue")
-                        .titleStyle()
-                    LabeledInputField("Issue name:") {
+                    LabeledInputField("Name:") {
                         CustomTextField("Issue name", text: $viewModel.name)
                     }
-                    // TODO: description needs to be a bigger text box
                     LabeledInputField("Description:") {
                         CustomTextField("Issue description", text: $viewModel.description)
                             .lineLimit(4 ... 8)
@@ -65,6 +60,24 @@ struct AddIssueView: View {
                 }
                 .padding(.horizontal)
             }
+            .bodyStyle()
+            .navigationTitle("Add issue")
+            .background(Color.customBackground)
+            .toolbarBackground(Color.customBackground)
+            .toolbar {
+                ToolbarItem(placement: .cancellationAction) {
+                    Button("Cancel") {
+                        dismiss()
+                    }
+                }
+                ToolbarItem(placement: .confirmationAction) {
+                    Button("Add Issue") {
+                        viewModel.addIssue()
+                        dismiss()
+                    }
+                    .disabled(!viewModel.allFieldsFilled)
+                }
+            }
             .safeAreaInset(edge: .bottom) {
                 ProminentButton("Add Issue") {
                     viewModel.addIssue()
@@ -74,31 +87,14 @@ struct AddIssueView: View {
                 .disabled(!viewModel.allFieldsFilled)
             }
         }
-        .bodyStyle()
-        .background(Color.customBackground)
-    }
-}
-
-private extension AddIssueView {
-    var header: some View {
-        HStack {
-            PlainButton("Close") {
-                dismiss()
-            }
-            Spacer()
-            PlainButton("Add issue") {
-                viewModel.addIssue()
-                dismiss()
-            }
-            .disabled(!viewModel.allFieldsFilled)
-        }
     }
 }
 
 struct AddIssueView_Previews: PreviewProvider {
     static var viewContext = PersistenceController.tagsPreview.container.viewContext
+    
     static var previews: some View {
-        AddIssueView(project: .example(context: viewContext))
+        AddIssueView(project: .init(name: "test", startDate: .now, context: viewContext))
             .environment(\.managedObjectContext, viewContext)
     }
 }
