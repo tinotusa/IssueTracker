@@ -20,79 +20,79 @@ struct IssueDetail: View {
     
     var body: some View {
         NavigationStack {
-            VStack(alignment: .leading) {
-                header
-                    .padding([.horizontal, .top])
-                ScrollView {
-                    VStack(alignment: .leading) {
-                        Text(issue.name)
-                            .headerStyle()
-                        if !issue.issueDescription.isEmpty {
-                            Text(issue.issueDescription)
-                                .padding(.bottom)
-                        } else {
-                            Text("No Description")
-                                .foregroundColor(.customSecondary)
-                        }
-                        Text("Created: \(issue.dateCreated.formatted(date: .abbreviated, time: .omitted))")
-                        HStack {
-                            Text("Priority:")
-                            Text(issue.priority.title)
-                        }
-                        
-                        LabeledInputField("Tags:") {
-                            ScrollView(.horizontal, showsIndicators: false) {
-                                let tags = issue.tags?.array as? [Tag] ?? []
-                                if tags.isEmpty {
-                                    Text("No tags")
-                                        .foregroundColor(.customSecondary)
-                                } else {
-                                    HStack {
-                                        ForEach(tags) { tag in
-                                            TagView(tag: tag)
-                                        }
+            ScrollView {
+                VStack(alignment: .leading) {
+                    Text(issue.name)
+                        .headerStyle()
+                    Divider()
+                    
+                    if !issue.issueDescription.isEmpty {
+                        Text(issue.issueDescription)
+                            .padding(.bottom)
+                    } else {
+                        Text("No Description")
+                            .foregroundColor(.customSecondary)
+                    }
+                    Divider()
+                    
+                    Text("Created: \(issue.dateCreated.formatted(date: .abbreviated, time: .omitted))")
+                    HStack {
+                        Text("Priority:")
+                        Text(issue.priority.title)
+                    }
+                    
+                    LabeledInputField("Tags:") {
+                        ScrollView(.horizontal, showsIndicators: false) {
+                            let tags = issue.tags?.array as? [Tag] ?? []
+                            if tags.isEmpty {
+                                Text("No tags")
+                                    .foregroundColor(.customSecondary)
+                            } else {
+                                HStack {
+                                    ForEach(tags) { tag in
+                                        TagView(tag: tag)
                                     }
                                 }
                             }
                         }
-                        HStack(alignment: .lastTextBaseline) {
-                            Text("Comments")
-                                .headerStyle()
-                            Spacer()
-                            Button {
-                                viewModel.addNewEmptyComment()
-                            } label: {
-                                Image(systemName: "plus")
-                            }
-                        }
-                        ForEach($issue.wrappedComments) { $comment in
-                            CommentBoxView(comment: comment, issue: issue)
-                        }
-                        
                     }
-                    .padding(.horizontal)
+                    
+                    Divider()
+                    
+                    HStack(alignment: .lastTextBaseline) {
+                        Text("Comments")
+                            .headerStyle()
+                        Spacer()
+                        Button {
+                            viewModel.addNewEmptyComment()
+                        } label: {
+                            Image(systemName: "plus")
+                        }
+                    }
+                    ForEach($issue.wrappedComments) { $comment in
+                        CommentBoxView(comment: comment, issue: issue)
+                    }
                 }
-                
+                .padding(.horizontal)
             }
             .bodyStyle()
             .background(Color.customBackground)
+            .toolbarBackground(Color.customBackground)
+            .toolbar {
+                ToolbarItem(placement: .cancellationAction) {
+                    Button("Close") {
+                        dismiss()
+                    }
+                }
+                ToolbarItem(placement: .confirmationAction) {
+                    NavigationLink(value: issue) {
+                        Text("Edit")
+                            .foregroundColor(.buttonLabel)
+                    }
+                }
+            }
             .navigationDestination(for: Issue.self) { issue in
                 EditIssueView(issue: issue)
-            }
-        }
-    }
-}
-
-private extension IssueDetail {
-    var header: some View {
-        HStack {
-            PlainButton("Close") {
-                dismiss()
-            }
-            Spacer()
-            NavigationLink(value: issue) {
-                Text("Edit")
-                    .foregroundColor(.buttonLabel)
             }
         }
     }
