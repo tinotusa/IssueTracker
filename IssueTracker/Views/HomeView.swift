@@ -10,6 +10,8 @@ import SwiftUI
 struct HomeView: View {
     @Environment(\.managedObjectContext) private var viewContext
     @StateObject private var viewModel = HomeViewModel()
+    @State private var showingDeleteConfirmation = false
+    @State private var selectedProject: Project?
     
     @FetchRequest(sortDescriptors: [.init(\.dateCreated_, order: .reverse)])
     private var projects: FetchedResults<Project>
@@ -30,7 +32,8 @@ struct HomeView: View {
                         }
                         .swipeActions {
                             Button(role: .destructive) {
-                                viewModel.deleteProject(project)
+                                selectedProject = project
+                                showingDeleteConfirmation = true
                             } label: {
                                 Label("Delete", systemImage: "trash")
                             }
@@ -81,6 +84,17 @@ struct HomeView: View {
             .background(Color.customBackground)
             .navigationDestination(for: Project.self) { project in
                 IssuesView(project: project)
+            }
+            .confirmationDialog("Delete project", isPresented: $showingDeleteConfirmation) {
+                Button("Delete", role: .destructive) {
+                    guard let selectedProject else {
+                        return
+                    }
+                    viewModel.deleteProject(selectedProject)
+                    self.selectedProject = nil
+                }
+            } message: {
+                Text("Are you sure you want to delete this project?")
             }
         }
     }
