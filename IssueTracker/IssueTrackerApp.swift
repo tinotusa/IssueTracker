@@ -16,5 +16,14 @@ struct IssueTrackerApp: App {
             ContentView()
                 .environment(\.managedObjectContext, persistenceController.container.viewContext)
         }
+        .commands {
+            IssueTrackerCommands()
+        }
+    }
+}
+
+struct IssueTrackerCommands: Commands {
+    var body: some Commands {
+        SidebarCommands()
     }
 }
