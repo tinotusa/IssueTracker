@@ -14,7 +14,6 @@ struct ContentView: View {
         NavigationView {
             ProjectListView()
                 .searchable(text: $searchText)
-//                .frame(minWidth: 700, minHeight: 300)
             Text("Select a project.")
         }
         .toolbar {
@@ -28,6 +27,7 @@ struct ContentView: View {
                 }
             }
         }
+        .frame(minWidth: 1000, minHeight: 600)
     }
 }
 
