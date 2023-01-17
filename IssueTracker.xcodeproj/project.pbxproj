@@ -23,6 +23,11 @@
 		2150C85E295972E2006CD7D2 /* IssueTrackerUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2150C85D295972E2006CD7D2 /* IssueTrackerUITests.swift */; };
 		2150C860295972E2006CD7D2 /* IssueTrackerUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2150C85F295972E2006CD7D2 /* IssueTrackerUITestsLaunchTests.swift */; };
 		21654BC629605245009C434B /* AddIssueView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21654BC529605245009C434B /* AddIssueView.swift */; };
+		21734A8D29764D8400EB3942 /* AddProjectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21734A8C29764D8400EB3942 /* AddProjectView.swift */; };
+		21734A8F29764E4E00EB3942 /* ProjectListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21734A8E29764E4E00EB3942 /* ProjectListView.swift */; };
+		21734A9129764F0700EB3942 /* AddIssueView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21734A9029764F0700EB3942 /* AddIssueView.swift */; };
+		21734A9329764F9600EB3942 /* IssueDetail.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21734A9229764F9600EB3942 /* IssueDetail.swift */; };
+		21734A9529764FFB00EB3942 /* IssuesListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21734A9429764FFB00EB3942 /* IssuesListView.swift */; };
 		218A50BD2975088000DF29F5 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 218A50BC2975088000DF29F5 /* ContentView.swift */; };
 		218A50BF2975088200DF29F5 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 218A50BE2975088200DF29F5 /* Assets.xcassets */; };
 		218A50C22975088200DF29F5 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 218A50C12975088200DF29F5 /* Preview Assets.xcassets */; };
@@ -133,6 +138,11 @@
 		2150C85D295972E2006CD7D2 /* IssueTrackerUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IssueTrackerUITests.swift; sourceTree = "<group>"; };
 		2150C85F295972E2006CD7D2 /* IssueTrackerUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IssueTrackerUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		21654BC529605245009C434B /* AddIssueView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddIssueView.swift; sourceTree = "<group>"; };
+		21734A8C29764D8400EB3942 /* AddProjectView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddProjectView.swift; sourceTree = "<group>"; };
+		21734A8E29764E4E00EB3942 /* ProjectListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProjectListView.swift; sourceTree = "<group>"; };
+		21734A9029764F0700EB3942 /* AddIssueView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddIssueView.swift; sourceTree = "<group>"; };
+		21734A9229764F9600EB3942 /* IssueDetail.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IssueDetail.swift; sourceTree = "<group>"; };
+		21734A9429764FFB00EB3942 /* IssuesListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IssuesListView.swift; sourceTree = "<group>"; };
 		218A50B82975087F00DF29F5 /* MacIssueTracker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MacIssueTracker.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		218A50BC2975088000DF29F5 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		218A50BE2975088200DF29F5 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -296,10 +306,23 @@
 			path = IssueTrackerUITests;
 			sourceTree = "<group>";
 		};
+		21734A8B29764D7100EB3942 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				21734A8C29764D8400EB3942 /* AddProjectView.swift */,
+				21734A8E29764E4E00EB3942 /* ProjectListView.swift */,
+				21734A9029764F0700EB3942 /* AddIssueView.swift */,
+				21734A9229764F9600EB3942 /* IssueDetail.swift */,
+				21734A9429764FFB00EB3942 /* IssuesListView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
 		218A50B92975088000DF29F5 /* MacIssueTracker */ = {
 			isa = PBXGroup;
 			children = (
 				218A50BC2975088000DF29F5 /* ContentView.swift */,
+				21734A8B29764D7100EB3942 /* Views */,
 				218A50BE2975088200DF29F5 /* Assets.xcassets */,
 				218A50C32975088200DF29F5 /* MacIssueTracker.entitlements */,
 				218A50C02975088200DF29F5 /* Preview Content */,
@@ -713,15 +736,20 @@
 				218A50F9297508B900DF29F5 /* EditIssueViewModel.swift in Sources */,
 				218A5109297508B900DF29F5 /* IssueTrackerApp.swift in Sources */,
 				218A50F7297508B900DF29F5 /* EditProjectViewModel.swift in Sources */,
+				21734A9329764F9600EB3942 /* IssueDetail.swift in Sources */,
+				21734A8F29764E4E00EB3942 /* ProjectListView.swift in Sources */,
 				218A50FD297508B900DF29F5 /* IssuesViewModel.swift in Sources */,
 				218A5102297508B900DF29F5 /* Color+Extensions.swift in Sources */,
 				218A50F3297508B900DF29F5 /* DeleteProjectViewModel.swift in Sources */,
 				218A50EB297508B900DF29F5 /* HomeViewModel.swift in Sources */,
 				218A50FE297508B900DF29F5 /* Project+Extensions.swift in Sources */,
 				218A5101297508B900DF29F5 /* AddIssueViewModel.swift in Sources */,
+				21734A8D29764D8400EB3942 /* AddProjectView.swift in Sources */,
 				218A50E3297508B900DF29F5 /* AddProjectViewModel.swift in Sources */,
+				21734A9129764F0700EB3942 /* AddIssueView.swift in Sources */,
 				218A50FF297508B900DF29F5 /* Tag+Extensions.swift in Sources */,
 				218A50F1297508B900DF29F5 /* String+filterWhitespace.swift in Sources */,
+				21734A9529764FFB00EB3942 /* IssuesListView.swift in Sources */,
 				218A5108297508B900DF29F5 /* Comment+Extensions.swift in Sources */,
 				218A50BD2975088000DF29F5 /* ContentView.swift in Sources */,
 				218A50F8297508B900DF29F5 /* IssueDetailViewModel.swift in Sources */,
