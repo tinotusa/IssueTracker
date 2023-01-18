@@ -5,13 +5,19 @@
 //  Created by Tino on 30/12/2022.
 //
 
-import Foundation
 import CoreData
+import SwiftUI
 
 extension Tag {
     convenience init(name: String, context: NSManagedObjectContext) {
         self.init(context: context)
         self.name = name
+    }
+    
+    convenience init(name: String, colour: Color, context: NSManagedObjectContext) {
+        self.init(name: name, context: context)
+        self.hexColour = "\(colour.hexCode)"
+        self.opacity = colour.opacityValue
     }
     
     public override func awakeFromInsert() {
