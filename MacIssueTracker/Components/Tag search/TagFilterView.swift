@@ -32,7 +32,7 @@ struct TagFilterView<Content: View>: View {
         Form {
             if !searchText.isEmpty && allTags.isEmpty {
                 Button("Create new tag \"\(searchText)\"") {
-                    _ = Tag(name: searchText, context: viewContext)
+                    _ = Tag(name: searchText, colour: tagColour, context: viewContext)
                     try? viewContext.save()
                 }
                 ColorPicker(selection: $tagColour) {
