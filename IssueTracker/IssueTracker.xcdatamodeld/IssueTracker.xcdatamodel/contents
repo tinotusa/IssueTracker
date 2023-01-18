@@ -58,7 +58,7 @@
         <attribute name="hexColour_" optional="YES" attributeType="String"/>
         <attribute name="id_" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
         <attribute name="name_" optional="YES" attributeType="String" minValueString="1" maxValueString="50"/>
-        <attribute name="opacity_" optional="YES" attributeType="Double" minValueString="0" maxValueString="1" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="opacity_" optional="YES" attributeType="Double" minValueString="0" maxValueString="1" defaultValueString="1" usesScalarValueType="YES"/>
         <relationship name="issues" optional="YES" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="Issue" inverseName="tags" inverseEntity="Issue"/>
         <uniquenessConstraints>
             <uniquenessConstraint>
