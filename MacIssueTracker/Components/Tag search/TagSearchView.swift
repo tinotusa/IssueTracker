@@ -24,7 +24,13 @@ struct TagSearchView: View {
                         selectedTags.insert(tag)
                     }
                 } label: {
-                    Text(tag.name)
+                    HStack {
+                        let tagColour = Color(red: tag.red, green: tag.green, blue: tag.blue, opacity: tag.opacity)
+                        Circle()
+                            .frame(width: 10, height: 10)
+                            .foregroundColor(tagColour)
+                        Text(tag.name)
+                    }
                 }
             }
         }
