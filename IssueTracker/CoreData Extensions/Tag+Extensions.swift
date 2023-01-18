@@ -16,8 +16,12 @@ extension Tag {
     
     convenience init(name: String, colour: Color, context: NSManagedObjectContext) {
         self.init(name: name, context: context)
-        self.hexColour = "\(colour.hexCode)"
-        self.opacity = colour.opacityValue
+        let (r, g, b) = colour.rgbComponents
+        let opacity = colour.opacityValue
+        self.red = r
+        self.green = g
+        self.blue = b
+        self.opacity = opacity
     }
     
     public override func awakeFromInsert() {
@@ -33,9 +37,19 @@ extension Tag {
         set { self.dateCreated_ = newValue }
     }
     
-    var hexColour: String {
-        get { self.hexColour_ ?? "ffffff" }
-        set { self.hexColour_ = newValue }
+    var red: Double {
+        get { self.red_ }
+        set { self.red_ = newValue }
+    }
+    
+    var green: Double {
+        get { self.green_ }
+        set { self.green_ = newValue }
+    }
+    
+    var blue: Double {
+        get { self.blue_ }
+        set { self.blue_ = newValue }
     }
     
     public var id: UUID {

@@ -54,11 +54,13 @@
         </uniquenessConstraints>
     </entity>
     <entity name="Tag" representedClassName="Tag" syncable="YES" codeGenerationType="class">
+        <attribute name="blue_" optional="YES" attributeType="Double" minValueString="0" maxValueString="255" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="dateCreated_" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
-        <attribute name="hexColour_" optional="YES" attributeType="String"/>
+        <attribute name="green_" optional="YES" attributeType="Double" minValueString="0" maxValueString="255" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="id_" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
         <attribute name="name_" optional="YES" attributeType="String" minValueString="1" maxValueString="50"/>
         <attribute name="opacity_" optional="YES" attributeType="Double" minValueString="0" maxValueString="1" defaultValueString="1" usesScalarValueType="YES"/>
+        <attribute name="red_" optional="YES" attributeType="Double" minValueString="0" maxValueString="255" defaultValueString="0" usesScalarValueType="YES"/>
         <relationship name="issues" optional="YES" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="Issue" inverseName="tags" inverseEntity="Issue"/>
         <uniquenessConstraints>
             <uniquenessConstraint>
