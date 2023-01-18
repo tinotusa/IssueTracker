@@ -16,32 +16,38 @@ struct AddIssueView: View {
     }
     
     var body: some View {
-        Form {
-            TextField("Issue name", text: $viewModel.name)
-            Section("Description") {
-                TextEditor(text: $viewModel.description)
-                    .frame(minHeight: 100)
-                    
-            }
-            Picker("Priority", selection: $viewModel.priority) {
-                ForEach(Issue.Priority.allCases) { priority in
-                    Text(priority.title)
+        List {
+            Form {
+                TextField("Issue name", text: $viewModel.name)
+                Section("Description") {
+                    TextEditor(text: $viewModel.description)
+                        .frame(minHeight: 100)
+                        
                 }
-            }
-            .pickerStyle(.radioGroup)
-            
-            HStack {
-                Button("Add issue") {
-                    viewModel.addIssue()
-                    dismiss()
+                Picker("Priority", selection: $viewModel.priority) {
+                    ForEach(Issue.Priority.allCases) { priority in
+                        Text(priority.title)
+                    }
                 }
-                Button("Close") {
-                    dismiss()
+                .pickerStyle(.radioGroup)
+                Section("Tags") {
+                    TagSearchView(selectedTags: $viewModel.tags)
                 }
+                HStack {
+                    Button("Close") {
+                        dismiss()
+                    }
+                    Button("Add issue") {
+                        viewModel.addIssue()
+                        dismiss()
+                    }
+                    .disabled(!viewModel.allFieldsFilled)
+                }
+                .frame(maxWidth: .infinity, alignment: .center)
             }
         }
         .padding()
-        .frame(minWidth: 400, minHeight: 200)
+        .frame(minWidth: 800, minHeight: 450)
     }
 }
 
@@ -51,5 +57,6 @@ struct AddIssueView_Previews: PreviewProvider {
     
     static var previews: some View {
         AddIssueView(project: project)
+            .environment(\.managedObjectContext, viewContext)
     }
 }
