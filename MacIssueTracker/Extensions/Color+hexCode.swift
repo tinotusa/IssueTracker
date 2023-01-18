@@ -33,4 +33,29 @@ extension Color {
         }
         return components[3]
     }
+    
+    /// Creates a colour from a hex string.
+    ///
+    /// ```
+    /// let color = Color(hex: "#ff00ff", opacity: 0.5)
+    /// ```
+    ///
+    /// - Parameters:
+    ///   - hex: The hex value as a string.
+    ///   - opacity: The opacity of the colour.
+    init?(hex: String, opacity: Double = 1) {
+        let hex = hex.filter { letter in
+            let allowedCharacters = Set("0123456789abcdef")
+            return allowedCharacters.contains(letter)
+        }
+        guard opacity >= 0 && opacity <= 1 else { return nil }
+        guard hex.count == 6 else { return nil }
+        guard let hexValue = Int(hex, radix: 16) else {
+            return nil
+        }
+        let red = Double(0xff & (hexValue >> 16) / 255)
+        let green = Double(0xff & (hexValue >> 8) / 255)
+        let blue = Double(0xff & (hexValue >> 0) / 255)
+        self.init(red: red, green: green, blue: blue, opacity: opacity)
+    }
 }
