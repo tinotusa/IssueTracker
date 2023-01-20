@@ -8,12 +8,10 @@
 import SwiftUI
 
 struct ContentView: View {
-    @State private var searchText = ""
-    
     var body: some View {
         NavigationView {
             ProjectListView()
-                .searchable(text: $searchText)
+            
             Text("Select a project.")
         }
         .toolbar {

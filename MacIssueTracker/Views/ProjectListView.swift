@@ -17,15 +17,10 @@ struct ProjectListView: View {
     
     var body: some View {
         List {
-            if projects.isEmpty {
-                Text("No projects. Add a project to track.")
-            } else {
-                Text("Projects")
-                    .foregroundColor(.secondary)
-                
-                ForEach(projects) { project in
-                    NavigationLink(project.name, destination: IssuesListView(project: project))
-                }
+            Text("Projects")
+                .foregroundColor(.secondary)
+            ForEach(projects) { project in
+                NavigationLink(project.name, destination: IssuesListView(project: project))
             }
         }
         .sheet(isPresented: $showingAddProjectView) {

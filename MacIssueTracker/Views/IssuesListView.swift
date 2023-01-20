@@ -12,69 +12,85 @@ struct IssuesListView: View {
     @FetchRequest(sortDescriptors: [.init(\.dateCreated_, order: .forward)])
     private var issues: FetchedResults<Issue>
     @State private var showingAddIssueView = false
+    @StateObject private var viewModel: IssuesViewModel
     
     init(project: Project) {
         self.project = project
+        let predicate = NSPredicate(format: "(project == %@) AND (status_ == %@)",  project, "open")
         _issues = FetchRequest(
             sortDescriptors: [.init(\.dateCreated_, order: .forward)],
             predicate: NSPredicate(format: "(project == %@) AND (status_ == %@)",  project, "open"))
+        _viewModel = StateObject(wrappedValue: IssuesViewModel(project: project, predicate: predicate))
     }
     
     @State private var searchText = ""
+    @State private var selectedIssues = Set<UUID>()
+    @State private var selectedIssue: Issue?
     
     var body: some View {
         NavigationView {
-            if issues.isEmpty {
-                Text("No issues. Add an issue for this project.")
-            } else {
-                List {
-                    Text("Issues")
-                        .foregroundColor(.secondary)
-                    if issues.isEmpty {
-                        Text("No issues. Add an issue for this project.")
-                    } else {
-                        ForEach(issues) { issue in
-                            NavigationLink(destination: IssueDetail(issue:issue)) {
-                                VStack(alignment: .leading) {
-                                    Text(issue.name)
+            #warning("last on this. look up how to have nav link with list(selection:)  ")
+            List(selection: $selectedIssue) {
+                Text("Issues")
+                    .foregroundColor(.secondary)
+                ForEach(issues) { issue in
+                    NavigationLink(
+                        destination: IssueDetail(issue: issue),
+                        tag: issue,
+                        selection: $selectedIssue
+                    ) {
+                        VStack(alignment: .leading) {
+                            Text(issue.name)
+                                .lineLimit(2)
+                            Group {
+                                if issue.issueDescription.isEmpty {
+                                    Text("No description")
+                                    
+                                } else {
+                                    Text(issue.issueDescription)
                                         .lineLimit(2)
-                                    Group {
-                                        if issue.issueDescription.isEmpty {
-                                            Text("No description")
-                                                
-                                        } else {
-                                            Text(issue.issueDescription)
-                                                .lineLimit(2)
-                                        }
-                                    }
-                                    .font(.footnote)
-                                    .foregroundColor(.secondary)
                                 }
                             }
-                            .swipeActions {
-                                Button {
-                                    // no action
-                                } label: {
-                                    Label("Delete", systemImage: "trash")
-                                }
-                            }
+                            .font(.footnote)
+                            .foregroundColor(.secondary)
                         }
                     }
+                    .tag(issue.id)
                 }
-                .sheet(isPresented: $showingAddIssueView) {
-                    AddIssueView(project: project)
-                }
-                .navigationTitle(project.name)
-                .toolbar {
-                    ToolbarItem {
+            }
+            .navigationTitle(project.name)
+            .onDeleteCommand {
+                deleteCommand()
+            }
+            .toolbar {
+                ToolbarItemGroup(placement: .primaryAction) {
+                    HStack {
                         Button {
                             showingAddIssueView = true
                         } label: {
-                            Label("Add issue", systemImage: "plus")
+                            Label("Add issue", systemImage: SFSymbol.plus.rawValue)
+                        }
+                        
+                        Button(role: .destructive, action: deleteCommand) {
+                            Label("Delete", systemImage: SFSymbol.trash.rawValue)
                         }
                     }
                 }
             }
+            
+            Text("Select an issue.")
+        }
+        .sheet(isPresented: $showingAddIssueView) {
+            AddIssueView(project: project)
+        }
+    }
+}
+
+private extension IssuesListView {
+    func deleteCommand() {
+        if let selectedIssue {
+            self.selectedIssue = nil
+            viewModel.deleteIssue(selectedIssue)
         }
     }
 }

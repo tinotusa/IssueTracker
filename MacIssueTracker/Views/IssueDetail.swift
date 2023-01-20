@@ -57,9 +57,11 @@ struct IssueDetail: View {
                             .foregroundColor(.secondary)
                             .font(.system(size: 20))
                     } else {
-                        ForEach(Array(issue.tags!.set as! Set<Tag>)) { tag in
-                            Text(tag.name)
-                                .font(.system(size: 20))
+                        if let tags = issue.tags?.set as? Set<Tag> {
+                            ForEach(Array(tags)) { tag in
+                                Text(tag.name)
+                                    .font(.system(size: 20))
+                            }
                         }
                     }
                 } header: {
@@ -74,29 +76,31 @@ struct IssueDetail: View {
                     } else {
                         ScrollView {
                             VStack(alignment: .leading) {
-                                ForEach(Array(issue.comments!.set as! Set<Comment>)) { comment in
-                                    VStack {
-                                        Text(comment.comment)
-                                            .font(.system(size: 20))
-                                        HStack {
-                                            Spacer()
-                                            Button {
-                                                // edit button
-                                            } label: {
-                                                Label("Edit", systemImage: "rectangle.and.pencil.and.ellipsis")
-                                            }
-                                            Button(role: .destructive) {
-                                                // delete code
-                                            } label: {
-                                                Label("Delete", systemImage: "trash")
+                                if let comments = issue.comments?.set as? Set<Comment> {
+                                    ForEach(Array(comments)) { comment in
+                                        VStack {
+                                            Text(comment.comment)
+                                                .font(.system(size: 20))
+                                            HStack {
+                                                Spacer()
+                                                Button {
+                                                    // edit button
+                                                } label: {
+                                                    Label("Edit", systemImage: "rectangle.and.pencil.and.ellipsis")
+                                                }
+                                                Button(role: .destructive) {
+                                                    // delete code
+                                                } label: {
+                                                    Label("Delete", systemImage: "trash")
+                                                }
                                             }
                                         }
-                                    }
-                                    .padding()
-                                    .frame(maxWidth: .infinity, alignment: .leading)
-                                    .background {
-                                        RoundedRectangle(cornerRadius: 10)
-                                            .foregroundColor(.gray)
+                                        .padding()
+                                        .frame(maxWidth: .infinity, alignment: .leading)
+                                        .background {
+                                            RoundedRectangle(cornerRadius: 10)
+                                                .foregroundColor(.gray)
+                                        }
                                     }
                                 }
                             }
@@ -120,11 +124,6 @@ struct IssueDetail: View {
             .toolbar {
                 ToolbarItem(placement: .primaryAction) {
                     Button("Edit") {
-                        
-                    }
-                }
-                ToolbarItem(placement: .destructiveAction) {
-                    Button("Delete") {
                         
                     }
                 }
