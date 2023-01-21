@@ -9,6 +9,12 @@ import SwiftUI
 
 struct IssueDetail: View {
     @ObservedObject var issue: Issue
+    @StateObject private var viewModel: IssueDetailViewModel
+    
+    init(issue: Issue) {
+        _issue = ObservedObject(wrappedValue: issue)
+        _viewModel = StateObject(wrappedValue: IssueDetailViewModel(issue: issue))
+    }
     
     var body: some View {
             Form {
@@ -107,16 +113,18 @@ struct IssueDetail: View {
                         }
                     }
                 } header: {
-                    HStack {
-                        Text("Comments")
-                            .font(.system(size: 30))
-                        Spacer()
-                        Button {
-                            // todo
-                        } label: {
-                            Label("Add comment", systemImage: "plus.bubble")
-                        }
+                    Text("Comments")
+                        .font(.system(size: 30))
+                }
+            }
+            .safeAreaInset(edge: .bottom) {
+                HStack {
+                    TextEditor(text: $viewModel.comment)
+                        .frame(maxHeight: 100)
+                    Button("Add comment") {
+                        viewModel.addComment()
                     }
+                    .disabled(viewModel.comment.isEmpty)
                 }
             }
             .padding()
