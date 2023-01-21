@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		2105DC5229628DFD008F940B /* TODO.md in Resources */ = {isa = PBXBuildFile; fileRef = 2105DC5129628DFD008F940B /* TODO.md */; };
 		2105DC542962CF33008F940B /* TagsEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2105DC532962CF33008F940B /* TagsEditView.swift */; };
+		210650E0297BD46C00E5BCD7 /* TextStyles.swift in Sources */ = {isa = PBXBuildFile; fileRef = 210650DF297BD46C00E5BCD7 /* TextStyles.swift */; };
 		211104AB297239DB00FB8CD1 /* EditTagView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 211104AA297239DB00FB8CD1 /* EditTagView.swift */; };
 		2127AD62295FB421005893DE /* EditIssueView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2127AD61295FB421005893DE /* EditIssueView.swift */; };
 		2127AD64295FB552005893DE /* EditIssueViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2127AD63295FB552005893DE /* EditIssueViewModel.swift */; };
@@ -125,6 +126,7 @@
 /* Begin PBXFileReference section */
 		2105DC5129628DFD008F940B /* TODO.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = TODO.md; sourceTree = "<group>"; };
 		2105DC532962CF33008F940B /* TagsEditView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagsEditView.swift; sourceTree = "<group>"; };
+		210650DF297BD46C00E5BCD7 /* TextStyles.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextStyles.swift; sourceTree = "<group>"; };
 		211104AA297239DB00FB8CD1 /* EditTagView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditTagView.swift; sourceTree = "<group>"; };
 		2127AD61295FB421005893DE /* EditIssueView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditIssueView.swift; sourceTree = "<group>"; };
 		2127AD63295FB552005893DE /* EditIssueViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditIssueViewModel.swift; sourceTree = "<group>"; };
@@ -241,6 +243,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		210650DE297BD45B00E5BCD7 /* Styles */ = {
+			isa = PBXGroup;
+			children = (
+				210650DF297BD46C00E5BCD7 /* TextStyles.swift */,
+			);
+			path = Styles;
+			sourceTree = "<group>";
+		};
 		2150C831295972E0006CD7D2 = {
 			isa = PBXGroup;
 			children = (
@@ -329,6 +339,7 @@
 		218A50B92975088000DF29F5 /* MacIssueTracker */ = {
 			isa = PBXGroup;
 			children = (
+				210650DE297BD45B00E5BCD7 /* Styles */,
 				21AFDF2B2977CB4800847889 /* Models */,
 				21AFDF2529777BC100847889 /* Components */,
 				21AFDF22297779FE00847889 /* Extensions */,
@@ -798,6 +809,7 @@
 				218A50F1297508B900DF29F5 /* String+filterWhitespace.swift in Sources */,
 				21734A9529764FFB00EB3942 /* IssuesListView.swift in Sources */,
 				218A5108297508B900DF29F5 /* Comment+Extensions.swift in Sources */,
+				210650E0297BD46C00E5BCD7 /* TextStyles.swift in Sources */,
 				218A50BD2975088000DF29F5 /* ContentView.swift in Sources */,
 				218A50F8297508B900DF29F5 /* IssueDetailViewModel.swift in Sources */,
 				21AFDF2A29777F7F00847889 /* TagFilterView.swift in Sources */,
