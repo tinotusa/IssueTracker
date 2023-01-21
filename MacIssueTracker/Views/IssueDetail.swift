@@ -30,10 +30,12 @@ struct IssueDetail: View {
     
     var body: some View {
         Form {
+            Text(issue.dateCreated.formatted(date: .long, time: .shortened))
+                .font(.footnote)
+                .foregroundColor(.secondary)
             Text(issue.name)
                 .titleStyle()
-            Text("Created: \(issue.dateCreated.formatted(date: .abbreviated, time: .shortened))")
-                .foregroundColor(.secondary)
+            Divider()
             descriptionSection
             prioritySection
             tagsSection
@@ -75,6 +77,7 @@ private extension IssueDetail {
                 }
             }
             .frame(maxWidth: .infinity, alignment: .leading)
+            .padding(.bottom)
         } header: {
             Text("Description")
                 .titleStyle()
@@ -84,6 +87,7 @@ private extension IssueDetail {
     var prioritySection: some View {
         Section {
             Text(issue.priority.title)
+                .padding(.bottom)
         } header: {
             Text("Priority")
                 .titleStyle()
@@ -92,14 +96,17 @@ private extension IssueDetail {
     
     var tagsSection: some View {
         Section {
-            if tags.isEmpty {
-                Text("No tags")
-                    .foregroundColor(.secondary)
-            } else {
-                ForEach(Array(tags)) { tag in
-                    Text(tag.name)
+            Group {
+                if tags.isEmpty {
+                    Text("No tags")
+                        .foregroundColor(.secondary)
+                } else {
+                    ForEach(Array(tags)) { tag in
+                        Text(tag.name)
+                    }
                 }
             }
+            .padding(.bottom)
         } header: {
             Text("Tags")
                 .titleStyle()
@@ -108,6 +115,7 @@ private extension IssueDetail {
     
     var commentsSection: some View {
         Section {
+            Divider()
             if comments.isEmpty {
                 Text("No comments")
                     .foregroundColor(.secondary)
