@@ -110,30 +110,8 @@ private extension IssueDetail {
                 ScrollView {
                     VStack(alignment: .leading) {
                         if let comments = issue.comments?.set as? Set<Comment> {
-                            #warning("Add comments view")
                             ForEach(Array(comments)) { comment in
-                                VStack {
-                                    Text(comment.comment)
-                                    HStack {
-                                        Spacer()
-                                        Button {
-                                            // edit button
-                                        } label: {
-                                            Label("Edit", systemImage: "rectangle.and.pencil.and.ellipsis")
-                                        }
-                                        Button(role: .destructive) {
-                                            // delete code
-                                        } label: {
-                                            Label("Delete", systemImage: "trash")
-                                        }
-                                    }
-                                }
-                                .padding()
-                                .frame(maxWidth: .infinity, alignment: .leading)
-                                .background {
-                                    RoundedRectangle(cornerRadius: 10)
-                                        .foregroundColor(.gray)
-                                }
+                                CommentView(comment: comment)
                             }
                         }
                     }
