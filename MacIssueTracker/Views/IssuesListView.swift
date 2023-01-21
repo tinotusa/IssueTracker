@@ -29,7 +29,6 @@ struct IssuesListView: View {
     
     var body: some View {
         NavigationView {
-            #warning("last on this. look up how to have nav link with list(selection:)  ")
             List(selection: $selectedIssue) {
                 Text("Issues")
                     .foregroundColor(.secondary)

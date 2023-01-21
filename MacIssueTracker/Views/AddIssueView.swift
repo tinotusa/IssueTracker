@@ -16,36 +16,35 @@ struct AddIssueView: View {
     }
     
     var body: some View {
-        List {
-            Form {
-                TextField("Issue name", text: $viewModel.name)
-                Section("Description") {
-                    TextEditor(text: $viewModel.description)
-                        .frame(minHeight: 100)
-                        
-                }
-                Picker("Priority", selection: $viewModel.priority) {
-                    ForEach(Issue.Priority.allCases) { priority in
-                        Text(priority.title)
-                    }
-                }
-                .pickerStyle(.radioGroup)
-                Section("Tags") {
-                    TagSearchView(selectedTags: $viewModel.tags)
-                }
-                HStack {
-                    Button("Close") {
-                        dismiss()
-                    }
-                    Button("Add issue") {
-                        viewModel.addIssue()
-                        dismiss()
-                    }
-                    .disabled(!viewModel.allFieldsFilled)
-                }
-                .frame(maxWidth: .infinity, alignment: .center)
+        Form {
+            TextField("Issue name", text: $viewModel.name)
+            Section("Description") {
+                TextEditor(text: $viewModel.description)
+                    .frame(minHeight: 100)
+                    
             }
+            Picker("Priority", selection: $viewModel.priority) {
+                ForEach(Issue.Priority.allCases) { priority in
+                    Text(priority.title)
+                }
+            }
+            .pickerStyle(.radioGroup)
+            Section("Tags") {
+                TagSearchView(selectedTags: $viewModel.tags)
+            }
+            HStack {
+                Button("Close") {
+                    dismiss()
+                }
+                Button("Add issue") {
+                    viewModel.addIssue()
+                    dismiss()
+                }
+                .disabled(!viewModel.allFieldsFilled)
+            }
+            .frame(maxWidth: .infinity, alignment: .center)
         }
+        
         .padding()
         .frame(minWidth: 800, minHeight: 450)
     }
