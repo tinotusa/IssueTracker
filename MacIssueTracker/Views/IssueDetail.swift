@@ -10,10 +10,22 @@ import SwiftUI
 struct IssueDetail: View {
     @ObservedObject var issue: Issue
     @StateObject private var viewModel: IssueDetailViewModel
+    @FetchRequest(sortDescriptors: [])
+    private var comments: FetchedResults<Comment>
+    @FetchRequest(sortDescriptors: [])
+    private var tags: FetchedResults<Tag>
     
     init(issue: Issue) {
         _issue = ObservedObject(wrappedValue: issue)
         _viewModel = StateObject(wrappedValue: IssueDetailViewModel(issue: issue))
+        _comments = FetchRequest<Comment>(
+            sortDescriptors: [.init(\.dateCreated_, order: .forward)],
+            predicate: .init(format: "issue == %@", issue)
+        )
+        _tags = FetchRequest<Tag>(
+            sortDescriptors: [.init(\.name_, order: .forward)],
+            predicate: .init(format: "%@ in issues", issue)
+        )
     }
     
     var body: some View {
@@ -57,16 +69,12 @@ private extension IssueDetail {
             Group {
                 if issue.issueDescription.isEmpty {
                     Text("No Description")
+                        .foregroundColor(.secondary)
                 } else {
                     Text(issue.issueDescription)
                 }
             }
-            .padding()
             .frame(maxWidth: .infinity, alignment: .leading)
-            .background {
-                RoundedRectangle(cornerRadius: 10)
-                    .foregroundColor(.gray)
-            }
         } header: {
             Text("Description")
                 .titleStyle()
@@ -84,15 +92,12 @@ private extension IssueDetail {
     
     var tagsSection: some View {
         Section {
-            #warning("Add tags as set property")
-            if let tags = issue.tags?.set as? Set<Tag>, tags.isEmpty {
+            if tags.isEmpty {
                 Text("No tags")
                     .foregroundColor(.secondary)
             } else {
-                if let tags = issue.tags?.set as? Set<Tag> {
-                    ForEach(Array(tags)) { tag in
-                        Text(tag.name)
-                    }
+                ForEach(Array(tags)) { tag in
+                    Text(tag.name)
                 }
             }
         } header: {
@@ -103,16 +108,14 @@ private extension IssueDetail {
     
     var commentsSection: some View {
         Section {
-            if let comments = issue.comments?.set as? Set<Comment>, comments.isEmpty {
+            if comments.isEmpty {
                 Text("No comments")
                     .foregroundColor(.secondary)
             } else {
                 ScrollView {
                     VStack(alignment: .leading) {
-                        if let comments = issue.comments?.set as? Set<Comment> {
-                            ForEach(Array(comments)) { comment in
-                                CommentView(comment: comment)
-                            }
+                        ForEach(Array(comments)) { comment in
+                            CommentView(comment: comment)
                         }
                     }
                 }
