@@ -30,8 +30,14 @@ struct CommentView: View {
                                 try? viewContext.save()
                             }
                         } label: {
-                            Label("Save", systemImage: "rectangle.and.pencil.and.ellipsis")
-                                .labelStyle(.iconOnly)
+                            Label("Save", systemImage: SFSymbol.pencil.rawValue)
+                        }
+                        Button {
+                            withAnimation {
+                                commentChange = comment.comment
+                            }
+                        } label: {
+                            Label("Cancel", systemImage: SFSymbol.pencilSlash.rawValue)
                         }
                     }
                     Button(role: .destructive) {
