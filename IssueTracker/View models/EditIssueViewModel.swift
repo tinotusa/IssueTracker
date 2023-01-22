@@ -63,7 +63,7 @@ extension EditIssueViewModel {
             return
         }
         issue.copyProperties(from: issueCopy) // does this copy the stuff
-        issue.addToTags(NSOrderedSet(set: selectedTags))
+        issue.tags = NSOrderedSet(set: selectedTags)
         do {
             try viewContext.save()
             log.debug("Successfully saved issue changes")
