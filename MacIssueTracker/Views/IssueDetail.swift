@@ -14,6 +14,8 @@ struct IssueDetail: View {
     private var comments: FetchedResults<Comment>
     @FetchRequest(sortDescriptors: [])
     private var tags: FetchedResults<Tag>
+    @State private var showingEditIssueView = false
+    @Environment(\.managedObjectContext) private var viewContext
     
     init(issue: Issue) {
         _issue = ObservedObject(wrappedValue: issue)
@@ -57,9 +59,13 @@ struct IssueDetail: View {
         .toolbar {
             ToolbarItem(placement: .primaryAction) {
                 Button("Edit") {
-                    // TODO: implement
+                    showingEditIssueView = true
                 }
             }
+        }
+        .sheet(isPresented: $showingEditIssueView) {
+            EditIssueView(issue: issue)
+                .environment(\.managedObjectContext, viewContext)
         }
     }
 }
