@@ -94,6 +94,21 @@ extension IssuesViewModel {
 
 // MARK: - Functions
 extension IssuesViewModel {
+    /// Toggles the given issue's status.
+    /// - Parameter issue: The issue to toggle.
+    func toggleStatus(_ issue: Issue) {
+        switch issue.status {
+        case .open: issue.status = .closed
+        case .closed: issue.status = .open
+        }
+        do {
+            try viewContext.save()
+            log.debug("Successfully toggled issue status to \(issue.status.rawValue).")
+        } catch {
+            log.error("Failed to save view context. \(error)")
+        }
+    }
+    
     /// Closes the given issue.
     /// - Parameter issue: The `Issue` to close.
     func closeIssue(_ issue: Issue) {

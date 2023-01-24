@@ -8,23 +8,28 @@
 import SwiftUI
 
 struct ProjectListView: View {
+    @State private var showingAddProjectView = false
+    @State private var selectedProject: Project?
+    
     @FetchRequest(sortDescriptors: [])
     private var projects: FetchedResults<Project>
-    
-    @State private var showingAddProjectView = false
     
     @Environment(\.managedObjectContext) private var viewContext
     
     var body: some View {
-        List {
+        List(selection: $selectedProject) {
             Text("Projects")
                 .foregroundColor(.secondary)
             ForEach(projects) { project in
                 NavigationLink(project.name, destination: IssuesListView(project: project))
             }
         }
+        .focusedValue(\.selectedProject, $selectedProject) // TODO: - This seems like it doesn't set it.
         .sheet(isPresented: $showingAddProjectView) {
             AddProjectView()
+        }
+        .onAppear {
+            selectedProject = nil
         }
         .toolbar {
             ToolbarItem(placement: .primaryAction) {

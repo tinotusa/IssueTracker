@@ -32,13 +32,8 @@ struct IssuesListView: View {
                 Text("Issues")
                     .foregroundColor(.secondary)
                 ForEach(issues) { issue in
-                    NavigationLink(
-                        destination: IssueDetail(issue: issue),
-                        tag: issue,
-                        selection: $selectedIssue
-                    ) {
-                        IssueRow(issue: issue)
-                    }
+                    IssueRow(issue: issue)
+                        .tag(issue)
                     .contextMenu {
                         contextMenuButtons(issue: issue)
                     }
@@ -51,7 +46,11 @@ struct IssuesListView: View {
                 toolbarItems
             }
             
-            Text("Select an issue.")
+            if let selectedIssue {
+                IssueDetail(issue: selectedIssue)
+            } else {
+                Text("Select an issue.")
+            }
         }
         .sheet(isPresented: $showingAddIssueView) {
             AddIssueView(project: project)
@@ -59,6 +58,20 @@ struct IssuesListView: View {
         .sheet(isPresented: $showingEditIssueView) {
             if let selectedIssue {
                 EditIssueView(issue: selectedIssue)
+            }
+        }
+        .focusedValue(\.selectedIssue, $selectedIssue) // focusedObject should be here.
+        .focusedValue(\.deleteIssueAction, viewModel.deleteIssue)
+        // TODO: This looks ugly. Search for something else.
+        .focusedValue(\.addIssueAction) {
+            showingAddIssueView = true
+        }
+        .focusedValue(\.editIssueAction) {
+            showingEditIssueView = true
+        }
+        .focusedValue(\.setIssueStatusAction) {
+            if let selectedIssue {
+                viewModel.toggleStatus(selectedIssue)
             }
         }
     }

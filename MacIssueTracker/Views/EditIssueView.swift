@@ -40,6 +40,8 @@ struct EditIssueView: View {
                         dismiss()
                     }
                 }
+                .keyboardShortcut(.escape, modifiers: [])
+                
                 Button("Save") {
                     viewModel.saveChanges()
                     dismiss()
