@@ -16,6 +16,8 @@ enum SFSymbol: String, CaseIterable, Identifiable {
     case rectangleAndPencilAndEllipsis = "rectangle.and.pencil.and.ellipsis"
     case pencil = "pencil"
     case pencilSlash = "pencil.slash"
+    case book = "book"
+    case bookClosed = "book.closed"
     
     /// A unique id of a case.
     var id: Self { self }
