@@ -37,32 +37,16 @@ struct IssuesListView: View {
                         tag: issue,
                         selection: $selectedIssue
                     ) {
-                        // TODO: Make in to a view
-                        VStack(alignment: .leading) {
-                            Text(issue.name)
-                                .lineLimit(2)
-                            Group {
-                                if issue.issueDescription.isEmpty {
-                                    Text("No description")
-                                    
-                                } else {
-                                    Text(issue.issueDescription)
-                                        .lineLimit(2)
-                                }
-                            }
-                            .font(.footnote)
-                            .foregroundColor(.secondary)
-                        }
+                        IssueRow(issue: issue)
                     }
                     .contextMenu {
                         contextMenuButtons(issue: issue)
                     }
                 }
             }
+            .frame(minWidth: 250)
             .navigationTitle(project.name)
-            .onDeleteCommand {
-                deleteCommand()
-            }
+            .onDeleteCommand(perform: deleteCommand)
             .toolbar {
                 toolbarItems
             }
