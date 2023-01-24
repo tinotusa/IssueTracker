@@ -9,10 +9,13 @@ import SwiftUI
 
 struct IssuesListView: View {
     let project: Project
+    @State private var selectedIssue: Issue?
+    @State private var showingAddIssueView = false
+    @State private var showingEditIssueView = false
+    @StateObject private var viewModel: IssuesViewModel
+    
     @FetchRequest(sortDescriptors: [.init(\.dateCreated_, order: .forward)])
     private var issues: FetchedResults<Issue>
-    @State private var showingAddIssueView = false
-    @StateObject private var viewModel: IssuesViewModel
     
     init(project: Project) {
         self.project = project
@@ -22,10 +25,6 @@ struct IssuesListView: View {
             predicate: NSPredicate(format: "(project == %@) AND (status_ == %@)",  project, "open"))
         _viewModel = StateObject(wrappedValue: IssuesViewModel(project: project, predicate: predicate))
     }
-    
-    @State private var searchText = ""
-    @State private var selectedIssues = Set<UUID>()
-    @State private var selectedIssue: Issue?
     
     var body: some View {
         NavigationView {
@@ -38,6 +37,7 @@ struct IssuesListView: View {
                         tag: issue,
                         selection: $selectedIssue
                     ) {
+                        // TODO: Make in to a view
                         VStack(alignment: .leading) {
                             Text(issue.name)
                                 .lineLimit(2)
@@ -54,7 +54,9 @@ struct IssuesListView: View {
                             .foregroundColor(.secondary)
                         }
                     }
-                    .tag(issue.id)
+                    .contextMenu {
+                        contextMenuButtons(issue: issue)
+                    }
                 }
             }
             .navigationTitle(project.name)
@@ -62,25 +64,18 @@ struct IssuesListView: View {
                 deleteCommand()
             }
             .toolbar {
-                ToolbarItemGroup(placement: .primaryAction) {
-                    HStack {
-                        Button {
-                            showingAddIssueView = true
-                        } label: {
-                            Label("Add issue", systemImage: SFSymbol.plus.rawValue)
-                        }
-                        
-                        Button(role: .destructive, action: deleteCommand) {
-                            Label("Delete", systemImage: SFSymbol.trash.rawValue)
-                        }
-                    }
-                }
+                toolbarItems
             }
             
             Text("Select an issue.")
         }
         .sheet(isPresented: $showingAddIssueView) {
             AddIssueView(project: project)
+        }
+        .sheet(isPresented: $showingEditIssueView) {
+            if let selectedIssue {
+                EditIssueView(issue: selectedIssue)
+            }
         }
     }
 }
@@ -90,6 +85,57 @@ private extension IssuesListView {
         if let selectedIssue {
             self.selectedIssue = nil
             viewModel.deleteIssue(selectedIssue)
+        }
+    }
+}
+
+// MARK: Subviews
+private extension IssuesListView {
+    @ViewBuilder
+    func contextMenuButtons(issue: Issue) -> some View {
+        Button {
+            selectedIssue = issue
+            showingEditIssueView = true
+        } label: {
+            Label("Edit", systemImage: SFSymbol.pencil.rawValue)
+        }
+        
+        Button {
+            if issue.status == .open {
+                viewModel.closeIssue(issue)
+                selectedIssue = nil
+            } else {
+                viewModel.openIssue(issue)
+            }
+        } label: {
+            if issue.status == .open {
+                Label("Close issue", systemImage: SFSymbol.bookClosed.rawValue)
+            } else {
+                Label("Open issue", systemImage: SFSymbol.book.rawValue)
+            }
+        }
+
+        Divider()
+        
+        Button(role: .destructive) {
+            selectedIssue = issue
+            deleteCommand()
+        } label: {
+            Label("Delete", systemImage: SFSymbol.trash.rawValue)
+        }
+    }
+    
+    var toolbarItems: some View {
+        HStack {
+            Button {
+                showingAddIssueView = true
+            } label: {
+                Label("Add issue", systemImage: SFSymbol.plus.rawValue)
+            }
+            
+            Button(role: .destructive, action: deleteCommand) {
+                Label("Delete", systemImage: SFSymbol.trash.rawValue)
+            }
         }
     }
 }
