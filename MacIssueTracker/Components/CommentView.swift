@@ -15,8 +15,7 @@ struct CommentView: View {
     var body: some View {
         VStack(alignment: .leading) {
             Text(comment.dateCreated.formatted(date: .long, time: .omitted))
-                .font(.footnote)
-                .foregroundColor(.secondary)
+                .secondaryFootnote()
             HStack {
                 TextEditor(text: $commentChange.animation())
 //                    .scrollContentBackground(.hidden) // don't have mac os 13

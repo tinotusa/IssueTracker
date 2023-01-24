@@ -33,8 +33,7 @@ struct IssueDetail: View {
     var body: some View {
         Form {
             Text(issue.dateCreated.formatted(date: .long, time: .shortened))
-                .font(.footnote)
-                .foregroundColor(.secondary)
+                .secondaryFootnote()
             Text(issue.name)
                 .titleStyle()
             Divider()
