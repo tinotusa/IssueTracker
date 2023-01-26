@@ -18,6 +18,8 @@ final class IssuesViewModel: ObservableObject {
     @Published var searchText = ""
     /// The search scope for the search bar.
     @Published var searchScope = SearchScopes.name
+    /// The issue status being listed.
+    @Published var searchIssueStatus = Issue.Status.open
     /// The currently selected issue.
     @Published var selectedIssue: Issue?
     /// The predicate used for the FilteredIssuesListView
@@ -28,11 +30,9 @@ final class IssuesViewModel: ObservableObject {
     @Published var sortOrder = SortOrder.forward
     /// The sort descriptor for the issues.
     @Published var sortDescriptor = SortDescriptor<Issue>(\.dateCreated_, order: .forward)
-    /// A boolean value indicating whether or not the issues view is showing open issues.
-    @Published var showingOpenIssues = true
     
     /// The current project the issues belong to.
-    private let project: Project
+    let project: Project
     /// The view context.
     private let viewContext: NSManagedObjectContext
     private let log = Logger(subsystem: "com.tinotusa.IssueTracker", category: "IssuesViewModel")
@@ -170,20 +170,20 @@ extension IssuesViewModel {
     func runSearch() {
         if searchText.isEmpty {
             predicate = NSPredicate(
-                format: "(project == %@) AND (status_ == %@)", project, showingOpenIssues ? "open" : "closed")
+                format: "(project == %@) AND (status_ == %@)", project, searchIssueStatus.rawValue)
             return
         }
         var format = "(project == %@) AND (status_ == %@)"
         switch searchScope {
         case .description:
             format += "AND (issueDescription_ CONTAINS[cd] %@)"
-            predicate = NSPredicate(format: format,  project, showingOpenIssues ? "open" : "closed", searchText)
+            predicate = NSPredicate(format: format,  project, searchIssueStatus.rawValue, searchText)
         case .name:
             format += "AND (name_ CONTAINS[cd] %@)"
-            predicate = NSPredicate(format: format,  project, showingOpenIssues ? "open" : "closed", searchText)
+            predicate = NSPredicate(format: format,  project, searchIssueStatus.rawValue, searchText)
         case .tag:
             format += "AND (tags.name_ CONTAINS[cd] %@)"
-            predicate = NSPredicate(format: format,  project, showingOpenIssues ? "open" : "closed", searchText)
+            predicate = NSPredicate(format: format,  project, searchIssueStatus.rawValue, searchText)
         }
     }
     
