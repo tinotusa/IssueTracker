@@ -108,10 +108,17 @@ extension Issue {
         get { self.comments?.array as? [Comment] ?? [] }
         set { self.comments = NSOrderedSet(array: newValue) }
     }
+    
+    /// A boolean value indicating whether the issue's status is open.
+    var isOpenStatus: Bool {
+        status == .open
+    }
 }
 
 // MARK: - Functions
 extension Issue {
+    /// Copies the properties of the given issue to self.
+    /// - Parameter issue: The issue to copy properties from.
     func copyProperties(from issue: Issue) {
         self.name = issue.name
         self.issueDescription = issue.issueDescription
