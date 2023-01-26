@@ -40,14 +40,12 @@ final class IssuesViewModel: ObservableObject {
     /// Creates a new IssuesViewModel
     /// - Parameters:
     ///   - project: The project the issues being listed belong to.
-    ///   - predicate: The predicate used for filtering and searching.
     ///   - viewContext: The view context to save to.
     init(project: Project,
-         predicate: NSPredicate,
          viewContext: NSManagedObjectContext = PersistenceController.shared.container.viewContext
     ) {
         self.project = project
-        self.predicate = predicate
+        self.predicate = NSPredicate(format: "(project == %@) AND (status_ == %@)",  project, "open")
         self.viewContext = viewContext
     }
 }

@@ -14,8 +14,7 @@ struct IssuesListView: View {
     @StateObject private var viewModel: IssuesViewModel
 
     init(project: Project) {
-        let predicate = NSPredicate(format: "(project == %@) AND (status_ == %@)",  project, "open")
-        _viewModel = StateObject(wrappedValue: IssuesViewModel(project: project, predicate: predicate))
+        _viewModel = StateObject(wrappedValue: IssuesViewModel(project: project))
     }
     
     var body: some View {
