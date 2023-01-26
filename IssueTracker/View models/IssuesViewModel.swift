@@ -109,43 +109,24 @@ extension IssuesViewModel {
         }
     }
     
-    /// Closes the given issue.
-    /// - Parameter issue: The `Issue` to close.
-    func closeIssue(_ issue: Issue) {
-        log.debug("Closing issue \"\(issue.name)\" ...")
-        if issue.status == .closed {
-            log.debug("Issue is already closed.")
+    /// Sets the given issue to the given status.
+    /// - Parameter issue: The issue to modify.
+    /// - Parameter status: The status to set the issue to.
+    func setIssueStatus(_ issue: Issue, to status: Issue.Status) {
+        log.debug(#"Setting issue "\#(issue.name)" to \#(status.rawValue)"#)
+        if issue.status == status {
+            log.log("Issue is already \(status.rawValue).")
             return
         }
-        issue.status = .closed
+        issue.status = status
         do {
             try withAnimation {
                 try viewContext.save()
             }
-            log.debug("Successfully close issue.")
+            log.log(#"Successfully set the issue "\#(issue.name)" status to \#(status.rawValue)."#)
         } catch {
             viewContext.rollback()
-            log.error("Failed to close issue. \(error)")
-        }
-    }
-    
-    /// Sets the given issue's status to open.
-    /// - Parameter issue: The issue to open.
-    func openIssue(_ issue: Issue) {
-        log.debug("opening issue ...")
-        if issue.status == .open {
-            log.debug("Issue is already opened.")
-            return
-        }
-        do {
-            issue.status = .open
-            try withAnimation {
-                try viewContext.save()
-            }
-            log.debug("Successfully opened issue")
-        } catch {
-            log.error("Failed to open issue. \(error)")
-            viewContext.rollback()
+            log.log(#"Failed to set the issue "\#(issue.name)" status to \#(status.rawValue)."#)
         }
     }
     
