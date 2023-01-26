@@ -6,24 +6,34 @@
 //
 
 import SwiftUI
+import Combine
 
 struct AddProjectView: View {
     @StateObject private var viewModel = AddProjectViewModel()
     @Environment(\.dismiss) private var dismiss
     
     var body: some View {
-        VStack {
-            TextField("Name", text: $viewModel.projectName)
+        Form {
+            TextField("Project name", text: $viewModel.projectName)
+                .onReceive(Just(viewModel.projectName), perform: viewModel.filterName)
+                .onSubmit {
+                    viewModel.addProject()
+                }
             HStack {
                 Button("Close") {
                     dismiss()
                 }
+                .keyboardShortcut(.escape, modifiers: [])
+                .help("Close this sheet")
                 
                 Button("Add project") {
                     viewModel.addProject()
                     dismiss()
                 }
+                .disabled(viewModel.addButtonDisabled)
+                .help("Add new project")
             }
+            .frame(maxWidth: .infinity)
         }
         .navigationTitle("Add new project")
         .padding()
