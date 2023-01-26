@@ -25,13 +25,13 @@ struct IssueRowView: View {
             }
             
             if let tags = issue.tags {
-                if tags.set.isEmpty {
+                if tags.allObjects.isEmpty {
                     Text("No tags")
                         .footerStyle()
                 } else {
                     HStack {
                         Text("Tags: ")
-                        ForEach(tags.array as? [Tag] ?? []) { tag in
+                        ForEach(tags.allObjects as? [Tag] ?? []) { tag in
                             Text(tag.name)
                         }
                     }

@@ -174,6 +174,7 @@
 		218A50D82975088300DF29F5 /* MacIssueTrackerUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacIssueTrackerUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		218E60C529822A7800A9C4AB /* IssueTrackerSettingsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IssueTrackerSettingsViewModel.swift; sourceTree = "<group>"; };
 		218E60C7298245BA00A9C4AB /* FilterIssuesList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterIssuesList.swift; sourceTree = "<group>"; };
+		218E60C9298296FD00A9C4AB /* IssueTracker.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = IssueTracker.entitlements; sourceTree = "<group>"; };
 		21AFDF2329777A3C00847889 /* Color+rgbComponents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Color+rgbComponents.swift"; sourceTree = "<group>"; };
 		21AFDF2629777BD000847889 /* TagSearchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagSearchView.swift; sourceTree = "<group>"; };
 		21AFDF2929777F7F00847889 /* TagFilterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagFilterView.swift; sourceTree = "<group>"; };
@@ -296,6 +297,7 @@
 		2150C83C295972E0006CD7D2 /* IssueTracker */ = {
 			isa = PBXGroup;
 			children = (
+				218E60C9298296FD00A9C4AB /* IssueTracker.entitlements */,
 				21E6D2B4295BF9CF00BB4AA6 /* View models */,
 				21E6D2B1295BF89700BB4AA6 /* Views */,
 				21E6D2A9295BD9A800BB4AA6 /* Extensions */,
@@ -1018,6 +1020,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = IssueTracker/IssueTracker.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"IssueTracker/Preview Content\"";
@@ -1049,6 +1052,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = IssueTracker/IssueTracker.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"IssueTracker/Preview Content\"";

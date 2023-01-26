@@ -21,12 +21,6 @@ struct AddProjectView: View {
                         CustomTextField("Project name", text: $viewModel.projectName)
                             .onReceive(Just(viewModel.projectName), perform: viewModel.filterName)
                     }
-                    
-                    LabeledInputField("Start date:") {
-                        DatePicker("Start date", selection: $viewModel.startDate, displayedComponents: [.date])
-                            .labelsHidden()
-                            .padding(.bottom)
-                    }
                 }
             }
             .safeAreaInset(edge: .bottom) {

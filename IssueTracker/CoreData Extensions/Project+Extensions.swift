@@ -21,7 +21,9 @@ extension Project {
     
     /// The latest issue added to the project.
     var latestIssue: Issue? {
-        self.issues?.lastObject as? Issue
+        let issues = self.issues?.allObjects as? [Issue] ?? []
+        let sortedIssues = issues.sorted { $0.dateCreated > $1.dateCreated }
+        return sortedIssues.last
     }
     
     /// Creates an example Project.
@@ -51,7 +53,7 @@ extension Project {
             return selectedTags
         }
         
-        project.issues = NSOrderedSet(set: Set<Issue>([
+        project.issues = NSSet(set: Set<Issue>([
             .init(name: "Lorem ipsum dolor", issueDescription: "this is a random description of the issue.", priority: .low, tags: randomTags(), context: context),
             .init(name: "Sit amet, consectetur", issueDescription: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam ac magna ex. Etiam nec dolor id ex imperdiet ornare.", priority: .low, tags: randomTags(), context: context),
             .init(name: "Vestibulum at tellus commodo", issueDescription: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.", priority: .low, tags: randomTags(), context: context),

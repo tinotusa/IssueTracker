@@ -43,7 +43,7 @@ struct IssueDetail: View {
                     
                     LabeledInputField("Tags:") {
                         ScrollView(.horizontal, showsIndicators: false) {
-                            let tags = issue.tags?.array as? [Tag] ?? []
+                            let tags = issue.tags?.allObjects as? [Tag] ?? []
                             if tags.isEmpty {
                                 Text("No tags")
                                     .foregroundColor(.customSecondary)

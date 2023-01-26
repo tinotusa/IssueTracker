@@ -30,10 +30,10 @@ final class EditIssueViewModel: ObservableObject {
             name: issue.name,
             issueDescription: issue.issueDescription,
             priority: issue.priority,
-            tags: issue.tags?.set as? Set<Tag> ?? [],
+            tags: Set((issue.tags?.allObjects ?? []) as! [Tag]),
             context: issue.managedObjectContext!
         )
-        self.selectedTags = issue.tags?.set as? Set<Tag> ?? []
+        self.selectedTags = Set((issue.tags?.allObjects ?? []) as! [Tag])
     }
 }
 
@@ -63,7 +63,7 @@ extension EditIssueViewModel {
             return
         }
         issue.copyProperties(from: issueCopy) // does this copy the stuff
-        issue.tags = NSOrderedSet(set: selectedTags)
+        issue.tags = NSSet(set: selectedTags)
         do {
             try viewContext.save()
             log.debug("Successfully saved issue changes")

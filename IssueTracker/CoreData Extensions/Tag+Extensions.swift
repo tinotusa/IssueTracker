@@ -13,7 +13,7 @@ extension Tag {
         self.init(context: context)
         self.name = name
     }
-    
+    #if os(macOS)
     convenience init(name: String, colour: Color, context: NSManagedObjectContext) {
         self.init(name: name, context: context)
         let (r, g, b) = colour.rgbComponents
@@ -23,6 +23,7 @@ extension Tag {
         self.blue = b
         self.opacity = opacity
     }
+    #endif
     
     public override func awakeFromInsert() {
         self.dateCreated_ = .now

@@ -21,7 +21,7 @@ extension Issue {
         self.name = name
         self.issueDescription = issueDescription
         self.priority = priority
-        self.addToTags(NSOrderedSet(set: tags))
+        self.addToTags(NSSet(set: tags))
     }
     
     public override func awakeFromInsert() {
@@ -105,8 +105,8 @@ extension Issue {
     }
     
     var wrappedComments: [Comment] {
-        get { self.comments?.array as? [Comment] ?? [] }
-        set { self.comments = NSOrderedSet(array: newValue) }
+        get { self.comments?.allObjects as? [Comment] ?? [] }
+        set { self.comments = NSSet(array: newValue) }
     }
     
     /// A boolean value indicating whether the issue's status is open.

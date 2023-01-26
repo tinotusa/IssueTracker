@@ -18,8 +18,7 @@ struct IssuesView: View {
     
     init(project: Project) {
         self.project = project
-        let predicate = NSPredicate(format: "(project == %@) AND (status_ == %@)",  project, "open")
-        _viewModel = StateObject(wrappedValue: IssuesViewModel(project: project, predicate: predicate))
+        _viewModel = StateObject(wrappedValue: IssuesViewModel(project: project))
     }
     
     var body: some View {
@@ -34,7 +33,7 @@ struct IssuesView: View {
             }
             .swipeActions {
                 Button {
-                    viewModel.closeIssue(issue)
+                    viewModel.setIssueStatus(issue, to: .closed)
                 } label: {
                     Label("Close issue", systemImage: "checkmark.circle.fill")
                 }
@@ -47,7 +46,7 @@ struct IssuesView: View {
             }
             .swipeActions(edge: .leading) {
                 Button {
-                    viewModel.openIssue(issue)
+                    viewModel.setIssueStatus(issue, to: .open)
                 } label: {
                     Label("Open", systemImage: "lock.open")
                 }
@@ -62,8 +61,8 @@ struct IssuesView: View {
         }
         .onChange(of: viewModel.searchText) { _ in viewModel.runSearch() }
         .onChange(of: viewModel.searchScope) { _ in viewModel.runSearch() }
-        .onChange(of: viewModel.showingOpenIssues) { _ in viewModel.runSearch() }
-        .navigationBarTitle(viewModel.showingOpenIssues ? "Open issues" : "Closed issues")
+        .onChange(of: viewModel.searchIssueStatus) { _ in viewModel.runSearch() }
+        .navigationBarTitle(viewModel.searchIssueStatus == .open ? "Open issues" : "Closed issues")
         .toolbarBackground(Color.customBackground, for: .navigationBar, .bottomBar) // this doesn't seem to change the bottom bar at all.
         .bodyStyle()
         .background(Color.customBackground)
@@ -92,11 +91,11 @@ struct IssuesView: View {
             }
             ToolbarItemGroup(placement: .bottomBar) {
                 Button {
-                    viewModel.showingOpenIssues.toggle()
+                    viewModel.searchIssueStatus = viewModel.searchIssueStatus == .open ? .closed : .open
                 } label: {
-                    Label("Issue status", systemImage: viewModel.showingOpenIssues ? "book.closed" : "book")
+                    Label("Issue status", systemImage: viewModel.searchIssueStatus == .open ? "book.closed" : "book")
                 }
-                
+
                 Button {
                     viewModel.showingAddIssueView = true
                 } label: {
