@@ -20,6 +20,11 @@ struct IssueTrackerApp: App {
         .commands {
             IssueTrackerCommands()
         }
+        
+        Settings {
+            IssueTrackerSettings()
+                .environment(\.managedObjectContext, persistenceController.container.viewContext)
+        }
     }
 }
 

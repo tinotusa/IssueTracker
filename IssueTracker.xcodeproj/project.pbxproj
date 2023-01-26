@@ -16,6 +16,7 @@
 		2127AD64295FB552005893DE /* EditIssueViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2127AD63295FB552005893DE /* EditIssueViewModel.swift */; };
 		2127AD66295FBD0E005893DE /* ProminentTagView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2127AD65295FBD0E005893DE /* ProminentTagView.swift */; };
 		213EDD992980DA7C00012198 /* IssueTrackerSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 213EDD982980DA7C00012198 /* IssueTrackerSettings.swift */; };
+		213EDD9B29814C9A00012198 /* TagTableColumn.swift in Sources */ = {isa = PBXBuildFile; fileRef = 213EDD9A29814C9A00012198 /* TagTableColumn.swift */; };
 		2150C83E295972E0006CD7D2 /* IssueTrackerApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2150C83D295972E0006CD7D2 /* IssueTrackerApp.swift */; };
 		2150C840295972E0006CD7D2 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2150C83F295972E0006CD7D2 /* ContentView.swift */; };
 		2150C842295972E2006CD7D2 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2150C841295972E2006CD7D2 /* Assets.xcassets */; };
@@ -58,6 +59,7 @@
 		218A5108297508B900DF29F5 /* Comment+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21BBEBFA295ECF8B008F237B /* Comment+Extensions.swift */; };
 		218A5109297508B900DF29F5 /* IssueTrackerApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2150C83D295972E0006CD7D2 /* IssueTrackerApp.swift */; };
 		218A510A297508BD00DF29F5 /* IssueTracker.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 2150C848295972E2006CD7D2 /* IssueTracker.xcdatamodeld */; };
+		218E60C629822A7800A9C4AB /* IssueTrackerSettingsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 218E60C529822A7800A9C4AB /* IssueTrackerSettingsViewModel.swift */; };
 		21AFDF2429777A3C00847889 /* Color+rgbComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21AFDF2329777A3C00847889 /* Color+rgbComponents.swift */; };
 		21AFDF2729777BD000847889 /* TagSearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21AFDF2629777BD000847889 /* TagSearchView.swift */; };
 		21AFDF2A29777F7F00847889 /* TagFilterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21AFDF2929777F7F00847889 /* TagFilterView.swift */; };
@@ -138,6 +140,7 @@
 		2127AD63295FB552005893DE /* EditIssueViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditIssueViewModel.swift; sourceTree = "<group>"; };
 		2127AD65295FBD0E005893DE /* ProminentTagView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProminentTagView.swift; sourceTree = "<group>"; };
 		213EDD982980DA7C00012198 /* IssueTrackerSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IssueTrackerSettings.swift; sourceTree = "<group>"; };
+		213EDD9A29814C9A00012198 /* TagTableColumn.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagTableColumn.swift; sourceTree = "<group>"; };
 		2150C83A295972E0006CD7D2 /* IssueTracker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = IssueTracker.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2150C83D295972E0006CD7D2 /* IssueTrackerApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IssueTrackerApp.swift; sourceTree = "<group>"; };
 		2150C83F295972E0006CD7D2 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -168,6 +171,7 @@
 		218A50D22975088300DF29F5 /* MacIssueTrackerUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MacIssueTrackerUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		218A50D62975088300DF29F5 /* MacIssueTrackerUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacIssueTrackerUITests.swift; sourceTree = "<group>"; };
 		218A50D82975088300DF29F5 /* MacIssueTrackerUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacIssueTrackerUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		218E60C529822A7800A9C4AB /* IssueTrackerSettingsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IssueTrackerSettingsViewModel.swift; sourceTree = "<group>"; };
 		21AFDF2329777A3C00847889 /* Color+rgbComponents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Color+rgbComponents.swift"; sourceTree = "<group>"; };
 		21AFDF2629777BD000847889 /* TagSearchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagSearchView.swift; sourceTree = "<group>"; };
 		21AFDF2929777F7F00847889 /* TagFilterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagFilterView.swift; sourceTree = "<group>"; };
@@ -351,6 +355,7 @@
 		218A50B92975088000DF29F5 /* MacIssueTracker */ = {
 			isa = PBXGroup;
 			children = (
+				218E60C429822A6500A9C4AB /* View models */,
 				210650DE297BD45B00E5BCD7 /* Styles */,
 				21AFDF2B2977CB4800847889 /* Models */,
 				21AFDF2529777BC100847889 /* Components */,
@@ -389,6 +394,14 @@
 			path = MacIssueTrackerUITests;
 			sourceTree = "<group>";
 		};
+		218E60C429822A6500A9C4AB /* View models */ = {
+			isa = PBXGroup;
+			children = (
+				218E60C529822A7800A9C4AB /* IssueTrackerSettingsViewModel.swift */,
+			);
+			path = "View models";
+			sourceTree = "<group>";
+		};
 		21AFDF22297779FE00847889 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
@@ -404,6 +417,7 @@
 				21AFDF2829777F6600847889 /* Tag search */,
 				210650E1297BD6CF00E5BCD7 /* CommentView.swift */,
 				2154B59C297F85910040FE69 /* IssueRow.swift */,
+				213EDD9A29814C9A00012198 /* TagTableColumn.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -816,6 +830,7 @@
 				218A50FD297508B900DF29F5 /* IssuesViewModel.swift in Sources */,
 				218A5102297508B900DF29F5 /* Color+Extensions.swift in Sources */,
 				218A50F3297508B900DF29F5 /* DeleteProjectViewModel.swift in Sources */,
+				218E60C629822A7800A9C4AB /* IssueTrackerSettingsViewModel.swift in Sources */,
 				218A50EB297508B900DF29F5 /* HomeViewModel.swift in Sources */,
 				2154B59D297F85910040FE69 /* IssueRow.swift in Sources */,
 				218A50FE297508B900DF29F5 /* Project+Extensions.swift in Sources */,
@@ -831,6 +846,7 @@
 				218A5108297508B900DF29F5 /* Comment+Extensions.swift in Sources */,
 				210650E0297BD46C00E5BCD7 /* TextStyles.swift in Sources */,
 				218A50BD2975088000DF29F5 /* ContentView.swift in Sources */,
+				213EDD9B29814C9A00012198 /* TagTableColumn.swift in Sources */,
 				218A50F8297508B900DF29F5 /* IssueDetailViewModel.swift in Sources */,
 				21AFDF2A29777F7F00847889 /* TagFilterView.swift in Sources */,
 			);
