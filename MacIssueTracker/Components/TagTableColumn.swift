@@ -11,16 +11,24 @@ struct TagTableColumn: View {
     @ObservedObject var tag: Tag
     @State private var selectedColour = Color.green
     @Environment(\.managedObjectContext) private var viewContext
+    @State private var tagName = ""
     
     var body: some View {
         HStack {
             ColorPicker("Tag Colour", selection: $selectedColour)
                 .labelsHidden()
-            Text(tag.name)
+            TextField("Tag name", text: $tagName)
+                .labelsHidden()
+                .onSubmit {
+                    if tagName.isEmpty { return }
+                    tag.name = tagName
+                    try? viewContext.save()
+                }
         }
         .onAppear {
             let colour = Color(red: tag.red, green: tag.green, blue: tag.blue, opacity: tag.opacity)
             selectedColour = colour
+            tagName = tag.name
         }
         .onChange(of: selectedColour) { colour in
             // TODO: make rgb have alpha component?
