@@ -51,9 +51,18 @@ extension Issue {
     }
     
     /// The status of the issue.
-    enum Status: String {
+    enum Status: String, CaseIterable, Identifiable {
         case open
         case closed
+        
+        var id: Self { self }
+        
+        var label: LocalizedStringKey {
+            switch self {
+            case .closed: return "Closed"
+            case .open: return "Open"
+            }
+        }
     }
     
 }
