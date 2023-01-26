@@ -9,16 +9,23 @@ import os
 import SwiftUI
 import CoreData
 
+/// View model for AddProjectView.
 final class AddProjectViewModel: ObservableObject {
+    /// The view context for core data.
     private let viewContext: NSManagedObjectContext
+    /// The name of the project.
     @Published var projectName = ""
-    @Published var startDate = Date()
-
+    
+    /// Creates a new view model.
+    /// - Parameter context: The context for saving objects.
     init(context: NSManagedObjectContext = PersistenceController.shared.container.viewContext) {
         self.viewContext = context
     }
     
-    private let log = Logger(subsystem: "com.tinotusa.IssueTracker", category: "AddProjectViewModel")
+    private let log = Logger(
+        subsystem: Bundle.main.bundleIdentifier!,
+        category: String(describing: AddProjectViewModel.self)
+    )
 }
 
 extension AddProjectViewModel {
@@ -30,16 +37,16 @@ extension AddProjectViewModel {
     
     /// Adds a new Project to CoreData.
     func addProject() {
-        log.debug("Adding a project")
+        log.log("Adding a project")
         guard !addButtonDisabled else {
-            log.debug("Failed to add project, the add button is disabled.")
+            log.log("Failed to add project, the add button is disabled.")
             return
         }
-        let _ = Project(name: projectName, startDate: startDate, context: viewContext)
+        let _ = Project(name: projectName, startDate: .now, context: viewContext)
         
         do {
             try viewContext.save()
-            log.debug("Successfully saved Project to view context's store.")
+            log.log("Successfully saved Project to view context's store.")
         } catch {
             log.error("Failed to save Project to view context's store.")
         }
