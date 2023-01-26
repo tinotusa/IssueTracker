@@ -102,21 +102,18 @@ private extension IssuesListView {
         } label: {
             Label("Edit", systemImage: SFSymbol.pencil.rawValue)
         }
+        .help("Edit the selected issue")
         
         Button {
-            if issue.status == .open {
-                viewModel.closeIssue(issue)
-                selectedIssue = nil
-            } else {
-                viewModel.openIssue(issue)
-            }
+            viewModel.setIssueStatus(issue, to: issue.isOpenStatus ? .closed : .open)
+            selectedIssue = nil
         } label: {
-            if issue.status == .open {
-                Label("Close issue", systemImage: SFSymbol.bookClosed.rawValue)
-            } else {
-                Label("Open issue", systemImage: SFSymbol.book.rawValue)
-            }
+            Label(
+                issue.isOpenStatus ? "Close issue" : "Open issue",
+                systemImage: issue.isOpenStatus ? SFSymbol.bookClosed.rawValue : SFSymbol.book.rawValue
+            )
         }
+        .help(issue.isOpenStatus ? "Close the selected issue" : "Open the selected issue")
 
         Divider()
         
@@ -126,6 +123,7 @@ private extension IssuesListView {
         } label: {
             Label("Delete", systemImage: SFSymbol.trash.rawValue)
         }
+        .help("Delete the selected issue")
     }
     
     var toolbarItems: some View {
@@ -135,11 +133,26 @@ private extension IssuesListView {
             } label: {
                 Label("Add issue", systemImage: SFSymbol.plus.rawValue)
             }
+            .help("Add new issue")
+            
+            if let selectedIssue {
+                Button {
+                    viewModel.setIssueStatus(selectedIssue, to: selectedIssue.isOpenStatus ? .closed : .open)
+                    self.selectedIssue = nil
+                } label: {
+                    Label(
+                        selectedIssue.isOpenStatus ? "Close issue" : "Open issue",
+                        systemImage: selectedIssue.isOpenStatus ? SFSymbol.bookClosed.rawValue : SFSymbol.book.rawValue
+                    )
+                }
+                .help(selectedIssue.isOpenStatus ? "Close selected issue" : "Open selected issue")
+            }
             
             Button(role: .destructive, action: deleteCommand) {
                 Label("Delete", systemImage: SFSymbol.trash.rawValue)
             }
             .disabled(selectedIssue == nil)
+            .help("Delete selected issue")
         }
     }
 }
