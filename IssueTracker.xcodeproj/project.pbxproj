@@ -60,6 +60,7 @@
 		218A5109297508B900DF29F5 /* IssueTrackerApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2150C83D295972E0006CD7D2 /* IssueTrackerApp.swift */; };
 		218A510A297508BD00DF29F5 /* IssueTracker.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 2150C848295972E2006CD7D2 /* IssueTracker.xcdatamodeld */; };
 		218E60C629822A7800A9C4AB /* IssueTrackerSettingsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 218E60C529822A7800A9C4AB /* IssueTrackerSettingsViewModel.swift */; };
+		218E60C8298245BA00A9C4AB /* FilterIssuesList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 218E60C7298245BA00A9C4AB /* FilterIssuesList.swift */; };
 		21AFDF2429777A3C00847889 /* Color+rgbComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21AFDF2329777A3C00847889 /* Color+rgbComponents.swift */; };
 		21AFDF2729777BD000847889 /* TagSearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21AFDF2629777BD000847889 /* TagSearchView.swift */; };
 		21AFDF2A29777F7F00847889 /* TagFilterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21AFDF2929777F7F00847889 /* TagFilterView.swift */; };
@@ -172,6 +173,7 @@
 		218A50D62975088300DF29F5 /* MacIssueTrackerUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacIssueTrackerUITests.swift; sourceTree = "<group>"; };
 		218A50D82975088300DF29F5 /* MacIssueTrackerUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacIssueTrackerUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		218E60C529822A7800A9C4AB /* IssueTrackerSettingsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IssueTrackerSettingsViewModel.swift; sourceTree = "<group>"; };
+		218E60C7298245BA00A9C4AB /* FilterIssuesList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterIssuesList.swift; sourceTree = "<group>"; };
 		21AFDF2329777A3C00847889 /* Color+rgbComponents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Color+rgbComponents.swift"; sourceTree = "<group>"; };
 		21AFDF2629777BD000847889 /* TagSearchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagSearchView.swift; sourceTree = "<group>"; };
 		21AFDF2929777F7F00847889 /* TagFilterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagFilterView.swift; sourceTree = "<group>"; };
@@ -418,6 +420,7 @@
 				210650E1297BD6CF00E5BCD7 /* CommentView.swift */,
 				2154B59C297F85910040FE69 /* IssueRow.swift */,
 				213EDD9A29814C9A00012198 /* TagTableColumn.swift */,
+				218E60C7298245BA00A9C4AB /* FilterIssuesList.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -841,6 +844,7 @@
 				218A50E3297508B900DF29F5 /* AddProjectViewModel.swift in Sources */,
 				21734A9129764F0700EB3942 /* AddIssueView.swift in Sources */,
 				218A50FF297508B900DF29F5 /* Tag+Extensions.swift in Sources */,
+				218E60C8298245BA00A9C4AB /* FilterIssuesList.swift in Sources */,
 				218A50F1297508B900DF29F5 /* String+filterWhitespace.swift in Sources */,
 				21734A9529764FFB00EB3942 /* IssuesListView.swift in Sources */,
 				218A5108297508B900DF29F5 /* Comment+Extensions.swift in Sources */,

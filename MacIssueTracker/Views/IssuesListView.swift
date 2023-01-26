@@ -8,39 +8,38 @@
 import SwiftUI
 
 struct IssuesListView: View {
-    let project: Project
     @State private var selectedIssue: Issue?
     @State private var showingAddIssueView = false
     @State private var showingEditIssueView = false
     @StateObject private var viewModel: IssuesViewModel
-    
-    @FetchRequest(sortDescriptors: [.init(\.dateCreated_, order: .forward)])
-    private var issues: FetchedResults<Issue>
-    
+
     init(project: Project) {
-        self.project = project
         let predicate = NSPredicate(format: "(project == %@) AND (status_ == %@)",  project, "open")
-        _issues = FetchRequest(
-            sortDescriptors: [.init(\.dateCreated_, order: .forward)],
-            predicate: NSPredicate(format: "(project == %@) AND (status_ == %@)",  project, "open"))
         _viewModel = StateObject(wrappedValue: IssuesViewModel(project: project, predicate: predicate))
     }
     
     var body: some View {
         NavigationView {
-            List(selection: $selectedIssue) {
-                Text("Issues")
-                    .foregroundColor(.secondary)
-                ForEach(issues) { issue in
-                    IssueRow(issue: issue)
-                        .tag(issue)
+            FilterIssuesList(selection: $selectedIssue, predicate: viewModel.predicate) { issue in
+                IssueRow(issue: issue)
+                    .tag(issue)
                     .contextMenu {
                         contextMenuButtons(issue: issue)
                     }
+            }
+            .safeAreaInset(edge: .bottom) {
+                Picker("Issue status", selection: $viewModel.searchIssueStatus) {
+                    ForEach(Issue.Status.allCases) { status in
+                        Text(status.label)
+                            .tag(status)
+                    }
                 }
+                .pickerStyle(.segmented)
+                .labelsHidden()
+                
             }
             .frame(minWidth: 250)
-            .navigationTitle(project.name)
+            .navigationTitle(viewModel.project.name)
             .onDeleteCommand(perform: deleteCommand)
             .toolbar {
                 toolbarItems
@@ -52,8 +51,15 @@ struct IssuesListView: View {
                 Text("Select an issue.")
             }
         }
+        .searchable(text: $viewModel.searchText)
+        .onChange(of: viewModel.searchText) { _ in
+            viewModel.runSearch()
+        }
+        .onChange(of: viewModel.searchIssueStatus) { _ in
+            viewModel.runSearch()
+        }
         .sheet(isPresented: $showingAddIssueView) {
-            AddIssueView(project: project)
+            AddIssueView(project: viewModel.project)
         }
         .sheet(isPresented: $showingEditIssueView) {
             if let selectedIssue {
