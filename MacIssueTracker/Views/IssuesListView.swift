@@ -139,6 +139,7 @@ private extension IssuesListView {
             Button(role: .destructive, action: deleteCommand) {
                 Label("Delete", systemImage: SFSymbol.trash.rawValue)
             }
+            .disabled(selectedIssue == nil)
         }
     }
 }
