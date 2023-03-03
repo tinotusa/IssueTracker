@@ -139,6 +139,17 @@ class AudioPlayer: NSObject, ObservableObject {
         category: String(describing: AudioPlayer.self)
     )
     @Published var isPlaying = false
+    private let session: AVAudioSession
+    
+    override init() {
+        session = AVAudioSession.sharedInstance()
+        do {
+            try session.setCategory(.playback)
+        } catch {
+            log.error("Failed to init AudioPlayer. \(error)")
+        }
+        super.init()
+    }
     
     func setUpPlayer(url: URL) {
         do {
@@ -207,6 +218,29 @@ class AudioRecorder: ObservableObject {
         category: String(describing: AudioRecorder.self)
     )
     @Published private(set) var url: URL?
+    private var session: AVAudioSession
+    
+    init() {
+        session = AVAudioSession.sharedInstance()
+        do {
+            try session.setCategory(.record)
+        } catch {
+            log.error("Failed to init audio recorder.")
+        }
+    }
+    
+    func requestPermission() -> Bool {
+        var hasPermission = false
+        session.requestRecordPermission { [weak self] granted in
+            if !granted {
+                self?.log.debug("Use denied recording.")
+                hasPermission = false
+                return
+            }
+            hasPermission = true
+        }
+        return hasPermission
+    }
     
     func setUpRecorder() {
         do {
@@ -225,6 +259,9 @@ class AudioRecorder: ObservableObject {
     
     @MainActor
     func startRecording() {
+        if !requestPermission() {
+            return
+        }
         log.debug("Starting to record audio.")
         if isRecording {
             log.debug("Already recording.")
