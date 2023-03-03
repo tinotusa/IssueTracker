@@ -20,6 +20,8 @@ struct AddCommentView: View {
     @State private var photos = [PhotosPickerItem]()
     @State private var paths = [URL]()
     @State private var errorMessage = ""
+    @StateObject private var audioRecorder = AudioRecorder()
+    @StateObject private var audioPlayer = AudioPlayer()
     
     var body: some View {
         NavigationStack {
@@ -34,11 +36,15 @@ struct AddCommentView: View {
                     }
                     Button {
                         withAnimation {
-                            recordingAudio = true
+                            recordingAudio.toggle()
+                            if recordingAudio {
+                                audioRecorder.setUpRecorder()
+                            }
                         }
                     } label: {
                         Label("Add audio attachment", systemImage: "mic.fill")
                     }
+                    .disabled(audioRecorder.isRecording)
                 }
                 .labelStyle(.iconOnly)
                 Button("list paths") {
@@ -52,13 +58,46 @@ struct AddCommentView: View {
                     Text(path.relativeString)
                 }
                 if recordingAudio {
-                    HStack {
-                        Image(systemName: "mic.fill")
-                            .foregroundColor(.red)
-                        Button {
-                            recordingAudio = false
-                        } label: {
-                            Label("Stop recording", systemImage: "stop.circle.fill")
+                    VStack {
+                        HStack {
+                            Image(systemName: "mic.fill")
+                                .foregroundColor(.red)
+                            
+                            Button {
+                                if audioRecorder.isRecording {
+                                    audioRecorder.stopRecording()
+                                } else {
+                                    audioRecorder.startRecording()
+                                }
+                            } label: {
+                                Label(
+                                    audioRecorder.isRecording ? "Stop recording" : "Start recording",
+                                    systemImage: audioRecorder.isRecording ? "pause.circle.fill" : "play.circle.fill")
+                            }
+                            Button(role: .destructive) {
+                                audioRecorder.deleteRecording()
+                            } label: {
+                                Label("Delete recording", systemImage: "trash")
+                            }
+                            .disabled(audioRecorder.isRecording)
+                        }
+                        .labelStyle(.iconOnly)
+                        if !audioRecorder.isRecording && audioRecorder.url != nil {
+                            HStack {
+                                Button {
+                                    audioPlayer.setUpPlayer(url: audioRecorder.url!)
+                                    if audioPlayer.isPlaying {
+                                        audioPlayer.pause()
+                                    } else {
+                                        audioPlayer.play()
+                                    }
+                                } label: {
+                                    Label(
+                                        audioPlayer.isPlaying ? "Pause playing" : "Start playing",
+                                        systemImage: audioPlayer.isPlaying ? "pause.circle.fill" : "play.circle.fill"
+                                    )
+                                }
+                            }
                         }
                     }
                 }
@@ -88,6 +127,160 @@ struct AddCommentView: View {
                 }
             }
         }
+    }
+}
+
+import os
+
+class AudioPlayer: NSObject, ObservableObject {
+    private var player: AVAudioPlayer?
+    private let log = Logger(
+        subsystem: Bundle.main.bundleIdentifier!,
+        category: String(describing: AudioPlayer.self)
+    )
+    @Published var isPlaying = false
+    
+    func setUpPlayer(url: URL) {
+        do {
+            player = try .init(contentsOf: url)
+            player?.prepareToPlay()
+            player?.delegate = self
+        } catch {
+            log.error("Failed to set up player. \(error)")
+        }
+    }
+    
+    @MainActor
+    func play() {
+        guard let player else {
+            log.debug("Failed to play audio. player is nil")
+            return
+        }
+        if isPlaying { return }
+        player.play()
+        isPlaying = player.isPlaying
+    }
+    
+    @MainActor
+    func pause() {
+        guard let player else {
+            log.debug("Failed to pause audio player. player is nil.")
+            return
+        }
+        player.pause()
+        isPlaying = player.isPlaying
+        log.debug("Paused audio player.")
+    }
+    
+    @MainActor
+    func stop() {
+        guard let player else {
+            log.debug("Failed to stop audio. player is nil.")
+            return
+        }
+        player.stop()
+        isPlaying = player.isPlaying
+    }
+    
+    var duration: TimeInterval {
+        player?.duration ?? .zero
+    }
+    
+    var currentTime: TimeInterval {
+        player?.currentTime ?? .zero
+    }
+}
+
+extension AudioPlayer: AVAudioPlayerDelegate {
+    func audioPlayerDidFinishPlaying(_ player: AVAudioPlayer, successfully flag: Bool) {
+        if flag {
+            isPlaying = false
+        }
+    }
+}
+
+class AudioRecorder: ObservableObject {
+    private var recorder: AVAudioRecorder?
+    @Published private(set) var isRecording = false
+    private let log = Logger(
+        subsystem: Bundle.main.bundleIdentifier!,
+        category: String(describing: AudioRecorder.self)
+    )
+    @Published private(set) var url: URL?
+    
+    func setUpRecorder() {
+        do {
+            let attachmentsFolder = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appending(path: "attachmentsFolder")
+            if !FileManager.default.fileExists(atPath: attachmentsFolder.path()) {
+                try FileManager.default.createDirectory(at: attachmentsFolder, withIntermediateDirectories: true)
+            }
+            let audioFileURL = attachmentsFolder.appending(path: UUID().uuidString)
+            url = audioFileURL
+            recorder = try .init(url: audioFileURL, settings: [:])
+//            recorder?.prepareToRecord()
+        } catch {
+            log.error("Failed to set up recorder. \(error)")
+        }
+    }
+    
+    @MainActor
+    func startRecording() {
+        log.debug("Starting to record audio.")
+        if isRecording {
+            log.debug("Already recording.")
+            return
+        }
+
+        guard let recorder else {
+            log.debug("Failed to start recorder. recorder is nil.")
+            return
+        }
+
+        recorder.prepareToRecord()
+        recorder.record()
+        isRecording = recorder.isRecording
+    }
+    
+    @MainActor
+    func stopRecording() {
+        guard let recorder else {
+            log.debug("Recorder is nil.")
+            return
+        }
+        if !isRecording {
+            return
+        }
+        recorder.stop()
+        isRecording = recorder.isRecording
+        log.debug("Stopped recording.")
+    }
+    
+    @MainActor
+    func pauseRecording() {
+        guard let recorder else {
+            log.debug("Cannot pause recording recorder is nil.")
+            return
+        }
+        recorder.pause()
+        isRecording = recorder.isRecording
+    }
+    
+    @MainActor
+    func deleteRecording() {
+        guard let recorder else {
+            log.debug("Failed to delete recording. recorder is nil.")
+            return
+        }
+        if isRecording {
+            log.debug("Failed to delete recording. recorder is still recording.")
+            return
+        }
+        let fileWasDeleted = recorder.deleteRecording()
+        if !fileWasDeleted {
+            log.error("Failed to delete audio recording.")
+        }
+        url = nil
+        log.debug("Successfully deleted audio recording.")
     }
 }
 
