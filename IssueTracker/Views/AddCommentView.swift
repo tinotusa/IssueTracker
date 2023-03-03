@@ -18,7 +18,7 @@ struct AddCommentView: View {
     @State private var recordingAudio = false // will probably change this
     @State private var showingPhotoPicker = false
     @State private var photos = [PhotosPickerItem]()
-    @State private var paths = [URL]()
+    @State private var paths = [JPEGTest]()
     @State private var errorMessage = ""
     @StateObject private var audioRecorder = AudioRecorder()
     @StateObject private var audioPlayer = AudioPlayer()
@@ -47,16 +47,7 @@ struct AddCommentView: View {
                     .disabled(audioRecorder.isRecording)
                 }
                 .labelStyle(.iconOnly)
-                Button("list paths") {
-                    Task {
-                        paths = await getImagePaths()
-                    }
-                }
-                Text(errorMessage)
-                    .foregroundColor(.red)
-                ForEach(paths, id: \.self) { path in
-                    Text(path.relativeString)
-                }
+                
                 if recordingAudio {
                     VStack {
                         HStack {
@@ -107,14 +98,9 @@ struct AddCommentView: View {
             .toolbar {
                 ToolbarItem(placement: .primaryAction) {
                     Button {
-                        let comment = Comment(comment: comment, context: viewContext)
-                        issue.addToComments(comment)
-                        do {
-                            try viewContext.save()
-                        } catch {
-                            print("Failed to save context. \(error)")
+                        Task {
+                            addComment
                         }
-                        dismiss()
                     } label: {
                         Label("add", systemImage: "plus")
                     }
@@ -379,10 +365,32 @@ struct JPEGTest: Transferable {
 }
 
 private extension AddCommentView {
-    static let attachmentsFolder = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appending(path: "attachmentsFolder")
-    func getImagePaths() async -> [URL] {
+    func addComment() async {
+        let comment = Comment(comment: comment, context: viewContext)
+        let paths = await getImagePaths()
+        var attachments = [Attachment]()
+        for path in paths {
+            let attachment = Attachment(context: viewContext)
+            attachment.comment = comment
+            attachment.dateCreated_ = .now
+            attachment.id_ = UUID()
+            attachment.type_ = path.attachmentType.rawValue
+            attachment.url_ = path.url
+            attachments.append(attachment)
+        }
+        issue.addToComments(comment)
+        comment.addToAttachments(.init(array: attachments))
+        do {
+            try viewContext.save()
+        } catch {
+            print("Failed to save context. \(error)")
+        }
+        dismiss()
+    }
+    
+    func getImagePaths() async -> [JPEGTest] {
         self.paths = []
-        var paths = [URL]()
+        var paths = [JPEGTest]()
         do {
             for photo in photos {
                 let data = try await photo.loadTransferable(type: JPEGTest.self)
@@ -390,11 +398,11 @@ private extension AddCommentView {
                     print("failed to get image data")
                     continue
                 }
+                // TODO: Look up how to store things in cloud kit
 //                try data.write(to: filePath, options: [.atomic, .completeFileProtection])
-                paths.append(data.url)
+                paths.append(data)
             }
         } catch {
-            errorMessage = "Failed to get image paths. \(error)"
             print("Failed to get image paths. \(error)")
         }
         return paths
