@@ -12,6 +12,7 @@ struct IssueDetail: View {
     @ObservedObject var issue: Issue
     @StateObject private var viewModel: IssueDetailViewModel
     @State private var showingEditView = false
+    @State private var showingCommentSheet = false
     
     init(issue: Issue) {
         self.issue = issue
@@ -64,7 +65,7 @@ struct IssueDetail: View {
                             .headerStyle()
                         Spacer()
                         Button {
-                            viewModel.addNewEmptyComment()
+                            showingCommentSheet = true
                         } label: {
                             Image(systemName: "plus")
                         }
@@ -78,6 +79,11 @@ struct IssueDetail: View {
             .bodyStyle()
             .background(Color.customBackground)
             .toolbarBackground(Color.customBackground)
+            .sheet(isPresented: $showingCommentSheet) {
+                AddCommentView(issue: issue)
+                    .presentationDetents([.large])
+                    .presentationDragIndicator(.visible)
+            }
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
                     Button("Close") {
@@ -108,5 +114,6 @@ struct IssueDetail_Previews: PreviewProvider {
             tags: [],
             context: viewContext)
         )
+        .environment(\.managedObjectContext, viewContext)
     }
 }
