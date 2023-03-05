@@ -37,9 +37,6 @@ struct AddCommentView: View {
                     Button {
                         withAnimation {
                             recordingAudio.toggle()
-                            if recordingAudio {
-                                audioRecorder.setUpRecorder()
-                            }
                         }
                     } label: {
                         Label("Add audio attachment", systemImage: "mic.fill")
@@ -99,12 +96,12 @@ struct AddCommentView: View {
                 ToolbarItem(placement: .primaryAction) {
                     Button {
                         Task {
-                            addComment
+                            await addComment()
                         }
                     } label: {
                         Label("add", systemImage: "plus")
                     }
-                    .disabled(comment.isEmpty)
+                    .disabled(comment.isEmpty || audioRecorder.isRecording)
                 }
                 ToolbarItem(placement: .cancellationAction) {
                     Button("Cancel") {
@@ -116,6 +113,7 @@ struct AddCommentView: View {
     }
 }
 
+#warning("move these files")
 import os
 
 class AudioPlayer: NSObject, ObservableObject {
@@ -228,40 +226,37 @@ class AudioRecorder: ObservableObject {
         return hasPermission
     }
     
-    func setUpRecorder() {
-        do {
-            let attachmentsFolder = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appending(path: "attachmentsFolder")
-            if !FileManager.default.fileExists(atPath: attachmentsFolder.path()) {
-                try FileManager.default.createDirectory(at: attachmentsFolder, withIntermediateDirectories: true)
-            }
-            let audioFileURL = attachmentsFolder.appending(path: UUID().uuidString)
-            url = audioFileURL
-            recorder = try .init(url: audioFileURL, settings: [:])
-//            recorder?.prepareToRecord()
-        } catch {
-            log.error("Failed to set up recorder. \(error)")
-        }
-    }
-    
     @MainActor
     func startRecording() {
         if !requestPermission() {
             return
         }
         log.debug("Starting to record audio.")
-        if isRecording {
-            log.debug("Already recording.")
-            return
+        do {
+            let attachmentsFolder = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appending(path: "attachmentsFolder")
+            if !FileManager.default.fileExists(atPath: attachmentsFolder.path()) {
+                try FileManager.default.createDirectory(at: attachmentsFolder, withIntermediateDirectories: true)
+            }
+            let audioFileURL = attachmentsFolder.appending(path: "\(UUID().uuidString).m4a")
+            url = audioFileURL
+            recorder = try .init(url: audioFileURL, settings: [:])
+            
+            if isRecording {
+                log.debug("Already recording.")
+                return
+            }
+            
+            guard let recorder else {
+                log.debug("Failed to start recorder. recorder is nil.")
+                return
+            }
+            
+            recorder.prepareToRecord()
+            recorder.record()
+            isRecording = recorder.isRecording
+        } catch {
+            log.error("Failed to start recording. \(error)")
         }
-
-        guard let recorder else {
-            log.debug("Failed to start recorder. recorder is nil.")
-            return
-        }
-
-        recorder.prepareToRecord()
-        recorder.record()
-        isRecording = recorder.isRecording
     }
     
     @MainActor
@@ -274,6 +269,10 @@ class AudioRecorder: ObservableObject {
             return
         }
         recorder.stop()
+        print("checking if written to disk")
+        if FileManager.default.fileExists(atPath: url!.path()) {
+            print("The file has been written to disk.")
+        }
         isRecording = recorder.isRecording
         log.debug("Stopped recording.")
     }
@@ -313,6 +312,8 @@ enum AttachmentType: Int16 {
     case audio
 }
 
+import CloudKit
+
 // TODO: Rename to something like Attachment (can't use Attachment because that is a coredata entity)
 struct JPEGTest: Transferable {
     let url: URL
@@ -334,10 +335,26 @@ struct JPEGTest: Transferable {
             }
             
             let copy = attachmentsFolder.appending(path: UUID().uuidString)
+            
             print("the received file is: \(received.file)")
             print("the copy path is:  \(copy)")
             try FileManager.default.copyItem(at: received.file, to: copy)
-            return Self.init(url: copy, attachmentType: .image)
+            let record = CKRecord(recordType: "Attachment")
+            let asset = CKAsset(fileURL: copy)
+            record.setValuesForKeys([
+                "type": AttachmentType.image.rawValue,
+                "attachment": asset,
+                "attachmentURL": asset.fileURL!.absoluteString
+            ])
+            let database = CKContainer.default().privateCloudDatabase
+            database.save(record) { record, error in
+                // TODO: Add logic to test is user is logged in.
+                if let error {
+                    print("Failed to save record to database. \(error)")
+                }
+                print("Successfully saved new record to cloudkit")
+            }
+            return Self.init(url: asset.fileURL!, attachmentType: .image)
         }
         
         // TODO: These file reps are the exact same. Is there a way to change this?
@@ -354,12 +371,25 @@ struct JPEGTest: Transferable {
                     print("Failed to create directory. \(error)")
                 }
             }
-            
             let copy = attachmentsFolder.appending(path: UUID().uuidString)
+            let record = CKRecord(recordType: "Attachment")
+            let asset = CKAsset(fileURL: received.file)
+            record.setValuesForKeys([
+                "type": AttachmentType.image.rawValue,
+                "attachment": asset,
+                "attachmentURL": asset.fileURL!.absoluteString
+            ])
+            let database = CKContainer.default().privateCloudDatabase
+            database.save(record) { record, error in
+                if let error {
+                    print("Failed to save record to database. \(error)")
+                }
+                print("Successfully saved new record to cloudkit")
+            }
             print("the received file is: \(received.file)")
             print("the copy path is:  \(copy)")
             try FileManager.default.copyItem(at: received.file, to: copy)
-            return Self.init(url: copy, attachmentType: .image)
+            return Self.init(url: asset.fileURL!, attachmentType: .image)
         }
     }
 }
@@ -375,7 +405,32 @@ private extension AddCommentView {
             attachment.dateCreated_ = .now
             attachment.id_ = UUID()
             attachment.type_ = path.attachmentType.rawValue
-            attachment.url_ = path.url
+            attachment.assetURL_ = path.url
+            attachments.append(attachment)
+        }
+        // adding audio
+        if let audioURL = audioRecorder.url {
+            print("trying to save audio.")
+            let asset = CKAsset(fileURL: audioURL)
+            let record = CKRecord(recordType: "Attachment")
+            record.setValuesForKeys([
+                "type": AttachmentType.audio.rawValue,
+                "attachment": asset,
+                "attachmentURL": audioURL.absoluteString
+            ])
+            let database = CKContainer.default().privateCloudDatabase
+            do {
+                try await database.save(record)
+            } catch {
+                print("Failed to save audio record to iCloud")
+            }
+            let attachment = Attachment(context: viewContext)
+            attachment.comment = comment
+            attachment.dateCreated_ = .now
+            attachment.id_ = UUID()
+            attachment.type_ = AttachmentType.audio.rawValue
+            attachment.assetURL_ = asset.fileURL!
+            print("added audio url to core data attachment.")
             attachments.append(attachment)
         }
         issue.addToComments(comment)
