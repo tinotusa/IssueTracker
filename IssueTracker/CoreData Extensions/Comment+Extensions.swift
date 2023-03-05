@@ -36,4 +36,8 @@ extension Comment {
         get { self.dateCreated_ ?? .now }
         set { self.dateCreated_ = newValue }
     }
+    
+    var wrappedAttachments: [Attachment] {
+        attachments?.allObjects as? [Attachment] ?? []
+    }
 }
