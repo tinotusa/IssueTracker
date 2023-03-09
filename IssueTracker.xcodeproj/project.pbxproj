@@ -12,6 +12,10 @@
 		210650E0297BD46C00E5BCD7 /* TextStyles.swift in Sources */ = {isa = PBXBuildFile; fileRef = 210650DF297BD46C00E5BCD7 /* TextStyles.swift */; };
 		210650E2297BD6CF00E5BCD7 /* CommentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 210650E1297BD6CF00E5BCD7 /* CommentView.swift */; };
 		211104AB297239DB00FB8CD1 /* EditTagView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 211104AA297239DB00FB8CD1 /* EditTagView.swift */; };
+		211246C529B9B82900D0EB01 /* AudioPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 211246C429B9B82900D0EB01 /* AudioPlayer.swift */; };
+		211246C729B9B84500D0EB01 /* AudioRecorder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 211246C629B9B84500D0EB01 /* AudioRecorder.swift */; };
+		211246C929B9B89A00D0EB01 /* AttachmentTransferable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 211246C829B9B89A00D0EB01 /* AttachmentTransferable.swift */; };
+		211246CB29B9B8EF00D0EB01 /* AttachmentType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 211246CA29B9B8EF00D0EB01 /* AttachmentType.swift */; };
 		2127AD62295FB421005893DE /* EditIssueView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2127AD61295FB421005893DE /* EditIssueView.swift */; };
 		2127AD64295FB552005893DE /* EditIssueViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2127AD63295FB552005893DE /* EditIssueViewModel.swift */; };
 		2127AD66295FBD0E005893DE /* ProminentTagView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2127AD65295FBD0E005893DE /* ProminentTagView.swift */; };
@@ -138,6 +142,10 @@
 		210650DF297BD46C00E5BCD7 /* TextStyles.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextStyles.swift; sourceTree = "<group>"; };
 		210650E1297BD6CF00E5BCD7 /* CommentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentView.swift; sourceTree = "<group>"; };
 		211104AA297239DB00FB8CD1 /* EditTagView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditTagView.swift; sourceTree = "<group>"; };
+		211246C429B9B82900D0EB01 /* AudioPlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioPlayer.swift; sourceTree = "<group>"; };
+		211246C629B9B84500D0EB01 /* AudioRecorder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioRecorder.swift; sourceTree = "<group>"; };
+		211246C829B9B89A00D0EB01 /* AttachmentTransferable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttachmentTransferable.swift; sourceTree = "<group>"; };
+		211246CA29B9B8EF00D0EB01 /* AttachmentType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttachmentType.swift; sourceTree = "<group>"; };
 		2127AD61295FB421005893DE /* EditIssueView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditIssueView.swift; sourceTree = "<group>"; };
 		2127AD63295FB552005893DE /* EditIssueViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditIssueViewModel.swift; sourceTree = "<group>"; };
 		2127AD65295FBD0E005893DE /* ProminentTagView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProminentTagView.swift; sourceTree = "<group>"; };
@@ -270,6 +278,17 @@
 			path = Styles;
 			sourceTree = "<group>";
 		};
+		211246C329B9B81C00D0EB01 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				211246C429B9B82900D0EB01 /* AudioPlayer.swift */,
+				211246C629B9B84500D0EB01 /* AudioRecorder.swift */,
+				211246C829B9B89A00D0EB01 /* AttachmentTransferable.swift */,
+				211246CA29B9B8EF00D0EB01 /* AttachmentType.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
 		2150C831295972E0006CD7D2 = {
 			isa = PBXGroup;
 			children = (
@@ -299,6 +318,7 @@
 		2150C83C295972E0006CD7D2 /* IssueTracker */ = {
 			isa = PBXGroup;
 			children = (
+				211246C329B9B81C00D0EB01 /* Models */,
 				218E60C9298296FD00A9C4AB /* IssueTracker.entitlements */,
 				21E6D2B4295BF9CF00BB4AA6 /* View models */,
 				21E6D2B1295BF89700BB4AA6 /* Views */,
@@ -761,6 +781,7 @@
 				21BBEBFB295ECF8B008F237B /* Comment+Extensions.swift in Sources */,
 				21E6D2BA295C010400BB4AA6 /* AddProjectViewModel.swift in Sources */,
 				21BBEBF3295E8465008F237B /* Tag+Extensions.swift in Sources */,
+				211246C729B9B84500D0EB01 /* AudioRecorder.swift in Sources */,
 				21BBEBF5295E9A5E008F237B /* IssueRowView.swift in Sources */,
 				21BBEBF7295EC963008F237B /* IssueDetail.swift in Sources */,
 				21F1DA33295DABB700076D73 /* IssuesView.swift in Sources */,
@@ -784,6 +805,7 @@
 				21E6D2AD295BDFBF00BB4AA6 /* ButtonStyles.swift in Sources */,
 				21654BC629605245009C434B /* AddIssueView.swift in Sources */,
 				21F1DA2B295D9E8000076D73 /* EditProjectViewModel.swift in Sources */,
+				211246C529B9B82900D0EB01 /* AudioPlayer.swift in Sources */,
 				21F1DA2F295DA58400076D73 /* DeleteProjectViewModel.swift in Sources */,
 				21BBEBF1295E8176008F237B /* TagFilterView.swift in Sources */,
 				21BBEBF9295ECD4E008F237B /* IssueDetailViewModel.swift in Sources */,
@@ -792,6 +814,8 @@
 				21E6D2C1295C5B4900BB4AA6 /* ProjectRowView.swift in Sources */,
 				21E6D2AB295BD9B500BB4AA6 /* Color+Extensions.swift in Sources */,
 				21F1DA35295DB04E00076D73 /* Issue+Extensions.swift in Sources */,
+				211246C929B9B89A00D0EB01 /* AttachmentTransferable.swift in Sources */,
+				211246CB29B9B8EF00D0EB01 /* AttachmentType.swift in Sources */,
 				21BBEBFD295EDBE8008F237B /* CommentBoxView.swift in Sources */,
 				21E6D2A7295BD4C500BB4AA6 /* TextStyles.swift in Sources */,
 				21F1DA37295DB3EA00076D73 /* IssuesViewModel.swift in Sources */,
