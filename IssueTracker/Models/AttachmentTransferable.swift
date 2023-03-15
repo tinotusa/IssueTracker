@@ -8,13 +8,16 @@
 import Foundation
 import CloudKit
 import SwiftUI
+import os
 
-// TODO: Rename to something like Attachment (can't use Attachment because that is a coredata entity)
 struct AttachmentTransferable: Transferable {
     let url: URL
     let attachmentType: AttachmentType
+    private static let log = Logger(
+        subsystem: Bundle.main.bundleIdentifier!,
+        category: String(describing: AttachmentTransferable.self)
+    )
     
-    #warning("look up how to save to icloud in background queue")
     static var transferRepresentation: some TransferRepresentation {
         FileRepresentation(contentType: .jpeg) { jpeg in
             return SentTransferredFile(jpeg.url)
@@ -22,18 +25,18 @@ struct AttachmentTransferable: Transferable {
             let attachmentsFolder = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appending(path: "attachmentsFolder/")
             if !FileManager.default.fileExists(atPath: attachmentsFolder.path()) {
                 do {
-                    print("Folder doesn't exist trying to create a new one")
+                    log.debug("Folder doesn't exist trying to create a new one")
                     try FileManager.default.createDirectory(atPath: attachmentsFolder.path(), withIntermediateDirectories: true)
-                    print("Successfully created new folder.")
+                    log.debug("Successfully created new folder.")
                 } catch {
-                    print("Failed to create directory. \(error)")
+                    log.debug("Failed to create directory. \(error)")
                 }
             }
             
             let copy = attachmentsFolder.appending(path: UUID().uuidString)
             
-            print("the received file is: \(received.file)")
-            print("the copy path is:  \(copy)")
+            log.debug("the received file is: \(received.file)")
+            log.debug("the copy path is:  \(copy)")
             try FileManager.default.copyItem(at: received.file, to: copy)
             let record = CKRecord(recordType: "Attachment")
             let asset = CKAsset(fileURL: copy)
@@ -43,13 +46,18 @@ struct AttachmentTransferable: Transferable {
                 "attachmentURL": asset.fileURL!.absoluteString
             ])
             let database = CKContainer.default().privateCloudDatabase
-            database.save(record) { record, error in
-                // TODO: Add logic to test is user is logged in.
-                if let error {
-                    print("Failed to save record to database. \(error)")
+            let config = CKOperation.Configuration()
+            config.qualityOfService = .userInitiated
+            Task {
+                await database.configuredWith(configuration: config) { database in
+                    do {
+                        try await database.save(record)
+                    } catch {
+                        log.error("Failed to save to data base. \(error)")
+                    }
                 }
-                print("Successfully saved new record to cloudkit")
             }
+            
             return Self.init(url: asset.fileURL!, attachmentType: .image)
         }
         
@@ -60,14 +68,15 @@ struct AttachmentTransferable: Transferable {
             let attachmentsFolder = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appending(path: "attachmentsFolder/")
             if !FileManager.default.fileExists(atPath: attachmentsFolder.path()) {
                 do {
-                    print("Folder doesn't exist trying to create a new one")
+                    log.debug("Folder doesn't exist trying to create a new one")
                     try FileManager.default.createDirectory(atPath: attachmentsFolder.path(), withIntermediateDirectories: true)
-                    print("Successfully created new folder.")
+                    log.debug("Successfully created new folder.")
                 } catch {
-                    print("Failed to create directory. \(error)")
+                    log.debug("Failed to create directory. \(error)")
                 }
             }
             let copy = attachmentsFolder.appending(path: UUID().uuidString)
+            try FileManager.default.copyItem(at: received.file, to: copy)
             let record = CKRecord(recordType: "Attachment")
             let asset = CKAsset(fileURL: received.file)
             record.setValuesForKeys([
@@ -75,16 +84,23 @@ struct AttachmentTransferable: Transferable {
                 "attachment": asset,
                 "attachmentURL": asset.fileURL!.absoluteString
             ])
+            
             let database = CKContainer.default().privateCloudDatabase
-            database.save(record) { record, error in
-                if let error {
-                    print("Failed to save record to database. \(error)")
+            let config = CKOperation.Configuration()
+            config.qualityOfService = .userInitiated
+            Task {
+                await database.configuredWith(configuration: config) { database in
+                    do {
+                        try await database.save(record)
+                    } catch {
+                        log.error("Failed to save record to database. \(error)")
+                    }
                 }
-                print("Successfully saved new record to cloudkit")
             }
-            print("the received file is: \(received.file)")
-            print("the copy path is:  \(copy)")
-            try FileManager.default.copyItem(at: received.file, to: copy)
+            
+            log.debug("the received file is: \(received.file)")
+            log.debug("the copy path is:  \(copy)")
+            
             return Self.init(url: asset.fileURL!, attachmentType: .image)
         }
     }
