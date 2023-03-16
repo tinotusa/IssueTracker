@@ -27,7 +27,9 @@ struct AddCommentView: View {
         NavigationStack {
             VStack(alignment: .trailing) {
                 imageAttachmentsRow
-                
+                if audioRecorder.url != nil {
+                    AudioAttachmentIcon(url: audioRecorder.url!)
+                }
                 if recordingAudio {
                     audioRecordingButtons
                 }
@@ -39,9 +41,9 @@ struct AddCommentView: View {
             }
             .padding()
             .navigationTitle("Add comment")
-            .onChange(of: photos) { _ in
+            .onChange(of: photos) { photoItems in
                 Task {
-                    await loadPhotos()
+                    await loadImages(from: photoItems)
                 }
             }
             .toolbar {
@@ -80,10 +82,7 @@ private extension AddCommentView {
                             .frame(width: 100, height: 100)
                             .cornerRadius(10)
                         Button(role: .destructive) {
-                            withAnimation {
-                                attachmentImages.remove(at: index)
-                                photos.remove(at: index)
-                            }
+                            photos.remove(at: index)
                         } label: {
                             Image(systemName: "xmark.circle.fill")
                                 .foregroundColor(.red)
@@ -96,7 +95,11 @@ private extension AddCommentView {
     
     var attachmentButtons: some View {
         HStack {
-            PhotosPicker(selection: $photos, matching: .any(of: [.images, .videos])) {
+            PhotosPicker(
+                selection: $photos,
+                selectionBehavior: .ordered,
+                matching: .any(of: [.images, .videos])
+            ) {
                 Label("Add photo attachment", systemImage: "photo.on.rectangle.angled")
             }
             Button {
@@ -126,7 +129,8 @@ private extension AddCommentView {
                 } label: {
                     Label(
                         audioRecorder.isRecording ? "Stop recording" : "Start recording",
-                        systemImage: audioRecorder.isRecording ? "pause.circle.fill" : "play.circle.fill")
+                        systemImage: audioRecorder.isRecording ? "pause.circle.fill" : "play.circle.fill"
+                    )
                 }
                 Button(role: .destructive) {
                     audioRecorder.deleteRecording()
@@ -158,11 +162,10 @@ private extension AddCommentView {
 }
 
 private extension AddCommentView {
-    #warning("last here")
-    // TODO: look up a way to remove image and photoItems
-    func loadPhotos() async {
+    func loadImages(from photoItems: [PhotosPickerItem]) async {
         do {
-            for photo in photos {
+            var attachmentImages: [Image] = []
+            for photo in photoItems {
                 
                 guard let data = try await photo.loadTransferable(type: Data.self) else {
                     continue
@@ -173,7 +176,9 @@ private extension AddCommentView {
                 let image = Image(uiImage: uiImage)
                 attachmentImages.append(image)
             }
+            self.attachmentImages = attachmentImages
         } catch {
+            // TODO: Display error message if one arises
             print("error \(error)")
         }
     }
