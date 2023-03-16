@@ -10,87 +10,40 @@ import PhotosUI
 import CloudKit
 
 struct AddCommentView: View {
-    @ObservedObject var issue: Issue
+    @ObservedObject private(set) var issue: Issue
     @State private var comment = ""
-    @Environment(\.dismiss) private var dismiss
-    @Environment(\.managedObjectContext) private var viewContext
     @State private var recordingAudio = false // will probably change this
     @State private var showingPhotoPicker = false
     @State private var photos = [PhotosPickerItem]()
-    @State private var paths = [AttachmentTransferable]()
-    @State private var errorMessage = ""
+    @State private var attachmentImages: [Image] = []
+    
     @StateObject private var audioRecorder = AudioRecorder()
     @StateObject private var audioPlayer = AudioPlayer()
+    
+    @Environment(\.dismiss) private var dismiss
+    @Environment(\.managedObjectContext) private var viewContext
     
     var body: some View {
         NavigationStack {
             VStack(alignment: .trailing) {
+                imageAttachmentsRow
+                
+                if recordingAudio {
+                    audioRecordingButtons
+                }
+            }
+            .safeAreaInset(edge: .bottom) {
                 TextField("Comment", text: $comment, axis: .vertical)
                     .lineLimit(3...)
                     .textFieldStyle(.roundedBorder)
-                
-                HStack {
-                    PhotosPicker(selection: $photos, matching: .any(of: [.images, .videos])) {
-                        Label("Add photo attachment", systemImage: "photo.on.rectangle.angled")
-                    }
-                    Button {
-                        withAnimation {
-                            recordingAudio.toggle()
-                        }
-                    } label: {
-                        Label("Add audio attachment", systemImage: "mic.fill")
-                    }
-                    .disabled(audioRecorder.isRecording)
-                }
-                .labelStyle(.iconOnly)
-                
-                if recordingAudio {
-                    VStack {
-                        HStack {
-                            Image(systemName: "mic.fill")
-                                .foregroundColor(.red)
-                            
-                            Button {
-                                if audioRecorder.isRecording {
-                                    audioRecorder.stopRecording()
-                                } else {
-                                    audioRecorder.startRecording()
-                                }
-                            } label: {
-                                Label(
-                                    audioRecorder.isRecording ? "Stop recording" : "Start recording",
-                                    systemImage: audioRecorder.isRecording ? "pause.circle.fill" : "play.circle.fill")
-                            }
-                            Button(role: .destructive) {
-                                audioRecorder.deleteRecording()
-                            } label: {
-                                Label("Delete recording", systemImage: "trash")
-                            }
-                            .disabled(audioRecorder.isRecording)
-                        }
-                        .labelStyle(.iconOnly)
-                        if !audioRecorder.isRecording && audioRecorder.url != nil {
-                            HStack {
-                                Button {
-                                    audioPlayer.setUpPlayer(url: audioRecorder.url!)
-                                    if audioPlayer.isPlaying {
-                                        audioPlayer.pause()
-                                    } else {
-                                        audioPlayer.play()
-                                    }
-                                } label: {
-                                    Label(
-                                        audioPlayer.isPlaying ? "Pause playing" : "Start playing",
-                                        systemImage: audioPlayer.isPlaying ? "pause.circle.fill" : "play.circle.fill"
-                                    )
-                                }
-                            }
-                        }
-                    }
-                }
             }
             .padding()
             .navigationTitle("Add comment")
+            .onChange(of: photos) { _ in
+                Task {
+                    await loadPhotos()
+                }
+            }
             .toolbar {
                 ToolbarItem(placement: .primaryAction) {
                     Button {
@@ -107,12 +60,124 @@ struct AddCommentView: View {
                         dismiss()
                     }
                 }
+                ToolbarItem(placement: .keyboard) {
+                    attachmentButtons
+                }
             }
         }
     }
 }
 
 private extension AddCommentView {
+    var imageAttachmentsRow: some View {
+        ScrollView(.horizontal) {
+            HStack {
+                ForEach(0 ..< attachmentImages.count, id: \.self) { index in
+                    ZStack(alignment: .topTrailing) {
+                        attachmentImages[index]
+                            .resizable()
+                            .scaledToFill()
+                            .frame(width: 100, height: 100)
+                            .cornerRadius(10)
+                        Button(role: .destructive) {
+                            withAnimation {
+                                attachmentImages.remove(at: index)
+                                photos.remove(at: index)
+                            }
+                        } label: {
+                            Image(systemName: "xmark.circle.fill")
+                                .foregroundColor(.red)
+                        }
+                    }
+                }
+            }
+        }
+    }
+    
+    var attachmentButtons: some View {
+        HStack {
+            PhotosPicker(selection: $photos, matching: .any(of: [.images, .videos])) {
+                Label("Add photo attachment", systemImage: "photo.on.rectangle.angled")
+            }
+            Button {
+                withAnimation {
+                    recordingAudio.toggle()
+                }
+            } label: {
+                Label("Add audio attachment", systemImage: "mic.fill")
+            }
+            .disabled(audioRecorder.isRecording)
+        }
+        .labelStyle(.iconOnly)
+    }
+    
+    var audioRecordingButtons: some View {
+        VStack {
+            HStack {
+                Image(systemName: "mic.fill")
+                    .foregroundColor(.red)
+                
+                Button {
+                    if audioRecorder.isRecording {
+                        audioRecorder.stopRecording()
+                    } else {
+                        audioRecorder.startRecording()
+                    }
+                } label: {
+                    Label(
+                        audioRecorder.isRecording ? "Stop recording" : "Start recording",
+                        systemImage: audioRecorder.isRecording ? "pause.circle.fill" : "play.circle.fill")
+                }
+                Button(role: .destructive) {
+                    audioRecorder.deleteRecording()
+                } label: {
+                    Label("Delete recording", systemImage: "trash")
+                }
+                .disabled(audioRecorder.isRecording)
+            }
+            .labelStyle(.iconOnly)
+            if !audioRecorder.isRecording && audioRecorder.url != nil {
+                HStack {
+                    Button {
+                        audioPlayer.setUpPlayer(url: audioRecorder.url!)
+                        if audioPlayer.isPlaying {
+                            audioPlayer.pause()
+                        } else {
+                            audioPlayer.play()
+                        }
+                    } label: {
+                        Label(
+                            audioPlayer.isPlaying ? "Pause playing" : "Start playing",
+                            systemImage: audioPlayer.isPlaying ? "pause.circle.fill" : "play.circle.fill"
+                        )
+                    }
+                }
+            }
+        }
+    }
+}
+
+private extension AddCommentView {
+    #warning("last here")
+    // TODO: look up a way to remove image and photoItems
+    func loadPhotos() async {
+        do {
+            for photo in photos {
+                
+                guard let data = try await photo.loadTransferable(type: Data.self) else {
+                    continue
+                }
+                guard let uiImage = UIImage(data: data) else {
+                    continue
+                }
+                let image = Image(uiImage: uiImage)
+                attachmentImages.append(image)
+            }
+        } catch {
+            print("error \(error)")
+        }
+    }
+    
     func addComment() async {
         let comment = Comment(comment: comment, context: viewContext)
         let paths = await getImagePaths()
@@ -162,7 +227,6 @@ private extension AddCommentView {
     }
     
     func getImagePaths() async -> [AttachmentTransferable] {
-        self.paths = []
         var paths = [AttachmentTransferable]()
         do {
             for photo in photos {
@@ -171,8 +235,6 @@ private extension AddCommentView {
                     print("failed to get image data")
                     continue
                 }
-                // TODO: Look up how to store things in cloud kit
-//                try data.write(to: filePath, options: [.atomic, .completeFileProtection])
                 paths.append(data)
             }
         } catch {
