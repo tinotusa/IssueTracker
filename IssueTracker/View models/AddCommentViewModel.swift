@@ -23,6 +23,7 @@ final class AddCommentViewModel: ObservableObject {
         category: String(describing: AddCommentViewModel.self)
     )
 }
+
 extension AddCommentViewModel {
     var hasComment: Bool {
         let comment = comment.trimmingCharacters(in: .whitespacesAndNewlines)
@@ -31,6 +32,7 @@ extension AddCommentViewModel {
 }
 
 extension AddCommentViewModel {
+    @MainActor
     func loadImages(from photoItems: [PhotosPickerItem]) async {
         do {
             var attachmentImages: [Image] = []
@@ -52,6 +54,7 @@ extension AddCommentViewModel {
         }
     }
     
+    @MainActor
     func addComment(issue: Issue, viewContext: NSManagedObjectContext, audioURL: URL? = nil) async {
         let comment = Comment(comment: comment, context: viewContext)
         let paths = await getImagePaths()
@@ -116,6 +119,7 @@ extension AddCommentViewModel {
         return paths
     }
     
+    @MainActor
     func deletePhotoItem(at index: Int) {
         photoPickerItems.remove(at: index)
     }
