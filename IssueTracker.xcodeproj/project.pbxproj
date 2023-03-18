@@ -19,6 +19,7 @@
 		2127AD62295FB421005893DE /* EditIssueView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2127AD61295FB421005893DE /* EditIssueView.swift */; };
 		2127AD64295FB552005893DE /* EditIssueViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2127AD63295FB552005893DE /* EditIssueViewModel.swift */; };
 		2127AD66295FBD0E005893DE /* ProminentTagView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2127AD65295FBD0E005893DE /* ProminentTagView.swift */; };
+		2132CB6C29C56785003D5C12 /* AudioAttachmentPreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2132CB6B29C56785003D5C12 /* AudioAttachmentPreview.swift */; };
 		213E7A3B29AEF91F00CD3BEF /* AddCommentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 213E7A3A29AEF91F00CD3BEF /* AddCommentView.swift */; };
 		213EDD992980DA7C00012198 /* IssueTrackerSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 213EDD982980DA7C00012198 /* IssueTrackerSettings.swift */; };
 		213EDD9B29814C9A00012198 /* TagTableColumn.swift in Sources */ = {isa = PBXBuildFile; fileRef = 213EDD9A29814C9A00012198 /* TagTableColumn.swift */; };
@@ -149,6 +150,7 @@
 		2127AD61295FB421005893DE /* EditIssueView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditIssueView.swift; sourceTree = "<group>"; };
 		2127AD63295FB552005893DE /* EditIssueViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditIssueViewModel.swift; sourceTree = "<group>"; };
 		2127AD65295FBD0E005893DE /* ProminentTagView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProminentTagView.swift; sourceTree = "<group>"; };
+		2132CB6B29C56785003D5C12 /* AudioAttachmentPreview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioAttachmentPreview.swift; sourceTree = "<group>"; };
 		213E7A3A29AEF91F00CD3BEF /* AddCommentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddCommentView.swift; sourceTree = "<group>"; };
 		213EDD982980DA7C00012198 /* IssueTrackerSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IssueTrackerSettings.swift; sourceTree = "<group>"; };
 		213EDD9A29814C9A00012198 /* TagTableColumn.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagTableColumn.swift; sourceTree = "<group>"; };
@@ -549,6 +551,7 @@
 				21BBEBFE295EE1E9008F237B /* TagView.swift */,
 				2127AD65295FBD0E005893DE /* ProminentTagView.swift */,
 				21E0CFC929604E800040C293 /* FilteredIssuesListView.swift */,
+				2132CB6B29C56785003D5C12 /* AudioAttachmentPreview.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -805,6 +808,7 @@
 				21E6D2AD295BDFBF00BB4AA6 /* ButtonStyles.swift in Sources */,
 				21654BC629605245009C434B /* AddIssueView.swift in Sources */,
 				21F1DA2B295D9E8000076D73 /* EditProjectViewModel.swift in Sources */,
+				2132CB6C29C56785003D5C12 /* AudioAttachmentPreview.swift in Sources */,
 				211246C529B9B82900D0EB01 /* AudioPlayer.swift in Sources */,
 				21F1DA2F295DA58400076D73 /* DeleteProjectViewModel.swift in Sources */,
 				21BBEBF1295E8176008F237B /* TagFilterView.swift in Sources */,
