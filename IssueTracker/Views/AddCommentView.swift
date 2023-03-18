@@ -13,7 +13,6 @@ struct AddCommentView: View {
     
     @StateObject private var viewModel = AddCommentViewModel()
     @StateObject private var audioRecorder = AudioRecorder()
-    @StateObject private var audioPlayer = AudioPlayer()
     
     @Environment(\.dismiss) private var dismiss
     @Environment(\.managedObjectContext) private var viewContext
@@ -103,49 +102,30 @@ private extension AddCommentView {
     }
     
     var audioRecordingButtons: some View {
-        VStack {
-            HStack {
-                Image(systemName: "mic.fill")
-                    .foregroundColor(.red)
-                
-                Button {
-                    if audioRecorder.isRecording {
-                        audioRecorder.stopRecording()
-                    } else {
-                        audioRecorder.startRecording()
-                    }
-                } label: {
-                    Label(
-                        audioRecorder.isRecording ? "Stop recording" : "Start recording",
-                        systemImage: audioRecorder.isRecording ? "pause.circle.fill" : "play.circle.fill"
-                    )
+        HStack {
+            Image(systemName: "mic.fill")
+                .foregroundColor(.red)
+            
+            Button {
+                if audioRecorder.isRecording {
+                    audioRecorder.stopRecording()
+                } else {
+                    audioRecorder.startRecording()
                 }
-                Button(role: .destructive) {
-                    audioRecorder.deleteRecording()
-                } label: {
-                    Label("Delete recording", systemImage: "trash")
-                }
-                .disabled(audioRecorder.isRecording)
+            } label: {
+                Label(
+                    audioRecorder.isRecording ? "Stop recording" : "Start recording",
+                    systemImage: audioRecorder.isRecording ? "pause.circle.fill" : "play.circle.fill"
+                )
             }
-            .labelStyle(.iconOnly)
-            if !audioRecorder.isRecording && audioRecorder.url != nil {
-                HStack {
-                    Button {
-                        audioPlayer.setUpPlayer(url: audioRecorder.url!)
-                        if audioPlayer.isPlaying {
-                            audioPlayer.pause()
-                        } else {
-                            audioPlayer.play()
-                        }
-                    } label: {
-                        Label(
-                            audioPlayer.isPlaying ? "Pause playing" : "Start playing",
-                            systemImage: audioPlayer.isPlaying ? "pause.circle.fill" : "play.circle.fill"
-                        )
-                    }
-                }
+            Button(role: .destructive) {
+                audioRecorder.deleteRecording()
+            } label: {
+                Label("Delete recording", systemImage: "trash")
             }
+            .disabled(audioRecorder.isRecording)
         }
+        .labelStyle(.iconOnly)
     }
 }
 
