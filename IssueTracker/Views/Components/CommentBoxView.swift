@@ -8,12 +8,14 @@
 import SwiftUI
 
 struct CommentBoxView: View {
-    @Environment(\.managedObjectContext) private var viewContext
-    @ObservedObject private(set) var comment: Comment
-    let issue: Issue
     @State private var isEditing = false
     @State private var showingDeleteConfirmation = false
     @State private var originalComment = ""
+    
+    @ObservedObject private(set) var comment: Comment
+    @ObservedObject private(set) var issue: Issue
+    
+    @Environment(\.managedObjectContext) private var viewContext
     
     var body: some View {
         VStack(alignment: .leading) {
