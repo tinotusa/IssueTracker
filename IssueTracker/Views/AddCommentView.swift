@@ -7,16 +7,11 @@
 
 import SwiftUI
 import PhotosUI
-import CloudKit
 
 struct AddCommentView: View {
     @ObservedObject private(set) var issue: Issue
-    @State private var comment = ""
-    @State private var recordingAudio = false // will probably change this
-    @State private var showingPhotoPicker = false
-    @State private var photos = [PhotosPickerItem]()
-    @State private var attachmentImages: [Image] = []
     
+    @StateObject private var viewModel = AddCommentViewModel()
     @StateObject private var audioRecorder = AudioRecorder()
     @StateObject private var audioPlayer = AudioPlayer()
     
@@ -25,37 +20,40 @@ struct AddCommentView: View {
     
     var body: some View {
         NavigationStack {
-            VStack(alignment: .trailing) {
+            VStack(alignment: .leading) {
                 imageAttachmentsRow
-                if audioRecorder.url != nil {
-                    AudioAttachmentIcon(url: audioRecorder.url!)
+                
+                if !audioRecorder.isRecording, let url = audioRecorder.url {
+                    AudioAttachmentPreview(url: url)
                 }
-                if recordingAudio {
+                
+                if viewModel.recordingAudio {
                     audioRecordingButtons
                 }
             }
             .safeAreaInset(edge: .bottom) {
-                TextField("Comment", text: $comment, axis: .vertical)
+                TextField("Comment", text: $viewModel.comment, axis: .vertical)
                     .lineLimit(3...)
                     .textFieldStyle(.roundedBorder)
             }
             .padding()
             .navigationTitle("Add comment")
-            .onChange(of: photos) { photoItems in
+            .onChange(of: viewModel.photoPickerItems) { photoItems in
                 Task {
-                    await loadImages(from: photoItems)
+                    await viewModel.loadImages(from: photoItems)
                 }
             }
             .toolbar {
                 ToolbarItem(placement: .primaryAction) {
                     Button {
                         Task {
-                            await addComment()
+                            await viewModel.addComment(issue: issue, viewContext: viewContext, audioURL: audioRecorder.url)
+                            dismiss()
                         }
                     } label: {
                         Label("add", systemImage: "plus")
                     }
-                    .disabled(comment.isEmpty || audioRecorder.isRecording)
+                    .disabled(!viewModel.hasComment || audioRecorder.isRecording)
                 }
                 ToolbarItem(placement: .cancellationAction) {
                     Button("Cancel") {
@@ -74,19 +72,9 @@ private extension AddCommentView {
     var imageAttachmentsRow: some View {
         ScrollView(.horizontal) {
             HStack {
-                ForEach(0 ..< attachmentImages.count, id: \.self) { index in
-                    ZStack(alignment: .topTrailing) {
-                        attachmentImages[index]
-                            .resizable()
-                            .scaledToFill()
-                            .frame(width: 100, height: 100)
-                            .cornerRadius(10)
-                        Button(role: .destructive) {
-                            photos.remove(at: index)
-                        } label: {
-                            Image(systemName: "xmark.circle.fill")
-                                .foregroundColor(.red)
-                        }
+                ForEach(0 ..< viewModel.attachmentImages.count, id: \.self) { index in
+                    ImageAttachmentPreview(image: viewModel.attachmentImages[index]) {
+                        viewModel.deletePhotoItem(at: index)
                     }
                 }
             }
@@ -96,7 +84,7 @@ private extension AddCommentView {
     var attachmentButtons: some View {
         HStack {
             PhotosPicker(
-                selection: $photos,
+                selection: $viewModel.photoPickerItems,
                 selectionBehavior: .ordered,
                 matching: .any(of: [.images, .videos])
             ) {
@@ -104,7 +92,7 @@ private extension AddCommentView {
             }
             Button {
                 withAnimation {
-                    recordingAudio.toggle()
+                    viewModel.recordingAudio.toggle()
                 }
             } label: {
                 Label("Add audio attachment", systemImage: "mic.fill")
@@ -158,94 +146,6 @@ private extension AddCommentView {
                 }
             }
         }
-    }
-}
-
-private extension AddCommentView {
-    func loadImages(from photoItems: [PhotosPickerItem]) async {
-        do {
-            var attachmentImages: [Image] = []
-            for photo in photoItems {
-                
-                guard let data = try await photo.loadTransferable(type: Data.self) else {
-                    continue
-                }
-                guard let uiImage = UIImage(data: data) else {
-                    continue
-                }
-                let image = Image(uiImage: uiImage)
-                attachmentImages.append(image)
-            }
-            self.attachmentImages = attachmentImages
-        } catch {
-            // TODO: Display error message if one arises
-            print("error \(error)")
-        }
-    }
-    
-    func addComment() async {
-        let comment = Comment(comment: comment, context: viewContext)
-        let paths = await getImagePaths()
-        var attachments = [Attachment]()
-        for path in paths {
-            let attachment = Attachment(context: viewContext)
-            attachment.comment = comment
-            attachment.dateCreated_ = .now
-            attachment.id_ = UUID()
-            attachment.type_ = path.attachmentType.rawValue
-            attachment.assetURL_ = path.url
-            attachments.append(attachment)
-        }
-        // adding audio
-        if let audioURL = audioRecorder.url {
-            print("trying to save audio.")
-            let asset = CKAsset(fileURL: audioURL)
-            let record = CKRecord(recordType: "Attachment")
-            record.setValuesForKeys([
-                "type": AttachmentType.audio.rawValue,
-                "attachment": asset,
-                "attachmentURL": audioURL.absoluteString
-            ])
-            let database = CKContainer.default().privateCloudDatabase
-            do {
-                try await database.save(record)
-            } catch {
-                print("Failed to save audio record to iCloud")
-            }
-            let attachment = Attachment(context: viewContext)
-            attachment.comment = comment
-            attachment.dateCreated_ = .now
-            attachment.id_ = UUID()
-            attachment.type_ = AttachmentType.audio.rawValue
-            attachment.assetURL_ = asset.fileURL!
-            print("added audio url to core data attachment.")
-            attachments.append(attachment)
-        }
-        issue.addToComments(comment)
-        comment.addToAttachments(.init(array: attachments))
-        do {
-            try viewContext.save()
-        } catch {
-            print("Failed to save context. \(error)")
-        }
-        dismiss()
-    }
-    
-    func getImagePaths() async -> [AttachmentTransferable] {
-        var paths = [AttachmentTransferable]()
-        do {
-            for photo in photos {
-                let data = try await photo.loadTransferable(type: AttachmentTransferable.self)
-                guard let data else {
-                    print("failed to get image data")
-                    continue
-                }
-                paths.append(data)
-            }
-        } catch {
-            print("Failed to get image paths. \(error)")
-        }
-        return paths
     }
 }
 
