@@ -12,3 +12,9 @@ Simple issue tracker using CoreData and CloudKit.
 - Comments on issues
 - Image and audio attachments on comments
 - Future mac extension
+
+## Pictures
+| | |
+| -- | -- |
+| ![Home view](./PreviewPictures/Home.png) | ![Issues list view](./PreviewPictures/IssuesList.png) |
+| ![Issue detail view](./PreviewPictures/IssueDetail.png) | |
