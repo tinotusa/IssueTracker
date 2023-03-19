@@ -13,7 +13,7 @@ struct HomeView: View {
     @State private var showingDeleteConfirmation = false
     @State private var selectedProject: Project?
     
-    @FetchRequest(sortDescriptors: [.init(\.dateCreated_, order: .reverse)])
+    @FetchRequest(sortDescriptors: [.init(\.dateCreated, order: .reverse)])
     private var projects: FetchedResults<Project>
     
     var body: some View {

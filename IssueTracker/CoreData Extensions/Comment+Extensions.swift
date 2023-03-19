@@ -22,19 +22,19 @@ extension Comment {
 
 // MARK: Wrapped properties
 extension Comment {
-    var comment: String {
-        get { self.comment_ ?? "N/A" }
-        set { self.comment_ = newValue }
+    var wrappedComment: String {
+        get { self.comment ?? "N/A" }
+        set { self.comment = newValue }
     }
     
-    public var id: UUID {
-        get { self.id_ ?? UUID() }
-        set { self.id_ = newValue }
+    public var wrappedId: UUID {
+        get { self.id ?? UUID() }
+        set { self.id = newValue }
     }
     
-    var dateCreated: Date {
-        get { self.dateCreated_ ?? .now }
-        set { self.dateCreated_ = newValue }
+    var wrappedDateCreated: Date {
+        get { self.dateCreated ?? .now }
+        set { self.dateCreated = newValue }
     }
     
     var wrappedAttachments: [Attachment] {

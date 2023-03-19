@@ -22,7 +22,7 @@ struct FilterIssuesList<Content: View>: View {
         _selectedIssue = selectedIssue
         self.content = content
         _issues = FetchRequest(
-            sortDescriptors: [.init(\.dateCreated_, order: .forward)],
+            sortDescriptors: [.init(\.dateCreated, order: .forward)],
             predicate: predicate
         )
     }
@@ -45,7 +45,7 @@ struct FilterIssuesList<Content: View>: View {
 struct FilterIssuesList_Previews: PreviewProvider {
     static var viewContext = PersistenceController.projectsPreview.container.viewContext
     static var project = Project.example(context: viewContext)
-    static var predicate = NSPredicate(format: "project == %@ && status_ == %@", project, "open")
+    static var predicate = NSPredicate(format: "project == %@ && status == %@", project, "open")
     
     static var previews: some View {
         FilterIssuesList(selection: .constant(nil), predicate: predicate) { issue in

@@ -14,7 +14,7 @@ struct AddIssueView: View {
     @StateObject private var viewModel: AddIssueViewModel
     @ObservedObject var project: Project
     
-    @FetchRequest(sortDescriptors: [.init(\.dateCreated_, order: .reverse)])
+    @FetchRequest(sortDescriptors: [.init(\.dateCreated, order: .reverse)])
     private var allTags: FetchedResults<Tag>
     
     init(project: Project) {
@@ -53,7 +53,7 @@ struct AddIssueView: View {
                         // TODO: add custom layout here
                         LazyHGrid(rows: [.init(.adaptive(minimum: 100))]) {
                             ForEach(Array(viewModel.tags)) { tag in
-                                Text(tag.name)
+                                Text(tag.wrappedName)
                             }
                         }
                     }

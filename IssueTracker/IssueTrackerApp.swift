@@ -54,10 +54,10 @@ struct IssueTrackerCommands: Commands {
             .disabled(selectedIssue == nil)
             
             if let selectedIssueKey = selectedIssue, let selectedIssue = selectedIssueKey {
-                Button("\(selectedIssue.status == .open ? "Close" : "Open") issue") {
+                Button("\(selectedIssue.wrappedStatus == .open ? "Close" : "Open") issue") {
                     setIssueStatusAction?()
                 }
-                .keyboardShortcut(selectedIssue.status == .open ? "c" : "o", modifiers: [.command, .shift])
+                .keyboardShortcut(selectedIssue.wrappedStatus == .open ? "c" : "o", modifiers: [.command, .shift])
             }
             
             Divider()

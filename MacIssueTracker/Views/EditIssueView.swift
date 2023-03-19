@@ -20,9 +20,9 @@ struct EditIssueView: View {
     
     var body: some View {
         Form {
-            TextField("Issue name", text: $viewModel.issueCopy.name)
+            TextField("Issue name", text: $viewModel.issueCopy.wrappedName)
             Section("Description") {
-            TextEditor(text: $viewModel.issueCopy.issueDescription)
+            TextEditor(text: $viewModel.issueCopy.wrappedIssueDescription)
             }
             Picker("Priority", selection: $viewModel.issueCopy.priority) {
                 ForEach(Issue.Priority.allCases) { priority in

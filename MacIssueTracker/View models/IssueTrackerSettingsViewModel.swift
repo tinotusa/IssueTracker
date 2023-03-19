@@ -41,9 +41,9 @@ extension IssueTrackerSettingsViewModel {
     /// - Parameters:
     ///   - tags: All the tags in core data.
     ///   - tagIDs: The tag ids to be removed.
-    func remove(tags: FetchedResults<Tag>, withIDs tagIDs: Set<UUID>) {
+    func remove(tags: FetchedResults<Tag>, withIDs tagIDs: Set<Tag.ID>) {
         log.trace("removing tags with the ids: \(tagIDs)")
-        let tags = tags.filter { tagIDs.contains($0.id) }
+        let tags = tags.filter { tagIDs.contains($0.wrappedId) }
         tags.forEach { viewContext.delete($0) }
         do {
             try viewContext.save()

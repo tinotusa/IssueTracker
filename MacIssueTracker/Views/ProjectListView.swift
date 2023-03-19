@@ -21,7 +21,7 @@ struct ProjectListView: View {
             Text("Projects")
                 .foregroundColor(.secondary)
             ForEach(projects) { project in
-                NavigationLink(project.name, destination: IssuesListView(project: project))
+                NavigationLink(project.wrappedName, destination: IssuesListView(project: project))
             }
         }
         .focusedValue(\.selectedProject, $selectedProject) // TODO: - This seems like it doesn't set it.

@@ -1,45 +1,45 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="21513" systemVersion="21G419" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
     <entity name="Attachment" representedClassName="Attachment" syncable="YES" codeGenerationType="class">
-        <attribute name="assetURL_" optional="YES" attributeType="URI" allowsExternalBinaryDataStorage="YES"/>
-        <attribute name="dateCreated_" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
-        <attribute name="id_" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
-        <attribute name="type_" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="assetURL" optional="YES" attributeType="URI" allowsExternalBinaryDataStorage="YES"/>
+        <attribute name="dateCreated" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="type" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
         <relationship name="comment" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Comment" inverseName="attachments" inverseEntity="Comment"/>
     </entity>
     <entity name="Comment" representedClassName="Comment" syncable="YES" codeGenerationType="class">
-        <attribute name="comment_" optional="YES" attributeType="String" minValueString="0" maxValueString="400"/>
-        <attribute name="dateCreated_" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
-        <attribute name="id_" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="comment" optional="YES" attributeType="String" minValueString="0" maxValueString="400"/>
+        <attribute name="dateCreated" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
         <relationship name="attachments" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Attachment" inverseName="comment" inverseEntity="Attachment"/>
         <relationship name="issue" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Issue" inverseName="comments" inverseEntity="Issue"/>
     </entity>
     <entity name="Issue" representedClassName="Issue" syncable="YES" codeGenerationType="class">
-        <attribute name="dateCreated_" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
-        <attribute name="id_" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
-        <attribute name="issueDescription_" optional="YES" attributeType="String" minValueString="0" maxValueString="2000"/>
-        <attribute name="name_" optional="YES" attributeType="String"/>
-        <attribute name="priority_" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
-        <attribute name="status_" optional="YES" attributeType="String"/>
+        <attribute name="dateCreated" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="issueDescription" optional="YES" attributeType="String" minValueString="0" maxValueString="2000"/>
+        <attribute name="name" optional="YES" attributeType="String"/>
+        <attribute name="priority" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="status" optional="YES" attributeType="String"/>
         <relationship name="comments" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Comment" inverseName="issue" inverseEntity="Comment"/>
         <relationship name="project" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Project" inverseName="issues" inverseEntity="Project"/>
         <relationship name="tags" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Tag" inverseName="issues" inverseEntity="Tag"/>
     </entity>
     <entity name="Project" representedClassName="Project" syncable="YES" codeGenerationType="class">
-        <attribute name="dateCreated_" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
-        <attribute name="id_" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
-        <attribute name="name_" optional="YES" attributeType="String" minValueString="1" maxValueString="50"/>
-        <attribute name="startDate_" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="dateCreated" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="name" optional="YES" attributeType="String" minValueString="1" maxValueString="50"/>
+        <attribute name="startDate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <relationship name="issues" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Issue" inverseName="project" inverseEntity="Issue"/>
     </entity>
     <entity name="Tag" representedClassName="Tag" syncable="YES" codeGenerationType="class">
-        <attribute name="blue_" optional="YES" attributeType="Double" minValueString="0" maxValueString="255" defaultValueString="0" usesScalarValueType="YES"/>
-        <attribute name="dateCreated_" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
-        <attribute name="green_" optional="YES" attributeType="Double" minValueString="0" maxValueString="255" defaultValueString="0" usesScalarValueType="YES"/>
-        <attribute name="id_" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
-        <attribute name="name_" optional="YES" attributeType="String" minValueString="1" maxValueString="50"/>
-        <attribute name="opacity_" optional="YES" attributeType="Double" minValueString="0" maxValueString="1" defaultValueString="1" usesScalarValueType="YES"/>
-        <attribute name="red_" optional="YES" attributeType="Double" minValueString="0" maxValueString="255" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="blue" optional="YES" attributeType="Double" minValueString="0" maxValueString="255" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="dateCreated" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="green" optional="YES" attributeType="Double" minValueString="0" maxValueString="255" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="name" optional="YES" attributeType="String" minValueString="1" maxValueString="50"/>
+        <attribute name="opacity" optional="YES" attributeType="Double" minValueString="0" maxValueString="1" defaultValueString="1" usesScalarValueType="YES"/>
+        <attribute name="red" optional="YES" attributeType="Double" minValueString="0" maxValueString="255" defaultValueString="0" usesScalarValueType="YES"/>
         <relationship name="issues" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Issue" inverseName="tags" inverseEntity="Issue"/>
     </entity>
 </model>

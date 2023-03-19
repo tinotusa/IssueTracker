@@ -62,10 +62,10 @@ extension AddCommentViewModel {
         for path in paths {
             let attachment = Attachment(context: viewContext)
             attachment.comment = comment
-            attachment.dateCreated_ = .now
-            attachment.id_ = UUID()
-            attachment.type_ = path.attachmentType.rawValue
-            attachment.assetURL_ = path.url
+            attachment.dateCreated = .now
+            attachment.id = UUID()
+            attachment.type = path.attachmentType.rawValue
+            attachment.assetURL = path.url
             attachments.append(attachment)
         }
         // adding audio
@@ -86,10 +86,10 @@ extension AddCommentViewModel {
             }
             let attachment = Attachment(context: viewContext)
             attachment.comment = comment
-            attachment.dateCreated_ = .now
-            attachment.id_ = UUID()
-            attachment.type_ = AttachmentType.audio.rawValue
-            attachment.assetURL_ = asset.fileURL!
+            attachment.dateCreated = .now
+            attachment.id = UUID()
+            attachment.type = AttachmentType.audio.rawValue
+            attachment.assetURL = asset.fileURL!
             logger.debug("added audio url to core data attachment.")
             attachments.append(attachment)
         }

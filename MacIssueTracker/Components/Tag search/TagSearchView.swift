@@ -29,7 +29,7 @@ struct TagSearchView: View {
                         Circle()
                             .frame(width: 10, height: 10)
                             .foregroundColor(tagColour)
-                        Text(tag.name)
+                        Text(tag.wrappedName)
                     }
                 }
             }

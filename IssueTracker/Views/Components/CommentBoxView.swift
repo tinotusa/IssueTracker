@@ -21,11 +21,11 @@ struct CommentBoxView: View {
     var body: some View {
         VStack(alignment: .leading) {
             if isEditing {
-                TextEditor(text: $comment.comment)
+                TextEditor(text: $comment.wrappedComment)
                     .scrollContentBackground(.hidden)
                     .frame(minHeight: 30)
             } else {
-                Text(comment.comment)
+                Text(comment.wrappedComment)
                 if !comment.wrappedAttachments.isEmpty {
                     HStack {
                         Text("^[\(comment.wrappedAttachments.count) Attachment](inflect: true)")
@@ -43,8 +43,8 @@ struct CommentBoxView: View {
                     ScrollView(.horizontal) {
                         HStack {
                             ForEach(comment.wrappedAttachments) { attachment in
-                                let attachmentType = AttachmentType(rawValue: attachment.type_)!
-                                let url = attachment.assetURL_!
+                                let attachmentType = AttachmentType(rawValue: attachment.type)!
+                                let url = attachment.assetURL!
                                 switch attachmentType {
                                 case .audio:
                                     AudioAttachmentView(url: url)
@@ -59,7 +59,7 @@ struct CommentBoxView: View {
                 }
             }
             HStack {
-                Text(comment.dateCreated.formatted(date: .abbreviated, time: .omitted))
+                Text(comment.wrappedDateCreated.formatted(date: .abbreviated, time: .omitted))
                     .footerStyle()
                 Spacer()
                 if isEditing {
@@ -78,7 +78,7 @@ struct CommentBoxView: View {
                     }
                 } else {
                     Button {
-                        originalComment = comment.comment
+                        originalComment = comment.wrappedComment
                         withAnimation {
                             isEditing = true
                         }

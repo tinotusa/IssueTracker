@@ -29,7 +29,7 @@ final class IssuesViewModel: ObservableObject {
     /// The sort order for the sort type.
     @Published var sortOrder = SortOrder.forward
     /// The sort descriptor for the issues.
-    @Published var sortDescriptor = SortDescriptor<Issue>(\.dateCreated_, order: .forward)
+    @Published var sortDescriptor = SortDescriptor<Issue>(\.dateCreated, order: .forward)
     
     /// The current project the issues belong to.
     let project: Project
@@ -45,7 +45,7 @@ final class IssuesViewModel: ObservableObject {
          viewContext: NSManagedObjectContext = PersistenceController.shared.container.viewContext
     ) {
         self.project = project
-        self.predicate = NSPredicate(format: "(project == %@) AND (status_ == %@)",  project, "open")
+        self.predicate = NSPredicate(format: "(project == %@) AND (status == %@)",  project, "open")
         self.viewContext = viewContext
     }
 }
@@ -95,13 +95,13 @@ extension IssuesViewModel {
     /// Toggles the given issue's status.
     /// - Parameter issue: The issue to toggle.
     func toggleStatus(_ issue: Issue) {
-        switch issue.status {
-        case .open: issue.status = .closed
-        case .closed: issue.status = .open
+        switch issue.wrappedStatus {
+        case .open: issue.wrappedStatus = .closed
+        case .closed: issue.wrappedStatus = .open
         }
         do {
             try viewContext.save()
-            log.debug("Successfully toggled issue status to \(issue.status.rawValue).")
+            log.debug("Successfully toggled issue status to \(issue.wrappedStatus.rawValue).")
         } catch {
             log.error("Failed to save view context. \(error)")
         }
@@ -111,27 +111,27 @@ extension IssuesViewModel {
     /// - Parameter issue: The issue to modify.
     /// - Parameter status: The status to set the issue to.
     func setIssueStatus(_ issue: Issue, to status: Issue.Status) {
-        log.debug(#"Setting issue "\#(issue.name)" to \#(status.rawValue)"#)
-        if issue.status == status {
-            log.log("Issue is already \(status.rawValue).")
+        log.debug(#"Setting issue "\#(issue.wrappedName)" to \#(status.rawValue)"#)
+        if issue.wrappedStatus == status {
+            log.debug("Issue is already \(status.rawValue).")
             return
         }
-        issue.status = status
+        issue.wrappedStatus = status
         do {
             try withAnimation {
                 try viewContext.save()
             }
-            log.log(#"Successfully set the issue "\#(issue.name)" status to \#(status.rawValue)."#)
+            log.debug(#"Successfully set the issue "\#(issue.wrappedName)" status to \#(status.rawValue)."#)
         } catch {
             viewContext.rollback()
-            log.log(#"Failed to set the issue "\#(issue.name)" status to \#(status.rawValue)."#)
+            log.debug(#"Failed to set the issue "\#(issue.wrappedName)" status to \#(status.rawValue)."#)
         }
     }
     
     /// Deletes the given issue from core data.
     /// - Parameter issue: The `Issue` to delete.
     func deleteIssue(_ issue: Issue) {
-        log.debug("Deleting issue with name \"\(issue.name)\" ...")
+        log.debug("Deleting issue with name \"\(issue.wrappedName)\" ...")
         // TODO: either set it to some archived state or implement undo ?
         viewContext.delete(issue)
         do {
@@ -149,19 +149,19 @@ extension IssuesViewModel {
     func runSearch() {
         if searchText.isEmpty {
             predicate = NSPredicate(
-                format: "(project == %@) AND (status_ == %@)", project, searchIssueStatus.rawValue)
+                format: "(project == %@) AND (status == %@)", project, searchIssueStatus.rawValue)
             return
         }
-        var format = "(project == %@) AND (status_ == %@)"
+        var format = "(project == %@) AND (status == %@)"
         switch searchScope {
         case .description:
-            format += "AND (issueDescription_ CONTAINS[cd] %@)"
+            format += "AND (issueDescription CONTAINS[cd] %@)"
             predicate = NSPredicate(format: format,  project, searchIssueStatus.rawValue, searchText)
         case .name:
-            format += "AND (name_ CONTAINS[cd] %@)"
+            format += "AND (name CONTAINS[cd] %@)"
             predicate = NSPredicate(format: format,  project, searchIssueStatus.rawValue, searchText)
         case .tag:
-            format += "AND (tags.name_ CONTAINS[cd] %@)"
+            format += "AND (tags.name CONTAINS[cd] %@)"
             predicate = NSPredicate(format: format,  project, searchIssueStatus.rawValue, searchText)
         }
     }
@@ -173,13 +173,13 @@ extension IssuesViewModel {
         log.debug("Settings sort ...")
         switch sortType {
         case .date:
-            sortDescriptor = .init(\.dateCreated_, order: sortOrder)
+            sortDescriptor = .init(\.dateCreated, order: sortOrder)
             log.debug("sort set to date with sortOrder: \(sortOrder)")
         case .title:
-            sortDescriptor = .init(\.name_, order: sortOrder)
+            sortDescriptor = .init(\.name, order: sortOrder)
             log.debug("sort set to title with sortOrder: \(sortOrder)")
         case .priority:
-            sortDescriptor = .init(\.priority_, order: sortOrder)
+            sortDescriptor = .init(\.priority, order: sortOrder)
             log.debug("sort set to priority with sortOrder: \(sortOrder)")
         }
     }

@@ -23,12 +23,12 @@ struct IssueDetail: View {
         NavigationStack {
             ScrollView {
                 VStack(alignment: .leading) {
-                    Text(issue.name)
+                    Text(issue.wrappedName)
                         .headerStyle()
                     Divider()
                     
-                    if !issue.issueDescription.isEmpty {
-                        Text(issue.issueDescription)
+                    if !issue.wrappedIssueDescription.isEmpty {
+                        Text(issue.wrappedIssueDescription)
                             .padding(.bottom)
                     } else {
                         Text("No Description")
@@ -36,10 +36,10 @@ struct IssueDetail: View {
                     }
                     Divider()
                     
-                    Text("Created: \(issue.dateCreated.formatted(date: .abbreviated, time: .omitted))")
+                    Text("Created: \(issue.wrappedDateCreated.formatted(date: .abbreviated, time: .omitted))")
                     HStack {
                         Text("Priority:")
-                        Text(issue.priority.title)
+                        Text(issue.wrappedPriority.title)
                     }
                     
                     LabeledInputField("Tags:") {

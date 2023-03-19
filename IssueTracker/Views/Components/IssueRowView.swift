@@ -12,12 +12,12 @@ struct IssueRowView: View {
     
     var body: some View {
         VStack(alignment: .leading) {
-            Text(issue.name)
+            Text(issue.wrappedName)
                 .lineLimit(2)
                 .multilineTextAlignment(.leading)
             
-            if !issue.issueDescription.isEmpty {
-                Text(issue.issueDescription)
+            if !issue.wrappedIssueDescription.isEmpty {
+                Text(issue.wrappedIssueDescription)
                     .footerStyle()
             } else {
                 Text("Description: N/A")
@@ -32,7 +32,7 @@ struct IssueRowView: View {
                     HStack {
                         Text("Tags: ")
                         ForEach(tags.allObjects as? [Tag] ?? []) { tag in
-                            Text(tag.name)
+                            Text(tag.wrappedName)
                         }
                     }
                     .footerStyle()

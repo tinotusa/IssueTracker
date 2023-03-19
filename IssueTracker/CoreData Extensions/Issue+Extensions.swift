@@ -20,14 +20,14 @@ extension Issue {
         self.init(context: context)
         self.name = name
         self.issueDescription = issueDescription
-        self.priority = priority
+        self.priority = priority.rawValue
         self.addToTags(NSSet(set: tags))
     }
     
     public override func awakeFromInsert() {
         self.id = UUID()
         self.dateCreated = .now
-        self.status = .open
+        self.wrappedStatus = .open
     }
 }
 
@@ -69,39 +69,39 @@ extension Issue {
 
 // MARK: Properties
 extension Issue {
-    public var id: UUID {
-        get { self.id_ ?? UUID() }
-        set { self.id_ = newValue }
+    public var wrappedId: UUID {
+        get { self.id ?? UUID() }
+        set { self.id = newValue }
     }
     
-    var dateCreated: Date {
-        get { self.dateCreated_ ?? .now }
-        set { self.dateCreated_ = newValue }
+    var wrappedDateCreated: Date {
+        get { self.dateCreated ?? .now }
+        set { self.dateCreated = newValue }
     }
     
-    var issueDescription: String {
-        get { self.issueDescription_ ?? "N/A" }
-        set { self.issueDescription_ = newValue }
+    var wrappedIssueDescription: String {
+        get { self.issueDescription ?? "N/A" }
+        set { self.issueDescription = newValue }
     }
     
-    var name: String {
-        get { self.name_ ?? "N/A" }
-        set { self.name_ = newValue }
+    var wrappedName: String {
+        get { self.name ?? "N/A" }
+        set { self.name = newValue }
     }
     
-    var priority: Priority {
-        get { Priority(rawValue: self.priority_) ?? Priority.low }
-        set { self.priority_ = newValue.rawValue }
+    var wrappedPriority: Priority {
+        get { Priority(rawValue: self.priority) ?? Priority.low }
+        set { self.priority = newValue.rawValue }
     }
     
-    var status: Status {
+    var wrappedStatus: Status {
         get {
-            if let status = status_ {
+            if let status = status {
                 return Status(rawValue: status) ?? Status.open
             }
             return Status.open
         }
-        set { self.status_ = newValue.rawValue }
+        set { self.status = newValue.rawValue }
     }
     
     var wrappedComments: [Comment] {
@@ -111,8 +111,13 @@ extension Issue {
     
     /// A boolean value indicating whether the issue's status is open.
     var isOpenStatus: Bool {
-        status == .open
+        guard let status, let status = Status(rawValue: status), status == .open else {
+            return false
+        }
+        return status == .open
     }
+    
+    
 }
 
 // MARK: - Functions

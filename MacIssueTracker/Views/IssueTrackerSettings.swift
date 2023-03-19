@@ -8,22 +8,22 @@
 import SwiftUI
 
 struct IssueTrackerSettings: View {
-    @State private var selectedTags: Set<UUID> = []
+    @State private var selectedTags = Set<Tag.ID>()
     @StateObject private var viewModel = IssueTrackerSettingsViewModel()
     
-    @FetchRequest(sortDescriptors: [.init(\.dateCreated_, order: .forward)])
+    @FetchRequest(sortDescriptors: [.init(\.dateCreated, order: .forward)])
     private var tags: FetchedResults<Tag>
     
     var body: some View {
         Form {
             Text("All tags")
-            
+            #warning("selecting anything causes a crash")
             Table(tags, selection: $selectedTags, sortOrder: $tags.sortDescriptors) {
-                TableColumn("Name", value: \.name_) { tag in
+                TableColumn("Name", value: \.name) { tag in
                     TagTableColumn(tag: tag)
                 }
-                TableColumn("Date created", value: \.dateCreated_) { tag in
-                    Text(tag.dateCreated.formatted(date: .numeric, time: .omitted))
+                TableColumn("Date created", value: \.dateCreated) { tag in
+                    Text(tag.wrappedDateCreated.formatted(date: .numeric, time: .omitted))
                 }
             }
             .tableStyle(.bordered)

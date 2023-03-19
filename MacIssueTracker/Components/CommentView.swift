@@ -14,7 +14,7 @@ struct CommentView: View {
     
     var body: some View {
         VStack(alignment: .leading) {
-            Text(comment.dateCreated.formatted(date: .long, time: .omitted))
+            Text(comment.wrappedDateCreated.formatted(date: .long, time: .omitted))
                 .secondaryFootnote()
             HStack {
                 TextEditor(text: $commentChange.animation())
@@ -33,7 +33,7 @@ struct CommentView: View {
                         }
                         Button {
                             withAnimation {
-                                commentChange = comment.comment
+                                commentChange = comment.wrappedComment
                             }
                         } label: {
                             Label("Cancel", systemImage: SFSymbol.pencilSlash.rawValue)
@@ -53,7 +53,7 @@ struct CommentView: View {
         }
         .bodyStyle()
         .onAppear {
-            commentChange = comment.comment
+            commentChange = comment.wrappedComment
         }
     }
 }

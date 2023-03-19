@@ -26,45 +26,45 @@ extension Tag {
     #endif
     
     public override func awakeFromInsert() {
-        self.dateCreated_ = .now
-        self.id_ = UUID()
+        self.dateCreated = .now
+        self.id = UUID()
     }
 }
 
 // MARK: Properties
 extension Tag {
-    var dateCreated: Date {
-        get { self.dateCreated_ ?? .now }
-        set { self.dateCreated_ = newValue }
+    var wrappedDateCreated: Date {
+        get { self.dateCreated ?? .now }
+        set { self.dateCreated = newValue }
     }
     
-    var red: Double {
-        get { self.red_ }
-        set { self.red_ = newValue }
+    var wrappedRed: Double {
+        get { self.red }
+        set { self.red = newValue }
     }
     
-    var green: Double {
-        get { self.green_ }
-        set { self.green_ = newValue }
+    var wrappedGreen: Double {
+        get { self.green }
+        set { self.green = newValue }
     }
     
-    var blue: Double {
-        get { self.blue_ }
-        set { self.blue_ = newValue }
+    var wrappedBlue: Double {
+        get { self.blue }
+        set { self.blue = newValue }
     }
     
-    public var id: UUID {
-        get { self.id_ ?? UUID() }
-        set { self.id_ = newValue }
+    public var wrappedId: UUID {
+        get { self.id ?? UUID() }
+        set { self.id = newValue }
     }
     
-    var name: String {
-        get { self.name_ ?? "N/A" }
-        set { self.name_ = newValue }
+    var wrappedName: String {
+        get { self.name ?? "N/A" }
+        set { self.name = newValue }
     }
     
-    var opacity: Double {
-        get { self.opacity_ }
-        set { self.opacity_ = newValue }
+    var wrappedOpacity: Double {
+        get { self.opacity }
+        set { self.opacity = newValue }
     }
 }

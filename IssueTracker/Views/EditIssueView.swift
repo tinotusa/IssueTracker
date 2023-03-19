@@ -24,10 +24,10 @@ struct EditIssueView: View {
         ScrollView {
             VStack(alignment: .leading) {
                 LabeledInputField("Issue name:") {
-                    CustomTextField("Issue name", text: $viewModel.issueCopy.name)
+                    CustomTextField("Issue name", text: $viewModel.issueCopy.wrappedName)
                 }
                 LabeledInputField("Description:") {
-                    CustomTextField("Issue Description", text: $viewModel.issueCopy.issueDescription)
+                    CustomTextField("Issue Description", text: $viewModel.issueCopy.wrappedIssueDescription)
                 }
                 LabeledInputField("Priority:") {
                     Picker("Issue priority", selection: $viewModel.issueCopy.priority) {
