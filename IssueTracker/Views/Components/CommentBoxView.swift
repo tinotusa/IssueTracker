@@ -42,7 +42,7 @@ struct CommentBoxView: View {
                 if showingAttachments {
                     ScrollView(.horizontal) {
                         HStack {
-                            ForEach(comment.wrappedAttachments) { attachment in
+                            ForEach(comment.sortedAttachments) { attachment in
                                 let attachmentType = AttachmentType(rawValue: attachment.type)!
                                 let url = attachment.assetURL!
                                 switch attachmentType {

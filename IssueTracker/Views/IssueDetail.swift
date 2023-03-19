@@ -70,7 +70,7 @@ struct IssueDetail: View {
                             Image(systemName: "plus")
                         }
                     }
-                    ForEach($issue.wrappedComments) { $comment in
+                    ForEach(issue.sortedComments) { comment in
                         CommentBoxView(comment: comment, issue: issue)
                     }
                 }

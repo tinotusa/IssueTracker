@@ -40,4 +40,16 @@ extension Comment {
     var wrappedAttachments: [Attachment] {
         attachments?.allObjects as? [Attachment] ?? []
     }
+    
+    var sortedAttachments: [Attachment] {
+        wrappedAttachments.sorted { $0.wrappedDateCreated < $1.wrappedDateCreated }
+    }
+}
+
+// TODO: move me to own file
+extension Attachment {
+    var wrappedDateCreated: Date {
+        get { dateCreated ?? .now }
+        set { dateCreated = newValue }
+    }
 }

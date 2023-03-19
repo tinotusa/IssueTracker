@@ -109,6 +109,10 @@ extension Issue {
         set { self.comments = NSSet(array: newValue) }
     }
     
+    var sortedComments: [Comment] {
+        wrappedComments.sorted { $0.wrappedDateCreated < $1.wrappedDateCreated }
+    }
+    
     /// A boolean value indicating whether the issue's status is open.
     var isOpenStatus: Bool {
         guard let status, let status = Status(rawValue: status), status == .open else {
