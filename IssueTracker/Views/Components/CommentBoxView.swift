@@ -11,6 +11,7 @@ struct CommentBoxView: View {
     @State private var isEditing = false
     @State private var showingDeleteConfirmation = false
     @State private var originalComment = ""
+    @State private var showingAttachments = false
     
     @ObservedObject private(set) var comment: Comment
     @ObservedObject private(set) var issue: Issue
@@ -25,19 +26,33 @@ struct CommentBoxView: View {
                     .frame(minHeight: 30)
             } else {
                 Text(comment.comment)
-                
-                ScrollView(.horizontal) {
+                if !comment.wrappedAttachments.isEmpty {
                     HStack {
-                        ForEach(comment.wrappedAttachments) { attachment in
-                            let attachmentType = AttachmentType(rawValue: attachment.type_)!
-                            let url = attachment.assetURL_!
-                            switch attachmentType {
-                            case .audio:
-                                AudioAttachmentView(url: url)
-                            case .image:
-                                ImageAttachmentView(url: url)
-                            case .video:
-                                Text("TODO")
+                        Text("^[\(comment.wrappedAttachments.count) Attachment](inflect: true)")
+                            .foregroundColor(.secondary)
+                        Button(showingAttachments ? "Hide" : "Show") {
+                            withAnimation {
+                                showingAttachments.toggle()
+                            }
+                        }
+                        .foregroundColor(.blue)
+                    }
+                    .font(.footnote)
+                }
+                if showingAttachments {
+                    ScrollView(.horizontal) {
+                        HStack {
+                            ForEach(comment.wrappedAttachments) { attachment in
+                                let attachmentType = AttachmentType(rawValue: attachment.type_)!
+                                let url = attachment.assetURL_!
+                                switch attachmentType {
+                                case .audio:
+                                    AudioAttachmentView(url: url)
+                                case .image:
+                                    ImageAttachmentView(url: url)
+                                case .video:
+                                    Text("TODO")
+                                }
                             }
                         }
                     }
