@@ -9,74 +9,26 @@ import SwiftUI
 
 struct IssueDetail: View {
     @Environment(\.dismiss) private var dismiss
-    @ObservedObject var issue: Issue
+    @ObservedObject private(set) var issue: Issue
     @StateObject private var viewModel: IssueDetailViewModel
     @State private var showingEditView = false
     @State private var showingCommentSheet = false
     
     init(issue: Issue) {
         self.issue = issue
+        // TODO: This will be illegal in a future update
         _viewModel = StateObject(wrappedValue: IssueDetailViewModel(issue: issue))
     }
     
     var body: some View {
         NavigationStack {
-            ScrollView {
-                VStack(alignment: .leading) {
-                    Text(issue.wrappedName)
-                        .headerStyle()
-                    Divider()
-                    
-                    if !issue.wrappedIssueDescription.isEmpty {
-                        Text(issue.wrappedIssueDescription)
-                            .padding(.bottom)
-                    } else {
-                        Text("No Description")
-                            .foregroundColor(.customSecondary)
-                    }
-                    Divider()
-                    
-                    Text("Created: \(issue.wrappedDateCreated.formatted(date: .abbreviated, time: .omitted))")
-                    HStack {
-                        Text("Priority:")
-                        Text(issue.wrappedPriority.title)
-                    }
-                    
-                    LabeledInputField("Tags:") {
-                        ScrollView(.horizontal, showsIndicators: false) {
-                            let tags = issue.tags?.allObjects as? [Tag] ?? []
-                            if tags.isEmpty {
-                                Text("No tags")
-                                    .foregroundColor(.customSecondary)
-                            } else {
-                                HStack {
-                                    ForEach(tags) { tag in
-                                        TagView(tag: tag)
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    
-                    Divider()
-                    
-                    HStack(alignment: .lastTextBaseline) {
-                        Text("Comments")
-                            .headerStyle()
-                        Spacer()
-                        Button {
-                            showingCommentSheet = true
-                        } label: {
-                            Image(systemName: "plus")
-                        }
-                    }
-                    ForEach(issue.sortedComments) { comment in
-                        CommentBoxView(comment: comment, issue: issue)
-                    }
-                }
-                .padding(.horizontal)
+            List {
+                titleSection
+                descriptionSection
+                infoSection
+                commentsSection
             }
-            .bodyStyle()
+            .listStyle(.plain)
             .background(Color.customBackground)
             .toolbarBackground(Color.customBackground)
             .sheet(isPresented: $showingCommentSheet) {
@@ -85,23 +37,91 @@ struct IssueDetail: View {
                     .presentationDragIndicator(.visible)
             }
             .toolbar {
-                ToolbarItem(placement: .cancellationAction) {
-                    Button("Close") {
-                        dismiss()
-                    }
-                }
-                ToolbarItem(placement: .confirmationAction) {
-                    NavigationLink(value: issue) {
-                        Text("Edit")
-                            .foregroundColor(.buttonLabel)
-                    }
-                }
+                toolbarItems
             }
             .navigationDestination(for: Issue.self) { issue in
                 EditIssueView(issue: issue)
             }
             .navigationDestination(for: URL.self) { imageURL in
                 ImageDetailView(url: imageURL)
+            }
+        }
+    }
+}
+
+private extension IssueDetail {
+    var titleSection: some View {
+        Section("Title") {
+            Text(issue.wrappedName)
+                .headerStyle()
+                .listRowSeparator(.hidden)
+        }
+    }
+    
+    var descriptionSection: some View {
+        
+        Section("Description") {
+            if !issue.wrappedIssueDescription.isEmpty {
+                Text(issue.wrappedIssueDescription)
+                    .padding(.bottom)
+            } else {
+                Text("No Description")
+                    .foregroundColor(.customSecondary)
+            }
+        }
+        .listRowSeparator(.hidden)
+        
+    }
+    
+    
+    var infoSection: some View {
+        Section("Info") {
+            VStack(alignment: .leading) {
+                Text("Created: \(issue.wrappedDateCreated.formatted(date: .abbreviated, time: .omitted))")
+                HStack {
+                    Text("Priority:")
+                    Text(issue.wrappedPriority.title)
+                }
+                
+                LabeledInputField("Tags:") {
+                    ScrollView(.horizontal, showsIndicators: false) {
+                        let tags = issue.tags?.allObjects as? [Tag] ?? []
+                        if tags.isEmpty {
+                            Text("No tags")
+                                .foregroundColor(.customSecondary)
+                        } else {
+                            HStack {
+                                ForEach(tags) { tag in
+                                    TagView(tag: tag)
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        .listRowSeparator(.hidden)
+    }
+    
+    var commentsSection: some View {
+        Section("Comments") {
+            ForEach(issue.sortedComments) { comment in
+                CommentBoxView(comment: comment, issue: issue)
+            }
+        }
+    }
+    
+    @ToolbarContentBuilder
+    var toolbarItems: some ToolbarContent {
+        ToolbarItem(placement: .cancellationAction) {
+            Button("Close") {
+                dismiss()
+            }
+        }
+        ToolbarItem(placement: .confirmationAction) {
+            NavigationLink(value: issue) {
+                Text("Edit")
+                    .foregroundColor(.buttonLabel)
             }
         }
     }
