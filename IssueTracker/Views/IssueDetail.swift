@@ -13,6 +13,8 @@ struct IssueDetail: View {
     @StateObject private var viewModel: IssueDetailViewModel
     @State private var showingEditView = false
     @State private var showingCommentSheet = false
+    @State private var showingEditCommentView = false
+    @State private var commentToEdit: Comment? = nil
     
     init(issue: Issue) {
         self.issue = issue
@@ -23,10 +25,13 @@ struct IssueDetail: View {
     var body: some View {
         NavigationStack {
             List {
-                titleSection
-                descriptionSection
-                infoSection
-                commentsSection
+                Group {
+                    titleSection
+                    descriptionSection
+                    infoSection
+                    commentsSection
+                }
+                .listRowBackground(Color.customBackground)
             }
             .listStyle(.plain)
             .background(Color.customBackground)
@@ -35,6 +40,13 @@ struct IssueDetail: View {
                 AddCommentView(issue: issue)
                     .presentationDetents([.large])
                     .presentationDragIndicator(.visible)
+            }
+            .sheet(isPresented: $showingEditCommentView) {
+                if let commentToEdit {
+                    EditCommentView(comment: commentToEdit)
+                        .presentationDetents([.large])
+                        .presentationDragIndicator(.visible)
+                }
             }
             .toolbar {
                 toolbarItems
@@ -59,7 +71,6 @@ private extension IssueDetail {
     }
     
     var descriptionSection: some View {
-        
         Section("Description") {
             if !issue.wrappedIssueDescription.isEmpty {
                 Text(issue.wrappedIssueDescription)
@@ -70,7 +81,6 @@ private extension IssueDetail {
             }
         }
         .listRowSeparator(.hidden)
-        
     }
     
     
@@ -107,8 +117,28 @@ private extension IssueDetail {
         Section("Comments") {
             ForEach(issue.sortedComments) { comment in
                 CommentBoxView(comment: comment, issue: issue)
+                    .swipeActions {
+                        Button(role: .destructive) {
+                            viewModel.deleteComment(comment)
+                        } label: {
+                            Label("Delete", systemImage: "trash")
+                        }
+                        Button {
+                            showingEditCommentView = true
+                            commentToEdit = comment
+                        } label: {
+                            Label("Edit", systemImage: "rectangle.and.pencil.and.ellipsis")
+                        }
+                        .tint(.blue)
+                    }
             }
+            
+            Button("Add comment") {
+                showingCommentSheet = true
+            }
+            .buttonStyle(.borderedProminent)
         }
+        .listRowSeparator(.hidden)
     }
     
     @ToolbarContentBuilder
