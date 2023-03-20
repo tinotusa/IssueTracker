@@ -100,6 +100,9 @@ struct IssueDetail: View {
             .navigationDestination(for: Issue.self) { issue in
                 EditIssueView(issue: issue)
             }
+            .navigationDestination(for: URL.self) { imageURL in
+                ImageDetailView(url: imageURL)
+            }
         }
     }
 }

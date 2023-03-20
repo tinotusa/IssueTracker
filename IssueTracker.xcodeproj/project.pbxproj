@@ -71,6 +71,7 @@
 		218A510A297508BD00DF29F5 /* IssueTracker.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 2150C848295972E2006CD7D2 /* IssueTracker.xcdatamodeld */; };
 		218E60C629822A7800A9C4AB /* IssueTrackerSettingsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 218E60C529822A7800A9C4AB /* IssueTrackerSettingsViewModel.swift */; };
 		218E60C8298245BA00A9C4AB /* FilterIssuesList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 218E60C7298245BA00A9C4AB /* FilterIssuesList.swift */; };
+		218F93D729C8044500F9D62A /* ImageDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 218F93D629C8044500F9D62A /* ImageDetailView.swift */; };
 		21AFDF2429777A3C00847889 /* Color+rgbComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21AFDF2329777A3C00847889 /* Color+rgbComponents.swift */; };
 		21AFDF2729777BD000847889 /* TagSearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21AFDF2629777BD000847889 /* TagSearchView.swift */; };
 		21AFDF2A29777F7F00847889 /* TagFilterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21AFDF2929777F7F00847889 /* TagFilterView.swift */; };
@@ -195,6 +196,7 @@
 		218E60C529822A7800A9C4AB /* IssueTrackerSettingsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IssueTrackerSettingsViewModel.swift; sourceTree = "<group>"; };
 		218E60C7298245BA00A9C4AB /* FilterIssuesList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterIssuesList.swift; sourceTree = "<group>"; };
 		218E60C9298296FD00A9C4AB /* IssueTracker.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = IssueTracker.entitlements; sourceTree = "<group>"; };
+		218F93D629C8044500F9D62A /* ImageDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageDetailView.swift; sourceTree = "<group>"; };
 		21AFDF2329777A3C00847889 /* Color+rgbComponents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Color+rgbComponents.swift"; sourceTree = "<group>"; };
 		21AFDF2629777BD000847889 /* TagSearchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagSearchView.swift; sourceTree = "<group>"; };
 		21AFDF2929777F7F00847889 /* TagFilterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagFilterView.swift; sourceTree = "<group>"; };
@@ -564,6 +566,7 @@
 				2132CB6B29C56785003D5C12 /* AudioAttachmentPreview.swift */,
 				2132CB6D29C5C76B003D5C12 /* ImageAttachmentPreview.swift */,
 				2132CB7529C5D0FC003D5C12 /* AudioAttachmentView.swift */,
+				218F93D629C8044500F9D62A /* ImageDetailView.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -821,6 +824,7 @@
 				2132CB7629C5D0FC003D5C12 /* AudioAttachmentView.swift in Sources */,
 				21654BC629605245009C434B /* AddIssueView.swift in Sources */,
 				21F1DA2B295D9E8000076D73 /* EditProjectViewModel.swift in Sources */,
+				218F93D729C8044500F9D62A /* ImageDetailView.swift in Sources */,
 				2132CB6C29C56785003D5C12 /* AudioAttachmentPreview.swift in Sources */,
 				2132CB6E29C5C76B003D5C12 /* ImageAttachmentPreview.swift in Sources */,
 				211246C529B9B82900D0EB01 /* AudioPlayer.swift in Sources */,
