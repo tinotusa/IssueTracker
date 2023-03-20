@@ -10,6 +10,7 @@ import SwiftUI
 struct EditCommentView: View {
     @ObservedObject private(set) var comment: Comment
     @Environment(\.managedObjectContext) private var viewContext
+    @Environment(\.dismiss) private var dismiss
     
     var body: some View {
         NavigationStack {
@@ -66,11 +67,16 @@ struct EditCommentView: View {
             .listStyle(.plain)
             .navigationTitle("Edit comment")
             .background(Color.customBackground)
-        }
-        .toolbar {
-            if comment.hasAttachments {
-                ToolbarItem(placement: .primaryAction) {
-                    EditButton()
+            .toolbar {
+                ToolbarItem(placement: .cancellationAction) {
+                    Button("Cancel") {
+                        dismiss()
+                    }
+                }
+                if comment.hasAttachments {
+                    ToolbarItem(placement: .primaryAction) {
+                        EditButton()
+                    }
                 }
             }
         }
