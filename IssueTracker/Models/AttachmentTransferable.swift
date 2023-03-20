@@ -33,7 +33,7 @@ struct AttachmentTransferable: Transferable {
                 }
             }
             
-            let copy = attachmentsFolder.appending(path: UUID().uuidString)
+            let copy = attachmentsFolder.appending(path: "\(UUID().uuidString).jpeg")
             
             log.debug("the received file is: \(received.file)")
             log.debug("the copy path is:  \(copy)")
@@ -75,7 +75,7 @@ struct AttachmentTransferable: Transferable {
                     log.debug("Failed to create directory. \(error)")
                 }
             }
-            let copy = attachmentsFolder.appending(path: UUID().uuidString)
+            let copy = attachmentsFolder.appending(path: "\(UUID().uuidString).png")
             try FileManager.default.copyItem(at: received.file, to: copy)
             let record = CKRecord(recordType: "Attachment")
             let asset = CKAsset(fileURL: received.file)
