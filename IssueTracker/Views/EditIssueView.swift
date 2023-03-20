@@ -30,7 +30,7 @@ struct EditIssueView: View {
                     CustomTextField("Issue Description", text: $viewModel.issueCopy.wrappedIssueDescription)
                 }
                 LabeledInputField("Priority:") {
-                    Picker("Issue priority", selection: $viewModel.issueCopy.priority) {
+                    Picker("Issue priority", selection: $viewModel.issueCopy.wrappedPriority) {
                         ForEach(Issue.Priority.allCases) { priority in
                             Text(priority.title)
                         }
