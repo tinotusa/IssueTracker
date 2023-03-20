@@ -44,6 +44,13 @@ extension Comment {
     var sortedAttachments: [Attachment] {
         wrappedAttachments.sorted { $0.wrappedDateCreated < $1.wrappedDateCreated }
     }
+    
+    var hasAttachments: Bool {
+        guard let attachments else {
+            return false
+        }
+        return attachments.count != 0
+    }
 }
 
 // TODO: move me to own file
