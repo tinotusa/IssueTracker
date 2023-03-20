@@ -19,7 +19,7 @@ struct CommentBoxView: View {
         VStack(alignment: .leading) {
             Text(comment.wrappedComment)
             
-            if !comment.hasAttachments {
+            if comment.hasAttachments {
                 HStack {
                     Text("^[\(comment.wrappedAttachments.count) Attachment](inflect: true)")
                         .foregroundColor(.secondary)
