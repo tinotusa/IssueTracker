@@ -15,7 +15,15 @@ struct ImageAttachmentView: View {
     var body: some View {
         Group {
             if let imageURL {
-                AsyncImage(url: imageURL)
+                NavigationLink(value: imageURL) {
+                    AsyncImage(url: imageURL) { image in
+                        image
+                            .resizable()
+                            .scaledToFit()
+                    } placeholder: {
+                        ProgressView()
+                    }
+                }
             } else {
                 ProgressView()
                     .progressViewStyle(.circular)
