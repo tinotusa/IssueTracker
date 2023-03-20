@@ -22,7 +22,7 @@ struct AttachmentTransferable: Transferable {
         FileRepresentation(contentType: .jpeg) { jpeg in
             return SentTransferredFile(jpeg.url)
         } importing: { received in
-            let attachmentsFolder = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appending(path: "attachmentsFolder/")
+            let attachmentsFolder = URL.documentsDirectory.appending(path: "attachmentsFolder/")
             if !FileManager.default.fileExists(atPath: attachmentsFolder.path()) {
                 do {
                     log.debug("Folder doesn't exist trying to create a new one")
@@ -65,7 +65,7 @@ struct AttachmentTransferable: Transferable {
         FileRepresentation(contentType: .png) { png in
             return SentTransferredFile(png.url)
         } importing: { received in
-            let attachmentsFolder = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appending(path: "attachmentsFolder/")
+            let attachmentsFolder = URL.documentsDirectory.appending(path: "attachmentsFolder/")
             if !FileManager.default.fileExists(atPath: attachmentsFolder.path()) {
                 do {
                     log.debug("Folder doesn't exist trying to create a new one")
