@@ -57,33 +57,41 @@ extension AddCommentViewModel {
     @MainActor
     func addComment(issue: Issue, viewContext: NSManagedObjectContext, audioURL: URL? = nil) async {
         let comment = Comment(comment: comment, context: viewContext)
-        let paths = await getImagePaths()
+        let attachmentTransferables = await getAttachmentsTransferables()
         var attachments = [Attachment]()
-        for path in paths {
+        var records = [CKRecord]()
+        
+        for attachmentTransferable in attachmentTransferables {
+            // create coredata attachment entity
             let attachment = Attachment(context: viewContext)
             attachment.comment = comment
             attachment.dateCreated = .now
             attachment.id = UUID()
-            attachment.type = path.attachmentType.rawValue
-            attachment.assetURL = path.url
+            attachment.type = attachmentTransferable.attachmentType.rawValue
+            
+            // create cloudkit attachment asset
+            let imageAttachmentRecord = CKRecord(recordType: "Attachment")
+            let asset = CKAsset(fileURL: attachmentTransferable.url)
+            imageAttachmentRecord["type"] = attachmentTransferable.attachmentType.rawValue
+            imageAttachmentRecord["attachment"] = asset
+            imageAttachmentRecord["attachmentURL"] = asset.fileURL!.absoluteString
+            
+            records.append(imageAttachmentRecord)
+            attachment.assetURL = asset.fileURL!
             attachments.append(attachment)
         }
         // adding audio
         if let audioURL {
-            logger.debug("trying to save audio.")
+            // cloudkit audio attachment
+            let audioAttachmentRecord = CKRecord(recordType: "Attachment")
             let asset = CKAsset(fileURL: audioURL)
-            let record = CKRecord(recordType: "Attachment")
-            record.setValuesForKeys([
+            audioAttachmentRecord.setValuesForKeys([
                 "type": AttachmentType.audio.rawValue,
                 "attachment": asset,
                 "attachmentURL": audioURL.absoluteString
             ])
-            let database = CKContainer.default().privateCloudDatabase
-            do {
-                try await database.save(record)
-            } catch {
-                logger.debug("Failed to save audio record to iCloud")
-            }
+            records.append(audioAttachmentRecord)
+            // coredata audio attachment
             let attachment = Attachment(context: viewContext)
             attachment.comment = comment
             attachment.dateCreated = .now
@@ -95,28 +103,43 @@ extension AddCommentViewModel {
         }
         issue.addToComments(comment)
         comment.addToAttachments(.init(array: attachments))
+        
+        // save to coredata and cloudkit
         do {
             try viewContext.save()
+        
+            let database = CKContainer.default().privateCloudDatabase
+            let modifyOperation = CKModifyRecordsOperation(recordsToSave: records)
+            modifyOperation.qualityOfService = .userInitiated
+            modifyOperation.modifyRecordsResultBlock = { [weak self] result in
+                switch result {
+                case .success:
+                    self?.logger.debug("Successfully saved records")
+                case .failure(let error):
+                    self?.logger.error("Failed to save attachment records. \(error)")
+                }
+            }
+            database.add(modifyOperation)
         } catch {
             logger.error("Failed to save context. \(error)")
         }
     }
     
-    private func getImagePaths() async -> [AttachmentTransferable] {
-        var paths = [AttachmentTransferable]()
+    private func getAttachmentsTransferables() async -> [AttachmentTransferable] {
+        var attachmentTransferables = [AttachmentTransferable]()
         do {
             for photo in photoPickerItems {
-                let data = try await photo.loadTransferable(type: AttachmentTransferable.self)
-                guard let data else {
+                let transferable = try await photo.loadTransferable(type: AttachmentTransferable.self)
+                guard let transferable else {
                     logger.debug("failed to get image data")
                     continue
                 }
-                paths.append(data)
+                attachmentTransferables.append(transferable)
             }
         } catch {
-            logger.error("Failed to get image paths. \(error)")
+            logger.error("Failed to get image transferables. \(error)")
         }
-        return paths
+        return attachmentTransferables
     }
     
     @MainActor
