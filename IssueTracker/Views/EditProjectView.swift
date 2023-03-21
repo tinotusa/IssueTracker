@@ -19,62 +19,64 @@ struct EditProjectView: View {
     }
     
     var body: some View {
-        List {
-            Group {
-                Section("Project name") {
-                    TextField("Project name", text: $viewModel.projectName)
-                        .textFieldStyle(.roundedBorder)
-                }
-                
-                Section("Start date") {
-                    DatePicker(
-                        "Project start date",
-                        selection: $viewModel.startDate,
-                        in: ...Date(),
-                        displayedComponents: [.date]
-                    )
-                    .datePickerStyle(.graphical)
-                }
-                
-                ProminentButton("Save changes") {
-                    _ = viewModel.save()
-                    dismiss()
-                }
-                .frame(maxWidth: .infinity, alignment: .center)
-                .disabled(!viewModel.projectHasChanges)
-            }
-            .listRowSeparator(.hidden)
-            .listRowBackground(Color.customBackground)
-        }
-        .listStyle(.plain)
-        .navigationTitle("Edit Project")
-        .toolbar {
-            ToolbarItem(placement: .cancellationAction) {
-                Button {
-                    viewModel.cancel()
-                    if !viewModel.showingHasChangesConfirmationDialog {
+        NavigationStack {
+            List {
+                Group {
+                    Section("Project name") {
+                        TextField("Project name", text: $viewModel.projectName)
+                            .textFieldStyle(.roundedBorder)
+                    }
+                    
+                    Section("Start date") {
+                        DatePicker(
+                            "Project start date",
+                            selection: $viewModel.startDate,
+                            in: ...Date(),
+                            displayedComponents: [.date]
+                        )
+                        .datePickerStyle(.graphical)
+                    }
+                    
+                    ProminentButton("Save changes") {
+                        _ = viewModel.save()
                         dismiss()
                     }
-                } label: {
-                    Text("Cancel")
+                    .frame(maxWidth: .infinity, alignment: .center)
+                    .disabled(!viewModel.projectHasChanges)
+                }
+                .listRowSeparator(.hidden)
+                .listRowBackground(Color.customBackground)
+            }
+            .listStyle(.plain)
+            .navigationTitle("Edit Project")
+            .toolbar {
+                ToolbarItem(placement: .cancellationAction) {
+                    Button {
+                        viewModel.cancel()
+                        if !viewModel.showingHasChangesConfirmationDialog {
+                            dismiss()
+                        }
+                    } label: {
+                        Text("Cancel")
+                    }
+                }
+                
+                ToolbarItem(placement: .primaryAction) {
+                    Button("Save") {
+                        _ = viewModel.save()
+                        dismiss()
+                    }
+                    .disabled(!viewModel.projectHasChanges)
                 }
             }
-            
-            ToolbarItem(placement: .primaryAction) {
-                Button("Save") {
-                    _ = viewModel.save()
+            .background(Color.customBackground)
+            .confirmationDialog("Changes not saved.", isPresented: $viewModel.showingHasChangesConfirmationDialog) {
+                Button("Don't save changes", role: .destructive) {
                     dismiss()
                 }
-                .disabled(!viewModel.projectHasChanges)
+            } message: {
+                Text("You have changes that haven't been saved.")
             }
-        }
-        .background(Color.customBackground)
-        .confirmationDialog("Changes not saved.", isPresented: $viewModel.showingHasChangesConfirmationDialog) {
-            Button("Don't save changes", role: .destructive) {
-                dismiss()
-            }
-        } message: {
-            Text("You have changes that haven't been saved.")
         }
     }
 }
