@@ -8,12 +8,14 @@
 import SwiftUI
 
 struct EditIssueView: View {
-    @ObservedObject var issue: Issue
+    @ObservedObject private(set) var issue: Issue
+    
+    @State private var showingCancelDialog = false
+    
+    @StateObject private var viewModel: EditIssueViewModel
     
     @Environment(\.dismiss) private var dismiss
     @Environment(\.managedObjectContext) private var viewContext
-    @StateObject private var viewModel: EditIssueViewModel
-    @State private var showingCancelDialog = false
     
     init(issue: Issue) {
         self.issue = issue
@@ -21,15 +23,18 @@ struct EditIssueView: View {
     }
     
     var body: some View {
-        ScrollView {
-            VStack(alignment: .leading) {
-                LabeledInputField("Issue name:") {
-                    CustomTextField("Issue name", text: $viewModel.issueCopy.wrappedName)
+        List {
+            Group {
+                Section("Issue name:") {
+                    TextField("Issue name", text: $viewModel.issueCopy.wrappedName)
+                        .textFieldStyle(.roundedBorder)
                 }
-                LabeledInputField("Description:") {
-                    CustomTextField("Issue Description", text: $viewModel.issueCopy.wrappedIssueDescription)
+                Section("Description") {
+                    TextField("Issue Description", text: $viewModel.issueCopy.wrappedIssueDescription, axis: .vertical)
+                        .lineLimit(3...)
+                        .textFieldStyle(.roundedBorder)
                 }
-                LabeledInputField("Priority:") {
+                Section("Priority") {
                     Picker("Issue priority", selection: $viewModel.issueCopy.wrappedPriority) {
                         ForEach(Issue.Priority.allCases) { priority in
                             Text(priority.title)
@@ -37,13 +42,14 @@ struct EditIssueView: View {
                     }
                     .pickerStyle(.segmented)
                 }
-                LabeledInputField("Tags:") {
+                Section("Tags") {
                     TagFilterView(selectedTags: $viewModel.selectedTags)
                 }
             }
+            .listRowSeparator(.hidden)
+            .listRowBackground(Color.customBackground)
         }
-        .padding()
-        .bodyStyle()
+        .listStyle(.plain)
         .background(Color.customBackground)
         .toolbarBackground(Color.customBackground)
         .navigationBarBackButtonHidden(true)
@@ -71,7 +77,6 @@ struct EditIssueView: View {
                 .disabled(!viewModel.hasChanges)
             }
         }
-        
         .confirmationDialog("Cancel changes", isPresented: $showingCancelDialog) {
             Button("Don't save", role: .destructive) {
                 dismiss()
