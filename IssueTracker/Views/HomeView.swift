@@ -8,10 +8,12 @@
 import SwiftUI
 
 struct HomeView: View {
-    @Environment(\.managedObjectContext) private var viewContext
-    @StateObject private var viewModel = HomeViewModel()
     @State private var showingDeleteConfirmation = false
     @State private var selectedProject: Project?
+    
+    @StateObject private var viewModel = HomeViewModel()
+    
+    @Environment(\.managedObjectContext) private var viewContext
     
     @FetchRequest(sortDescriptors: [.init(\.dateCreated, order: .reverse)])
     private var projects: FetchedResults<Project>
@@ -75,11 +77,14 @@ struct HomeView: View {
             .sheet(isPresented: $viewModel.showingAddProjectView) {
                 AddProjectView()
                     .environment(\.managedObjectContext, viewContext)
+                    .presentationDetents([.large])
                     .presentationDragIndicator(.visible)
             }
             .sheet(item: $viewModel.selectedProject) { project in
                 EditProjectView(project: project)
                     .environment(\.managedObjectContext, viewContext)
+                    .presentationDetents([.large])
+                    .presentationDragIndicator(.visible)
             }
             .background(Color.customBackground)
             .navigationDestination(for: Project.self) { project in
