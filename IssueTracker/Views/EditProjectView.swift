@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct EditProjectView: View {
-    @ObservedObject var project: Project
+    @ObservedObject private(set) var project: Project
     @Environment(\.managedObjectContext) private var viewContext
     @Environment(\.dismiss) private var dismiss
     @StateObject private var viewModel: EditProjectViewModel
@@ -19,43 +19,55 @@ struct EditProjectView: View {
     }
     
     var body: some View {
-        VStack(alignment: .leading) {
-            HStack {
-                PlainButton("Cancel") {
+        List {
+            Group {
+                Section("Project name") {
+                    TextField("Project name", text: $viewModel.projectName)
+                        .textFieldStyle(.roundedBorder)
+                }
+                
+                Section("Start date") {
+                    DatePicker(
+                        "Project start date",
+                        selection: $viewModel.startDate,
+                        in: ...Date(),
+                        displayedComponents: [.date]
+                    )
+                    .datePickerStyle(.graphical)
+                }
+                
+                ProminentButton("Save changes") {
+                    _ = viewModel.save()
+                    dismiss()
+                }
+                .frame(maxWidth: .infinity, alignment: .center)
+                .disabled(!viewModel.projectHasChanges)
+            }
+            .listRowSeparator(.hidden)
+            .listRowBackground(Color.customBackground)
+        }
+        .listStyle(.plain)
+        .navigationTitle("Edit Project")
+        .toolbar {
+            ToolbarItem(placement: .cancellationAction) {
+                Button {
                     viewModel.cancel()
                     if !viewModel.showingHasChangesConfirmationDialog {
                         dismiss()
                     }
+                } label: {
+                    Text("Cancel")
                 }
-                Spacer()
-                PlainButton("Save") {
+            }
+            
+            ToolbarItem(placement: .primaryAction) {
+                Button("Save") {
                     _ = viewModel.save()
                     dismiss()
                 }
                 .disabled(!viewModel.projectHasChanges)
             }
-            ScrollView {
-                VStack(alignment: .leading) {
-                    Text("Editing Project")
-                        .titleStyle()
-                    Text("Project name:")
-                    CustomTextField("Project name", text: $viewModel.projectName)
-                    
-                    Text("Project start date:")
-                    DatePicker("Project start date", selection: $viewModel.startDate, displayedComponents: [.date])
-                        .padding(.bottom)
-                    ProminentButton("Save changes") {
-                        _ = viewModel.save()
-                        dismiss()
-                    }
-                    .frame(maxWidth: .infinity, alignment: .center)
-                    .disabled(!viewModel.projectHasChanges)
-                }
-            }
         }
-        .padding()
-        .navigationBarBackButtonHidden(true)
-        .bodyStyle()
         .background(Color.customBackground)
         .confirmationDialog("Changes not saved.", isPresented: $viewModel.showingHasChangesConfirmationDialog) {
             Button("Don't save changes", role: .destructive) {
@@ -67,7 +79,10 @@ struct EditProjectView: View {
     }
 }
 struct EditProjectView_Previews: PreviewProvider {
+    static var viewContext = PersistenceController.projectsPreview.container.viewContext
     static var previews: some View {
-        EditProjectView(project: .example(context: PersistenceController.projectsPreview.container.viewContext))
+        NavigationStack {
+            EditProjectView(project: .example(context: viewContext))
+        }
     }
 }
