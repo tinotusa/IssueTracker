@@ -24,6 +24,19 @@ struct ContentView: View {
                     Label("Show sidebar", systemImage: "sidebar.leading")
                 }
             }
+            #warning("remove me")
+            ToolbarItem {
+                Button("delete tags") {
+                    let viewContext = PersistenceController.shared.container.viewContext
+                    let request = Tag.fetchRequest()
+                    let tags = try? viewContext.fetch(request)
+                    for tag in tags ?? [] 
+                    {
+                        viewContext.delete(tag)
+                    }
+                    try? viewContext.save()
+                }
+            }
         }
         .frame(minWidth: 1000, minHeight: 600)
     }

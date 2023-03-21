@@ -22,18 +22,41 @@ extension Comment {
 
 // MARK: Wrapped properties
 extension Comment {
-    var comment: String {
-        get { self.comment_ ?? "N/A" }
-        set { self.comment_ = newValue }
+    var wrappedComment: String {
+        get { self.comment ?? "N/A" }
+        set { self.comment = newValue }
     }
     
-    public var id: UUID {
-        get { self.id_ ?? UUID() }
-        set { self.id_ = newValue }
+    public var wrappedId: UUID {
+        get { self.id ?? UUID() }
+        set { self.id = newValue }
     }
     
-    var dateCreated: Date {
-        get { self.dateCreated_ ?? .now }
-        set { self.dateCreated_ = newValue }
+    var wrappedDateCreated: Date {
+        get { self.dateCreated ?? .now }
+        set { self.dateCreated = newValue }
+    }
+    
+    var wrappedAttachments: [Attachment] {
+        attachments?.allObjects as? [Attachment] ?? []
+    }
+    
+    var sortedAttachments: [Attachment] {
+        wrappedAttachments.sorted { $0.wrappedDateCreated < $1.wrappedDateCreated }
+    }
+    
+    var hasAttachments: Bool {
+        guard let attachments else {
+            return false
+        }
+        return attachments.count != 0
+    }
+}
+
+// TODO: move me to own file
+extension Attachment {
+    var wrappedDateCreated: Date {
+        get { dateCreated ?? .now }
+        set { dateCreated = newValue }
     }
 }

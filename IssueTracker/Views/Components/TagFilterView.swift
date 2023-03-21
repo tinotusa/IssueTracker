@@ -25,15 +25,15 @@ struct TagsView: View {
     @Binding var selectedTags: Set<Tag>
     
     @Environment(\.managedObjectContext) private var viewContext
-    @FetchRequest(sortDescriptors: [.init(\.dateCreated_, order: .reverse)])
+    @FetchRequest(sortDescriptors: [.init(\.dateCreated, order: .reverse)])
     private var allTags: FetchedResults<Tag>
     
     init(filterText: String, selectedTags: Binding<Set<Tag>>) {
         _selectedTags = selectedTags
         self.filterText = filterText
         _allTags = FetchRequest(
-            sortDescriptors: [.init(\.dateCreated_, order: .reverse)],
-            predicate: filterText.isEmpty ? nil : .init(format: "%K CONTAINS[cd] %@", "name_", filterText)
+            sortDescriptors: [.init(\.dateCreated, order: .reverse)],
+            predicate: filterText.isEmpty ? nil : .init(format: "%K CONTAINS[cd] %@", "name", filterText)
         )
     }
     
@@ -55,7 +55,7 @@ struct TagsView: View {
                     Button {
                         addTagToSelection(tag)
                     } label: {
-                        ProminentTagView(title: tag.name, isSelected: selectedTags.contains(tag))
+                        ProminentTagView(title: tag.wrappedName, isSelected: selectedTags.contains(tag))
                     }
                 }
             }

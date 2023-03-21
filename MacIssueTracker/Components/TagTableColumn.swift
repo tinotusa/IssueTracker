@@ -28,7 +28,7 @@ struct TagTableColumn: View {
         .onAppear {
             let colour = Color(red: tag.red, green: tag.green, blue: tag.blue, opacity: tag.opacity)
             selectedColour = colour
-            tagName = tag.name
+            tagName = tag.wrappedName
         }
         .onChange(of: selectedColour) { colour in
             // TODO: make rgb have alpha component?

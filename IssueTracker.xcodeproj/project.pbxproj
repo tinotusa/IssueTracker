@@ -12,9 +12,19 @@
 		210650E0297BD46C00E5BCD7 /* TextStyles.swift in Sources */ = {isa = PBXBuildFile; fileRef = 210650DF297BD46C00E5BCD7 /* TextStyles.swift */; };
 		210650E2297BD6CF00E5BCD7 /* CommentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 210650E1297BD6CF00E5BCD7 /* CommentView.swift */; };
 		211104AB297239DB00FB8CD1 /* EditTagView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 211104AA297239DB00FB8CD1 /* EditTagView.swift */; };
+		211246C529B9B82900D0EB01 /* AudioPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 211246C429B9B82900D0EB01 /* AudioPlayer.swift */; };
+		211246C729B9B84500D0EB01 /* AudioRecorder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 211246C629B9B84500D0EB01 /* AudioRecorder.swift */; };
+		211246C929B9B89A00D0EB01 /* AttachmentTransferable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 211246C829B9B89A00D0EB01 /* AttachmentTransferable.swift */; };
+		211246CB29B9B8EF00D0EB01 /* AttachmentType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 211246CA29B9B8EF00D0EB01 /* AttachmentType.swift */; };
 		2127AD62295FB421005893DE /* EditIssueView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2127AD61295FB421005893DE /* EditIssueView.swift */; };
 		2127AD64295FB552005893DE /* EditIssueViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2127AD63295FB552005893DE /* EditIssueViewModel.swift */; };
 		2127AD66295FBD0E005893DE /* ProminentTagView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2127AD65295FBD0E005893DE /* ProminentTagView.swift */; };
+		2132CB6C29C56785003D5C12 /* AudioAttachmentPreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2132CB6B29C56785003D5C12 /* AudioAttachmentPreview.swift */; };
+		2132CB6E29C5C76B003D5C12 /* ImageAttachmentPreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2132CB6D29C5C76B003D5C12 /* ImageAttachmentPreview.swift */; };
+		2132CB7029C5CCE7003D5C12 /* AddCommentViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2132CB6F29C5CCE7003D5C12 /* AddCommentViewModel.swift */; };
+		2132CB7429C5CF9A003D5C12 /* ImageAttachmentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2132CB7329C5CF9A003D5C12 /* ImageAttachmentView.swift */; };
+		2132CB7629C5D0FC003D5C12 /* AudioAttachmentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2132CB7529C5D0FC003D5C12 /* AudioAttachmentView.swift */; };
+		213E7A3B29AEF91F00CD3BEF /* AddCommentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 213E7A3A29AEF91F00CD3BEF /* AddCommentView.swift */; };
 		213EDD992980DA7C00012198 /* IssueTrackerSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 213EDD982980DA7C00012198 /* IssueTrackerSettings.swift */; };
 		213EDD9B29814C9A00012198 /* TagTableColumn.swift in Sources */ = {isa = PBXBuildFile; fileRef = 213EDD9A29814C9A00012198 /* TagTableColumn.swift */; };
 		2150C83E295972E0006CD7D2 /* IssueTrackerApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2150C83D295972E0006CD7D2 /* IssueTrackerApp.swift */; };
@@ -61,6 +71,8 @@
 		218A510A297508BD00DF29F5 /* IssueTracker.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 2150C848295972E2006CD7D2 /* IssueTracker.xcdatamodeld */; };
 		218E60C629822A7800A9C4AB /* IssueTrackerSettingsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 218E60C529822A7800A9C4AB /* IssueTrackerSettingsViewModel.swift */; };
 		218E60C8298245BA00A9C4AB /* FilterIssuesList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 218E60C7298245BA00A9C4AB /* FilterIssuesList.swift */; };
+		218F93D729C8044500F9D62A /* ImageDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 218F93D629C8044500F9D62A /* ImageDetailView.swift */; };
+		218F93D929C80C3500F9D62A /* EditCommentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 218F93D829C80C3500F9D62A /* EditCommentView.swift */; };
 		21AFDF2429777A3C00847889 /* Color+rgbComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21AFDF2329777A3C00847889 /* Color+rgbComponents.swift */; };
 		21AFDF2729777BD000847889 /* TagSearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21AFDF2629777BD000847889 /* TagSearchView.swift */; };
 		21AFDF2A29777F7F00847889 /* TagFilterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21AFDF2929777F7F00847889 /* TagFilterView.swift */; };
@@ -137,9 +149,19 @@
 		210650DF297BD46C00E5BCD7 /* TextStyles.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextStyles.swift; sourceTree = "<group>"; };
 		210650E1297BD6CF00E5BCD7 /* CommentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentView.swift; sourceTree = "<group>"; };
 		211104AA297239DB00FB8CD1 /* EditTagView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditTagView.swift; sourceTree = "<group>"; };
+		211246C429B9B82900D0EB01 /* AudioPlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioPlayer.swift; sourceTree = "<group>"; };
+		211246C629B9B84500D0EB01 /* AudioRecorder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioRecorder.swift; sourceTree = "<group>"; };
+		211246C829B9B89A00D0EB01 /* AttachmentTransferable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttachmentTransferable.swift; sourceTree = "<group>"; };
+		211246CA29B9B8EF00D0EB01 /* AttachmentType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttachmentType.swift; sourceTree = "<group>"; };
 		2127AD61295FB421005893DE /* EditIssueView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditIssueView.swift; sourceTree = "<group>"; };
 		2127AD63295FB552005893DE /* EditIssueViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditIssueViewModel.swift; sourceTree = "<group>"; };
 		2127AD65295FBD0E005893DE /* ProminentTagView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProminentTagView.swift; sourceTree = "<group>"; };
+		2132CB6B29C56785003D5C12 /* AudioAttachmentPreview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioAttachmentPreview.swift; sourceTree = "<group>"; };
+		2132CB6D29C5C76B003D5C12 /* ImageAttachmentPreview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageAttachmentPreview.swift; sourceTree = "<group>"; };
+		2132CB6F29C5CCE7003D5C12 /* AddCommentViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddCommentViewModel.swift; sourceTree = "<group>"; };
+		2132CB7329C5CF9A003D5C12 /* ImageAttachmentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageAttachmentView.swift; sourceTree = "<group>"; };
+		2132CB7529C5D0FC003D5C12 /* AudioAttachmentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioAttachmentView.swift; sourceTree = "<group>"; };
+		213E7A3A29AEF91F00CD3BEF /* AddCommentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddCommentView.swift; sourceTree = "<group>"; };
 		213EDD982980DA7C00012198 /* IssueTrackerSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IssueTrackerSettings.swift; sourceTree = "<group>"; };
 		213EDD9A29814C9A00012198 /* TagTableColumn.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagTableColumn.swift; sourceTree = "<group>"; };
 		2150C83A295972E0006CD7D2 /* IssueTracker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = IssueTracker.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -175,6 +197,8 @@
 		218E60C529822A7800A9C4AB /* IssueTrackerSettingsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IssueTrackerSettingsViewModel.swift; sourceTree = "<group>"; };
 		218E60C7298245BA00A9C4AB /* FilterIssuesList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterIssuesList.swift; sourceTree = "<group>"; };
 		218E60C9298296FD00A9C4AB /* IssueTracker.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = IssueTracker.entitlements; sourceTree = "<group>"; };
+		218F93D629C8044500F9D62A /* ImageDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageDetailView.swift; sourceTree = "<group>"; };
+		218F93D829C80C3500F9D62A /* EditCommentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditCommentView.swift; sourceTree = "<group>"; };
 		21AFDF2329777A3C00847889 /* Color+rgbComponents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Color+rgbComponents.swift"; sourceTree = "<group>"; };
 		21AFDF2629777BD000847889 /* TagSearchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagSearchView.swift; sourceTree = "<group>"; };
 		21AFDF2929777F7F00847889 /* TagFilterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagFilterView.swift; sourceTree = "<group>"; };
@@ -268,6 +292,17 @@
 			path = Styles;
 			sourceTree = "<group>";
 		};
+		211246C329B9B81C00D0EB01 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				211246C429B9B82900D0EB01 /* AudioPlayer.swift */,
+				211246C629B9B84500D0EB01 /* AudioRecorder.swift */,
+				211246C829B9B89A00D0EB01 /* AttachmentTransferable.swift */,
+				211246CA29B9B8EF00D0EB01 /* AttachmentType.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
 		2150C831295972E0006CD7D2 = {
 			isa = PBXGroup;
 			children = (
@@ -297,6 +332,7 @@
 		2150C83C295972E0006CD7D2 /* IssueTracker */ = {
 			isa = PBXGroup;
 			children = (
+				211246C329B9B81C00D0EB01 /* Models */,
 				218E60C9298296FD00A9C4AB /* IssueTracker.entitlements */,
 				21E6D2B4295BF9CF00BB4AA6 /* View models */,
 				21E6D2B1295BF89700BB4AA6 /* Views */,
@@ -495,6 +531,8 @@
 				21654BC529605245009C434B /* AddIssueView.swift */,
 				2105DC532962CF33008F940B /* TagsEditView.swift */,
 				211104AA297239DB00FB8CD1 /* EditTagView.swift */,
+				213E7A3A29AEF91F00CD3BEF /* AddCommentView.swift */,
+				218F93D829C80C3500F9D62A /* EditCommentView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -510,6 +548,7 @@
 				21F1DA3A295DB55E00076D73 /* AddIssueViewModel.swift */,
 				21BBEBF8295ECD4E008F237B /* IssueDetailViewModel.swift */,
 				2127AD63295FB552005893DE /* EditIssueViewModel.swift */,
+				2132CB6F29C5CCE7003D5C12 /* AddCommentViewModel.swift */,
 			);
 			path = "View models";
 			sourceTree = "<group>";
@@ -523,9 +562,14 @@
 				21BBEBF0295E8176008F237B /* TagFilterView.swift */,
 				21BBEBF4295E9A5E008F237B /* IssueRowView.swift */,
 				21BBEBFC295EDBE8008F237B /* CommentBoxView.swift */,
+				2132CB7329C5CF9A003D5C12 /* ImageAttachmentView.swift */,
 				21BBEBFE295EE1E9008F237B /* TagView.swift */,
 				2127AD65295FBD0E005893DE /* ProminentTagView.swift */,
 				21E0CFC929604E800040C293 /* FilteredIssuesListView.swift */,
+				2132CB6B29C56785003D5C12 /* AudioAttachmentPreview.swift */,
+				2132CB6D29C5C76B003D5C12 /* ImageAttachmentPreview.swift */,
+				2132CB7529C5D0FC003D5C12 /* AudioAttachmentView.swift */,
+				218F93D629C8044500F9D62A /* ImageDetailView.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -758,7 +802,9 @@
 				21BBEBFB295ECF8B008F237B /* Comment+Extensions.swift in Sources */,
 				21E6D2BA295C010400BB4AA6 /* AddProjectViewModel.swift in Sources */,
 				21BBEBF3295E8465008F237B /* Tag+Extensions.swift in Sources */,
+				211246C729B9B84500D0EB01 /* AudioRecorder.swift in Sources */,
 				21BBEBF5295E9A5E008F237B /* IssueRowView.swift in Sources */,
+				218F93D929C80C3500F9D62A /* EditCommentView.swift in Sources */,
 				21BBEBF7295EC963008F237B /* IssueDetail.swift in Sources */,
 				21F1DA33295DABB700076D73 /* IssuesView.swift in Sources */,
 				2127AD62295FB421005893DE /* EditIssueView.swift in Sources */,
@@ -779,17 +825,27 @@
 				21E6D2B3295BF94800BB4AA6 /* HomeView.swift in Sources */,
 				2127AD66295FBD0E005893DE /* ProminentTagView.swift in Sources */,
 				21E6D2AD295BDFBF00BB4AA6 /* ButtonStyles.swift in Sources */,
+				2132CB7629C5D0FC003D5C12 /* AudioAttachmentView.swift in Sources */,
 				21654BC629605245009C434B /* AddIssueView.swift in Sources */,
 				21F1DA2B295D9E8000076D73 /* EditProjectViewModel.swift in Sources */,
+				218F93D729C8044500F9D62A /* ImageDetailView.swift in Sources */,
+				2132CB6C29C56785003D5C12 /* AudioAttachmentPreview.swift in Sources */,
+				2132CB6E29C5C76B003D5C12 /* ImageAttachmentPreview.swift in Sources */,
+				211246C529B9B82900D0EB01 /* AudioPlayer.swift in Sources */,
 				21F1DA2F295DA58400076D73 /* DeleteProjectViewModel.swift in Sources */,
 				21BBEBF1295E8176008F237B /* TagFilterView.swift in Sources */,
 				21BBEBF9295ECD4E008F237B /* IssueDetailViewModel.swift in Sources */,
 				21E6D2BF295C4DD900BB4AA6 /* AddProjectView.swift in Sources */,
+				213E7A3B29AEF91F00CD3BEF /* AddCommentView.swift in Sources */,
 				21E6D2C1295C5B4900BB4AA6 /* ProjectRowView.swift in Sources */,
 				21E6D2AB295BD9B500BB4AA6 /* Color+Extensions.swift in Sources */,
 				21F1DA35295DB04E00076D73 /* Issue+Extensions.swift in Sources */,
+				211246C929B9B89A00D0EB01 /* AttachmentTransferable.swift in Sources */,
+				211246CB29B9B8EF00D0EB01 /* AttachmentType.swift in Sources */,
 				21BBEBFD295EDBE8008F237B /* CommentBoxView.swift in Sources */,
+				2132CB7029C5CCE7003D5C12 /* AddCommentViewModel.swift in Sources */,
 				21E6D2A7295BD4C500BB4AA6 /* TextStyles.swift in Sources */,
+				2132CB7429C5CF9A003D5C12 /* ImageAttachmentView.swift in Sources */,
 				21F1DA37295DB3EA00076D73 /* IssuesViewModel.swift in Sources */,
 				21F1DA29295D9C0E00076D73 /* String+filterWhitespace.swift in Sources */,
 			);
@@ -1029,6 +1085,8 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = IssueTracker/Info.plist;
 				INFOPLIST_KEY_LSApplicationCategoryType = "";
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "App requires this permission to allow you to record voice notes for issue comments";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "App needs permission to let you attach photos to comments.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -1061,6 +1119,8 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = IssueTracker/Info.plist;
 				INFOPLIST_KEY_LSApplicationCategoryType = "";
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "App requires this permission to allow you to record voice notes for issue comments";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "App needs permission to let you attach photos to comments.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;

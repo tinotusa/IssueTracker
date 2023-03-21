@@ -26,7 +26,7 @@ struct EditTagView: View {
             }
             .navigationTitle("Edit tag")
             .onAppear {
-                name = tag.name
+                name = tag.wrappedName
             }
             .padding()
             .frame(maxHeight: .infinity)

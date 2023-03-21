@@ -27,9 +27,9 @@ final class EditIssueViewModel: ObservableObject {
         self.issue = issue
         self.viewContext = viewContext
         issueCopy = Issue(
-            name: issue.name,
-            issueDescription: issue.issueDescription,
-            priority: issue.priority,
+            name: issue.wrappedName,
+            issueDescription: issue.wrappedIssueDescription,
+            priority: issue.wrappedPriority,
             tags: Set((issue.tags?.allObjects ?? []) as! [Tag]),
             context: issue.managedObjectContext!
         )

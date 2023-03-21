@@ -13,17 +13,17 @@ struct IssueRow: View {
     var body: some View {
         VStack(alignment: .leading) {
             HStack(alignment: .top) {
-                Text(issue.name)
+                Text(issue.wrappedName)
                     .lineLimit(2)
                 Spacer()
-                Text(issue.dateCreated.formatted(date: .numeric, time: .omitted))
+                Text(issue.wrappedDateCreated.formatted(date: .numeric, time: .omitted))
                     .secondaryFootnote()
             }
             Group {
-                if issue.issueDescription.isEmpty {
+                if issue.wrappedIssueDescription.isEmpty {
                     Text("No description")
                 } else {
-                    Text(issue.issueDescription)
+                    Text(issue.wrappedIssueDescription)
                         .lineLimit(2)
                 }
             }

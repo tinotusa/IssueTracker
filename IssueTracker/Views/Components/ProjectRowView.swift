@@ -12,13 +12,13 @@ struct ProjectRowView: View {
     
     var body: some View {
         VStack(alignment: .leading) {
-            Text(project.name)
+            Text(project.wrappedName)
                 .headerStyle()
                 .lineLimit(2)
                 .multilineTextAlignment(.leading)
             Group {
                 if let latestIssue = project.latestIssue {
-                    Text(latestIssue.name)
+                    Text(latestIssue.wrappedName)
                     if let date = latestIssue.dateCreated {
                         Text(date.formatted(date: .abbreviated, time: .omitted))
                     }

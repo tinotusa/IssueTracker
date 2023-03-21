@@ -8,72 +8,54 @@
 import SwiftUI
 
 struct CommentBoxView: View {
+    @State private var showingAttachments = false
+    
+    @ObservedObject private(set) var comment: Comment
+    @ObservedObject private(set) var issue: Issue
+    
     @Environment(\.managedObjectContext) private var viewContext
-    @ObservedObject var comment: Comment
-    let issue: Issue
-    @State private var isEditing = false
-    @State private var showingDeleteConfirmation = false
-    @State private var originalComment = ""
     
     var body: some View {
         VStack(alignment: .leading) {
-            if isEditing {
-                TextEditor(text: $comment.comment)
-                    .scrollContentBackground(.hidden)
-                    .frame(minHeight: 30)
-            } else {
-                Text(comment.comment)
-            }
-            HStack {
-                Text(comment.dateCreated.formatted(date: .abbreviated, time: .omitted))
-                    .footerStyle()
-                Spacer()
-                if isEditing {
-                    Button("Save") {
-                        issue.addToComments(comment)
+            Text(comment.wrappedComment)
+            
+            if comment.hasAttachments {
+                HStack {
+                    Text("^[\(comment.wrappedAttachments.count) Attachment](inflect: true)")
+                        .foregroundColor(.secondary)
+                    Button(showingAttachments ? "Hide" : "Show") {
                         withAnimation {
-                            isEditing = false
-                        }
-                        try? viewContext.save()
-                    }
-                    Button("Cancel") {
-                        comment.comment = originalComment
-                        withAnimation {
-                            isEditing = false
+                            showingAttachments.toggle()
                         }
                     }
-                } else {
-                    Button {
-                        originalComment = comment.comment
-                        withAnimation {
-                            isEditing = true
-                        }
-                    } label: {
-                        Image(systemName: "rectangle.and.pencil.and.ellipsis")
-                    }
+                    .foregroundColor(.blue)
                 }
-                if !isEditing {
-                    Button {
-                        showingDeleteConfirmation = true
-                    } label: {
-                        Image(systemName: "trash")
+                .font(.footnote)
+            }
+            if showingAttachments {
+                ScrollView(.horizontal) {
+                    HStack {
+                        ForEach(comment.sortedAttachments) { attachment in
+                            let attachmentType = AttachmentType(rawValue: attachment.type)!
+                            let url = attachment.assetURL!
+                            switch attachmentType {
+                            case .audio:
+                                AudioAttachmentView(url: url)
+                            case .image:
+                                ImageAttachmentView(url: url)
+                            case .video:
+                                Text("TODO")
+                            }
+                        }
                     }
                 }
             }
+            Text(comment.wrappedDateCreated.formatted(date: .abbreviated, time: .omitted))
+                .footerStyle()
         }
         .padding()
         .background(Color.popup)
         .cornerRadius(10)
-        .confirmationDialog("Delete comment", isPresented: $showingDeleteConfirmation) {
-            Button("Delete", role: .destructive) {   
-                issue.removeFromComments(comment)
-                withAnimation {
-                    try? viewContext.save()
-                }
-            }
-        } message: {
-            Text("Delete this comment.")
-        }
     }
 }
 

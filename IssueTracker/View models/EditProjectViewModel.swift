@@ -15,13 +15,16 @@ final class EditProjectViewModel: ObservableObject {
     @Published var projectName = ""
     @Published var startDate = Date()
     private let viewContext: NSManagedObjectContext
-    private let log = Logger(subsystem: "com.tinotusa.IssueTracker", category: "EditProjectViewModel")
+    private let log = Logger(
+        subsystem: Bundle.main.bundleIdentifier!,
+        category: String(describing: EditProjectViewModel.self)
+    )
     
     init(project: Project, viewContext: NSManagedObjectContext = PersistenceController.shared.container.viewContext) {
         self.project = project
         self.viewContext = viewContext
-        self.projectName = project.name
-        self.startDate = project.startDate
+        self.projectName = project.wrappedName
+        self.startDate = project.wrappedStartDate
     }
 }
 
@@ -51,7 +54,7 @@ extension EditProjectViewModel {
     }
     
     var projectHasChanges: Bool {
-        let dateOrder = Calendar.current.compare(self.startDate, to: project.startDate, toGranularity: .day)
+        let dateOrder = Calendar.current.compare(self.startDate, to: project.wrappedStartDate, toGranularity: .day)
         return self.projectName != project.name || dateOrder != .orderedSame
     }
 }

@@ -21,20 +21,20 @@ struct IssueDetail: View {
         _issue = ObservedObject(wrappedValue: issue)
         _viewModel = StateObject(wrappedValue: IssueDetailViewModel(issue: issue))
         _comments = FetchRequest<Comment>(
-            sortDescriptors: [.init(\.dateCreated_, order: .forward)],
+            sortDescriptors: [.init(\.dateCreated, order: .forward)],
             predicate: .init(format: "issue == %@", issue)
         )
         _tags = FetchRequest<Tag>(
-            sortDescriptors: [.init(\.name_, order: .forward)],
+            sortDescriptors: [.init(\.name, order: .forward)],
             predicate: .init(format: "%@ in issues", issue)
         )
     }
     
     var body: some View {
         Form {
-            Text(issue.dateCreated.formatted(date: .long, time: .shortened))
+            Text(issue.wrappedDateCreated.formatted(date: .long, time: .shortened))
                 .secondaryFootnote()
-            Text(issue.name)
+            Text(issue.wrappedName)
                 .titleStyle()
             Divider()
             descriptionSection
@@ -74,11 +74,11 @@ private extension IssueDetail {
     var descriptionSection: some View {
         Section {
             Group {
-                if issue.issueDescription.isEmpty {
+                if issue.wrappedIssueDescription.isEmpty {
                     Text("No Description")
                         .foregroundColor(.secondary)
                 } else {
-                    Text(issue.issueDescription)
+                    Text(issue.wrappedIssueDescription)
                 }
             }
             .frame(maxWidth: .infinity, alignment: .leading)
@@ -91,7 +91,7 @@ private extension IssueDetail {
     
     var prioritySection: some View {
         Section {
-            Text(issue.priority.title)
+            Text(issue.wrappedPriority.title)
                 .padding(.bottom)
         } header: {
             Text("Priority")
@@ -107,7 +107,7 @@ private extension IssueDetail {
                         .foregroundColor(.secondary)
                 } else {
                     ForEach(Array(tags)) { tag in
-                        Text(tag.name)
+                        Text(tag.wrappedName)
                     }
                 }
             }

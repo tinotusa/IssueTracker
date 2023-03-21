@@ -11,7 +11,7 @@ struct TagView: View {
     let tag: Tag
     
     var body: some View {
-        Text(tag.name)
+        Text(tag.wrappedName)
             .font(.system(size: 16))
             .fontWeight(.light)
             .foregroundColor(.buttonText)

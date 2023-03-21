@@ -37,6 +37,15 @@ final class IssueDetailViewModel: ObservableObject {
         }
     }
     
+    func deleteComment(_ comment: Comment) {
+        viewContext.delete(comment)
+        do {
+            try viewContext.save()
+        } catch {
+            log.error("Failed to delete comment. \(error)")
+        }
+    }
+    
     func addNewEmptyComment() {
         log.debug("Add new empty comment...")
         let comment = Comment(context: viewContext)

@@ -22,7 +22,7 @@ extension Project {
     /// The latest issue added to the project.
     var latestIssue: Issue? {
         let issues = self.issues?.allObjects as? [Issue] ?? []
-        let sortedIssues = issues.sorted { $0.dateCreated > $1.dateCreated }
+        let sortedIssues = issues.sorted { $0.wrappedDateCreated > $1.wrappedDateCreated }
         return sortedIssues.last
     }
     
@@ -84,39 +84,39 @@ extension Project {
 
 // MARK: - Property wrappers
 extension Project {
-    var name: String {
+    var wrappedName: String {
         get {
-            self.name_ ?? "N/A"
+            self.name ?? "N/A"
         }
         set {
-            self.name_ = newValue
+            self.name = newValue
         }
     }
     
-    public var id: UUID {
+    public var wrappedId: UUID {
         get {
-            self.id_ ?? UUID()
+            self.id ?? UUID()
         }
         set {
-            self.id_ = newValue
+            self.id = newValue
         }
     }
     
-    var dateCreated: Date {
+    var wrappedDateCreated: Date {
         get {
-            self.dateCreated_ ?? .now
+            self.dateCreated ?? .now
         }
         set {
-            self.dateCreated_ = newValue
+            self.dateCreated = newValue
         }
     }
     
-    var startDate: Date {
+    var wrappedStartDate: Date {
         get {
-            self.startDate_ ?? .now
+            self.startDate ?? .now
         }
         set {
-            self.startDate_ = newValue
+            self.startDate = newValue
         }
     }
 }

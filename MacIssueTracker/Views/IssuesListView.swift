@@ -38,7 +38,7 @@ struct IssuesListView: View {
                 
             }
             .frame(minWidth: 250)
-            .navigationTitle(viewModel.project.name)
+            .navigationTitle(viewModel.project.wrappedName)
             .onDeleteCommand(perform: deleteCommand)
             .toolbar {
                 toolbarItems

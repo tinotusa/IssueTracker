@@ -23,8 +23,8 @@ struct TagFilterView<Content: View>: View {
         self.content = content
         self.searchText = searchText
         _allTags = FetchRequest<Tag>(
-            sortDescriptors: [.init(\.dateCreated_, order: .forward)],
-            predicate: searchText.isEmpty ? nil : .init(format: "%K CONTAINS[cd] %@", "name_", searchText)
+            sortDescriptors: [.init(\.dateCreated, order: .forward)],
+            predicate: searchText.isEmpty ? nil : .init(format: "%K CONTAINS[cd] %@", "name", searchText)
         )
     }
     
@@ -51,7 +51,7 @@ struct TagFilterView_Previews: PreviewProvider {
     
     static var previews: some View {
         TagFilterView(searchText: "") { tag in
-            Button(tag.name) {
+            Button(tag.wrappedName) {
                 
             }
         }

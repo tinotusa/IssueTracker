@@ -32,8 +32,8 @@ struct TagsEditView: View {
                             selectedTag = tag
                         } label: {
                             VStack(alignment: .leading) {
-                                Text(tag.name)
-                                Text("Created \(tag.dateCreated.formatted(date: .abbreviated,  time: .omitted))")
+                                Text(tag.wrappedName)
+                                Text("Created \(tag.wrappedDateCreated.formatted(date: .abbreviated,  time: .omitted))")
                                     .footerStyle()
                             }
                         }

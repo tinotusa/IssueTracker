@@ -54,10 +54,10 @@ struct FilteredIssuesListView_Previews: PreviewProvider {
     static var viewContext = PersistenceController.issuesPreview.container.viewContext
     static var previews: some View {
         FilteredIssuesListView(
-            sortDescriptor: .init(\.dateCreated_, order: .forward),
-            predicate: .init(format: "(status_ == %@) AND (TRUEPREDICATE)", "open")
+            sortDescriptor: .init(\.dateCreated, order: .forward),
+            predicate: .init(format: "(status == %@) AND (TRUEPREDICATE)", "open")
         ) { issue in
-            Text(issue.name)
+            Text(issue.wrappedName)
         }
         .environment(\.managedObjectContext, viewContext)
     }
