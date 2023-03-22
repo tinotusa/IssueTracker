@@ -26,38 +26,11 @@ struct AddIssueView: View {
         NavigationStack {
             List {
                 Group {
-                    Section("Name") {
-                        TextField("Issue name", text: $viewModel.name)
-                            .textFieldStyle(.roundedBorder)
-                    }
-                    Section("Description") {
-                        TextField("Issue description", text: $viewModel.description, axis: .vertical)
-                            .lineLimit(4 ... 8)
-                            .textFieldStyle(.roundedBorder)
-                    }
-                    Section("Priority") {
-                        Picker("Issue priority", selection: $viewModel.priority) {
-                            ForEach(Issue.Priority.allCases) { priority in
-                                Text(priority.title)
-                            }
-                        }
-                        .pickerStyle(.segmented)
-                    }
-                    Section("Add tags") {
-                        TagSelectionView(selection: $viewModel.tags)
-                    }
-                    Section("Selected tags") {
-                        if viewModel.tags.isEmpty {
-                            Text("No tags selected.")
-                                .foregroundColor(.customSecondary)
-                                .frame(maxWidth: .infinity, alignment: .center)
-                        }
-                        WrappingHStack {
-                            ForEach(Array(viewModel.tags)) { tag in
-                                Text(tag.wrappedName)
-                            }
-                        }
-                    }
+                    nameSection
+                    descriptionSection
+                    prioritySection
+                    addTagsSection
+                    selectedTagsSection
                 }
                 .listRowSeparator(.hidden)
                 .listRowBackground(Color.customBackground)
@@ -67,18 +40,7 @@ struct AddIssueView: View {
             .background(Color.customBackground)
             .toolbarBackground(Color.customBackground)
             .toolbar {
-                ToolbarItem(placement: .cancellationAction) {
-                    Button("Cancel") {
-                        dismiss()
-                    }
-                }
-                ToolbarItem(placement: .confirmationAction) {
-                    Button("Add Issue") {
-                        viewModel.addIssue()
-                        dismiss()
-                    }
-                    .disabled(!viewModel.allFieldsFilled)
-                }
+                toolbarItems
             }
             .safeAreaInset(edge: .bottom) {
                 ProminentButton("Add Issue") {
@@ -89,6 +51,72 @@ struct AddIssueView: View {
             }
         }
     }
+}
+
+private extension AddIssueView {
+    var nameSection: some View{
+        Section("Name") {
+            TextField("Issue name", text: $viewModel.name)
+                .textFieldStyle(.roundedBorder)
+        }
+    }
+    
+    var descriptionSection: some View {
+        Section("Description") {
+            TextField("Issue description", text: $viewModel.description, axis: .vertical)
+                .lineLimit(4 ... 8)
+                .textFieldStyle(.roundedBorder)
+        }
+    }
+    
+    var prioritySection: some View {
+        Section("Priority") {
+            Picker("Issue priority", selection: $viewModel.priority) {
+                ForEach(Issue.Priority.allCases) { priority in
+                    Text(priority.title)
+                }
+            }
+            .pickerStyle(.segmented)
+        }
+    }
+    
+    var addTagsSection: some View {
+        Section("Add tags") {
+            TagSelectionView(selection: $viewModel.tags)
+        }
+    }
+    
+    var selectedTagsSection: some View {
+        Section("Selected tags") {
+            if viewModel.tags.isEmpty {
+                Text("No tags selected.")
+                    .foregroundColor(.customSecondary)
+                    .frame(maxWidth: .infinity, alignment: .center)
+            }
+            WrappingHStack {
+                ForEach(Array(viewModel.tags)) { tag in
+                    Text(tag.wrappedName)
+                }
+            }
+        }
+    }
+    
+    @ToolbarContentBuilder
+    var toolbarItems: some ToolbarContent {
+        ToolbarItem(placement: .cancellationAction) {
+            Button("Cancel") {
+                dismiss()
+            }
+        }
+        ToolbarItem(placement: .confirmationAction) {
+            Button("Add Issue") {
+                viewModel.addIssue()
+                dismiss()
+            }
+            .disabled(!viewModel.allFieldsFilled)
+        }
+    }
+    
 }
 
 struct AddIssueView_Previews: PreviewProvider {
