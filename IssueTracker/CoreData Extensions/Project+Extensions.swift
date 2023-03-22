@@ -61,11 +61,6 @@ extension Project {
             .init(name: "Adipiscing elit", issueDescription: "Dolor id ex imperdiet ornare. Proin consectetur est eget suscipit sodales. Cras tempor pharetra pulvinar.", priority: .low, tags: randomTags(), context: context),
         ]))
         
-        do {
-            try context.save()
-        } catch {
-            print("failed to save example project. \(error)")
-        }
         return project
     }
     

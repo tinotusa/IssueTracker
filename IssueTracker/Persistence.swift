@@ -44,11 +44,6 @@ extension PersistenceController {
         for i in 0 ..< 4 {
             _ = Tag(name: "Tag\(i)", context: viewContext)
         }
-        do {
-            try viewContext.save()
-        } catch {
-            fatalError("Failed to save preview tags. \(error)")
-        }
         return controller
     }
     
@@ -57,11 +52,6 @@ extension PersistenceController {
         let viewContext = controller.container.viewContext
         for i in 0 ..< 10 {
             _ = Issue(name: "Issue#\(i)", issueDescription: "testing", priority: .low, tags: [], context: viewContext)
-        }
-        do {
-            try viewContext.save()
-        } catch {
-            fatalError("Failed to save preview issues. \(error)")
         }
         return controller
     }
@@ -77,11 +67,6 @@ extension PersistenceController {
                 issue.project = project
             }
             
-        }
-        do {
-            try viewContext.save()
-        } catch {
-            fatalError("Failed to save preview projects. \(error)")
         }
         return controller
     }
