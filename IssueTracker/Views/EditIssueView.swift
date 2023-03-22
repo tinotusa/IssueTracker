@@ -43,7 +43,7 @@ struct EditIssueView: View {
                     .pickerStyle(.segmented)
                 }
                 Section("Tags") {
-                    TagFilterView(selectedTags: $viewModel.selectedTags)
+                    TagSelectionView(selectedTags: $viewModel.selectedTags)
                 }
             }
             .listRowSeparator(.hidden)

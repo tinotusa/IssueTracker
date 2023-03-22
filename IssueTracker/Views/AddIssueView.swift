@@ -42,7 +42,7 @@ struct AddIssueView: View {
                         .pickerStyle(.segmented)
                     }
                     LabeledInputField("Add tags:") {
-                        TagFilterView(selectedTags: $viewModel.tags)
+                        TagSelectionView(selectedTags: $viewModel.tags)
                     }
                     LabeledInputField("Selected tags:") {
                         if viewModel.tags.isEmpty {
