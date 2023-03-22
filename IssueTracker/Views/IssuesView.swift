@@ -9,7 +9,10 @@ import SwiftUI
 import CoreData
 
 struct IssuesView: View {
-    private let project: Project
+    @ObservedObject private(set) var project: Project
+    
+    @State private var showingDeleteIssueConfirmation = false
+    
     @FetchRequest(sortDescriptors: [])
     private var issues: FetchedResults<Issue>
     
@@ -35,27 +38,11 @@ struct IssuesView: View {
                 IssueRowView(issue: issue)
             }
             .swipeActions {
-                Button {
-                    viewModel.setIssueStatus(issue, to: .closed)
-                } label: {
-                    Label("Close issue", systemImage: "checkmark.circle.fill")
-                }
-                .tint(.green)
-                Button(role: .destructive) {
-                    viewModel.deleteIssue(issue)
-                } label: {
-                    Label("Delete", systemImage: "trash")
-                }
+                trailingSwipeActions(issue: issue)
             }
-            .swipeActions(edge: .leading) {
-                Button {
-                    viewModel.setIssueStatus(issue, to: .open)
-                } label: {
-                    Label("Open", systemImage: "lock.open")
-                }
-                .tint(.purple)
-            }
+            .listRowBackground(Color.customBackground)
         }
+        .listStyle(.plain)
         .searchable(text: $viewModel.searchText)
         .searchScopes($viewModel.searchScope) {
             ForEach(IssuesViewModel.SearchScopes.allCases) { scope in
@@ -63,16 +50,13 @@ struct IssuesView: View {
             }
         }
         .onChange(of: viewModel.searchText) { _ in
-            viewModel.runSearch()
-            issues.nsPredicate = viewModel.predicate
+            handleChange()
         }
         .onChange(of: viewModel.searchScope) { _ in
-            viewModel.runSearch()
-            issues.nsPredicate = viewModel.predicate
+            handleChange()
         }
         .onChange(of: viewModel.searchIssueStatus) { _ in
-            viewModel.runSearch()
-            issues.nsPredicate = viewModel.predicate
+            handleChange()
         }
         .navigationBarTitle(viewModel.searchIssueStatus == .open ? "Open issues" : "Closed issues")
         .toolbarBackground(Color.customBackground, for: .navigationBar, .bottomBar) // this doesn't seem to change the bottom bar at all.
@@ -85,6 +69,8 @@ struct IssuesView: View {
         }
         .sheet(item: $viewModel.selectedIssue) { selectedIssue in
             IssueDetail(issue: selectedIssue)
+                .presentationDetents([.large])
+                .presentationDragIndicator(.visible)
         }
         .sheet(isPresented: $viewModel.showingEditTagsView) {
             TagsEditView()
@@ -93,30 +79,19 @@ struct IssuesView: View {
                 .presentationDragIndicator(.visible)
         }
         .toolbar {
-            ToolbarItemGroup {
-                Menu {
-                    sortBySection
-                    sortTypeSection
-                } label: {
-                    Text("Sort")
+            toolbarItems
+        }
+        .confirmationDialog("Delete issue", isPresented: $showingDeleteIssueConfirmation) {
+            Button(role: .destructive) {
+                guard let issue = viewModel.selectedIssue else {
+                    return
                 }
-                Button("Edit tags") {
-                    viewModel.showingEditTagsView = true
-                }
+                viewModel.deleteIssue(issue)
+            } label: {
+                Text("Delete")
             }
-            ToolbarItemGroup(placement: .bottomBar) {
-                Button {
-                    viewModel.searchIssueStatus = viewModel.searchIssueStatus == .open ? .closed : .open
-                } label: {
-                    Label("Issue status", systemImage: viewModel.searchIssueStatus == .open ? "book.closed" : "book")
-                }
-
-                Button {
-                    viewModel.showingAddIssueView = true
-                } label: {
-                    Label("Add Issue", systemImage: "square.and.pencil")
-                }
-            }
+        } message: {
+            Text("Are you sure you want to delete this issue?")
         }
     }
 }
@@ -178,6 +153,67 @@ private extension IssuesView {
                 }
             }
         }
+    }
+    
+    @ToolbarContentBuilder
+    var toolbarItems: some ToolbarContent {
+        ToolbarItemGroup {
+            Menu {
+                sortBySection
+                sortTypeSection
+            } label: {
+                Text("Sort")
+            }
+            Button("Edit tags") {
+                viewModel.showingEditTagsView = true
+            }
+        }
+        ToolbarItemGroup(placement: .bottomBar) {
+            Button {
+                viewModel.searchIssueStatus = viewModel.searchIssueStatus == .open ? .closed : .open
+            } label: {
+                Label(
+                    "Issue status",
+                    systemImage: viewModel.searchIssueStatus == .open ? "tray.and.arrow.down.fill" : "tray.and.arrow.up.fill"
+                )
+            }
+
+            Button {
+                viewModel.showingAddIssueView = true
+            } label: {
+                Label("Add Issue", systemImage: "square.and.pencil")
+            }
+        }
+    }
+    
+    @ViewBuilder
+    func trailingSwipeActions(issue: Issue) -> some View {
+        Button {
+            switch issue.wrappedStatus {
+            case .closed:
+                viewModel.setIssueStatus(issue, to: .open)
+            case .open:
+                viewModel.setIssueStatus(issue, to: .closed)
+            }
+        } label: {
+            Label(
+                issue.isOpenStatus ? "Close issue" : "Open Issue",
+                systemImage: issue.isOpenStatus ? "tray.and.arrow.down.fill" : "tray.and.arrow.up.fill"
+            )
+        }
+        .tint(issue.isOpenStatus ? .green : .purple)
+        
+        Button(role: .destructive) {
+            viewModel.selectedIssue = issue
+            showingDeleteIssueConfirmation = true
+        } label: {
+            Label("Delete", systemImage: "trash")
+        }
+    }
+    
+    func handleChange() {
+        viewModel.runSearch()
+        issues.nsPredicate = viewModel.predicate
     }
 }
 
