@@ -24,16 +24,18 @@ struct AddIssueView: View {
     
     var body: some View {
         NavigationStack {
-            ScrollView {
-                VStack(alignment: .leading) {
-                    LabeledInputField("Name:") {
-                        CustomTextField("Issue name", text: $viewModel.name)
+            List {
+                Group {
+                    Section("Name") {
+                        TextField("Issue name", text: $viewModel.name)
+                            .textFieldStyle(.roundedBorder)
                     }
-                    LabeledInputField("Description:") {
-                        CustomTextField("Issue description", text: $viewModel.description)
+                    Section("Description") {
+                        TextField("Issue description", text: $viewModel.description, axis: .vertical)
                             .lineLimit(4 ... 8)
+                            .textFieldStyle(.roundedBorder)
                     }
-                    LabeledInputField("Priority:") {
+                    Section("Priority") {
                         Picker("Issue priority", selection: $viewModel.priority) {
                             ForEach(Issue.Priority.allCases) { priority in
                                 Text(priority.title)
@@ -41,10 +43,10 @@ struct AddIssueView: View {
                         }
                         .pickerStyle(.segmented)
                     }
-                    LabeledInputField("Add tags:") {
+                    Section("Add tags") {
                         TagSelectionView(selection: $viewModel.tags)
                     }
-                    LabeledInputField("Selected tags:") {
+                    Section("Selected tags") {
                         if viewModel.tags.isEmpty {
                             Text("No tags selected.")
                                 .foregroundColor(.customSecondary)
@@ -58,9 +60,10 @@ struct AddIssueView: View {
                         }
                     }
                 }
-                .padding(.horizontal)
+                .listRowSeparator(.hidden)
+                .listRowBackground(Color.customBackground)
             }
-            .bodyStyle()
+            .listStyle(.plain)
             .navigationTitle("Add issue")
             .background(Color.customBackground)
             .toolbarBackground(Color.customBackground)
@@ -83,7 +86,6 @@ struct AddIssueView: View {
                     viewModel.addIssue()
                     dismiss()
                 }
-                .frame(maxWidth: .infinity, alignment: .center)
                 .disabled(!viewModel.allFieldsFilled)
             }
         }
