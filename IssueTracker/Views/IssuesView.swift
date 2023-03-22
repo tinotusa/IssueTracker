@@ -10,6 +10,8 @@ import CoreData
 
 struct IssuesView: View {
     private let project: Project
+    @FetchRequest(sortDescriptors: [])
+    private var issues: FetchedResults<Issue>
     
     @Environment(\.managedObjectContext) private var viewContext
     @Environment(\.dismiss) private var dismiss
@@ -19,13 +21,14 @@ struct IssuesView: View {
     init(project: Project) {
         self.project = project
         _viewModel = StateObject(wrappedValue: IssuesViewModel(project: project))
+        _issues = FetchRequest(
+            sortDescriptors: [.init(\.dateCreated, order: .forward)],
+            predicate: NSPredicate(format: "(project == %@) AND (status == %@)",  project, "open")
+        )
     }
     
     var body: some View {
-        FilteredIssuesListView(
-            sortDescriptor: viewModel.sortDescriptor,
-            predicate: viewModel.predicate
-        ) { issue in
+        List(issues) { issue in
             Button {
                 viewModel.selectedIssue = issue
             } label: {
@@ -59,16 +62,26 @@ struct IssuesView: View {
                 Text(scope.title).tag(scope)
             }
         }
-        .onChange(of: viewModel.searchText) { _ in viewModel.runSearch() }
-        .onChange(of: viewModel.searchScope) { _ in viewModel.runSearch() }
-        .onChange(of: viewModel.searchIssueStatus) { _ in viewModel.runSearch() }
+        .onChange(of: viewModel.searchText) { _ in
+            viewModel.runSearch()
+            issues.nsPredicate = viewModel.predicate
+        }
+        .onChange(of: viewModel.searchScope) { _ in
+            viewModel.runSearch()
+            issues.nsPredicate = viewModel.predicate
+        }
+        .onChange(of: viewModel.searchIssueStatus) { _ in
+            viewModel.runSearch()
+            issues.nsPredicate = viewModel.predicate
+        }
         .navigationBarTitle(viewModel.searchIssueStatus == .open ? "Open issues" : "Closed issues")
         .toolbarBackground(Color.customBackground, for: .navigationBar, .bottomBar) // this doesn't seem to change the bottom bar at all.
-        .bodyStyle()
         .background(Color.customBackground)
         .sheet(isPresented: $viewModel.showingAddIssueView) {
             AddIssueView(project: project)
                 .environment(\.managedObjectContext, viewContext)
+                .presentationDetents([.large])
+                .presentationDragIndicator(.visible)
         }
         .sheet(item: $viewModel.selectedIssue) { selectedIssue in
             IssueDetail(issue: selectedIssue)
@@ -76,6 +89,8 @@ struct IssuesView: View {
         .sheet(isPresented: $viewModel.showingEditTagsView) {
             TagsEditView()
                 .environment(\.managedObjectContext, viewContext)
+                .presentationDetents([.large])
+                .presentationDragIndicator(.visible)
         }
         .toolbar {
             ToolbarItemGroup {
@@ -138,22 +153,26 @@ private extension IssuesView {
             case .date:
                 Button {
                     viewModel.setSortOrder(to: .reverse)
+                    issues.sortDescriptors = [viewModel.sortDescriptor]
                 } label: {
                     labelFor(.reverse, title: "Newest first")
                 }
                 Button {
                     viewModel.setSortOrder(to: .forward)
+                    issues.sortDescriptors = [viewModel.sortDescriptor]
                 } label: {
                     labelFor(.forward, title: "Oldest first")
                 }
             case .priority, .title:
                 Button {
                     viewModel.setSortOrder(to: .forward)
+                    issues.sortDescriptors = [viewModel.sortDescriptor]
                 } label: {
                     labelFor(.forward, title: "Ascending")
                 }
                 Button {
                     viewModel.setSortOrder(to: .reverse)
+                    issues.sortDescriptors = [viewModel.sortDescriptor]
                 } label: {
                     labelFor(.reverse, title: "Descending")
                 }
