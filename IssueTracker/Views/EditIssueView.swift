@@ -25,7 +25,7 @@ struct EditIssueView: View {
     var body: some View {
         List {
             Group {
-                Section("Issue name:") {
+                Section("Issue name") {
                     TextField("Issue name", text: $viewModel.issueCopy.wrappedName)
                         .textFieldStyle(.roundedBorder)
                 }
@@ -43,7 +43,7 @@ struct EditIssueView: View {
                     .pickerStyle(.segmented)
                 }
                 Section("Tags") {
-                    TagSelectionView(selectedTags: $viewModel.selectedTags)
+                    TagSelectionView(selection: $viewModel.selectedTags)
                 }
             }
             .listRowSeparator(.hidden)

@@ -16,7 +16,7 @@ struct TagSelectionView: View {
     @FetchRequest(sortDescriptors: [.init(\.dateCreated, order: .reverse)])
     private var allTags: FetchedResults<Tag>
     
-    init(selectedTags: Binding<Set<Tag>>) {
+    init(selection selectedTags: Binding<Set<Tag>>) {
         _selectedTags = selectedTags
         self.filterText = filterText
         _allTags = FetchRequest(
@@ -86,7 +86,7 @@ struct TagSelectionView_Previews: PreviewProvider {
         @State private var selectedTags: Set<Tag> = []
         
         var body: some View {
-            TagSelectionView(selectedTags: $selectedTags)
+            TagSelectionView(selection: $selectedTags)
         }
     }
     
