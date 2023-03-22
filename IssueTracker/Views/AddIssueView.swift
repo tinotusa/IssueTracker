@@ -52,8 +52,7 @@ struct AddIssueView: View {
                                 .foregroundColor(.customSecondary)
                                 .frame(maxWidth: .infinity, alignment: .center)
                         }
-                        // TODO: add custom layout here
-                        LazyHGrid(rows: [.init(.adaptive(minimum: 100))]) {
+                        WrappingHStack {
                             ForEach(Array(viewModel.tags)) { tag in
                                 Text(tag.wrappedName)
                             }

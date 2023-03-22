@@ -40,8 +40,7 @@ struct TagSelectionView: View {
                         addNewTag(named: filterText)
                     }
                 }
-                // TODO: add custom layout here
-                LazyVGrid(columns: [.init(.adaptive(minimum: 100))]) {
+                WrappingHStack {
                     ForEach(allTags) { tag in
                         Button {
                             addTagToSelection(tag)
