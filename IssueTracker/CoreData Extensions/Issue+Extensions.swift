@@ -64,7 +64,6 @@ extension Issue {
             }
         }
     }
-    
 }
 
 // MARK: Properties
@@ -120,8 +119,6 @@ extension Issue {
         }
         return status == .open
     }
-    
-    
 }
 
 // MARK: - Functions
@@ -133,19 +130,5 @@ extension Issue {
         self.issueDescription = issue.issueDescription
         self.tags = issue.tags
         self.priority = issue.priority
-    }
-    
-    static var example: Issue {
-        let viewContext = PersistenceController.issuesPreview.container.viewContext
-        let request = fetchRequest()
-        do {
-            let result = try viewContext.fetch(request)
-            guard let issue = result.first else {
-                fatalError("Failed to get issue from issues preview.")
-            }
-            return issue
-        } catch {
-            fatalError("Failed to get issue example. \(error)")
-        }
     }
 }

@@ -88,11 +88,9 @@ struct EditIssueView: View {
 }
 
 struct IssueEditView_Previews: PreviewProvider {
-    static let viewContext = PersistenceController.issuesPreview.container.viewContext
-    
     static var previews: some View {
         NavigationStack {
-            EditIssueView(issue: Issue(name: "Test issue", issueDescription: "", priority: .low, tags: [], context: viewContext))
+            EditIssueView(issue: .example)
         }
     }
 }

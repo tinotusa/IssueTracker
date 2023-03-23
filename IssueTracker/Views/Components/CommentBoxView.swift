@@ -60,12 +60,10 @@ struct CommentBoxView: View {
 }
 
 struct CommentBoxView_Previews: PreviewProvider {
-    static let viewContext = PersistenceController.issuesPreview.container.viewContext
-    
     static var previews: some View {
         CommentBoxView(
-            comment: .init(comment: "testing", context: viewContext),
-            issue: .init(name: "test", issueDescription: "", priority: .low, tags: [], context: viewContext)
+            comment: .example,
+            issue: .example
         )
     }
 }

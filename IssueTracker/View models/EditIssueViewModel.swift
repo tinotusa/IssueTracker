@@ -31,7 +31,7 @@ final class EditIssueViewModel: ObservableObject {
             issueDescription: issue.wrappedIssueDescription,
             priority: issue.wrappedPriority,
             tags: Set((issue.tags?.allObjects ?? []) as! [Tag]),
-            context: issue.managedObjectContext!
+            context: viewContext
         )
         self.selectedTags = Set((issue.tags?.allObjects ?? []) as! [Tag])
     }

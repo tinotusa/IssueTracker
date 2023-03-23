@@ -23,9 +23,7 @@ struct TagView: View {
 }
 
 struct TagView_Previews: PreviewProvider {
-    static let viewContext = PersistenceController.tagsPreview.container.viewContext
-    
     static var previews: some View {
-        TagView(tag: .init(name: "new tag", context: viewContext))
+        TagView(tag: .example)
     }
 }

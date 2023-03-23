@@ -218,11 +218,11 @@ private extension IssuesView {
 }
 
 struct IssuesView_Previews: PreviewProvider {
-    static var viewContext = PersistenceController.issuesPreview.container.viewContext
+    static var viewContext = PersistenceController.projectsPreview.container.viewContext
     
     static var previews: some View {
         NavigationStack {
-            IssuesView(project: .example(context: viewContext))
+            IssuesView(project: .example)
                 .environment(
                     \.managedObjectContext,
                      viewContext

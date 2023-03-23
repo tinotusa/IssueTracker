@@ -40,6 +40,10 @@
 		2154B59F297F88340040FE69 /* View+secondaryFootnote.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2154B59E297F88340040FE69 /* View+secondaryFootnote.swift */; };
 		2159F00C29CABC5C00E01576 /* WrappingHStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2159F00B29CABC5C00E01576 /* WrappingHStack.swift */; };
 		21654BC629605245009C434B /* AddIssueView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21654BC529605245009C434B /* AddIssueView.swift */; };
+		2168A62D29CC373D004CF64B /* Issue+Example.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2168A62C29CC373D004CF64B /* Issue+Example.swift */; };
+		2168A62F29CC72F0004CF64B /* Project+Example.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2168A62E29CC72F0004CF64B /* Project+Example.swift */; };
+		2168A63129CC75B7004CF64B /* Comment+Example.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2168A63029CC75B7004CF64B /* Comment+Example.swift */; };
+		2168A63329CC763B004CF64B /* Tag+Example.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2168A63229CC763B004CF64B /* Tag+Example.swift */; };
 		21734A8D29764D8400EB3942 /* AddProjectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21734A8C29764D8400EB3942 /* AddProjectView.swift */; };
 		21734A8F29764E4E00EB3942 /* ProjectListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21734A8E29764E4E00EB3942 /* ProjectListView.swift */; };
 		21734A9129764F0700EB3942 /* AddIssueView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21734A9029764F0700EB3942 /* AddIssueView.swift */; };
@@ -180,6 +184,10 @@
 		2154B59E297F88340040FE69 /* View+secondaryFootnote.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+secondaryFootnote.swift"; sourceTree = "<group>"; };
 		2159F00B29CABC5C00E01576 /* WrappingHStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WrappingHStack.swift; sourceTree = "<group>"; };
 		21654BC529605245009C434B /* AddIssueView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddIssueView.swift; sourceTree = "<group>"; };
+		2168A62C29CC373D004CF64B /* Issue+Example.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Issue+Example.swift"; sourceTree = "<group>"; };
+		2168A62E29CC72F0004CF64B /* Project+Example.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Project+Example.swift"; sourceTree = "<group>"; };
+		2168A63029CC75B7004CF64B /* Comment+Example.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Comment+Example.swift"; sourceTree = "<group>"; };
+		2168A63229CC763B004CF64B /* Tag+Example.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Tag+Example.swift"; sourceTree = "<group>"; };
 		21734A8C29764D8400EB3942 /* AddProjectView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddProjectView.swift; sourceTree = "<group>"; };
 		21734A8E29764E4E00EB3942 /* ProjectListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProjectListView.swift; sourceTree = "<group>"; };
 		21734A9029764F0700EB3942 /* AddIssueView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddIssueView.swift; sourceTree = "<group>"; };
@@ -354,6 +362,10 @@
 			isa = PBXGroup;
 			children = (
 				2150C844295972E2006CD7D2 /* Preview Assets.xcassets */,
+				2168A62C29CC373D004CF64B /* Issue+Example.swift */,
+				2168A62E29CC72F0004CF64B /* Project+Example.swift */,
+				2168A63029CC75B7004CF64B /* Comment+Example.swift */,
+				2168A63229CC763B004CF64B /* Tag+Example.swift */,
 			);
 			path = "Preview Content";
 			sourceTree = "<group>";
@@ -800,8 +812,10 @@
 			files = (
 				21F1DA3B295DB55E00076D73 /* AddIssueViewModel.swift in Sources */,
 				21BBEBFB295ECF8B008F237B /* Comment+Extensions.swift in Sources */,
+				2168A62D29CC373D004CF64B /* Issue+Example.swift in Sources */,
 				21E6D2BA295C010400BB4AA6 /* AddProjectViewModel.swift in Sources */,
 				21BBEBF3295E8465008F237B /* Tag+Extensions.swift in Sources */,
+				2168A63329CC763B004CF64B /* Tag+Example.swift in Sources */,
 				211246C729B9B84500D0EB01 /* AudioRecorder.swift in Sources */,
 				21BBEBF5295E9A5E008F237B /* IssueRowView.swift in Sources */,
 				218F93D929C80C3500F9D62A /* EditCommentView.swift in Sources */,
@@ -827,12 +841,14 @@
 				21E6D2AD295BDFBF00BB4AA6 /* ButtonStyles.swift in Sources */,
 				2132CB7629C5D0FC003D5C12 /* AudioAttachmentView.swift in Sources */,
 				21654BC629605245009C434B /* AddIssueView.swift in Sources */,
+				2168A62F29CC72F0004CF64B /* Project+Example.swift in Sources */,
 				21F1DA2B295D9E8000076D73 /* EditProjectViewModel.swift in Sources */,
 				218F93D729C8044500F9D62A /* ImageDetailView.swift in Sources */,
 				2132CB6C29C56785003D5C12 /* AudioAttachmentPreview.swift in Sources */,
 				2132CB6E29C5C76B003D5C12 /* ImageAttachmentPreview.swift in Sources */,
 				211246C529B9B82900D0EB01 /* AudioPlayer.swift in Sources */,
 				21F1DA2F295DA58400076D73 /* DeleteProjectViewModel.swift in Sources */,
+				2168A63129CC75B7004CF64B /* Comment+Example.swift in Sources */,
 				21BBEBF1295E8176008F237B /* TagSelectionView.swift in Sources */,
 				21BBEBF9295ECD4E008F237B /* IssueDetailViewModel.swift in Sources */,
 				21E6D2BF295C4DD900BB4AA6 /* AddProjectView.swift in Sources */,

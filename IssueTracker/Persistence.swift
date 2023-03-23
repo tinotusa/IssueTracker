@@ -47,16 +47,26 @@ extension PersistenceController {
         return controller
     }
     
-    static var issuesPreview: Self {
+    static var issuesPreview: Self = {
         let controller = PersistenceController(inMemory: true)
         let viewContext = controller.container.viewContext
         for i in 0 ..< 10 {
             _ = Issue(name: "Issue#\(i)", issueDescription: "testing", priority: .low, tags: [], context: viewContext)
         }
+        try? viewContext.save()
         return controller
-    }
+    }()
     
-    static var projectsPreview: Self {
+    static var commentsPreview: Self = {
+        let controller = PersistenceController(inMemory: true)
+        let viewContext = controller.container.viewContext
+        for i in 0 ..< 3 {
+            let comment = Comment(comment: "Comment #\(i)", context: viewContext)
+        }
+        return controller
+    }()
+    
+    static var projectsPreview: Self = {
         let controller = PersistenceController(inMemory: true)
         let viewContext = controller.container.viewContext
         for i in 0 ..< 4 {
@@ -69,7 +79,7 @@ extension PersistenceController {
             
         }
         return controller
-    }
+    }()
     
     static var empty: Self {
         let controller = PersistenceController(inMemory: true)
