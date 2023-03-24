@@ -161,7 +161,7 @@ extension IssuesViewModel {
             format += "AND (name CONTAINS[cd] %@)"
             predicate = NSPredicate(format: format,  project, searchIssueStatus.rawValue, searchText)
         case .tag:
-            format += "AND (tags.name CONTAINS[cd] %@)"
+            format += "AND (ANY tags.name CONTAINS[cd] %@)"
             predicate = NSPredicate(format: format,  project, searchIssueStatus.rawValue, searchText)
         }
     }
