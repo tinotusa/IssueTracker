@@ -90,6 +90,8 @@
 		21BBEBFB295ECF8B008F237B /* Comment+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21BBEBFA295ECF8B008F237B /* Comment+Extensions.swift */; };
 		21BBEBFD295EDBE8008F237B /* CommentBoxView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21BBEBFC295EDBE8008F237B /* CommentBoxView.swift */; };
 		21BBEBFF295EE1E9008F237B /* TagView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21BBEBFE295EE1E9008F237B /* TagView.swift */; };
+		21CB0C8229CD48EA006BF4FF /* bulbasaur.png in Resources */ = {isa = PBXBuildFile; fileRef = 21CB0C8129CD48EA006BF4FF /* bulbasaur.png */; };
+		21CB0C8429CD4902006BF4FF /* URL+previewImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21CB0C8329CD4902006BF4FF /* URL+previewImage.swift */; };
 		21CEAAC2297D4EC500A7A344 /* EditIssueView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21CEAAC1297D4EC500A7A344 /* EditIssueView.swift */; };
 		21E6D2A7295BD4C500BB4AA6 /* TextStyles.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21E6D2A6295BD4C500BB4AA6 /* TextStyles.swift */; };
 		21E6D2AB295BD9B500BB4AA6 /* Color+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21E6D2AA295BD9B500BB4AA6 /* Color+Extensions.swift */; };
@@ -220,6 +222,8 @@
 		21BBEBFA295ECF8B008F237B /* Comment+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Comment+Extensions.swift"; sourceTree = "<group>"; };
 		21BBEBFC295EDBE8008F237B /* CommentBoxView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentBoxView.swift; sourceTree = "<group>"; };
 		21BBEBFE295EE1E9008F237B /* TagView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagView.swift; sourceTree = "<group>"; };
+		21CB0C8129CD48EA006BF4FF /* bulbasaur.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bulbasaur.png; sourceTree = "<group>"; };
+		21CB0C8329CD4902006BF4FF /* URL+previewImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "URL+previewImage.swift"; sourceTree = "<group>"; };
 		21CEAAC1297D4EC500A7A344 /* EditIssueView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditIssueView.swift; sourceTree = "<group>"; };
 		21E6D2A6295BD4C500BB4AA6 /* TextStyles.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextStyles.swift; sourceTree = "<group>"; };
 		21E6D2AA295BD9B500BB4AA6 /* Color+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Color+Extensions.swift"; sourceTree = "<group>"; };
@@ -361,11 +365,13 @@
 		2150C843295972E2006CD7D2 /* Preview Content */ = {
 			isa = PBXGroup;
 			children = (
+				21CB0C8129CD48EA006BF4FF /* bulbasaur.png */,
 				2150C844295972E2006CD7D2 /* Preview Assets.xcassets */,
 				2168A62C29CC373D004CF64B /* Issue+Example.swift */,
 				2168A62E29CC72F0004CF64B /* Project+Example.swift */,
 				2168A63029CC75B7004CF64B /* Comment+Example.swift */,
 				2168A63229CC763B004CF64B /* Tag+Example.swift */,
+				21CB0C8329CD4902006BF4FF /* URL+previewImage.swift */,
 			);
 			path = "Preview Content";
 			sourceTree = "<group>";
@@ -759,6 +765,7 @@
 			files = (
 				2105DC5229628DFD008F940B /* TODO.md in Resources */,
 				2150C845295972E2006CD7D2 /* Preview Assets.xcassets in Resources */,
+				21CB0C8229CD48EA006BF4FF /* bulbasaur.png in Resources */,
 				2150C842295972E2006CD7D2 /* Assets.xcassets in Resources */,
 				21E6D2AF295BEA6800BB4AA6 /* SF-Pro-Text-Light.otf in Resources */,
 			);
@@ -862,6 +869,7 @@
 				2132CB7029C5CCE7003D5C12 /* AddCommentViewModel.swift in Sources */,
 				21E6D2A7295BD4C500BB4AA6 /* TextStyles.swift in Sources */,
 				2132CB7429C5CF9A003D5C12 /* ImageAttachmentView.swift in Sources */,
+				21CB0C8429CD4902006BF4FF /* URL+previewImage.swift in Sources */,
 				21F1DA37295DB3EA00076D73 /* IssuesViewModel.swift in Sources */,
 				21F1DA29295D9C0E00076D73 /* String+filterWhitespace.swift in Sources */,
 			);
@@ -1095,7 +1103,7 @@
 				CODE_SIGN_ENTITLEMENTS = IssueTracker/IssueTracker.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_ASSET_PATHS = "\"IssueTracker/Preview Content\"";
+				DEVELOPMENT_ASSET_PATHS = "IssueTracker/Preview\\ Content";
 				DEVELOPMENT_TEAM = SVNZBC4323;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -1129,7 +1137,7 @@
 				CODE_SIGN_ENTITLEMENTS = IssueTracker/IssueTracker.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_ASSET_PATHS = "\"IssueTracker/Preview Content\"";
+				DEVELOPMENT_ASSET_PATHS = "IssueTracker/Preview\\ Content";
 				DEVELOPMENT_TEAM = SVNZBC4323;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
