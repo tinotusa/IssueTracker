@@ -82,9 +82,11 @@ struct EditProjectView: View {
 }
 
 struct EditProjectView_Previews: PreviewProvider {
+    static var viewContext = PersistenceController.preview.container.viewContext
     static var previews: some View {
         NavigationStack {
             EditProjectView(project: .example)
+                .environment(\.managedObjectContext, viewContext)
         }
     }
 }

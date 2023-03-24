@@ -44,7 +44,7 @@ struct IssueRowView: View {
 }
 
 struct IssueRowView_Previews: PreviewProvider {
-    static var viewContext = PersistenceController.issuesPreview.container.viewContext
+    static var viewContext = PersistenceController.preview.container.viewContext
     static var previews: some View {
         IssueRowView(issue: .init(name: "test issue", issueDescription: "", priority: .low, tags: [], context: viewContext))
     }

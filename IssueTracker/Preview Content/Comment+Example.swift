@@ -9,7 +9,7 @@ import Foundation
 
 extension Comment {
     static var example: Comment {
-        let viewContext = PersistenceController.commentsPreview.container.viewContext
+        let viewContext = PersistenceController.preview.container.viewContext
         let fetchRequest = fetchRequest()
         do {
             let results = try viewContext.fetch(fetchRequest)

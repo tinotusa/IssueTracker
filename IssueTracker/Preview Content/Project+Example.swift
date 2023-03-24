@@ -9,7 +9,7 @@ import Foundation
 
 extension Project {
     static var example: Project {
-        let viewContext = PersistenceController.projectsPreview.container.viewContext
+        let viewContext = PersistenceController.preview.container.viewContext
         let fetchRequest = fetchRequest()
         do {
             let results = try viewContext.fetch(fetchRequest)

@@ -158,15 +158,9 @@ private extension IssueDetail {
 }
 
 struct IssueDetail_Previews: PreviewProvider {
-    static let viewContext = PersistenceController.issuesPreview.container.viewContext
+    static let viewContext = PersistenceController.preview.container.viewContext
     static var previews: some View {
-        IssueDetail(issue: .init(
-            name: "test issue",
-            issueDescription: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras imperdiet sodales arcu, vitae congue risus iaculis ut. Quisque vitae varius leo. In interdum neque eros, non porta diam laoreet in. Pellentesque sed tortor tempus, efficitur sem quis, volutpat diam. Aenean ut posuere odio. In vehicula eu nulla sed mollis. ",
-            priority: .low,
-            tags: [],
-            context: viewContext)
-        )
-        .environment(\.managedObjectContext, viewContext)
+        IssueDetail(issue: .example)
+            .environment(\.managedObjectContext, viewContext)
     }
 }

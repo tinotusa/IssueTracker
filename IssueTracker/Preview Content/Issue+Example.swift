@@ -9,7 +9,7 @@ import Foundation
 
 extension Issue {
     static var example: Issue {
-        let viewContext = PersistenceController.issuesPreview.container.viewContext
+        let viewContext = PersistenceController.preview.container.viewContext
         let issueFetchRequest = Issue.fetchRequest()
         do {
             let results = try viewContext.fetch(issueFetchRequest)

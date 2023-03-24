@@ -79,7 +79,7 @@ private extension TagSelectionView {
 }
 
 struct TagSelectionView_Previews: PreviewProvider {
-    static var viewContext = PersistenceController.tagsPreview.container.viewContext
+    static var viewContext = PersistenceController.preview.container.viewContext
     
     struct ContainerView: View {
         @State private var selectedTags: Set<Tag> = []

@@ -84,7 +84,7 @@ struct EditCommentView: View {
 }
 
 struct EditCommentView_Previews: PreviewProvider {
-    static var viewContext = PersistenceController.issuesPreview.container.viewContext
+    static var viewContext = PersistenceController.preview.container.viewContext
     static var previews: some View {
         NavigationStack {
             EditCommentView(comment: Comment(comment: "testing", context: viewContext))

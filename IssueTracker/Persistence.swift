@@ -38,51 +38,37 @@ struct PersistenceController {
 }
 
 extension PersistenceController {
-    static var tagsPreview: Self {
+    static var preview: Self = {
         let controller = PersistenceController(inMemory: true)
         let viewContext = controller.container.viewContext
+        
+        let project = Project(name: "Test project", startDate: .now, context: viewContext)
+        
+       
+        
+        var tags = Set<Tag>()
+        for i in 0 ..< Int.random(in: 1 ..< 4) {
+            let tag = Tag(name: "Tag\(i)", context: viewContext)
+            tags.insert(tag)
+        }
+        
+        var issues = [Issue]()
         for i in 0 ..< 4 {
-            _ = Tag(name: "Tag\(i)", context: viewContext)
-        }
-        return controller
-    }
-    
-    static var issuesPreview: Self = {
-        let controller = PersistenceController(inMemory: true)
-        let viewContext = controller.container.viewContext
-        for i in 0 ..< 10 {
-            _ = Issue(name: "Issue#\(i)", issueDescription: "testing", priority: .low, tags: [], context: viewContext)
-        }
-        try? viewContext.save()
-        return controller
-    }()
-    
-    static var commentsPreview: Self = {
-        let controller = PersistenceController(inMemory: true)
-        let viewContext = controller.container.viewContext
-        for i in 0 ..< 3 {
-            let comment = Comment(comment: "Comment #\(i)", context: viewContext)
-        }
-        return controller
-    }()
-    
-    static var projectsPreview: Self = {
-        let controller = PersistenceController(inMemory: true)
-        let viewContext = controller.container.viewContext
-        for i in 0 ..< 4 {
-            let project = Project(name: "name\(i)", startDate: .now, context: viewContext)
+            let issue = Issue(name: "Issue#\(i)", issueDescription: "testing", priority: .low, tags: tags, context: viewContext)
+            issues.append(issue)
             
-            for i in 0 ..< Int.random(in: 0 ..< 5) {
-                let issue = Issue(name: "Issue#\(i)", issueDescription: "testing", priority: .init(rawValue: Int16.random(in: 0 ..< 3))!, tags: [], context: viewContext)
-                issue.project = project
+            var comments = Set<Comment>()
+            for i in 0 ..< 3 {
+                let comment = Comment(comment: "Comment #\(i)", context: viewContext)
+                comments.insert(comment)
             }
+            issue.addToComments(.init(set: comments))
             
         }
+        project.addToIssues(.init(set: Set(issues)))
+
+        try? viewContext.save()
+        
         return controller
     }()
-    
-    static var empty: Self {
-        let controller = PersistenceController(inMemory: true)
-        return controller
-    }
 }

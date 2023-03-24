@@ -9,7 +9,7 @@ import Foundation
 
 extension Tag {
     static var example: Tag {
-        let viewContext = PersistenceController.tagsPreview.container.viewContext
+        let viewContext = PersistenceController.preview.container.viewContext
         let fetchRequest = fetchRequest()
         do {
             let results = try viewContext.fetch(fetchRequest)

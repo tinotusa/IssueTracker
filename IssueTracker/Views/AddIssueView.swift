@@ -120,7 +120,7 @@ private extension AddIssueView {
 }
 
 struct AddIssueView_Previews: PreviewProvider {
-    static var viewContext = PersistenceController.tagsPreview.container.viewContext
+    static var viewContext = PersistenceController.preview.container.viewContext
     
     static var previews: some View {
         AddIssueView(project: .init(name: "test", startDate: .now, context: viewContext))

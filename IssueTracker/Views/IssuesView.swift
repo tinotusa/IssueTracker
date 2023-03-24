@@ -218,7 +218,7 @@ private extension IssuesView {
 }
 
 struct IssuesView_Previews: PreviewProvider {
-    static var viewContext = PersistenceController.projectsPreview.container.viewContext
+    static var viewContext = PersistenceController.preview.container.viewContext
     
     static var previews: some View {
         NavigationStack {

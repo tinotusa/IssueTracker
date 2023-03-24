@@ -110,7 +110,7 @@ struct HomeView_Previews: PreviewProvider {
         HomeView()
             .environment(
                 \.managedObjectContext,
-                 PersistenceController.projectsPreview.container.viewContext
+                 PersistenceController.preview.container.viewContext
             )
     }
 }
