@@ -31,16 +31,29 @@ struct IssuesView: View {
     }
     
     var body: some View {
-        List(issues) { issue in
-            Button {
-                viewModel.selectedIssue = issue
-            } label: {
-                IssueRowView(issue: issue)
+        List {
+            if issues.isEmpty {
+                Text("No issues.")
+                    .font(.headline)
+                    .listRowBackground(Color.customBackground)
+                    .listRowSeparator(.hidden)
+            } else {
+                ForEach(issues) { issue in
+                    // TODO: make into a view (issuerow)
+                    Button {
+                        viewModel.selectedIssue = issue
+                    } label: {
+                        IssueRowView(issue: issue)
+                    }
+                    .swipeActions {
+                        deleteIssueButton(issue: issue)
+                    }
+                    .swipeActions(edge: .leading) {
+                        changeIssueStatusButton(issue: issue)
+                    }
+                    .listRowBackground(Color.customBackground)
+                }
             }
-            .swipeActions {
-                trailingSwipeActions(issue: issue)
-            }
-            .listRowBackground(Color.customBackground)
         }
         .listStyle(.plain)
         .searchable(text: $viewModel.searchText)
@@ -69,6 +82,7 @@ struct IssuesView: View {
         }
         .sheet(item: $viewModel.selectedIssue) { selectedIssue in
             IssueDetail(issue: selectedIssue)
+                .environment(\.managedObjectContext, viewContext)
                 .presentationDetents([.large])
                 .presentationDragIndicator(.visible)
         }
@@ -82,12 +96,7 @@ struct IssuesView: View {
             toolbarItems
         }
         .confirmationDialog("Delete issue", isPresented: $showingDeleteIssueConfirmation) {
-            Button(role: .destructive) {
-                guard let issue = viewModel.selectedIssue else {
-                    return
-                }
-                viewModel.deleteIssue(issue)
-            } label: {
+            Button(role: .destructive, action: viewModel.deleteIssue) {
                 Text("Delete")
             }
         } message: {
@@ -186,8 +195,16 @@ private extension IssuesView {
         }
     }
     
-    @ViewBuilder
-    func trailingSwipeActions(issue: Issue) -> some View {
+    func deleteIssueButton(issue: Issue) -> some View {
+        Button(role: .destructive) {
+            viewModel.selectedIssue = issue
+            showingDeleteIssueConfirmation = true
+        } label: {
+            Label("Delete", systemImage: "trash")
+        }
+    }
+    
+    func changeIssueStatusButton(issue: Issue) -> some View {
         Button {
             switch issue.wrappedStatus {
             case .closed:
@@ -202,13 +219,6 @@ private extension IssuesView {
             )
         }
         .tint(issue.isOpenStatus ? .green : .purple)
-        
-        Button(role: .destructive) {
-            viewModel.selectedIssue = issue
-            showingDeleteIssueConfirmation = true
-        } label: {
-            Label("Delete", systemImage: "trash")
-        }
     }
     
     func handleChange() {

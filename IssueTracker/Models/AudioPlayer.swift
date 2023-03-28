@@ -11,7 +11,7 @@ import AVFoundation
 
 class AudioPlayer: NSObject, ObservableObject {
     private var player: AVAudioPlayer?
-    private let log = Logger(
+    private let logger = Logger(
         subsystem: Bundle.main.bundleIdentifier!,
         category: String(describing: AudioPlayer.self)
     )
@@ -23,7 +23,7 @@ class AudioPlayer: NSObject, ObservableObject {
         do {
             try session.setCategory(.playback)
         } catch {
-            log.error("Failed to init AudioPlayer. \(error)")
+            logger.error("Failed to init AudioPlayer. \(error)")
         }
         super.init()
     }
@@ -34,14 +34,14 @@ class AudioPlayer: NSObject, ObservableObject {
             player?.prepareToPlay()
             player?.delegate = self
         } catch {
-            log.error("Failed to set up player. \(error)")
+            logger.error("Failed to set up player. \(error)")
         }
     }
     
     @MainActor
     func play() {
         guard let player else {
-            log.debug("Failed to play audio. player is nil")
+            logger.debug("Failed to play audio. player is nil")
             return
         }
         if isPlaying { return }
@@ -52,18 +52,18 @@ class AudioPlayer: NSObject, ObservableObject {
     @MainActor
     func pause() {
         guard let player else {
-            log.debug("Failed to pause audio player. player is nil.")
+            logger.debug("Failed to pause audio player. player is nil.")
             return
         }
         player.pause()
         isPlaying = player.isPlaying
-        log.debug("Paused audio player.")
+        logger.debug("Paused audio player.")
     }
     
     @MainActor
     func stop() {
         guard let player else {
-            log.debug("Failed to stop audio. player is nil.")
+            logger.debug("Failed to stop audio. player is nil.")
             return
         }
         player.stop()

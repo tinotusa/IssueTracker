@@ -15,14 +15,11 @@ final class AddIssueViewModel: ObservableObject {
     @Published var priority: Issue.Priority = .low
     @Published var tags: Set<Tag> = []
     @Published var newTag = ""
-    private let log = Logger(subsystem: "com.tinotusa.IssueTracker", category: "AddIssueViewModel")
-    private let viewContext: NSManagedObjectContext
-    private let project: Project
-    
-    init(project: Project, viewContext: NSManagedObjectContext = PersistenceController.shared.container.viewContext) {
-        self.viewContext = viewContext
-        self.project = project
-    }
+    private let logger = Logger(
+        subsystem: Bundle.main.bundleIdentifier!,
+        category: String(describing: AddIssueViewModel.self)
+    )
+    private lazy var persistenceController = PersistenceController.shared
 }
 
 extension AddIssueViewModel {
@@ -32,26 +29,15 @@ extension AddIssueViewModel {
     }
     
     /// Adds an Issue entity to Core Data.
-    func addIssue() {
-        log.debug("Adding issue to core data...")
+    func addIssue(to project: Project) {
         guard allFieldsFilled else {
-            log.debug("Failed to add issue. Not all fields have input.")
+            logger.debug("Failed to add issue. Not all fields have input.")
             return
         }
-        let issue = Issue(
-            name: name,
-            issueDescription: description,
-            priority: priority,
-            tags: tags,
-            context: viewContext
-        )
-        project.addToIssues(issue)
-        
         do {
-            try viewContext.save()
-            log.debug("Successfully saved issue to core data.")
+            try persistenceController.addIssue(name: name, issueDescription: description, priority: priority, tags: tags, project: project)
         } catch {
-            log.error("Failed to save issue to disk. \(error)")
+            logger.error("Failed to add issue. \(error)")
         }
     }
     

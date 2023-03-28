@@ -115,6 +115,11 @@ extension Issue {
         set { self.comments = NSSet(array: newValue) }
     }
     
+    var wrappedTags: Set<Tag> {
+        get { self.tags as? Set<Tag> ?? [] }
+        set { self.tags = NSSet(set: newValue) }
+    }
+    
     var sortedComments: [Comment] {
         wrappedComments.sorted { $0.wrappedDateCreated < $1.wrappedDateCreated }
     }
@@ -137,5 +142,15 @@ extension Issue {
         self.issueDescription = issue.issueDescription
         self.tags = issue.tags
         self.priority = issue.priority
+    }
+    
+    static func copyIssue(issue: Issue) -> Issue {
+        Issue(
+            name: issue.wrappedName,
+            issueDescription: issue.wrappedIssueDescription,
+            priority: issue.wrappedPriority,
+            tags: issue.wrappedTags,
+            context: issue.managedObjectContext!
+        )
     }
 }

@@ -16,24 +16,18 @@ final class EditIssueViewModel: ObservableObject {
     @Published var selectedTags: Set<Tag> = []
     /// The issue being edited.
     private var issue: Issue
-    private let log = Logger(subsystem: "com.tinotusa.IssueTracker", category: "IssueEditViewModel")
-    private let viewContext: NSManagedObjectContext
-    
+    private let logger = Logger(
+        subsystem: Bundle.main.bundleIdentifier!,
+        category: String(describing: EditIssueViewModel.self)
+    )
+    private lazy var persistenceController = PersistenceController.shared
     /// Creates a new EditIssueViewModel
     /// - Parameters:
     ///   - issue: The issue being edited.
-    ///   - viewContext: The managed object context for the issue.
-    init(issue: Issue, viewContext: NSManagedObjectContext = PersistenceController.shared.container.viewContext) {
+    init(issue: Issue) {
         self.issue = issue
-        self.viewContext = viewContext
-        issueCopy = Issue(
-            name: issue.wrappedName,
-            issueDescription: issue.wrappedIssueDescription,
-            priority: issue.wrappedPriority,
-            tags: Set((issue.tags?.allObjects ?? []) as! [Tag]),
-            context: viewContext
-        )
-        self.selectedTags = Set((issue.tags?.allObjects ?? []) as! [Tag])
+        issueCopy = Issue.copyIssue(issue: issue)
+        self.selectedTags = issue.wrappedTags
     }
 }
 
@@ -57,18 +51,15 @@ extension EditIssueViewModel {
     
     /// Saves the changes made to core data.
     func saveChanges() {
-        log.debug("Saving issue changes ...")
+        logger.debug("Saving issue changes ...")
         if !hasChanges {
-            log.debug("Failed to save changes. No changes have been made.")
+            logger.debug("Failed to save changes. No changes have been made.")
             return
         }
-        issue.copyProperties(from: issueCopy) // does this copy the stuff
-        issue.tags = NSSet(set: selectedTags)
         do {
-            try viewContext.save()
-            log.debug("Successfully saved issue changes")
+            try persistenceController.copyIssue(from: issueCopy, to: issue, withTags: selectedTags)
         } catch {
-            log.error("Failed to save issue changes. \(error)")
+            logger.error("Failed to save changes. \(error)")
         }
     }
 }

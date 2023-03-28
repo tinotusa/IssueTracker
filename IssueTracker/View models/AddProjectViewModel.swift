@@ -15,6 +15,7 @@ final class AddProjectViewModel: ObservableObject {
     private let viewContext: NSManagedObjectContext
     /// The name of the project.
     @Published var projectName = ""
+    private lazy var persistenceController = PersistenceController.shared
     
     /// Creates a new view model.
     /// - Parameter context: The context for saving objects.
@@ -22,7 +23,7 @@ final class AddProjectViewModel: ObservableObject {
         self.viewContext = context
     }
     
-    private let log = Logger(
+    private let logger = Logger(
         subsystem: Bundle.main.bundleIdentifier!,
         category: String(describing: AddProjectViewModel.self)
     )
@@ -37,20 +38,16 @@ extension AddProjectViewModel {
     
     /// Adds a new Project to CoreData.
     func addProject() {
-        log.log("Adding a project")
+        logger.log("Adding a project")
         guard !addButtonDisabled else {
-            log.log("Failed to add project, the add button is disabled.")
+            logger.log("Failed to add project, the add button is disabled.")
             return
         }
-        let _ = Project(name: projectName, startDate: .now, context: viewContext)
-        
         do {
-            try viewContext.save()
-            log.log("Successfully saved Project to view context's store.")
+            try persistenceController.addProject(name: projectName, dateStarted: .now)
         } catch {
-            log.error("Failed to save Project to view context's store.")
+            logger.error("Failed to add project. \(error)")
         }
-        return
     }
     
     /// Filters the given name by removing non alphanumerics and non spaces.

@@ -15,7 +15,7 @@ final class EditProjectViewModel: ObservableObject {
     @Published var projectName = ""
     @Published var startDate = Date()
     private let viewContext: NSManagedObjectContext
-    private let log = Logger(
+    private let logger = Logger(
         subsystem: Bundle.main.bundleIdentifier!,
         category: String(describing: EditProjectViewModel.self)
     )
@@ -36,19 +36,20 @@ extension EditProjectViewModel {
     }
     
     func save() -> Bool {
-        log.debug("Starting to save project edits...")
+        logger.debug("Starting to save project edits...")
         guard projectHasChanges else {
-            log.debug("Failed to save changes. Project has no changes.")
+            logger.debug("Failed to save changes. Project has no changes.")
             return false
         }
+        objectWillChange.send()
         project.name = projectName
         project.startDate = startDate
         do {
             try viewContext.save()
-            log.debug("Successfully saved project edits.")
+            logger.debug("Successfully saved project edits.")
             return true
         } catch {
-            log.error("Failed to save changes. \(error)")
+            logger.error("Failed to save changes. \(error)")
             return false
         }
     }

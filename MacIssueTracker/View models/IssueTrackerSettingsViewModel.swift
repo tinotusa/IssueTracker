@@ -11,7 +11,7 @@ import os
 
 final class IssueTrackerSettingsViewModel: ObservableObject {
     private let viewContext: NSManagedObjectContext
-    private let log = Logger(
+    private let logger = Logger(
         subsystem: Bundle.main.bundleIdentifier!,
         category: String(describing: IssueTrackerSettingsViewModel.self)
     )
@@ -26,14 +26,14 @@ final class IssueTrackerSettingsViewModel: ObservableObject {
 extension IssueTrackerSettingsViewModel {
     /// Adds a new tag with N/A as its name.
     func addNewTag() {
-        log.trace("Adding a new empty tag.")
+        logger.trace("Adding a new empty tag.")
         _ = Tag.init(name: "N/A", context: viewContext)
         do {
             try viewContext.save()
-            log.trace("Successfully saved the new empty tag")
+            logger.trace("Successfully saved the new empty tag")
         } catch {
             viewContext.rollback()
-            log.error("Failed to save the new tag. \(error)")
+            logger.error("Failed to save the new tag. \(error)")
         }
     }
     
@@ -42,14 +42,14 @@ extension IssueTrackerSettingsViewModel {
     ///   - tags: All the tags in core data.
     ///   - tagIDs: The tag ids to be removed.
     func remove(tags: FetchedResults<Tag>, withIDs tagIDs: Set<Tag.ID>) {
-        log.trace("removing tags with the ids: \(tagIDs)")
+        logger.trace("removing tags with the ids: \(tagIDs)")
         let tags = tags.filter { tagIDs.contains($0.wrappedId) }
         tags.forEach { viewContext.delete($0) }
         do {
             try viewContext.save()
-            log.trace("Successfully deleted tags with ids: \(tagIDs)")
+            logger.trace("Successfully deleted tags with ids: \(tagIDs)")
         } catch {
-            log.error("Failed to delete tags with ids: \(tagIDs). \(error)")
+            logger.error("Failed to delete tags with ids: \(tagIDs). \(error)")
         }
     }
 }

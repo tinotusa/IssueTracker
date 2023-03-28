@@ -33,22 +33,22 @@ final class IssuesViewModel: ObservableObject {
     
     /// The current project the issues belong to.
     let project: Project
-    /// The view context.
-    private let viewContext: NSManagedObjectContext
-    private let log = Logger(subsystem: "com.tinotusa.IssueTracker", category: "IssuesViewModel")
+    private let logger = Logger(
+        subsystem: Bundle.main.bundleIdentifier!,
+        category: String(describing: IssuesViewModel.self)
+    )
     
+    private lazy var persistenceController = PersistenceController.shared
     /// Creates a new IssuesViewModel
     /// - Parameters:
     ///   - project: The project the issues being listed belong to.
     ///   - viewContext: The view context to save to.
-    init(project: Project,
-         viewContext: NSManagedObjectContext = PersistenceController.shared.container.viewContext
-    ) {
+    init(project: Project) {
         self.project = project
         self.predicate = NSPredicate(format: "(project == %@) AND (status == %@)",  project, "open")
-        self.viewContext = viewContext
     }
 }
+
 // MARK: - Enums
 extension IssuesViewModel {
     /// The search scopes for the IssuesView
@@ -95,15 +95,11 @@ extension IssuesViewModel {
     /// Toggles the given issue's status.
     /// - Parameter issue: The issue to toggle.
     func toggleStatus(_ issue: Issue) {
-        switch issue.wrappedStatus {
-        case .open: issue.wrappedStatus = .closed
-        case .closed: issue.wrappedStatus = .open
-        }
         do {
-            try viewContext.save()
-            log.debug("Successfully toggled issue status to \(issue.wrappedStatus.rawValue).")
+            try persistenceController.toggleIssueStatus(for: issue)
+            logger.debug("Successfully toggled issue status for \(issue.wrappedId)")
         } catch {
-            log.error("Failed to save view context. \(error)")
+            logger.error("Failed to toggle issue status for \(issue.wrappedId)")
         }
     }
     
@@ -111,37 +107,30 @@ extension IssuesViewModel {
     /// - Parameter issue: The issue to modify.
     /// - Parameter status: The status to set the issue to.
     func setIssueStatus(_ issue: Issue, to status: Issue.Status) {
-        log.debug(#"Setting issue "\#(issue.wrappedName)" to \#(status.rawValue)"#)
-        if issue.wrappedStatus == status {
-            log.debug("Issue is already \(status.rawValue).")
-            return
-        }
-        issue.wrappedStatus = status
+        logger.debug(#"Setting issue "\#(issue.wrappedName)" to \#(status.rawValue)"#)
         do {
             try withAnimation {
-                try viewContext.save()
+                objectWillChange.send()
+                try persistenceController.setIssueStatus(for: issue, to: status)
             }
-            log.debug(#"Successfully set the issue "\#(issue.wrappedName)" status to \#(status.rawValue)."#)
         } catch {
-            viewContext.rollback()
-            log.debug(#"Failed to set the issue "\#(issue.wrappedName)" status to \#(status.rawValue)."#)
+            logger.error("Failed to set issue: \(issue.wrappedId) status to \(status)")
         }
     }
     
     /// Deletes the given issue from core data.
     /// - Parameter issue: The `Issue` to delete.
-    func deleteIssue(_ issue: Issue) {
-        log.debug("Deleting issue with name \"\(issue.wrappedName)\" ...")
-        // TODO: either set it to some archived state or implement undo ?
-        viewContext.delete(issue)
+    func deleteIssue() {
+        guard let selectedIssue else {
+            return
+        }
+        logger.debug("Deleting issue with name \"\(selectedIssue.wrappedName)\"")
         do {
-            try withAnimation {
-                try viewContext.save()
-            }
-            log.debug("Successfully deleted issue.")
+            try persistenceController.deleteObject(selectedIssue)
+            self.selectedIssue = nil
+            logger.debug("Successfully deleted issue.")
         } catch {
-            viewContext.rollback()
-            log.error("Failed to delete issue. \(error)")
+            logger.error("Failed to delete issue. \(error)")
         }
     }
     
@@ -170,17 +159,17 @@ extension IssuesViewModel {
     /// - Parameter sortOrder: The order to set
     func setSortOrder(to sortOrder: SortOrder) {
         self.sortOrder = sortOrder
-        log.debug("Settings sort ...")
+        logger.debug("Settings sort ...")
         switch sortType {
         case .date:
             sortDescriptor = .init(\.dateCreated, order: sortOrder)
-            log.debug("sort set to date with sortOrder: \(sortOrder)")
+            logger.debug("sort set to date with sortOrder: \(sortOrder)")
         case .title:
             sortDescriptor = .init(\.name, order: sortOrder)
-            log.debug("sort set to title with sortOrder: \(sortOrder)")
+            logger.debug("sort set to title with sortOrder: \(sortOrder)")
         case .priority:
             sortDescriptor = .init(\.priority, order: sortOrder)
-            log.debug("sort set to priority with sortOrder: \(sortOrder)")
+            logger.debug("sort set to priority with sortOrder: \(sortOrder)")
         }
     }
 }

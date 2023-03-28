@@ -17,6 +17,7 @@ final class AddCommentViewModel: ObservableObject {
     @Published private(set) var showingPhotoPicker = false
     @Published var photoPickerItems = [PhotosPickerItem]()
     @Published private(set) var attachmentImages: [Image] = []
+    private lazy var persistenceController = PersistenceController.shared
     
     private let logger = Logger(
         subsystem: Bundle.main.bundleIdentifier!,
@@ -54,74 +55,12 @@ extension AddCommentViewModel {
         }
     }
     
-    @MainActor
     func addComment(issue: Issue, viewContext: NSManagedObjectContext, audioURL: URL? = nil) async {
-        let comment = Comment(comment: comment, context: viewContext)
         let attachmentTransferables = await getAttachmentsTransferables()
-        var attachments = [Attachment]()
-        var records = [CKRecord]()
-        
-        for attachmentTransferable in attachmentTransferables {
-            // create coredata attachment entity
-            let attachment = Attachment(context: viewContext)
-            attachment.comment = comment
-            attachment.dateCreated = .now
-            attachment.id = UUID()
-            attachment.type = attachmentTransferable.attachmentType.rawValue
-            
-            // create cloudkit attachment asset
-            let imageAttachmentRecord = CKRecord(recordType: "Attachment")
-            let asset = CKAsset(fileURL: attachmentTransferable.url)
-            imageAttachmentRecord["type"] = attachmentTransferable.attachmentType.rawValue
-            imageAttachmentRecord["attachment"] = asset
-            imageAttachmentRecord["attachmentURL"] = asset.fileURL!.absoluteString
-            
-            records.append(imageAttachmentRecord)
-            attachment.assetURL = asset.fileURL!
-            attachments.append(attachment)
-        }
-        // adding audio
-        if let audioURL {
-            // cloudkit audio attachment
-            let audioAttachmentRecord = CKRecord(recordType: "Attachment")
-            let asset = CKAsset(fileURL: audioURL)
-            audioAttachmentRecord.setValuesForKeys([
-                "type": AttachmentType.audio.rawValue,
-                "attachment": asset,
-                "attachmentURL": audioURL.absoluteString
-            ])
-            records.append(audioAttachmentRecord)
-            // coredata audio attachment
-            let attachment = Attachment(context: viewContext)
-            attachment.comment = comment
-            attachment.dateCreated = .now
-            attachment.id = UUID()
-            attachment.type = AttachmentType.audio.rawValue
-            attachment.assetURL = asset.fileURL!
-            logger.debug("added audio url to core data attachment.")
-            attachments.append(attachment)
-        }
-        issue.addToComments(comment)
-        comment.addToAttachments(.init(array: attachments))
-        
-        // save to coredata and cloudkit
         do {
-            try viewContext.save()
-        
-            let database = CKContainer.default().privateCloudDatabase
-            let modifyOperation = CKModifyRecordsOperation(recordsToSave: records)
-            modifyOperation.qualityOfService = .userInitiated
-            modifyOperation.modifyRecordsResultBlock = { [weak self] result in
-                switch result {
-                case .success:
-                    self?.logger.debug("Successfully saved records")
-                case .failure(let error):
-                    self?.logger.error("Failed to save attachment records. \(error)")
-                }
-            }
-            database.add(modifyOperation)
+            try persistenceController.addComment(comment: comment, to: issue, attachments: attachmentTransferables, audioAttachmentURL: audioURL)
         } catch {
-            logger.error("Failed to save context. \(error)")
+            logger.error("Failed to add comment. \(error)")
         }
     }
     

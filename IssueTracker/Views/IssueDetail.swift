@@ -9,6 +9,7 @@ import SwiftUI
 
 struct IssueDetail: View {
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.managedObjectContext) private var viewContext
     @ObservedObject private(set) var issue: Issue
     @StateObject private var viewModel: IssueDetailViewModel
     @State private var showingEditView = false
@@ -17,8 +18,7 @@ struct IssueDetail: View {
     @State private var commentToEdit: Comment? = nil
     
     init(issue: Issue) {
-        self.issue = issue
-        // TODO: This will be illegal in a future update
+        _issue = ObservedObject(wrappedValue: issue)
         _viewModel = StateObject(wrappedValue: IssueDetailViewModel(issue: issue))
     }
     
@@ -38,12 +38,14 @@ struct IssueDetail: View {
             .toolbarBackground(Color.customBackground)
             .sheet(isPresented: $showingCommentSheet) {
                 AddCommentView(issue: issue)
+                    .environment(\.managedObjectContext, viewContext)
                     .presentationDetents([.large])
                     .presentationDragIndicator(.visible)
             }
             .sheet(isPresented: $showingEditCommentView) {
                 if let commentToEdit {
                     EditCommentView(comment: commentToEdit)
+                        .environment(\.managedObjectContext, viewContext)
                         .presentationDetents([.large])
                         .presentationDragIndicator(.visible)
                 }

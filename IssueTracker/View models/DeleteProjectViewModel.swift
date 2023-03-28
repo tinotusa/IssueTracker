@@ -18,31 +18,27 @@ final class DeleteProjectViewModel: ObservableObject {
         }
     }
     @Published var showingDeleteProjectDialog = false
-    
-    private let log = Logger(subsystem: "com.tinotusa.IssueTracker", category: "DeleteProjectViewModel")
-    private let viewContext: NSManagedObjectContext
-    
-    init(viewContext: NSManagedObjectContext = PersistenceController.shared.container.viewContext) {
-        self.viewContext = viewContext
-    }
+    private lazy var persistenceController = PersistenceController.shared
+    private let logger = Logger(
+        subsystem: Bundle.main.bundleIdentifier!,
+        category: String(describing: DeleteProjectViewModel.self)
+    )
 }
 
 extension DeleteProjectViewModel {
     /// Deletes the selected project from core data.
     /// - Returns: `true` if the delete was successful; `false` otherwise.
     func deleteProject() -> Bool {
-        log.debug("Deleting project...")
         guard let selectedProject else {
-            log.debug("Failed to delete project. no project selected.")
+            logger.debug("Failed to delete project. no project selected.")
             return false
         }
-        viewContext.delete(selectedProject)
+        logger.debug("Deleting project \(selectedProject.wrappedId)")
         do {
-            try viewContext.save()
-            log.debug("Successfully deleted project.")
+            try persistenceController.deleteObject(selectedProject)
             return true
         } catch {
-            log.error("Failed to delete project. \(error)")
+            logger.error("Failed to delete project \(selectedProject.wrappedId). \(error)")
             return false
         }
     }

@@ -12,7 +12,7 @@ import os
 class AudioRecorder: ObservableObject {
     private var recorder: AVAudioRecorder?
     @Published private(set) var isRecording = false
-    private let log = Logger(
+    private let logger = Logger(
         subsystem: Bundle.main.bundleIdentifier!,
         category: String(describing: AudioRecorder.self)
     )
@@ -24,7 +24,7 @@ class AudioRecorder: ObservableObject {
         do {
             try session.setCategory(.record)
         } catch {
-            log.error("Failed to init audio recorder.")
+            logger.error("Failed to init audio recorder.")
         }
     }
     
@@ -32,7 +32,7 @@ class AudioRecorder: ObservableObject {
         var hasPermission = false
         session.requestRecordPermission { [weak self] granted in
             if !granted {
-                self?.log.debug("Use denied recording.")
+                self?.logger.debug("Use denied recording.")
                 hasPermission = false
                 return
             }
@@ -46,7 +46,7 @@ class AudioRecorder: ObservableObject {
         if !requestPermission() {
             return
         }
-        log.debug("Starting to record audio.")
+        logger.debug("Starting to record audio.")
         do {
             let attachmentsFolder = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appending(path: "attachmentsFolder")
             if !FileManager.default.fileExists(atPath: attachmentsFolder.path()) {
@@ -57,12 +57,12 @@ class AudioRecorder: ObservableObject {
             recorder = try .init(url: audioFileURL, settings: [:])
             
             if isRecording {
-                log.debug("Already recording.")
+                logger.debug("Already recording.")
                 return
             }
             
             guard let recorder else {
-                log.debug("Failed to start recorder. recorder is nil.")
+                logger.debug("Failed to start recorder. recorder is nil.")
                 return
             }
             
@@ -70,14 +70,14 @@ class AudioRecorder: ObservableObject {
             recorder.record()
             isRecording = recorder.isRecording
         } catch {
-            log.error("Failed to start recording. \(error)")
+            logger.error("Failed to start recording. \(error)")
         }
     }
     
     @MainActor
     func stopRecording() {
         guard let recorder else {
-            log.debug("Recorder is nil.")
+            logger.debug("Recorder is nil.")
             return
         }
         if !isRecording {
@@ -89,13 +89,13 @@ class AudioRecorder: ObservableObject {
             print("The file has been written to disk.")
         }
         isRecording = recorder.isRecording
-        log.debug("Stopped recording.")
+        logger.debug("Stopped recording.")
     }
     
     @MainActor
     func pauseRecording() {
         guard let recorder else {
-            log.debug("Cannot pause recording recorder is nil.")
+            logger.debug("Cannot pause recording recorder is nil.")
             return
         }
         recorder.pause()
@@ -105,18 +105,18 @@ class AudioRecorder: ObservableObject {
     @MainActor
     func deleteRecording() {
         guard let recorder else {
-            log.debug("Failed to delete recording. recorder is nil.")
+            logger.debug("Failed to delete recording. recorder is nil.")
             return
         }
         if isRecording {
-            log.debug("Failed to delete recording. recorder is still recording.")
+            logger.debug("Failed to delete recording. recorder is still recording.")
             return
         }
         let fileWasDeleted = recorder.deleteRecording()
         if !fileWasDeleted {
-            log.error("Failed to delete audio recording.")
+            logger.error("Failed to delete audio recording.")
         }
         url = nil
-        log.debug("Successfully deleted audio recording.")
+        logger.debug("Successfully deleted audio recording.")
     }
 }

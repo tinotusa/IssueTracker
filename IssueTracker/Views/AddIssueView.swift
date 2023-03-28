@@ -9,18 +9,15 @@ import SwiftUI
 import CoreData
 
 struct AddIssueView: View {
+    @ObservedObject var project: Project
+    
+    @StateObject private var viewModel = AddIssueViewModel()
+    
     @Environment(\.managedObjectContext) private var viewContext
     @Environment(\.dismiss) private var dismiss
-    @StateObject private var viewModel: AddIssueViewModel
-    @ObservedObject var project: Project
     
     @FetchRequest(sortDescriptors: [.init(\.dateCreated, order: .reverse)])
     private var allTags: FetchedResults<Tag>
-    
-    init(project: Project) {
-        self.project = project
-        _viewModel = StateObject(wrappedValue: AddIssueViewModel(project: project))
-    }
     
     var body: some View {
         NavigationStack {
@@ -44,7 +41,7 @@ struct AddIssueView: View {
             }
             .safeAreaInset(edge: .bottom) {
                 ProminentButton("Add Issue") {
-                    viewModel.addIssue()
+                    viewModel.addIssue(to: project)
                     dismiss()
                 }
                 .disabled(!viewModel.allFieldsFilled)
@@ -110,7 +107,7 @@ private extension AddIssueView {
         }
         ToolbarItem(placement: .confirmationAction) {
             Button("Add Issue") {
-                viewModel.addIssue()
+                viewModel.addIssue(to: project)
                 dismiss()
             }
             .disabled(!viewModel.allFieldsFilled)

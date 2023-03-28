@@ -21,27 +21,23 @@ final class HomeViewModel: ObservableObject {
     // A boolean indicating whether or not the DeleteProjectView is showing.
     @Published var showingDeleteProjectView = false
     
-    private let viewContext: NSManagedObjectContext
-    private let log = Logger(subsystem: "com.tinotusa.IssueTracker", category: "HomeViewModel")
-    
-    init(viewContext: NSManagedObjectContext = PersistenceController.shared.container.viewContext) {
-        self.viewContext = viewContext
-    }
+    private lazy var persistenceController = PersistenceController.shared
+    private let logger = Logger(
+        subsystem: Bundle.main.bundleIdentifier!,
+        category: String(describing: HomeViewModel.self)
+    )
 }
 
 extension HomeViewModel {
     /// Deletes the given project for the view context.
     /// - Parameter project: The project to delete.
     func deleteProject(_ project: Project) {
-        log.debug("Deleting project ...")
-        
-        viewContext.delete(project)
+        logger.debug("Deleting project \(project.wrappedId)")
         do {
-            try viewContext.save()
-            log.debug("Successfully deleted project.")
+            try persistenceController.deleteObject(project)
+            logger.debug("Successfully deleted project.")
         } catch {
-            viewContext.rollback()
-            log.error("Failed to delete project. \(error)")
+            logger.error("Failed to delete project: \(project.wrappedId). \(error)")
         }
     }
 }

@@ -10,53 +10,47 @@ import CoreData
 import os
 
 final class IssueDetailViewModel: ObservableObject {
-    private let viewContext: NSManagedObjectContext
     private let issue: Issue
-    private let log = Logger(subsystem: "com.tinotusa.IssueTracker", category: "IssueDetailViewModel")
+    private let logger = Logger(
+        subsystem: Bundle.main.bundleIdentifier!,
+        category: String(describing: IssueDetailViewModel.self)
+    )
     /// The comments text.
     @Published var comment = ""
+    private lazy var persistenceController = PersistenceController.shared
     
-    init(issue: Issue, viewContext: NSManagedObjectContext = PersistenceController.shared.container.viewContext) {
-        self.viewContext = viewContext
+    init(issue: Issue) {
         self.issue = issue
+    }
+}
+
+extension IssueDetailViewModel {
+    var validComment: Bool {
+        let comment = comment.trimmingCharacters(in: .whitespacesAndNewlines)
+        if comment.isEmpty {
+            return false
+        }
+        return true
     }
     
     /// Adds the `comment`to the issues comments.
-    func addComment() {
-        if comment.isEmpty {
-            log.debug("Failed to add comment. comment text is empty.")
+    func addComment(to issue: Issue) {
+        if !validComment {
+            logger.debug("Failed to add comment. Comment is not valid.")
             return
         }
-        issue.addToComments(.init(comment: comment, context: viewContext))
         do {
-            try viewContext.save()
-            comment = ""
-            log.debug("Successfully saved comment.")
+            try persistenceController.addComment(comment: comment, to: issue)
         } catch {
-            log.error("Failed to save comment.")
+            logger.error("Failed to add comment. \(error)")
         }
     }
     
     func deleteComment(_ comment: Comment) {
-        viewContext.delete(comment)
         do {
-            try viewContext.save()
+            try persistenceController.deleteObject(comment)
         } catch {
-            log.error("Failed to delete comment. \(error)")
-        }
-    }
-    
-    func addNewEmptyComment() {
-        log.debug("Add new empty comment...")
-        let comment = Comment(context: viewContext)
-        comment.id = UUID()
-        comment.issue = issue
-        comment.dateCreated = Date()
-        do {
-            try viewContext.save()
-            log.debug("Successfully added a new empty comment.")
-        } catch {
-            log.error("Failed to add new empty comment.")
+            logger.error("Failed to delete comment. \(error)")
         }
     }
 }
