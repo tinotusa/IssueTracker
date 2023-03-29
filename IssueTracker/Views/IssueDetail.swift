@@ -8,14 +8,12 @@
 import SwiftUI
 
 struct IssueDetail: View {
+    @State private var issueDetailState: IssueDetailState? = nil
+    @StateObject private var viewModel: IssueDetailViewModel
+    @ObservedObject private(set) var issue: Issue
+    
     @Environment(\.dismiss) private var dismiss
     @Environment(\.managedObjectContext) private var viewContext
-    @ObservedObject private(set) var issue: Issue
-    @StateObject private var viewModel: IssueDetailViewModel
-    @State private var showingEditView = false
-    @State private var showingCommentSheet = false
-    @State private var showingEditCommentView = false
-    @State private var commentToEdit: Comment? = nil
     
     init(issue: Issue) {
         _issue = ObservedObject(wrappedValue: issue)
@@ -36,19 +34,18 @@ struct IssueDetail: View {
             .listStyle(.plain)
             .background(Color.customBackground)
             .toolbarBackground(Color.customBackground)
-            .sheet(isPresented: $showingCommentSheet) {
-                AddCommentView(issue: issue)
-                    .environment(\.managedObjectContext, viewContext)
-                    .presentationDetents([.large])
-                    .presentationDragIndicator(.visible)
-            }
-            .sheet(isPresented: $showingEditCommentView) {
-                if let commentToEdit {
-                    EditCommentView(comment: commentToEdit)
-                        .environment(\.managedObjectContext, viewContext)
-                        .presentationDetents([.large])
-                        .presentationDragIndicator(.visible)
+            .sheet(item: $issueDetailState) { state in
+                Group {
+                    switch state {
+                    case .showingCommentSheet:
+                        AddCommentView(issue: issue)
+                    case .showingEditCommentView(let comment):
+                        EditCommentView(comment: comment)
+                    }
                 }
+                .environment(\.managedObjectContext, viewContext)
+                .presentationDetents([.large])
+                .presentationDragIndicator(.visible)
             }
             .toolbar {
                 toolbarItems
@@ -64,6 +61,13 @@ struct IssueDetail: View {
 }
 
 private extension IssueDetail {
+    enum IssueDetailState: Hashable, Identifiable {
+        case showingCommentSheet
+        case showingEditCommentView(comment: Comment)
+        
+        var id: Self { self }
+    }
+    
     var titleSection: some View {
         Section("Title") {
             Text(issue.wrappedName)
@@ -126,8 +130,7 @@ private extension IssueDetail {
                             Label("Delete", systemImage: "trash")
                         }
                         Button {
-                            showingEditCommentView = true
-                            commentToEdit = comment
+                            issueDetailState = .showingEditCommentView(comment: comment)
                         } label: {
                             Label("Edit", systemImage: "rectangle.and.pencil.and.ellipsis")
                         }
@@ -136,7 +139,7 @@ private extension IssueDetail {
             }
             
             Button("Add comment") {
-                showingCommentSheet = true
+                issueDetailState = .showingCommentSheet
             }
             .buttonStyle(.borderedProminent)
         }
