@@ -61,22 +61,22 @@ extension PersistenceController {
         priority: Issue.Priority,
         tags: Set<Tag>,
         project: Project
-    ) {
+    ) -> Bool {
         let issue = Issue(name: name, issueDescription: issueDescription, priority: priority, tags: tags, context: viewContext)
         logger.debug("Adding new issue with id: \(issue.wrappedId)")
         project.addToIssues(issue)
-        save()
+        return save()
     }
     
     /// Toggles the issues status.
     /// - Parameter issue: The issue to toggle.
     @MainActor
-    func toggleIssueStatus(for issue: Issue) {
+    func toggleIssueStatus(for issue: Issue) -> Bool {
         switch issue.wrappedStatus {
         case .open: issue.wrappedStatus = .closed
         case .closed: issue.wrappedStatus = .open
         }
-        save()
+        return save()
     }
     
     /// Changes the issues status to the given status.
@@ -84,12 +84,12 @@ extension PersistenceController {
     ///   - issue: The issue to change.
     ///   - status: The status to set the issue to.
     @MainActor
-    func setIssueStatus(for issue: Issue, to status: Issue.Status) {
+    func setIssueStatus(for issue: Issue, to status: Issue.Status) -> Bool {
         if issue.wrappedStatus == status {
-            return
+            return false
         }
         issue.wrappedStatus = status
-        save()
+        return save()
     }
     
     /// Copies values from the source issue to the destination issue.
@@ -98,12 +98,12 @@ extension PersistenceController {
     ///   - destination: The issue to copy to.
     ///   - tags: The tags from the source issue to copy to the destination.
     @MainActor
-    func copyIssue(from source: Issue, to destination: Issue, withTags tags: Set<Tag>) {
+    func copyIssue(from source: Issue, to destination: Issue, withTags tags: Set<Tag>) -> Bool {
         logger.debug("Copying from issue: \(source.wrappedId) to issue: \(destination.wrappedId)")
         destination.copyProperties(from: source)
         destination.tags = .init(set: tags)
         
-        save()
+        return save()
     }
 }
 
@@ -125,7 +125,7 @@ extension PersistenceController {
         to issue: Issue,
         attachments attachmentTransferables: [AttachmentTransferable]? = nil,
         audioAttachmentURL audioURL: URL? = nil
-    ) {
+    ) -> Bool {
         let comment = Comment(comment: comment, context: viewContext)
         logger.debug("Adding comment with id: \(comment.wrappedId)")
         
@@ -178,7 +178,7 @@ extension PersistenceController {
         comment.addToAttachments(.init(array: attachments))
         
         // save to coredata and cloudkit
-        save()
+        
         
         let database = CKContainer.default().privateCloudDatabase
         let modifyOperation = CKModifyRecordsOperation(recordsToSave: records)
@@ -192,6 +192,8 @@ extension PersistenceController {
             }
         }
         database.add(modifyOperation)
+        let didSave = save()
+        return didSave
     }
     
     /// Adds a new project to core data.
@@ -199,19 +201,19 @@ extension PersistenceController {
     ///   - name: The name of the project.
     ///   - dateStarted: The start date for the project.
     @MainActor
-    func addProject(name: String, dateStarted: Date) {
+    func addProject(name: String, dateStarted: Date) -> Bool {
         let project = Project(name: name, startDate: dateStarted, context: viewContext)
         logger.debug("Adding new project with id: \(project.wrappedId)")
-        save()
+        return save()
     }
     
     /// Deletes the given object from core data.
     /// - Parameter object: The object to delete.
     @MainActor
-    func deleteObject<T: NSManagedObject>(_ object: T) {
+    func deleteObject<T: NSManagedObject>(_ object: T) -> Bool {
         viewContext.delete(object)
         logger.debug("Deleting object with id: \(object.objectID)")
-        save()
+        return save()
     }
     
     /// Adds an attachment to a comment.
@@ -220,7 +222,7 @@ extension PersistenceController {
     ///   - attachmentURL: The URL for the attachment.
     ///   - comment: The comment to add the attachment to.
     @MainActor
-    func addAttachment(ofType attachmentType: AttachmentType, attachmentURL: URL, to comment: Comment) {
+    func addAttachment(ofType attachmentType: AttachmentType, attachmentURL: URL, to comment: Comment) -> Bool {
         let attachment = Attachment(context: viewContext)
         attachment.assetURL = attachmentURL
         attachment.type = attachmentType.rawValue
@@ -230,24 +232,26 @@ extension PersistenceController {
         
         comment.addToAttachments(attachment)
         logger.debug("Added new attachment to comment: \(comment.wrappedId).")
-        save()
+        return save()
     }
     
     @MainActor
     /// Commits the changes made to core data.
-    func save() {
+    func save() -> Bool {
         if !viewContext.hasChanges {
             logger.debug("Failed to save. managed object has no changes.")
-            return
+            return false
         }
         
         do {
             try viewContext.save()
             logger.debug("Successfully saved managed object context.")
+            return true
         } catch {
             logger.error("Failed to save managed object context. \(error)")
             showingError = true
             persistenceError = .saveError
+            return false
         }
     }
 }

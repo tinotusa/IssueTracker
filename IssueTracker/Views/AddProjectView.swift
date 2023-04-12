@@ -12,31 +12,27 @@ struct AddProjectView: View {
     @State private var projectName = ""
     @State private var dateStarted: Date = .now
     
-    @StateObject private var viewModel = AddProjectViewModel()
-    
     @Environment(\.managedObjectContext) private var viewContext
     @Environment(\.dismiss) private var dismiss
     @EnvironmentObject private var persistenceController: PersistenceController
     
     var body: some View {
         NavigationStack {
-            ScrollView(showsIndicators: false) {
-                VStack(alignment: .leading) {
-                    LabeledInputField("Project name:") {
-                        CustomTextField("Project name", text: $viewModel.projectName)
-                            .onReceive(Just(viewModel.projectName), perform: viewModel.filterName)
-                    }
+            List {
+                Section("Project name") {
+                    TextField("Project name", text: $projectName)
                 }
+                .listRowSeparator(.hidden)
+                .listRowBackground(Color.customBackground)
             }
+            .listStyle(.plain)
             .safeAreaInset(edge: .bottom) {
                 ProminentButton("Add project") {
-                    persistenceController.addProject(name: projectName, dateStarted: dateStarted)
-                    dismiss()
+                    addProject()
                 }
-                .disabled(viewModel.addButtonDisabled)
+                .disabled(addButtonDisabled)
             }
             .persistenceErrorAlert(isPresented: $persistenceController.showingError, presenting: $persistenceController.persistenceError)
-            .padding()
             .background(Color.customBackground)
             .toolbarBackground(Color.customBackground)
             .navigationTitle("New project")
@@ -48,14 +44,35 @@ struct AddProjectView: View {
                 }
                 ToolbarItem(placement: .confirmationAction) {
                     Button("Add project") {
-                        persistenceController.addProject(name: projectName, dateStarted: dateStarted)
-                        dismiss()
+                        addProject()
                     }
-                    .disabled(viewModel.addButtonDisabled)
+                    .disabled(addButtonDisabled)
                 }
             }
         }
     }
+}
+
+private extension AddProjectView {
+    func addProject() {
+        let didSave = persistenceController.addProject(name: projectName, dateStarted: dateStarted)
+        if didSave {
+            dismiss()
+        }
+    }
+    
+    func filterName(name: String) {
+        let filteredName = Project.filterName(name)
+        if filteredName != projectName {
+            projectName = filteredName
+        }
+    }
+    
+    var addButtonDisabled: Bool {
+        let projectName = projectName.trimmingCharacters(in: .whitespacesAndNewlines)
+        return projectName.isEmpty
+    }
+    
 }
 
 struct AddProjectView_Previews: PreviewProvider {

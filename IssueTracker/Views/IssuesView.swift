@@ -105,7 +105,7 @@ struct IssuesView: View {
                 guard let selectedIssue else {
                     return
                 }
-                persistenceController.deleteObject(selectedIssue)
+                _ = persistenceController.deleteObject(selectedIssue)
             } label: {
                 Text("Delete")
             }
@@ -218,9 +218,9 @@ private extension IssuesView {
         Button {
             switch issue.wrappedStatus {
             case .closed:
-                persistenceController.setIssueStatus(for: issue, to: .open)
+                _ = persistenceController.setIssueStatus(for: issue, to: .open)
             case .open:
-                persistenceController.setIssueStatus(for: issue, to: .closed)
+                _ = persistenceController.setIssueStatus(for: issue, to: .closed)
             }
         } label: {
             Label(

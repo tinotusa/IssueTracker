@@ -32,25 +32,4 @@ extension IssueDetailViewModel {
         }
         return true
     }
-    
-//    /// Adds the `comment`to the issues comments.
-//    func addComment(to issue: Issue) {
-//        if !validComment {
-//            logger.debug("Failed to add comment. Comment is not valid.")
-//            return
-//        }
-//        do {
-//            try persistenceController.addComment(comment: comment, to: issue)
-//        } catch {
-//            logger.error("Failed to add comment. \(error)")
-//        }
-//    }
-//    
-//    func deleteComment(_ comment: Comment) {
-//        do {
-//            try persistenceController.deleteObject(comment)
-//        } catch {
-//            logger.error("Failed to delete comment. \(error)")
-//        }
-//    }
 }

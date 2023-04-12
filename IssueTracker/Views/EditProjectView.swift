@@ -10,7 +10,9 @@ import SwiftUI
 struct EditProjectView: View {
     @ObservedObject private(set) var project: Project
     @Environment(\.managedObjectContext) private var viewContext
+    @EnvironmentObject private var persistenceController: PersistenceController
     @Environment(\.dismiss) private var dismiss
+    
     @StateObject private var viewModel: EditProjectViewModel
     
     init(project: Project) {
@@ -38,8 +40,10 @@ struct EditProjectView: View {
                     }
                     
                     ProminentButton("Save changes") {
-                        _ = viewModel.save()
-                        dismiss()
+                        let didSave = saveChanges()
+                        if didSave {
+                            dismiss()
+                        }
                     }
                     .frame(maxWidth: .infinity, alignment: .center)
                     .disabled(!viewModel.projectHasChanges)
@@ -63,8 +67,10 @@ struct EditProjectView: View {
                 
                 ToolbarItem(placement: .primaryAction) {
                     Button("Save") {
-                        _ = viewModel.save()
-                        dismiss()
+                        let didSave = saveChanges()
+                        if didSave {
+                            dismiss()
+                        }
                     }
                     .disabled(!viewModel.projectHasChanges)
                 }
@@ -81,12 +87,19 @@ struct EditProjectView: View {
     }
 }
 
+private extension EditProjectView {
+    func saveChanges() -> Bool {
+        viewModel.save(persistenceController: persistenceController)
+    }
+}
+
 struct EditProjectView_Previews: PreviewProvider {
     static var viewContext = PersistenceController.preview.container.viewContext
     static var previews: some View {
         NavigationStack {
             EditProjectView(project: .example)
                 .environment(\.managedObjectContext, viewContext)
+                .environmentObject(PersistenceController.preview)
         }
     }
 }

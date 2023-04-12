@@ -58,7 +58,7 @@ struct EditIssueView: View {
         .persistenceErrorAlert(isPresented: $persistenceController.showingError, presenting: $persistenceController.persistenceError)
         .safeAreaInset(edge: .bottom) {
             ProminentButton("Save Changes") {
-                persistenceController.copyIssue(from: issueCopy, to: issue, withTags: selectedTags)
+                _ = persistenceController.copyIssue(from: issueCopy, to: issue, withTags: selectedTags)
             }
             .disabled(issueCopy != issue)
         }
@@ -74,7 +74,7 @@ struct EditIssueView: View {
             }
             ToolbarItem(placement: .confirmationAction) {
                 Button("Save") {
-                    persistenceController.copyIssue(from: issueCopy, to: issue, withTags: selectedTags)
+                    _ = persistenceController.copyIssue(from: issueCopy, to: issue, withTags: selectedTags)
                 }
                 .disabled(issueCopy != issue)
             }

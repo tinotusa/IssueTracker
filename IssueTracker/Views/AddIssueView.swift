@@ -43,7 +43,6 @@ struct AddIssueView: View {
             .safeAreaInset(edge: .bottom) {
                 ProminentButton("Add Issue") {
                     addIssue()
-                    dismiss()
                 }
                 .disabled(!issueData.allFieldsFilled)
             }
@@ -110,7 +109,6 @@ private extension AddIssueView {
         ToolbarItem(placement: .confirmationAction) {
             Button("Add Issue") {
                 addIssue()
-                dismiss()
             }
             .disabled(!issueData.allFieldsFilled)
         }
@@ -120,13 +118,16 @@ private extension AddIssueView {
 // MARK: - Functions
 private extension AddIssueView {
     func addIssue() {
-        persistenceController.addIssue(
+        let didSave = persistenceController.addIssue(
             name: issueData.name,
             issueDescription: issueData.description,
             priority: issueData.priority,
             tags: issueData.tags,
             project: project
         )
+        if didSave {
+            dismiss()
+        }
     }
 }
 

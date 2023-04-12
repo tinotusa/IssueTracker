@@ -49,13 +49,15 @@ struct AddCommentView: View {
                     Button {
                         Task {
                             let attachments = await viewModel.getAttachmentsTransferables()
-                            persistenceController.addComment(
+                            let didSave = persistenceController.addComment(
                                 comment: viewModel.comment,
                                 to: issue,
                                 attachments: attachments,
                                 audioAttachmentURL: audioRecorder.url
                             )
-                            dismiss()
+                            if didSave {
+                                dismiss()
+                            }
                         }
                     } label: {
                         Label("add", systemImage: "plus")

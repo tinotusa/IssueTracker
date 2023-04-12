@@ -94,7 +94,7 @@ struct HomeView: View {
                     guard let selectedProject else {
                         return
                     }
-                    persistenceController.deleteObject(selectedProject)
+                    _ = persistenceController.deleteObject(selectedProject)
                     self.selectedProject = nil
                 }
             } message: {
