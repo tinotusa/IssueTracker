@@ -48,15 +48,7 @@ struct IssueDetail: View {
                 .presentationDetents([.large])
                 .presentationDragIndicator(.visible)
             }
-            .alert(
-                "Save failed.",
-                isPresented: $persistenceController.showingError,
-                presenting: $persistenceController.persistenceError
-            ) { error in
-                
-            } message: { error in
-                Text("Failed to save the changes made.")
-            }
+            .persistenceErrorAlert(isPresented: $persistenceController.showingError, presenting: $persistenceController.persistenceError)
             .toolbar {
                 toolbarItems
             }

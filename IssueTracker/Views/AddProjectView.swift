@@ -35,7 +35,7 @@ struct AddProjectView: View {
                 }
                 .disabled(viewModel.addButtonDisabled)
             }
-            .bodyStyle()
+            .persistenceErrorAlert(isPresented: $persistenceController.showingError, presenting: $persistenceController.persistenceError)
             .padding()
             .background(Color.customBackground)
             .toolbarBackground(Color.customBackground)

@@ -58,6 +58,7 @@ struct IssuesView: View {
                 }
             }
         }
+        .persistenceErrorAlert(isPresented: $persistenceController.showingError, presenting: $persistenceController.persistenceError)
         .listStyle(.plain)
         .searchable(text: $viewModel.searchText)
         .searchScopes($viewModel.searchScope) {

@@ -43,6 +43,7 @@ struct AddCommentView: View {
                     await viewModel.loadImages(from: photoItems)
                 }
             }
+            .persistenceErrorAlert(isPresented: $persistenceController.showingError, presenting: $persistenceController.persistenceError)
             .toolbar {
                 ToolbarItem(placement: .primaryAction) {
                     Button {

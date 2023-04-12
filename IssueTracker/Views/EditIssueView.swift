@@ -55,6 +55,7 @@ struct EditIssueView: View {
         .toolbarBackground(Color.customBackground)
         .navigationBarBackButtonHidden(true)
         .navigationTitle("Edit issue")
+        .persistenceErrorAlert(isPresented: $persistenceController.showingError, presenting: $persistenceController.persistenceError)
         .safeAreaInset(edge: .bottom) {
             ProminentButton("Save Changes") {
                 persistenceController.copyIssue(from: issueCopy, to: issue, withTags: selectedTags)

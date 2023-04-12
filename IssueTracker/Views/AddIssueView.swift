@@ -39,6 +39,7 @@ struct AddIssueView: View {
             .listStyle(.plain)
             .navigationTitle("Add issue")
             .background(Color.customBackground)
+            .persistenceErrorAlert(isPresented: $persistenceController.showingError, presenting: $persistenceController.persistenceError)
             .toolbarBackground(Color.customBackground)
             .toolbar {
                 toolbarItems

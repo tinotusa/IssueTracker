@@ -74,6 +74,7 @@ struct HomeView: View {
             }
             .listStyle(.plain)
             .bodyStyle()
+            .persistenceErrorAlert(isPresented: $persistenceController.showingError, presenting: $persistenceController.persistenceError)
             .sheet(isPresented: $showingAddProjectView) {
                 AddProjectView()
                     .presentationDetents([.large])

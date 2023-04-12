@@ -242,9 +242,7 @@ extension PersistenceController {
         }
         
         do {
-//            try viewContext.save()
-            showingError = true
-            persistenceError = .saveError
+            try viewContext.save()
             logger.debug("Successfully saved managed object context.")
         } catch {
             logger.error("Failed to save managed object context. \(error)")
