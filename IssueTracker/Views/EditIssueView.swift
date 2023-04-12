@@ -93,7 +93,7 @@ struct IssueEditView_Previews: PreviewProvider {
     static var previews: some View {
         NavigationStack {
             EditIssueView(issue: .example)
-                .environmentObject(PersistenceController())
+                .environmentObject(PersistenceController.preview)
         }
     }
 }

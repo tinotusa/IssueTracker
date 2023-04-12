@@ -171,6 +171,6 @@ struct IssueDetail_Previews: PreviewProvider {
     static var previews: some View {
         IssueDetail(issue: .example)
             .environment(\.managedObjectContext, viewContext)
-            .environmentObject(PersistenceController())
+            .environmentObject(PersistenceController.preview)
     }
 }

@@ -10,11 +10,7 @@ import CoreData
 
 struct AddIssueView: View {
     @ObservedObject var project: Project
-    @State private var name = ""
-    @State private var description = ""
-    @State private var priority: Issue.Priority = .low
-    @State private var tags: Set<Tag> = []
-    @State private var newTag = ""
+    @State private var issueData = IssueData()
     
     @Environment(\.managedObjectContext) private var viewContext
     @Environment(\.dismiss) private var dismiss
@@ -46,32 +42,27 @@ struct AddIssueView: View {
             }
             .safeAreaInset(edge: .bottom) {
                 ProminentButton("Add Issue") {
-                    persistenceController.addIssue(
-                        name: name,
-                        issueDescription: description,
-                        priority: priority,
-                        tags: tags,
-                        project: project
-                    )
+                    addIssue()
                     dismiss()
                 }
-//                .disabled(!viewModel.allFieldsFilled)
+                .disabled(!issueData.allFieldsFilled)
             }
         }
     }
 }
 
+// MARK: - List sections
 private extension AddIssueView {
     var nameSection: some View{
         Section("Name") {
-            TextField("Issue name", text: $name)
+            TextField("Issue name", text: $issueData.name)
                 .textFieldStyle(.roundedBorder)
         }
     }
     
     var descriptionSection: some View {
         Section("Description") {
-            TextField("Issue description", text: $description, axis: .vertical)
+            TextField("Issue description", text: $issueData.description, axis: .vertical)
                 .lineLimit(4 ... 8)
                 .textFieldStyle(.roundedBorder)
         }
@@ -79,7 +70,7 @@ private extension AddIssueView {
     
     var prioritySection: some View {
         Section("Priority") {
-            Picker("Issue priority", selection: $priority) {
+            Picker("Issue priority", selection: $issueData.priority) {
                 ForEach(Issue.Priority.allCases) { priority in
                     Text(priority.title)
                 }
@@ -90,19 +81,19 @@ private extension AddIssueView {
     
     var addTagsSection: some View {
         Section("Add tags") {
-            TagSelectionView(selection: $tags)
+            TagSelectionView(selection: $issueData.tags)
         }
     }
     
     var selectedTagsSection: some View {
         Section("Selected tags") {
-            if tags.isEmpty {
+            if issueData.tags.isEmpty {
                 Text("No tags selected.")
                     .foregroundColor(.customSecondary)
                     .frame(maxWidth: .infinity, alignment: .center)
             }
             WrappingHStack {
-                ForEach(Array(tags)) { tag in
+                ForEach(Array(issueData.tags)) { tag in
                     Text(tag.wrappedName)
                 }
             }
@@ -118,26 +109,33 @@ private extension AddIssueView {
         }
         ToolbarItem(placement: .confirmationAction) {
             Button("Add Issue") {
-                persistenceController.addIssue(
-                    name: name,
-                    issueDescription: description,
-                    priority: priority,
-                    tags: tags,
-                    project: project
-                )
+                addIssue()
                 dismiss()
             }
+            .disabled(!issueData.allFieldsFilled)
         }
     }
-    
+}
+
+// MARK: - Functions
+private extension AddIssueView {
+    func addIssue() {
+        persistenceController.addIssue(
+            name: issueData.name,
+            issueDescription: issueData.description,
+            priority: issueData.priority,
+            tags: issueData.tags,
+            project: project
+        )
+    }
 }
 
 struct AddIssueView_Previews: PreviewProvider {
     static var viewContext = PersistenceController.preview.container.viewContext
     
     static var previews: some View {
-        AddIssueView(project: .init(name: "test", startDate: .now, context: viewContext))
+        AddIssueView(project: .example)
             .environment(\.managedObjectContext, viewContext)
-            .environmentObject(PersistenceController())
+            .environmentObject(PersistenceController.preview)
     }
 }

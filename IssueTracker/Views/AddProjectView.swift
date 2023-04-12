@@ -65,6 +65,6 @@ struct AddProjectView_Previews: PreviewProvider {
                 \.managedObjectContext,
                  PersistenceController.preview.container.viewContext
             )
-            .environmentObject(PersistenceController())
+            .environmentObject(PersistenceController.preview)
     }
 }
