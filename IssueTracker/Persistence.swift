@@ -9,15 +9,16 @@ import CoreData
 import os
 import CloudKit
 
-class PersistenceController {
+final class PersistenceController: ObservableObject {
     static let shared = PersistenceController()
-    let logger = Logger(
+    private let logger = Logger(
         subsystem: Bundle.main.bundleIdentifier!,
         category: String(describing:  PersistenceController.self)
     )
     
     let container: NSPersistentContainer
-
+    @Published private(set) var persistenceError: PersistenceError?
+    
     init(inMemory: Bool = false) {
         container =  NSPersistentCloudKitContainer(name: "IssueTracker")
         if inMemory {
@@ -58,33 +59,33 @@ extension PersistenceController {
         priority: Issue.Priority,
         tags: Set<Tag>,
         project: Project
-    ) throws {
+    ) {
         let issue = Issue(name: name, issueDescription: issueDescription, priority: priority, tags: tags, context: viewContext)
         logger.debug("Adding new issue with id: \(issue.wrappedId)")
         project.addToIssues(issue)
-        try save()
+        save()
     }
     
     /// Toggles the issues status.
     /// - Parameter issue: The issue to toggle.
-    func toggleIssueStatus(for issue: Issue) throws {
+    func toggleIssueStatus(for issue: Issue) {
         switch issue.wrappedStatus {
         case .open: issue.wrappedStatus = .closed
         case .closed: issue.wrappedStatus = .open
         }
-        try save()
+        save()
     }
     
     /// Changes the issues status to the given status.
     /// - Parameters:
     ///   - issue: The issue to change.
     ///   - status: The status to set the issue to.
-    func setIssueStatus(for issue: Issue, to status: Issue.Status) throws {
+    func setIssueStatus(for issue: Issue, to status: Issue.Status) {
         if issue.wrappedStatus == status {
             return
         }
         issue.wrappedStatus = status
-        try save()
+        save()
     }
     
     /// Copies values from the source issue to the destination issue.
@@ -92,12 +93,12 @@ extension PersistenceController {
     ///   - source: The issue to copy from.
     ///   - destination: The issue to copy to.
     ///   - tags: The tags from the source issue to copy to the destination.
-    func copyIssue(from source: Issue, to destination: Issue, withTags tags: Set<Tag>) throws {
+    func copyIssue(from source: Issue, to destination: Issue, withTags tags: Set<Tag>) {
         logger.debug("Copying from issue: \(source.wrappedId) to issue: \(destination.wrappedId)")
         destination.copyProperties(from: source)
         destination.tags = .init(set: tags)
         
-        try save()
+        save()
     }
 }
 
@@ -118,7 +119,7 @@ extension PersistenceController {
         to issue: Issue,
         attachments attachmentTransferables: [AttachmentTransferable]? = nil,
         audioAttachmentURL audioURL: URL? = nil
-    ) throws {
+    ) {
         let comment = Comment(comment: comment, context: viewContext)
         logger.debug("Adding comment with id: \(comment.wrappedId)")
         
@@ -171,43 +172,39 @@ extension PersistenceController {
         comment.addToAttachments(.init(array: attachments))
         
         // save to coredata and cloudkit
-        do {
-            try save()
-            
-            let database = CKContainer.default().privateCloudDatabase
-            let modifyOperation = CKModifyRecordsOperation(recordsToSave: records)
-            modifyOperation.qualityOfService = .userInitiated
-            modifyOperation.modifyRecordsResultBlock = { [weak self] result in
-                switch result {
-                case .success:
-                    self?.logger.debug("Successfully saved records")
-                case .failure(let error):
-                    self?.logger.error("Failed to save attachment records. \(error)")
-                }
+        save()
+        
+        let database = CKContainer.default().privateCloudDatabase
+        let modifyOperation = CKModifyRecordsOperation(recordsToSave: records)
+        modifyOperation.qualityOfService = .userInitiated
+        modifyOperation.modifyRecordsResultBlock = { [weak self] result in
+            switch result {
+            case .success:
+                self?.logger.debug("Successfully saved records")
+            case .failure(let error):
+                self?.logger.error("Failed to save attachment records. \(error)")
             }
-            database.add(modifyOperation)
-        } catch {
-            logger.error("Failed to add comment. \(error)")
         }
+        database.add(modifyOperation)
     }
     
     /// Adds a new project to core data.
     /// - Parameters:
     ///   - name: The name of the project.
     ///   - dateStarted: The start date for the project.
-    func addProject(name: String, dateStarted: Date) throws {
+    func addProject(name: String, dateStarted: Date) {
         let project = Project(name: name, startDate: dateStarted, context: viewContext)
         logger.debug("Adding new project with id: \(project.wrappedId)")
-        try save()
+        save()
         
     }
     
     /// Deletes the given object from core data.
     /// - Parameter object: The object to delete.
-    func deleteObject<T: NSManagedObject>(_ object: T) throws {
+    func deleteObject<T: NSManagedObject>(_ object: T) {
         viewContext.delete(object)
         logger.debug("Deleting object with id: \(object.objectID)")
-        try save()
+        save()
     }
     
     /// Adds an attachment to a comment.
@@ -215,7 +212,7 @@ extension PersistenceController {
     ///   - attachmentType: The type of the attachment (Image or audio).
     ///   - attachmentURL: The URL for the attachment.
     ///   - comment: The comment to add the attachment to.
-    func addAttachment(ofType attachmentType: AttachmentType, attachmentURL: URL, to comment: Comment) throws {
+    func addAttachment(ofType attachmentType: AttachmentType, attachmentURL: URL, to comment: Comment) {
         let attachment = Attachment(context: viewContext)
         attachment.assetURL = attachmentURL
         attachment.type = attachmentType.rawValue
@@ -225,16 +222,22 @@ extension PersistenceController {
         
         comment.addToAttachments(attachment)
         logger.debug("Added new attachment to comment: \(comment.wrappedId).")
-        try save()
+        save()
     }
     
     /// Commits the changes made to core data.
-    func save() throws {
+    func save() {
         if !viewContext.hasChanges {
             logger.debug("Failed to save. managed object has no changes.")
             return
         }
-        try viewContext.save()
+        do {
+            try viewContext.save()
+        } catch {
+            logger.error("Failed to save managed object context. \(error)")
+            persistenceError = .saveError
+        }
+        
         logger.debug("Successfully saved managed object context.")
     }
 }

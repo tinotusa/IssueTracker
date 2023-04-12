@@ -78,6 +78,7 @@
 		218E60C8298245BA00A9C4AB /* FilterIssuesList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 218E60C7298245BA00A9C4AB /* FilterIssuesList.swift */; };
 		218F93D729C8044500F9D62A /* ImageDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 218F93D629C8044500F9D62A /* ImageDetailView.swift */; };
 		218F93D929C80C3500F9D62A /* EditCommentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 218F93D829C80C3500F9D62A /* EditCommentView.swift */; };
+		218FD5EC29E65BD50029E1E6 /* PersistenceError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 218FD5EB29E65BD50029E1E6 /* PersistenceError.swift */; };
 		21AFDF2429777A3C00847889 /* Color+rgbComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21AFDF2329777A3C00847889 /* Color+rgbComponents.swift */; };
 		21AFDF2729777BD000847889 /* TagSearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21AFDF2629777BD000847889 /* TagSearchView.swift */; };
 		21AFDF2A29777F7F00847889 /* TagFilterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21AFDF2929777F7F00847889 /* TagFilterView.swift */; };
@@ -210,6 +211,7 @@
 		218E60C9298296FD00A9C4AB /* IssueTracker.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = IssueTracker.entitlements; sourceTree = "<group>"; };
 		218F93D629C8044500F9D62A /* ImageDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageDetailView.swift; sourceTree = "<group>"; };
 		218F93D829C80C3500F9D62A /* EditCommentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditCommentView.swift; sourceTree = "<group>"; };
+		218FD5EB29E65BD50029E1E6 /* PersistenceError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersistenceError.swift; sourceTree = "<group>"; };
 		21AFDF2329777A3C00847889 /* Color+rgbComponents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Color+rgbComponents.swift"; sourceTree = "<group>"; };
 		21AFDF2629777BD000847889 /* TagSearchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagSearchView.swift; sourceTree = "<group>"; };
 		21AFDF2929777F7F00847889 /* TagFilterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagFilterView.swift; sourceTree = "<group>"; };
@@ -311,6 +313,7 @@
 				211246C629B9B84500D0EB01 /* AudioRecorder.swift */,
 				211246C829B9B89A00D0EB01 /* AttachmentTransferable.swift */,
 				211246CA29B9B8EF00D0EB01 /* AttachmentType.swift */,
+				218FD5EB29E65BD50029E1E6 /* PersistenceError.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -833,6 +836,7 @@
 				2150C847295972E2006CD7D2 /* Persistence.swift in Sources */,
 				2127AD64295FB552005893DE /* EditIssueViewModel.swift in Sources */,
 				211104AB297239DB00FB8CD1 /* EditTagView.swift in Sources */,
+				218FD5EC29E65BD50029E1E6 /* PersistenceError.swift in Sources */,
 				2150C840295972E0006CD7D2 /* ContentView.swift in Sources */,
 				2150C84A295972E2006CD7D2 /* IssueTracker.xcdatamodeld in Sources */,
 				2150C83E295972E0006CD7D2 /* IssueTrackerApp.swift in Sources */,
