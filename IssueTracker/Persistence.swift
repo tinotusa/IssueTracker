@@ -17,7 +17,8 @@ final class PersistenceController: ObservableObject {
     )
     
     let container: NSPersistentContainer
-    @Published private(set) var persistenceError: PersistenceError?
+    @Published var persistenceError: PersistenceError?
+    @Published var showingError = false
     
     init(inMemory: Bool = false) {
         container =  NSPersistentCloudKitContainer(name: "IssueTracker")
@@ -53,6 +54,7 @@ extension PersistenceController {
     ///   - priority: The priority of the issue.
     ///   - tags: The tags associated with the issue.
     ///   - project: The project the issue is a part of.
+    @MainActor
     func addIssue(
         name: String,
         issueDescription: String,
@@ -68,6 +70,7 @@ extension PersistenceController {
     
     /// Toggles the issues status.
     /// - Parameter issue: The issue to toggle.
+    @MainActor
     func toggleIssueStatus(for issue: Issue) {
         switch issue.wrappedStatus {
         case .open: issue.wrappedStatus = .closed
@@ -80,6 +83,7 @@ extension PersistenceController {
     /// - Parameters:
     ///   - issue: The issue to change.
     ///   - status: The status to set the issue to.
+    @MainActor
     func setIssueStatus(for issue: Issue, to status: Issue.Status) {
         if issue.wrappedStatus == status {
             return
@@ -93,6 +97,7 @@ extension PersistenceController {
     ///   - source: The issue to copy from.
     ///   - destination: The issue to copy to.
     ///   - tags: The tags from the source issue to copy to the destination.
+    @MainActor
     func copyIssue(from source: Issue, to destination: Issue, withTags tags: Set<Tag>) {
         logger.debug("Copying from issue: \(source.wrappedId) to issue: \(destination.wrappedId)")
         destination.copyProperties(from: source)
@@ -114,6 +119,7 @@ extension PersistenceController {
     ///   - issue: The issue to add the comment to.
     ///   - attachmentTransferables: The image attachment(s) of the comment.
     ///   - audioURL: The audio attachment of the comment.
+    @MainActor
     func addComment(
         comment: String,
         to issue: Issue,
@@ -192,15 +198,16 @@ extension PersistenceController {
     /// - Parameters:
     ///   - name: The name of the project.
     ///   - dateStarted: The start date for the project.
+    @MainActor
     func addProject(name: String, dateStarted: Date) {
         let project = Project(name: name, startDate: dateStarted, context: viewContext)
         logger.debug("Adding new project with id: \(project.wrappedId)")
         save()
-        
     }
     
     /// Deletes the given object from core data.
     /// - Parameter object: The object to delete.
+    @MainActor
     func deleteObject<T: NSManagedObject>(_ object: T) {
         viewContext.delete(object)
         logger.debug("Deleting object with id: \(object.objectID)")
@@ -212,6 +219,7 @@ extension PersistenceController {
     ///   - attachmentType: The type of the attachment (Image or audio).
     ///   - attachmentURL: The URL for the attachment.
     ///   - comment: The comment to add the attachment to.
+    @MainActor
     func addAttachment(ofType attachmentType: AttachmentType, attachmentURL: URL, to comment: Comment) {
         let attachment = Attachment(context: viewContext)
         attachment.assetURL = attachmentURL
@@ -225,20 +233,24 @@ extension PersistenceController {
         save()
     }
     
+    @MainActor
     /// Commits the changes made to core data.
     func save() {
         if !viewContext.hasChanges {
             logger.debug("Failed to save. managed object has no changes.")
             return
         }
+        
         do {
-            try viewContext.save()
+//            try viewContext.save()
+            showingError = true
+            persistenceError = .saveError
+            logger.debug("Successfully saved managed object context.")
         } catch {
             logger.error("Failed to save managed object context. \(error)")
+            showingError = true
             persistenceError = .saveError
         }
-        
-        logger.debug("Successfully saved managed object context.")
     }
 }
 

@@ -10,12 +10,13 @@ import CoreData
 
 @main
 struct IssueTrackerApp: App {
-    let persistenceController = PersistenceController.shared
+    @StateObject private var persistenceController = PersistenceController.shared
     
     var body: some Scene {
         WindowGroup {
             ContentView()
                 .environment(\.managedObjectContext, persistenceController.container.viewContext)
+                .environmentObject(persistenceController)
         }
         .commands {
             IssueTrackerCommands()

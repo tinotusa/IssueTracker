@@ -9,9 +9,14 @@ import SwiftUI
 import Combine
 
 struct AddProjectView: View {
-    @Environment(\.managedObjectContext) private var viewContext
+    @State private var projectName = ""
+    @State private var dateStarted: Date = .now
+    
     @StateObject private var viewModel = AddProjectViewModel()
+    
+    @Environment(\.managedObjectContext) private var viewContext
     @Environment(\.dismiss) private var dismiss
+    @EnvironmentObject private var persistenceController: PersistenceController
     
     var body: some View {
         NavigationStack {
@@ -25,7 +30,7 @@ struct AddProjectView: View {
             }
             .safeAreaInset(edge: .bottom) {
                 ProminentButton("Add project") {
-                    viewModel.addProject()
+                    persistenceController.addProject(name: projectName, dateStarted: dateStarted)
                     dismiss()
                 }
                 .disabled(viewModel.addButtonDisabled)
@@ -43,7 +48,7 @@ struct AddProjectView: View {
                 }
                 ToolbarItem(placement: .confirmationAction) {
                     Button("Add project") {
-                        viewModel.addProject()
+                        persistenceController.addProject(name: projectName, dateStarted: dateStarted)
                         dismiss()
                     }
                     .disabled(viewModel.addButtonDisabled)
@@ -60,5 +65,6 @@ struct AddProjectView_Previews: PreviewProvider {
                 \.managedObjectContext,
                  PersistenceController.preview.container.viewContext
             )
+            .environmentObject(PersistenceController())
     }
 }

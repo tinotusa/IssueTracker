@@ -14,6 +14,7 @@ struct IssueDetail: View {
     
     @Environment(\.dismiss) private var dismiss
     @Environment(\.managedObjectContext) private var viewContext
+    @EnvironmentObject private var persistenceController: PersistenceController
     
     init(issue: Issue) {
         _issue = ObservedObject(wrappedValue: issue)
@@ -46,6 +47,15 @@ struct IssueDetail: View {
                 .environment(\.managedObjectContext, viewContext)
                 .presentationDetents([.large])
                 .presentationDragIndicator(.visible)
+            }
+            .alert(
+                "Save failed.",
+                isPresented: $persistenceController.showingError,
+                presenting: $persistenceController.persistenceError
+            ) { error in
+                
+            } message: { error in
+                Text("Failed to save the changes made.")
             }
             .toolbar {
                 toolbarItems
@@ -123,18 +133,20 @@ private extension IssueDetail {
         Section("Comments") {
             ForEach(issue.sortedComments) { comment in
                 CommentBoxView(comment: comment, issue: issue)
-                    .swipeActions {
-                        Button(role: .destructive) {
-                            viewModel.deleteComment(comment)
-                        } label: {
-                            Label("Delete", systemImage: "trash")
-                        }
+                    .swipeActions(edge: .leading) {
                         Button {
                             issueDetailState = .showingEditCommentView(comment: comment)
                         } label: {
                             Label("Edit", systemImage: "rectangle.and.pencil.and.ellipsis")
                         }
                         .tint(.blue)
+                    }
+                    .swipeActions {
+                        Button(role: .destructive) {
+                            persistenceController.deleteObject(comment)
+                        } label: {
+                            Label("Delete", systemImage: "trash")
+                        }
                     }
             }
             
@@ -167,5 +179,6 @@ struct IssueDetail_Previews: PreviewProvider {
     static var previews: some View {
         IssueDetail(issue: .example)
             .environment(\.managedObjectContext, viewContext)
+            .environmentObject(PersistenceController())
     }
 }

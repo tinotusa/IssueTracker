@@ -9,33 +9,34 @@ import SwiftUI
 
 struct EditIssueView: View {
     @ObservedObject private(set) var issue: Issue
-    
+    @ObservedObject private var issueCopy: Issue
     @State private var showingCancelDialog = false
-    
-    @StateObject private var viewModel: EditIssueViewModel
+    @State private var selectedTags: Set<Tag> = []
     
     @Environment(\.dismiss) private var dismiss
     @Environment(\.managedObjectContext) private var viewContext
+    @EnvironmentObject private var persistenceController: PersistenceController
     
     init(issue: Issue) {
         self.issue = issue
-        _viewModel = StateObject(wrappedValue: EditIssueViewModel(issue: issue))
+        issueCopy = Issue.copyIssue(issue: issue)
+        _selectedTags = State(wrappedValue: issue.wrappedTags)
     }
     
     var body: some View {
         List {
             Group {
                 Section("Issue name") {
-                    TextField("Issue name", text: $viewModel.issueCopy.wrappedName)
+                    TextField("Issue name", text: $issueCopy.wrappedName)
                         .textFieldStyle(.roundedBorder)
                 }
                 Section("Description") {
-                    TextField("Issue Description", text: $viewModel.issueCopy.wrappedIssueDescription, axis: .vertical)
+                    TextField("Issue Description", text: $issueCopy.wrappedIssueDescription, axis: .vertical)
                         .lineLimit(3...)
                         .textFieldStyle(.roundedBorder)
                 }
                 Section("Priority") {
-                    Picker("Issue priority", selection: $viewModel.issueCopy.wrappedPriority) {
+                    Picker("Issue priority", selection: $issueCopy.wrappedPriority) {
                         ForEach(Issue.Priority.allCases) { priority in
                             Text(priority.title)
                         }
@@ -43,7 +44,7 @@ struct EditIssueView: View {
                     .pickerStyle(.segmented)
                 }
                 Section("Tags") {
-                    TagSelectionView(selection: $viewModel.selectedTags)
+                    TagSelectionView(selection: $selectedTags)
                 }
             }
             .listRowSeparator(.hidden)
@@ -56,14 +57,14 @@ struct EditIssueView: View {
         .navigationTitle("Edit issue")
         .safeAreaInset(edge: .bottom) {
             ProminentButton("Save Changes") {
-                viewModel.saveChanges()
+                persistenceController.copyIssue(from: issueCopy, to: issue, withTags: selectedTags)
             }
-            .disabled(!viewModel.hasChanges)
+            .disabled(issueCopy != issue)
         }
         .toolbar {
             ToolbarItem(placement: .cancellationAction) {
                 Button("Cancel") {
-                    if viewModel.hasChanges {
+                    if issueCopy != issue {
                         showingCancelDialog = true
                     } else {
                         dismiss()
@@ -72,9 +73,9 @@ struct EditIssueView: View {
             }
             ToolbarItem(placement: .confirmationAction) {
                 Button("Save") {
-                    viewModel.saveChanges()
+                    persistenceController.copyIssue(from: issueCopy, to: issue, withTags: selectedTags)
                 }
-                .disabled(!viewModel.hasChanges)
+                .disabled(issueCopy != issue)
             }
         }
         .confirmationDialog("Cancel changes", isPresented: $showingCancelDialog) {
@@ -91,6 +92,7 @@ struct IssueEditView_Previews: PreviewProvider {
     static var previews: some View {
         NavigationStack {
             EditIssueView(issue: .example)
+                .environmentObject(PersistenceController())
         }
     }
 }

@@ -37,18 +37,18 @@ extension AddProjectViewModel {
     }
     
     /// Adds a new Project to CoreData.
-    func addProject() {
-        logger.log("Adding a project")
-        guard !addButtonDisabled else {
-            logger.log("Failed to add project, the add button is disabled.")
-            return
-        }
-        do {
-            try persistenceController.addProject(name: projectName, dateStarted: .now)
-        } catch {
-            logger.error("Failed to add project. \(error)")
-        }
-    }
+//    func addProject() {
+//        logger.log("Adding a project")
+//        guard !addButtonDisabled else {
+//            logger.log("Failed to add project, the add button is disabled.")
+//            return
+//        }
+//        do {
+//            try persistenceController.addProject(name: projectName, dateStarted: .now)
+//        } catch {
+//            logger.error("Failed to add project. \(error)")
+//        }
+//    }
     
     /// Filters the given name by removing non alphanumerics and non spaces.
     /// - Parameter name: The name to filter.

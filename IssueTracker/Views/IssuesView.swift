@@ -10,7 +10,9 @@ import CoreData
 
 struct IssuesView: View {
     @ObservedObject private(set) var project: Project
-    
+    @State private var selectedIssue: Issue?
+    @State private var showingAddIssueView = false
+    @State private var showingEditTagsView = false
     @State private var showingDeleteIssueConfirmation = false
     
     @FetchRequest(sortDescriptors: [])
@@ -18,11 +20,12 @@ struct IssuesView: View {
     
     @Environment(\.managedObjectContext) private var viewContext
     @Environment(\.dismiss) private var dismiss
+    @EnvironmentObject private var persistenceController: PersistenceController
     
     @StateObject private var viewModel: IssuesViewModel
     
     init(project: Project) {
-        self.project = project
+        _project = ObservedObject(wrappedValue: project)
         _viewModel = StateObject(wrappedValue: IssuesViewModel(project: project))
         _issues = FetchRequest(
             sortDescriptors: [.init(\.dateCreated, order: .forward)],
@@ -41,7 +44,7 @@ struct IssuesView: View {
                 ForEach(issues) { issue in
                     // TODO: make into a view (issuerow)
                     Button {
-                        viewModel.selectedIssue = issue
+                        selectedIssue = issue
                     } label: {
                         IssueRowView(issue: issue)
                     }
@@ -74,19 +77,19 @@ struct IssuesView: View {
         .navigationBarTitle(viewModel.searchIssueStatus == .open ? "Open issues" : "Closed issues")
         .toolbarBackground(Color.customBackground, for: .navigationBar, .bottomBar) // this doesn't seem to change the bottom bar at all.
         .background(Color.customBackground)
-        .sheet(isPresented: $viewModel.showingAddIssueView) {
+        .sheet(isPresented: $showingAddIssueView) {
             AddIssueView(project: project)
                 .environment(\.managedObjectContext, viewContext)
                 .presentationDetents([.large])
                 .presentationDragIndicator(.visible)
         }
-        .sheet(item: $viewModel.selectedIssue) { selectedIssue in
+        .sheet(item: $selectedIssue) { selectedIssue in
             IssueDetail(issue: selectedIssue)
                 .environment(\.managedObjectContext, viewContext)
                 .presentationDetents([.large])
                 .presentationDragIndicator(.visible)
         }
-        .sheet(isPresented: $viewModel.showingEditTagsView) {
+        .sheet(isPresented: $showingEditTagsView) {
             TagsEditView()
                 .environment(\.managedObjectContext, viewContext)
                 .presentationDetents([.large])
@@ -96,7 +99,13 @@ struct IssuesView: View {
             toolbarItems
         }
         .confirmationDialog("Delete issue", isPresented: $showingDeleteIssueConfirmation) {
-            Button(role: .destructive, action: viewModel.deleteIssue) {
+            Button(role: .destructive) {
+                // TODO: Remove code from ui (make a func)
+                guard let selectedIssue else {
+                    return
+                }
+                persistenceController.deleteObject(selectedIssue)
+            } label: {
                 Text("Delete")
             }
         } message: {
@@ -174,7 +183,7 @@ private extension IssuesView {
                 Text("Sort")
             }
             Button("Edit tags") {
-                viewModel.showingEditTagsView = true
+                showingEditTagsView = true
             }
         }
         ToolbarItemGroup(placement: .bottomBar) {
@@ -188,7 +197,7 @@ private extension IssuesView {
             }
 
             Button {
-                viewModel.showingAddIssueView = true
+                showingAddIssueView = true
             } label: {
                 Label("Add Issue", systemImage: "square.and.pencil")
             }
@@ -197,7 +206,7 @@ private extension IssuesView {
     
     func deleteIssueButton(issue: Issue) -> some View {
         Button(role: .destructive) {
-            viewModel.selectedIssue = issue
+            selectedIssue = issue
             showingDeleteIssueConfirmation = true
         } label: {
             Label("Delete", systemImage: "trash")
@@ -208,9 +217,9 @@ private extension IssuesView {
         Button {
             switch issue.wrappedStatus {
             case .closed:
-                viewModel.setIssueStatus(issue, to: .open)
+                persistenceController.setIssueStatus(for: issue, to: .open)
             case .open:
-                viewModel.setIssueStatus(issue, to: .closed)
+                persistenceController.setIssueStatus(for: issue, to: .closed)
             }
         } label: {
             Label(
@@ -233,10 +242,8 @@ struct IssuesView_Previews: PreviewProvider {
     static var previews: some View {
         NavigationStack {
             IssuesView(project: .example)
-                .environment(
-                    \.managedObjectContext,
-                     viewContext
-            )
+                .environment(\.managedObjectContext, viewContext)
+                .environmentObject(PersistenceController())
         }
     }
 }

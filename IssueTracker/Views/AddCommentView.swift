@@ -16,6 +16,7 @@ struct AddCommentView: View {
     
     @Environment(\.dismiss) private var dismiss
     @Environment(\.managedObjectContext) private var viewContext
+    @EnvironmentObject private var persistenceController: PersistenceController
     
     var body: some View {
         NavigationStack {
@@ -46,7 +47,13 @@ struct AddCommentView: View {
                 ToolbarItem(placement: .primaryAction) {
                     Button {
                         Task {
-                            await viewModel.addComment(issue: issue, viewContext: viewContext, audioURL: audioRecorder.url)
+                            let attachments = await viewModel.getAttachmentsTransferables()
+                            persistenceController.addComment(
+                                comment: viewModel.comment,
+                                to: issue,
+                                attachments: attachments,
+                                audioAttachmentURL: audioRecorder.url
+                            )
                             dismiss()
                         }
                     } label: {
@@ -132,5 +139,6 @@ private extension AddCommentView {
 struct AddCommentView_Previews: PreviewProvider {
     static var previews: some View {
         AddCommentView(issue: .example)
+            .environmentObject(PersistenceController())
     }
 }

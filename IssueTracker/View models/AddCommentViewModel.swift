@@ -55,16 +55,16 @@ extension AddCommentViewModel {
         }
     }
     
-    func addComment(issue: Issue, viewContext: NSManagedObjectContext, audioURL: URL? = nil) async {
-        let attachmentTransferables = await getAttachmentsTransferables()
-        do {
-            try persistenceController.addComment(comment: comment, to: issue, attachments: attachmentTransferables, audioAttachmentURL: audioURL)
-        } catch {
-            logger.error("Failed to add comment. \(error)")
-        }
-    }
+//    func addComment(issue: Issue, viewContext: NSManagedObjectContext, audioURL: URL? = nil) async {
+//        let attachmentTransferables = await getAttachmentsTransferables()
+//        do {
+//            try persistenceController.addComment(comment: comment, to: issue, attachments: attachmentTransferables, audioAttachmentURL: audioURL)
+//        } catch {
+//            logger.error("Failed to add comment. \(error)")
+//        }
+//    }
     
-    private func getAttachmentsTransferables() async -> [AttachmentTransferable] {
+    func getAttachmentsTransferables() async -> [AttachmentTransferable] {
         var attachmentTransferables = [AttachmentTransferable]()
         do {
             for photo in photoPickerItems {

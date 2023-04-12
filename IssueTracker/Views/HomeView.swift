@@ -10,10 +10,10 @@ import SwiftUI
 struct HomeView: View {
     @State private var showingDeleteConfirmation = false
     @State private var selectedProject: Project?
-    
-    @StateObject private var viewModel = HomeViewModel()
+    @State private var showingAddProjectView = false
     
     @Environment(\.managedObjectContext) private var viewContext
+    @EnvironmentObject private var persistenceController: PersistenceController
     
     @FetchRequest(sortDescriptors: [.init(\.dateCreated, order: .reverse)])
     private var projects: FetchedResults<Project>
@@ -32,6 +32,14 @@ struct HomeView: View {
                         NavigationLink(value: project) {
                             ProjectRowView(project: project)
                         }
+                        .swipeActions(edge: .leading) {
+                            Button {
+                                selectedProject = project
+                            } label: {
+                                Label("Edit", systemImage: "pencil")
+                            }
+                            .tint(.blue)
+                        }
                         .swipeActions {
                             Button(role: .destructive) {
                                 selectedProject = project
@@ -39,14 +47,6 @@ struct HomeView: View {
                             } label: {
                                 Label("Delete", systemImage: "trash")
                             }
-                            
-                            Button {
-                                viewModel.selectedProject = project
-                            } label: {
-                                Label("Edit", systemImage: "pencil")
-                            }
-                            .tint(.blue)
-                            
                         }
                     }
                     .listRowBackground(Color.customBackground)
@@ -58,7 +58,7 @@ struct HomeView: View {
             .toolbar {
                 ToolbarItem(placement: .bottomBar) {
                     Button {
-                        viewModel.showingAddProjectView = true
+                        showingAddProjectView = true
                     } label: {
                         Label("Add project", systemImage: "square.and.pencil")
                     }
@@ -74,15 +74,13 @@ struct HomeView: View {
             }
             .listStyle(.plain)
             .bodyStyle()
-            .sheet(isPresented: $viewModel.showingAddProjectView) {
+            .sheet(isPresented: $showingAddProjectView) {
                 AddProjectView()
-                    .environment(\.managedObjectContext, viewContext)
                     .presentationDetents([.large])
                     .presentationDragIndicator(.visible)
             }
-            .sheet(item: $viewModel.selectedProject) { project in
+            .sheet(item: $selectedProject) { project in
                 EditProjectView(project: project)
-                    .environment(\.managedObjectContext, viewContext)
                     .presentationDetents([.large])
                     .presentationDragIndicator(.visible)
             }
@@ -95,7 +93,7 @@ struct HomeView: View {
                     guard let selectedProject else {
                         return
                     }
-                    viewModel.deleteProject(selectedProject)
+                    persistenceController.deleteObject(selectedProject)
                     self.selectedProject = nil
                 }
             } message: {
@@ -108,9 +106,7 @@ struct HomeView: View {
 struct HomeView_Previews: PreviewProvider {
     static var previews: some View {
         HomeView()
-            .environment(
-                \.managedObjectContext,
-                 PersistenceController.preview.container.viewContext
-            )
+            .environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
+            .environmentObject(PersistenceController())
     }
 }

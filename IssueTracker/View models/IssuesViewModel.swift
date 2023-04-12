@@ -11,17 +11,12 @@ import os
 import SwiftUI
 
 final class IssuesViewModel: ObservableObject {
-    /// A boolean indicating whether or not the AddIssueView is showing.
-    @Published var showingAddIssueView = false
-    @Published var showingEditTagsView = false
     /// The search text for the searchable modifier.
     @Published var searchText = ""
     /// The search scope for the search bar.
     @Published var searchScope = SearchScopes.name
     /// The issue status being listed.
     @Published var searchIssueStatus = Issue.Status.open
-    /// The currently selected issue.
-    @Published var selectedIssue: Issue?
     /// The predicate used for the FilteredIssuesListView
     @Published var predicate: NSPredicate
     /// The sorting type for the issues (e.g sort type title)
@@ -92,48 +87,6 @@ extension IssuesViewModel {
 
 // MARK: - Functions
 extension IssuesViewModel {
-    /// Toggles the given issue's status.
-    /// - Parameter issue: The issue to toggle.
-    func toggleStatus(_ issue: Issue) {
-        do {
-            try persistenceController.toggleIssueStatus(for: issue)
-            logger.debug("Successfully toggled issue status for \(issue.wrappedId)")
-        } catch {
-            logger.error("Failed to toggle issue status for \(issue.wrappedId)")
-        }
-    }
-    
-    /// Sets the given issue to the given status.
-    /// - Parameter issue: The issue to modify.
-    /// - Parameter status: The status to set the issue to.
-    func setIssueStatus(_ issue: Issue, to status: Issue.Status) {
-        logger.debug(#"Setting issue "\#(issue.wrappedName)" to \#(status.rawValue)"#)
-        do {
-            try withAnimation {
-                objectWillChange.send()
-                try persistenceController.setIssueStatus(for: issue, to: status)
-            }
-        } catch {
-            logger.error("Failed to set issue: \(issue.wrappedId) status to \(status)")
-        }
-    }
-    
-    /// Deletes the given issue from core data.
-    /// - Parameter issue: The `Issue` to delete.
-    func deleteIssue() {
-        guard let selectedIssue else {
-            return
-        }
-        logger.debug("Deleting issue with name \"\(selectedIssue.wrappedName)\"")
-        do {
-            try persistenceController.deleteObject(selectedIssue)
-            self.selectedIssue = nil
-            logger.debug("Successfully deleted issue.")
-        } catch {
-            logger.error("Failed to delete issue. \(error)")
-        }
-    }
-    
     /// Sets the predicate based on the search text.
     func runSearch() {
         if searchText.isEmpty {
