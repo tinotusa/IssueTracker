@@ -51,6 +51,10 @@ extension Comment {
         }
         return attachments.count != 0
     }
+    
+    static func copy(source: Comment) -> Comment {
+        Comment(comment: source.wrappedComment, context: source.managedObjectContext!)
+    }
 }
 
 // TODO: move me to own file
@@ -58,5 +62,17 @@ extension Attachment {
     var wrappedDateCreated: Date {
         get { dateCreated ?? .now }
         set { dateCreated = newValue }
+    }
+    
+    var wrappedId: UUID {
+        get { id ?? UUID() }
+        set { id = newValue }
+    }
+    
+    static func ==(lhs: Attachment, rhs: Attachment) -> Bool {
+        guard let lhsURL = lhs.assetURL, let rhsURL = rhs.assetURL else {
+            return false
+        }
+        return lhsURL == rhsURL
     }
 }
