@@ -213,6 +213,20 @@ extension PersistenceController {
     func deleteObject<T: NSManagedObject>(_ object: T) -> Bool {
         viewContext.delete(object)
         logger.debug("Deleting object with id: \(object.objectID)")
+        
+        if let issue = object as? Issue {
+            for comment in issue.wrappedComments {
+                for attachment in comment.wrappedAttachments {
+                    guard let assetURL = attachment.assetURL else {
+                        continue
+                    }
+                    Task {
+                        await CloudKitManager.shared.deleteAttachment(withURL: assetURL)
+                    }
+                }
+            }
+        }
+        
         return save()
     }
     

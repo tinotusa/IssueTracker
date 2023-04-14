@@ -92,6 +92,7 @@
 		21CB0C8229CD48EA006BF4FF /* bulbasaur.png in Resources */ = {isa = PBXBuildFile; fileRef = 21CB0C8129CD48EA006BF4FF /* bulbasaur.png */; };
 		21CB0C8429CD4902006BF4FF /* URL+previewImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21CB0C8329CD4902006BF4FF /* URL+previewImage.swift */; };
 		21CEAAC2297D4EC500A7A344 /* EditIssueView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21CEAAC1297D4EC500A7A344 /* EditIssueView.swift */; };
+		21E12CDD29E94E1400EE8255 /* CloudKitManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21E12CDC29E94E1400EE8255 /* CloudKitManager.swift */; };
 		21E6D2A7295BD4C500BB4AA6 /* TextStyles.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21E6D2A6295BD4C500BB4AA6 /* TextStyles.swift */; };
 		21E6D2AB295BD9B500BB4AA6 /* Color+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21E6D2AA295BD9B500BB4AA6 /* Color+Extensions.swift */; };
 		21E6D2AD295BDFBF00BB4AA6 /* ButtonStyles.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21E6D2AC295BDFBF00BB4AA6 /* ButtonStyles.swift */; };
@@ -224,6 +225,7 @@
 		21CB0C8129CD48EA006BF4FF /* bulbasaur.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bulbasaur.png; sourceTree = "<group>"; };
 		21CB0C8329CD4902006BF4FF /* URL+previewImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "URL+previewImage.swift"; sourceTree = "<group>"; };
 		21CEAAC1297D4EC500A7A344 /* EditIssueView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditIssueView.swift; sourceTree = "<group>"; };
+		21E12CDC29E94E1400EE8255 /* CloudKitManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudKitManager.swift; sourceTree = "<group>"; };
 		21E6D2A6295BD4C500BB4AA6 /* TextStyles.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextStyles.swift; sourceTree = "<group>"; };
 		21E6D2AA295BD9B500BB4AA6 /* Color+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Color+Extensions.swift"; sourceTree = "<group>"; };
 		21E6D2AC295BDFBF00BB4AA6 /* ButtonStyles.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonStyles.swift; sourceTree = "<group>"; };
@@ -310,6 +312,7 @@
 				211246CA29B9B8EF00D0EB01 /* AttachmentType.swift */,
 				218FD5EB29E65BD50029E1E6 /* PersistenceError.swift */,
 				2141D3C129E6B5A000113CA0 /* IssueData.swift */,
+				21E12CDC29E94E1400EE8255 /* CloudKitManager.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -840,6 +843,7 @@
 				218FD5EC29E65BD50029E1E6 /* PersistenceError.swift in Sources */,
 				2150C840295972E0006CD7D2 /* ContentView.swift in Sources */,
 				2150C84A295972E2006CD7D2 /* IssueTracker.xcdatamodeld in Sources */,
+				21E12CDD29E94E1400EE8255 /* CloudKitManager.swift in Sources */,
 				2150C83E295972E0006CD7D2 /* IssueTrackerApp.swift in Sources */,
 				21E6D2BD295C4B8400BB4AA6 /* CustomTextField.swift in Sources */,
 				21FDE718295D64F10006C24A /* Project+Extensions.swift in Sources */,
