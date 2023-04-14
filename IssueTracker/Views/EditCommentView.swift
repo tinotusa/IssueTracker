@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct EditCommentView: View {
+    @State private var showingCancelDialog = false
     @ObservedObject private(set) var comment: Comment
     @Environment(\.dismiss) private var dismiss
     @EnvironmentObject private var persistenceController: PersistenceController
@@ -58,21 +59,43 @@ struct EditCommentView: View {
             .navigationTitle("Edit comment")
             .background(Color.customBackground)
             .toolbar {
-                ToolbarItem(placement: .cancellationAction) {
-                    Button("Cancel") {
-                        dismiss()
-                    }
+                toolbarContent
+            }
+            .confirmationDialog("Comment not saved.", isPresented: $showingCancelDialog) {
+                Button(role: .destructive) {
+                    dismiss()
+                } label: {
+                    Text("Don't save")
                 }
-                if comment.hasAttachments {
-                    ToolbarItem(placement: .primaryAction) {
-                        EditButton()
-                    }
-                }
+            } message: {
+                Text("Comment not saved.")
             }
         }
     }
 }
 
+// MARK: - Views
+private extension EditCommentView {
+    @ToolbarContentBuilder
+    var toolbarContent: some ToolbarContent {
+        ToolbarItem(placement: .cancellationAction) {
+            Button("Cancel") {
+                if commentHasChanges {
+                    showingCancelDialog = true
+                    return
+                }
+                dismiss()
+            }
+        }
+        if comment.hasAttachments {
+            ToolbarItem(placement: .primaryAction) {
+                EditButton()
+            }
+        }
+    }
+}
+
+// MARK: - Functions
 private extension EditCommentView {
     func delete(offsets indexSet: IndexSet) {
         for index in indexSet {
@@ -83,14 +106,14 @@ private extension EditCommentView {
         _ = persistenceController.save()
     }
     
+    var commentHasChanges: Bool {
+        commentCopy.wrappedComment != comment.wrappedComment ||
+        commentCopy.wrappedAttachments != comment.wrappedAttachments
+    }
+    
     var canSaveComment: Bool {
         let commentText = comment.wrappedComment.trimmingCharacters(in: .whitespacesAndNewlines)
-        let commentHasChanged = (
-            commentCopy.wrappedComment != comment.wrappedComment ||
-            commentCopy.wrappedAttachments != comment.wrappedAttachments
-        )
-        
-        return (!commentText.isEmpty && commentHasChanged)
+        return (!commentText.isEmpty && commentHasChanges)
     }
     
     func save() {
