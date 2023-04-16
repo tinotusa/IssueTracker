@@ -135,7 +135,9 @@ private extension IssueDetail {
                     }
                     .swipeActions {
                         Button(role: .destructive) {
-                            _ = persistenceController.deleteObject(comment)
+                            Task {
+                                _ = await persistenceController.deleteObject(comment)
+                            }
                         } label: {
                             Label("Delete", systemImage: "trash")
                         }

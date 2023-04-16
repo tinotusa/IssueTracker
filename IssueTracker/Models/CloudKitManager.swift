@@ -9,16 +9,58 @@ import Foundation
 import CloudKit
 import os
 
-struct CloudKitManager {
+class CloudKitManager {
     static let shared = CloudKitManager()
-    private static let logger = Logger(
+    private let logger = Logger(
         subsystem: Bundle.main.bundleIdentifier!,
         category: String(describing: CloudKitManager.self)
     )
 }
 
 extension CloudKitManager {
+    func deleteComments(_ comments: [Comment]) async {
+        logger.debug("Deleting \(comments.count) comments")
+        await withTaskGroup(of: Void.self) { group in
+            for comment in comments {
+                group.addTask { [weak self] in
+                    await self?.deleteComment(comment)
+                }
+            }
+        }
+    }
+    
+    func deleteIssues(_ issues: [Issue]) async {
+        await withTaskGroup(of: Void.self) { group in
+            for issue in issues {
+                group.addTask { [weak self] in
+                    await self?.deleteIssue(issue)
+                }
+            }
+        }
+    }
+    
+    func deleteIssue(_ issue: Issue) async {
+        await deleteComments(issue.wrappedComments)
+    }
+    
+    func deleteComment(_ comment: Comment) async {
+        logger.debug("Deleting comment with id: \(comment.wrappedId)")
+        logger.debug("\(comment.wrappedAttachments.count) attachment")
+        await withTaskGroup(of: Void.self) { group in
+            for attachment in comment.wrappedAttachments {
+                guard let assetURL = attachment.assetURL else {
+                    logger.debug("No asset url for attachment with id: \(attachment.wrappedId)")
+                    continue
+                }
+                group.addTask { [weak self] in
+                    await self?.deleteAttachment(withURL: assetURL)
+                }
+            }
+        }
+    }
+    
     func deleteAttachment(withURL assetURL: URL) async {
+        logger.debug("Deleting record with asset url: \(assetURL)")
         let database = CKContainer.default().privateCloudDatabase
         let query = CKQuery(recordType: "Attachment", predicate: .init(format: "attachmentURL == %@", assetURL.absoluteString))
         do {
@@ -29,7 +71,7 @@ extension CloudKitManager {
                     // TODO: is this necessary?
                     record["attachment"] = nil // set the asset to nil. which will be removed lazily later.
                 case .failure(let error):
-                    Self.logger.debug("Error trying to set record: \(id) asset url to nil. \(error)")
+                    logger.debug("Error trying to set record: \(id) asset url to nil. \(error)")
                 }
             }
             
@@ -38,25 +80,25 @@ extension CloudKitManager {
             })
             
             let deleteOperation = CKModifyRecordsOperation(recordIDsToDelete: recordIDs)
-            deleteOperation.modifyRecordsResultBlock = { result in
+            deleteOperation.modifyRecordsResultBlock = { [weak self] result in
                 switch result {
                 case .success:
-                    Self.logger.debug("Successfully completed the operation")
+                    self?.logger.debug("Successfully completed the operation")
                 case .failure(let error):
-                    Self.logger.debug("Failed to complete the delete operation. \(error)")
+                    self?.logger.debug("Failed to complete the delete operation. \(error)")
                 }
             }
-            deleteOperation.perRecordDeleteBlock = { id, result in
+            deleteOperation.perRecordDeleteBlock = { [weak self] id, result in
                 switch result {
                 case .success:
-                    Self.logger.debug("Successfully delete record with id: \(id)")
+                    self?.logger.debug("Successfully delete record with id: \(id)")
                 case .failure(let error):
-                    Self.logger.debug("Failed to delete record with id: \(id). \(error)")
+                    self?.logger.debug("Failed to delete record with id: \(id). \(error)")
                 }
             }
             database.add(deleteOperation)
         } catch {
-            Self.logger.debug("something went wrong. \(error)")
+            logger.debug("something went wrong. \(error)")
         }
     }
 }

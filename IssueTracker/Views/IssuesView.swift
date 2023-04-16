@@ -105,7 +105,9 @@ struct IssuesView: View {
                 guard let selectedIssue else {
                     return
                 }
-                _ = persistenceController.deleteObject(selectedIssue)
+                Task {
+                    _ = await persistenceController.deleteObject(selectedIssue)
+                }
             } label: {
                 Text("Delete")
             }

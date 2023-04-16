@@ -106,44 +106,7 @@ private extension EditCommentView {
                 continue
             }
             Task {
-                let database = CKContainer.default().privateCloudDatabase
-                let query = CKQuery(recordType: "Attachment", predicate: .init(format: "attachmentURL == %@", assetURL.absoluteString))
-                do {
-                    let records = try await database.records(matching: query)
-                    for (id, result) in records.matchResults {
-                        switch result {
-                        case .success(let record):
-                            record["attachment"] = nil // set the asset to nil. which will be removed lazily later.
-                        case .failure(let error):
-                            print("Error trying to set record: \(id) asset url to nil. \(error)")
-                        }
-                    }
-                    
-                    let recordIDs = records.matchResults.compactMap { recordID, _ in
-                        recordID
-                    }
-                    
-                    let deleteOperation = CKModifyRecordsOperation(recordIDsToDelete: recordIDs)
-                    deleteOperation.modifyRecordsResultBlock = { result in
-                        switch result {
-                        case .success:
-                            print("Successfully completed the operation")
-                        case .failure(let error):
-                            print("Failed to complete the delete operation. \(error)")
-                        }
-                    }
-                    deleteOperation.perRecordDeleteBlock = { id, result in
-                        switch result {
-                        case .success:
-                            print("Successfully delete record with id: \(id)")
-                        case .failure(let error):
-                            print("Failed to delete record with id: \(id). \(error)")
-                        }
-                    }
-                    database.add(deleteOperation)
-                } catch {
-                    print("something went wrong.")
-                }
+                await CloudKitManager.shared.deleteAttachment(withURL: assetURL)
             }
         }
         _ = persistenceController.save()

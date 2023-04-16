@@ -110,7 +110,7 @@ extension PersistenceController {
 extension PersistenceController {
     /// The managed object context for the container.
     var viewContext: NSManagedObjectContext {
-        Self.shared.container.viewContext
+        container.viewContext
     }
     
     /// Adds a new comment to core data.
@@ -174,9 +174,8 @@ extension PersistenceController {
             attachments.append(attachment)
         }
         logger.debug("Added \(attachments.count) attachments to comment")
-        issue.addToComments(comment)
         comment.addToAttachments(.init(array: attachments))
-        
+        issue.addToComments(comment)
         // save to coredata and cloudkit
         
         
@@ -210,8 +209,7 @@ extension PersistenceController {
     /// Deletes the given object from core data.
     /// - Parameter object: The object to delete.
     @MainActor
-    func deleteObject<T: NSManagedObject>(_ object: T) -> Bool {
-        viewContext.delete(object)
+    func deleteObject<T: NSManagedObject>(_ object: T) async -> Bool {
         logger.debug("Deleting object with id: \(object.objectID)")
         
         if let issue = object as? Issue {
@@ -220,13 +218,28 @@ extension PersistenceController {
                     guard let assetURL = attachment.assetURL else {
                         continue
                     }
-                    Task {
-                        await CloudKitManager.shared.deleteAttachment(withURL: assetURL)
-                    }
+                    
+                    await CloudKitManager.shared.deleteAttachment(withURL: assetURL)
                 }
             }
+        } else if let project = object as? Project {
+            logger.debug("Deleting object issues and comments.")
+            let request = NSFetchRequest<Issue>(entityName: "Issue")
+            request.predicate = NSPredicate(format: "project == %@", project)
+            do {
+                let issues = try PersistenceController.shared.viewContext.fetch(request)
+                print("\(issues.count) to be deleted.")
+                await CloudKitManager.shared.deleteIssues(issues)
+            } catch {
+                logger.error("Failed to get issue. \(error)")
+            }
+        } else if let comment = object as? Comment {
+            logger.debug("comment \(comment.wrappedId) has \(comment.wrappedAttachments.count) attachments")
+            
+            await CloudKitManager.shared.deleteComment(comment)
         }
         
+        viewContext.delete(object)
         return save()
     }
     

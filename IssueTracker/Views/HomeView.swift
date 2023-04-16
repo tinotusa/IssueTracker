@@ -94,8 +94,10 @@ struct HomeView: View {
                     guard let selectedProject else {
                         return
                     }
-                    _ = persistenceController.deleteObject(selectedProject)
-                    self.selectedProject = nil
+                    Task {
+                        _ = await persistenceController.deleteObject(selectedProject)
+                        self.selectedProject = nil
+                    }
                 }
             } message: {
                 Text("Are you sure you want to delete this project?")

@@ -38,7 +38,13 @@ extension Comment {
     }
     
     var wrappedAttachments: [Attachment] {
-        attachments?.allObjects as? [Attachment] ?? []
+        get {
+            if let attachmentsSet = attachments as? Set<Attachment> {
+                return Array(attachmentsSet)
+            }
+            return []
+        }
+        set { attachments = .init(array: newValue) }
     }
     
     var sortedAttachments: [Attachment] {
