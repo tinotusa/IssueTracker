@@ -22,50 +22,47 @@ struct IssueDetail: View {
     }
     
     var body: some View {
-        NavigationStack {
-            List {
-                Group {
-                    titleSection
-                    descriptionSection
-                    infoSection
-                    commentsSection
+        List {
+            Group {
+                titleSection
+                descriptionSection
+                infoSection
+                commentsSection
+            }
+            .listRowBackground(Color.customBackground)
+        }
+        .listStyle(.plain)
+        .background(Color.customBackground)
+        .toolbarBackground(Color.customBackground)
+        .navigationBarTitleDisplayMode(.inline)
+        .sheet(item: $issueDetailState) { state in
+            Group {
+                switch state {
+                case .showingAddCommentSheet:
+                    AddCommentView(issue: issue)
+                case .showingEditCommentView(let comment):
+                    EditCommentView(comment: comment)
+                case .showingEditIssueView:
+                    EditIssueView(issue: issue)
                 }
-                .listRowBackground(Color.customBackground)
             }
-            .listStyle(.plain)
-            .background(Color.customBackground)
-            .toolbarBackground(Color.customBackground)
-            .sheet(item: $issueDetailState) { state in
-                Group {
-                    switch state {
-                    case .showingCommentSheet:
-                        AddCommentView(issue: issue)
-                    case .showingEditCommentView(let comment):
-                        EditCommentView(comment: comment)
-                    }
-                }
-                .environment(\.managedObjectContext, viewContext)
-                .presentationDetents([.large])
-                .presentationDragIndicator(.visible)
-            }
-            .persistenceErrorAlert(isPresented: $persistenceController.showingError, presenting: $persistenceController.persistenceError)
-            .toolbar {
-                toolbarItems
-            }
-            .navigationDestination(for: Issue.self) { issue in
-                EditIssueView(issue: issue)
-            }
-            .navigationDestination(for: URL.self) { imageURL in
-                ImageDetailView(url: imageURL)
-            }
+            .sheetWithIndicator()
+        }
+        .persistenceErrorAlert(isPresented: $persistenceController.showingError, presenting: $persistenceController.persistenceError)
+        .toolbar {
+            toolbarItems
+        }
+        .navigationDestination(for: URL.self) { imageURL in
+            ImageDetailView(url: imageURL)
         }
     }
 }
 
 private extension IssueDetail {
     enum IssueDetailState: Hashable, Identifiable {
-        case showingCommentSheet
+        case showingAddCommentSheet
         case showingEditCommentView(comment: Comment)
+        case showingEditIssueView
         
         var id: Self { self }
     }
@@ -145,7 +142,7 @@ private extension IssueDetail {
             }
             
             Button("Add comment") {
-                issueDetailState = .showingCommentSheet
+                issueDetailState = .showingAddCommentSheet
             }
             .buttonStyle(.borderedProminent)
         }
@@ -154,15 +151,9 @@ private extension IssueDetail {
     
     @ToolbarContentBuilder
     var toolbarItems: some ToolbarContent {
-        ToolbarItem(placement: .cancellationAction) {
-            Button("Close") {
-                dismiss()
-            }
-        }
-        ToolbarItem(placement: .confirmationAction) {
-            NavigationLink(value: issue) {
-                Text("Edit")
-                    .foregroundColor(.buttonLabel)
+        ToolbarItem(placement: .primaryAction) {
+            Button("Edit") {
+                issueDetailState = .showingEditIssueView
             }
         }
     }

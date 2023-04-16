@@ -52,6 +52,9 @@ struct IssuesView: View {
                 .onDelete(perform: deleteIssue)
             }
         }
+        .navigationDestination(for: Issue.self) { issue in
+            IssueDetail(issue: issue)
+        }
         .persistenceErrorAlert(isPresented: $persistenceController.showingError, presenting: $persistenceController.persistenceError)
         .listStyle(.plain)
         .searchable(text: $viewModel.searchText)
