@@ -280,8 +280,21 @@ extension PersistenceController {
             return false
         }
     }
+    
+    @MainActor
+    /// Adds a tag to core data
+    /// - Parameter name: The name of the tag
+    /// - Returns: `true` if the tag was added successfully, `false` otherwise.
+    func addTag(named name: String) -> Bool {
+        let tag = Tag(context: viewContext)
+        tag.name = name
+        tag.id = UUID()
+        tag.dateCreated = .now
+        return save()
+    }
 }
 
+// MARK: - Preview
 extension PersistenceController {
     /// A preview `PersistenceController` for the ui previews.
     static var preview: PersistenceController = {
