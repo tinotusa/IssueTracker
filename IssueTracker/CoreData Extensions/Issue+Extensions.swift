@@ -153,4 +153,26 @@ extension Issue {
             context: issue.managedObjectContext!
         )
     }
+    
+    func equals(_ otherIssue: Issue) -> Bool {
+        let tagCountIsEqual = wrappedTags.count == otherIssue.wrappedTags.count
+        var tagsAreEqual = true
+        for tag in wrappedTags {
+            let otherIssueTag = otherIssue.wrappedTags.first { otherTag in
+                tag.wrappedName == otherTag.wrappedName
+            }
+            if tag.wrappedName != otherIssueTag?.wrappedName {
+                tagsAreEqual = false
+                break
+            }
+        }
+    
+        return (
+            wrappedName == otherIssue.wrappedName &&
+            wrappedIssueDescription == otherIssue.wrappedIssueDescription &&
+            wrappedPriority == otherIssue.wrappedPriority &&
+            wrappedName == otherIssue.wrappedName &&
+            tagCountIsEqual && tagsAreEqual
+        )
+    }
 }

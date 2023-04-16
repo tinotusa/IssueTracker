@@ -1,26 +1,16 @@
 //
-//  IssueDetail.swift
+//  IssueSummary.swift
 //  IssueTracker
 //
-//  Created by Tino on 30/12/2022.
+//  Created by Tino on 16/4/2023.
 //
 
 import SwiftUI
 
-struct IssueDetail: View {
-    @State private var issueDetailState: IssueDetailState? = nil
-    @StateObject private var viewModel: IssueDetailViewModel
-    @ObservedObject private(set) var issue: Issue
-    
-    @Environment(\.dismiss) private var dismiss
-    @Environment(\.managedObjectContext) private var viewContext
+struct IssueSummary: View {
+    let issue: Issue
     @EnvironmentObject private var persistenceController: PersistenceController
-    
-    init(issue: Issue) {
-        _issue = ObservedObject(wrappedValue: issue)
-        _viewModel = StateObject(wrappedValue: IssueDetailViewModel(issue: issue))
-    }
-    
+    @State private var issueDetailState: IssueDetailState? = nil
     var body: some View {
         List {
             Group {
@@ -48,17 +38,11 @@ struct IssueDetail: View {
             }
             .sheetWithIndicator()
         }
-        .persistenceErrorAlert(isPresented: $persistenceController.showingError, presenting: $persistenceController.persistenceError)
-        .toolbar {
-            toolbarItems
-        }
-        .navigationDestination(for: URL.self) { imageURL in
-            ImageDetailView(url: imageURL)
-        }
     }
 }
 
-private extension IssueDetail {
+// MARK: - Views
+private extension IssueSummary {
     enum IssueDetailState: Hashable, Identifiable {
         case showingAddCommentSheet
         case showingEditCommentView(comment: Comment)
@@ -148,22 +132,10 @@ private extension IssueDetail {
         }
         .listRowSeparator(.hidden)
     }
-    
-    @ToolbarContentBuilder
-    var toolbarItems: some ToolbarContent {
-        ToolbarItem(placement: .primaryAction) {
-            Button("Edit") {
-                issueDetailState = .showingEditIssueView
-            }
-        }
-    }
 }
 
-struct IssueDetail_Previews: PreviewProvider {
-    static let viewContext = PersistenceController.preview.container.viewContext
+struct IssueSummary_Previews: PreviewProvider {
     static var previews: some View {
-        IssueDetail(issue: .example)
-            .environment(\.managedObjectContext, viewContext)
-            .environmentObject(PersistenceController.preview)
+        IssueSummary(issue: .example)
     }
 }

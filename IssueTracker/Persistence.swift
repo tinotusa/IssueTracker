@@ -98,10 +98,9 @@ extension PersistenceController {
     ///   - destination: The issue to copy to.
     ///   - tags: The tags from the source issue to copy to the destination.
     @MainActor
-    func copyIssue(from source: Issue, to destination: Issue, withTags tags: Set<Tag>) -> Bool {
+    func copyIssue(from source: Issue, to destination: Issue) -> Bool {
         logger.debug("Copying from issue: \(source.wrappedId) to issue: \(destination.wrappedId)")
         destination.copyProperties(from: source)
-        destination.tags = .init(set: tags)
         
         return save()
     }

@@ -11,16 +11,14 @@ struct EditIssueView: View {
     @ObservedObject private(set) var issue: Issue
     @ObservedObject private var issueCopy: Issue
     @State private var showingCancelDialog = false
-    @State private var selectedTags: Set<Tag> = []
     
-    @Environment(\.dismiss) private var dismiss
+    @Environment(\.editMode) private var editMode
     @Environment(\.managedObjectContext) private var viewContext
     @EnvironmentObject private var persistenceController: PersistenceController
     
     init(issue: Issue) {
         self.issue = issue
-        issueCopy = Issue.copyIssue(issue: issue)
-        _selectedTags = State(wrappedValue: issue.wrappedTags)
+        _issueCopy = ObservedObject(wrappedValue: Issue.copyIssue(issue: issue))
     }
     
     var body: some View {
@@ -44,7 +42,7 @@ struct EditIssueView: View {
                     .pickerStyle(.segmented)
                 }
                 Section("Tags") {
-                    TagSelectionView(selection: $selectedTags)
+                    TagSelectionView(selection: $issueCopy.wrappedTags)
                 }
             }
             .listRowSeparator(.hidden)
@@ -58,30 +56,31 @@ struct EditIssueView: View {
         .persistenceErrorAlert(isPresented: $persistenceController.showingError, presenting: $persistenceController.persistenceError)
         .safeAreaInset(edge: .bottom) {
             ProminentButton("Save Changes") {
-                _ = persistenceController.copyIssue(from: issueCopy, to: issue, withTags: selectedTags)
+                _ = persistenceController.copyIssue(from: issueCopy, to: issue)
             }
-            .disabled(issueCopy != issue)
+            .disabled(issueCopy.equals(issue))
         }
         .toolbar {
             ToolbarItem(placement: .cancellationAction) {
                 Button("Cancel") {
-                    if issueCopy != issue {
+                    if !issueCopy.equals(issue) {
                         showingCancelDialog = true
                     } else {
-                        dismiss()
+                        editMode?.wrappedValue = .inactive
                     }
                 }
             }
             ToolbarItem(placement: .confirmationAction) {
-                Button("Save") {
-                    _ = persistenceController.copyIssue(from: issueCopy, to: issue, withTags: selectedTags)
+                Button("Done") {
+                    _ = persistenceController.copyIssue(from: issueCopy, to: issue)
+                    editMode?.wrappedValue = .inactive
                 }
-                .disabled(issueCopy != issue)
+                .disabled(issueCopy.equals(issue))
             }
         }
         .confirmationDialog("Cancel changes", isPresented: $showingCancelDialog) {
             Button("Don't save", role: .destructive) {
-                dismiss()
+                editMode?.wrappedValue = .inactive
             }
         } message: {
             Text("You haven't saved these changes.")

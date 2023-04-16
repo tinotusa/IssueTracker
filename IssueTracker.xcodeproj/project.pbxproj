@@ -51,6 +51,7 @@
 		21734A9329764F9600EB3942 /* IssueDetail.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21734A9229764F9600EB3942 /* IssueDetail.swift */; };
 		21734A9529764FFB00EB3942 /* IssuesListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21734A9429764FFB00EB3942 /* IssuesListView.swift */; };
 		2179A40329EBCA2700D69C82 /* SheetWithIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2179A40229EBCA2700D69C82 /* SheetWithIndicator.swift */; };
+		2179A40629EBEA3D00D69C82 /* IssueSummary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2179A40529EBEA3D00D69C82 /* IssueSummary.swift */; };
 		218A50BD2975088000DF29F5 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 218A50BC2975088000DF29F5 /* ContentView.swift */; };
 		218A50BF2975088200DF29F5 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 218A50BE2975088200DF29F5 /* Assets.xcassets */; };
 		218A50C22975088200DF29F5 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 218A50C12975088200DF29F5 /* Preview Assets.xcassets */; };
@@ -196,6 +197,7 @@
 		21734A9229764F9600EB3942 /* IssueDetail.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IssueDetail.swift; sourceTree = "<group>"; };
 		21734A9429764FFB00EB3942 /* IssuesListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IssuesListView.swift; sourceTree = "<group>"; };
 		2179A40229EBCA2700D69C82 /* SheetWithIndicator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SheetWithIndicator.swift; sourceTree = "<group>"; };
+		2179A40529EBEA3D00D69C82 /* IssueSummary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IssueSummary.swift; sourceTree = "<group>"; };
 		218A50B82975087F00DF29F5 /* MacIssueTracker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MacIssueTracker.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		218A50BC2975088000DF29F5 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		218A50BE2975088200DF29F5 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -424,6 +426,16 @@
 			path = Views;
 			sourceTree = "<group>";
 		};
+		2179A40429EBEA2300D69C82 /* Issue detail */ = {
+			isa = PBXGroup;
+			children = (
+				2127AD61295FB421005893DE /* EditIssueView.swift */,
+				21BBEBF6295EC963008F237B /* IssueDetail.swift */,
+				2179A40529EBEA3D00D69C82 /* IssueSummary.swift */,
+			);
+			path = "Issue detail";
+			sourceTree = "<group>";
+		};
 		218A50B92975088000DF29F5 /* MacIssueTracker */ = {
 			isa = PBXGroup;
 			children = (
@@ -552,14 +564,13 @@
 		21E6D2B1295BF89700BB4AA6 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				2179A40429EBEA2300D69C82 /* Issue detail */,
 				21E6D2BB295C4B7900BB4AA6 /* Components */,
 				2150C83F295972E0006CD7D2 /* ContentView.swift */,
 				21E6D2B2295BF94800BB4AA6 /* HomeView.swift */,
 				21E6D2BE295C4DD900BB4AA6 /* AddProjectView.swift */,
 				21FDE756295D80D30006C24A /* EditProjectView.swift */,
 				21F1DA32295DABB700076D73 /* IssuesView.swift */,
-				21BBEBF6295EC963008F237B /* IssueDetail.swift */,
-				2127AD61295FB421005893DE /* EditIssueView.swift */,
 				21654BC529605245009C434B /* AddIssueView.swift */,
 				2105DC532962CF33008F940B /* TagsEditView.swift */,
 				211104AA297239DB00FB8CD1 /* EditTagView.swift */,
@@ -868,6 +879,7 @@
 				2132CB6E29C5C76B003D5C12 /* ImageAttachmentPreview.swift in Sources */,
 				211246C529B9B82900D0EB01 /* AudioPlayer.swift in Sources */,
 				21F1DA2F295DA58400076D73 /* DeleteProjectViewModel.swift in Sources */,
+				2179A40629EBEA3D00D69C82 /* IssueSummary.swift in Sources */,
 				2168A63129CC75B7004CF64B /* Comment+Example.swift in Sources */,
 				21BBEBF1295E8176008F237B /* TagSelectionView.swift in Sources */,
 				21BBEBF9295ECD4E008F237B /* IssueDetailViewModel.swift in Sources */,

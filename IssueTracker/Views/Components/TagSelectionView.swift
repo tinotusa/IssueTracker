@@ -29,25 +29,25 @@ struct TagSelectionView: View {
         VStack(alignment: .leading) {
             TextField("Search tags", text: $filterText)
                 .textFieldStyle(.roundedBorder)
-            VStack {
-                if allTags.isEmpty && filterText.isEmpty {
-                    Text("No tags.\nType a new tag.")
-                        .foregroundColor(.customSecondary)
-                        .multilineTextAlignment(.center)
-                        .frame(maxWidth: .infinity, alignment: .center)
-                } else if allTags.isEmpty {
-                    PlainButton("Add new tag") {
-                        addNewTag(named: filterText)
-                    }
+            
+            if allTags.isEmpty && filterText.isEmpty {
+                Text("No tags.\nType a new tag.")
+                    .foregroundColor(.customSecondary)
+                    .multilineTextAlignment(.center)
+                    .frame(maxWidth: .infinity, alignment: .center)
+            } else if allTags.isEmpty {
+                PlainButton("Add new tag") {
+                    addNewTag(named: filterText)
                 }
-                WrappingHStack {
-                    ForEach(allTags) { tag in
-                        Button {
-                            addTagToSelection(tag)
-                        } label: {
-                            ProminentTagView(title: tag.wrappedName, isSelected: selectedTags.contains(tag))
-                        }
+            }
+            WrappingHStack {
+                ForEach(allTags) { tag in
+                    Button {
+                        addTagToSelection(tag)
+                    } label: {
+                        ProminentTagView(title: tag.wrappedName, isSelected: selectedTags.contains(tag))
                     }
+                    .buttonStyle(.borderless)
                 }
             }
         }
