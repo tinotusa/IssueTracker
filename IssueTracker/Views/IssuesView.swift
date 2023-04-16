@@ -11,8 +11,7 @@ import CoreData
 struct IssuesView: View {
     @ObservedObject private(set) var project: Project
     @State private var selectedIssue: Issue?
-    @State private var showingAddIssueView = false
-    @State private var showingEditTagsView = false
+    @State private var issuesViewState: IssuesViewState?
     @State private var showingDeleteIssueConfirmation = false
     
     @FetchRequest(sortDescriptors: [])
@@ -42,20 +41,15 @@ struct IssuesView: View {
                     .listRowSeparator(.hidden)
             } else {
                 ForEach(issues) { issue in
-                    // TODO: make into a view (issuerow)
-                    Button {
-                        selectedIssue = issue
-                    } label: {
+                    NavigationLink(value: issue) {
                         IssueRowView(issue: issue)
-                    }
-                    .swipeActions {
-                        deleteIssueButton(issue: issue)
                     }
                     .swipeActions(edge: .leading) {
                         changeIssueStatusButton(issue: issue)
                     }
                     .listRowBackground(Color.customBackground)
                 }
+                .onDelete(perform: deleteIssue)
             }
         }
         .persistenceErrorAlert(isPresented: $persistenceController.showingError, presenting: $persistenceController.persistenceError)
@@ -78,23 +72,18 @@ struct IssuesView: View {
         .navigationBarTitle(viewModel.searchIssueStatus == .open ? "Open issues" : "Closed issues")
         .toolbarBackground(Color.customBackground, for: .navigationBar, .bottomBar) // this doesn't seem to change the bottom bar at all.
         .background(Color.customBackground)
-        .sheet(isPresented: $showingAddIssueView) {
-            AddIssueView(project: project)
-                .environment(\.managedObjectContext, viewContext)
-                .presentationDetents([.large])
-                .presentationDragIndicator(.visible)
-        }
-        .sheet(item: $selectedIssue) { selectedIssue in
-            IssueDetail(issue: selectedIssue)
-                .environment(\.managedObjectContext, viewContext)
-                .presentationDetents([.large])
-                .presentationDragIndicator(.visible)
-        }
-        .sheet(isPresented: $showingEditTagsView) {
-            TagsEditView()
-                .environment(\.managedObjectContext, viewContext)
-                .presentationDetents([.large])
-                .presentationDragIndicator(.visible)
+        .sheet(item: $issuesViewState) { state in
+            Group {
+                switch state {
+                case .showingAddIssueView:
+                    AddIssueView(project: project)
+                        .environment(\.managedObjectContext, viewContext)
+                case .showingEditTagsView:
+                    TagsEditView()
+                        .environment(\.managedObjectContext, viewContext)
+                }
+            }
+            .sheetWithIndicator()
         }
         .toolbar {
             toolbarItems
@@ -117,6 +106,7 @@ struct IssuesView: View {
     }
 }
 
+// MARK: - Views
 private extension IssuesView {
     @ViewBuilder
     func labelFor(_ sortOrder: SortOrder, title: LocalizedStringKey) -> some View {
@@ -186,7 +176,7 @@ private extension IssuesView {
                 Text("Sort")
             }
             Button("Edit tags") {
-                showingEditTagsView = true
+                issuesViewState = .showingEditTagsView
             }
         }
         ToolbarItemGroup(placement: .bottomBar) {
@@ -198,21 +188,12 @@ private extension IssuesView {
                     systemImage: viewModel.searchIssueStatus == .open ? "tray.and.arrow.down.fill" : "tray.and.arrow.up.fill"
                 )
             }
-
+            
             Button {
-                showingAddIssueView = true
+                issuesViewState = .showingAddIssueView
             } label: {
                 Label("Add Issue", systemImage: "square.and.pencil")
             }
-        }
-    }
-    
-    func deleteIssueButton(issue: Issue) -> some View {
-        Button(role: .destructive) {
-            selectedIssue = issue
-            showingDeleteIssueConfirmation = true
-        } label: {
-            Label("Delete", systemImage: "trash")
         }
     }
     
@@ -231,6 +212,26 @@ private extension IssuesView {
             )
         }
         .tint(issue.isOpenStatus ? .green : .purple)
+    }
+}
+
+// MARK: - Functions
+private extension IssuesView {
+    enum IssuesViewState: Identifiable {
+        case showingAddIssueView
+        case showingEditTagsView
+        
+        var id: Self { self }
+    }
+
+
+    func deleteIssue(offsets indexSet: IndexSet) {
+        for index in indexSet {
+            let issue = issues[index]
+            Task {
+                _ = await persistenceController.deleteObject(issue)
+            }
+        }
     }
     
     func handleChange() {
