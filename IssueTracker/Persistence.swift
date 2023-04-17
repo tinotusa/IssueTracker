@@ -88,6 +88,7 @@ extension PersistenceController {
         if issue.wrappedStatus == status {
             return false
         }
+        objectWillChange.send()
         issue.wrappedStatus = status
         return save()
     }

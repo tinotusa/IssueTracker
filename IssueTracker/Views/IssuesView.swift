@@ -202,11 +202,13 @@ private extension IssuesView {
     
     func changeIssueStatusButton(issue: Issue) -> some View {
         Button {
-            switch issue.wrappedStatus {
-            case .closed:
-                _ = persistenceController.setIssueStatus(for: issue, to: .open)
-            case .open:
-                _ = persistenceController.setIssueStatus(for: issue, to: .closed)
+            withAnimation {
+                switch issue.wrappedStatus {
+                case .closed:
+                    _ = persistenceController.setIssueStatus(for: issue, to: .open)
+                case .open:
+                    _ = persistenceController.setIssueStatus(for: issue, to: .closed)
+                }
             }
         } label: {
             Label(
