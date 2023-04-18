@@ -218,25 +218,25 @@ extension PersistenceController {
         return try await save()
     }
     
-//    func requestCloudKitAccount() async throws {
-//        let status = try await cloudKitManager.getAccountStatus()
-//        if status != .available {
-//            logger.debug("iCloud account is not available. current status is: \(status.rawValue)")
-//            return
-//        }
-//    }
+    /// Deletes the given objects from core data.
+    /// - Parameter objects: The objects to delete.
+    func deleteObjects<T: NSManagedObject>(_ objects: [T]) async throws {
+        await withThrowingTaskGroup(of: Void.self) { group in
+            for object in objects {
+                group.addTask { [weak self] in
+                    try await self?.deleteObject(object)
+                }
+            }
+        }
+    }
+    
     
     /// Deletes the given object from core data.
     /// - Parameter object: The object to delete.
     @MainActor
     func deleteObject<T: NSManagedObject>(_ object: T) async throws {
         logger.debug("Deleting object with id: \(object.objectID)")
-//        let isSignedIn = await requestCloudKitAccount()
-//        if !isSignedIn {
-//            showingError = true
-//            persistenceError = .noICloudAccount
-//            return false
-//        }
+
         if let issue = object as? Issue {
             for comment in issue.wrappedComments {
                 for attachment in comment.wrappedAttachments {
