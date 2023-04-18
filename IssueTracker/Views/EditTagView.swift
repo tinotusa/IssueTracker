@@ -11,27 +11,34 @@ struct EditTagView: View {
     @ObservedObject var tag: Tag
     @State private var name: String = ""
     @State private var showingCancelDialog = false
-
+    @State private var errorWrapper: ErrorWrapper?
+    
+    @EnvironmentObject private var persistenceController: PersistenceController
     @Environment(\.dismiss) private var dismiss
     @Environment(\.managedObjectContext) private var viewContext
 
     var body: some View {
         NavigationStack {
-            VStack {
-                LabeledInputField("Tag name:") {
-                    CustomTextField("Tag name", text: $name)
+            List {
+                Section("Tag name") {
+                    TextField("Tag name", text: $name)
+                        .textFieldStyle(.roundedBorder)
                 }
+                .listRowSeparator(.hidden)
+                .listRowBackground(Color.customBackground)
+                
                 ProminentButton("Save", action: save)
                     .disabled(!hasChanges)
+                    .listRowSeparator(.hidden)
+                    .listRowBackground(Color.customBackground)
             }
+            .listStyle(.plain)
+            .listRowBackground(Color.customBackground)
             .navigationTitle("Edit tag")
             .onAppear {
                 name = tag.wrappedName
             }
-            .padding()
-            .frame(maxHeight: .infinity)
             .background(Color.customBackground)
-            .bodyStyle()
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
                     Button("Cancel", role: .cancel) {
@@ -60,6 +67,9 @@ struct EditTagView: View {
         } message: {
             Text("Are you sure you want to discard the changes you've made?")
         }
+        .sheet(item: $errorWrapper) { error in
+            ErrorView(errorWrapper: error)
+        }
     }
 }
 
@@ -71,11 +81,13 @@ private extension EditTagView {
     
     /// Saves the changes made.
     func save() {
-        tag.name = name
-        do {
-            try viewContext.save()
-        } catch {
-            viewContext.rollback()
+        Task {
+            tag.name = name
+            do {
+                try await persistenceController.save()
+            } catch {
+                errorWrapper = .init(error: error, message: "Failed to save the tag edit.")
+            }
         }
     }
 }
@@ -97,5 +109,6 @@ struct EditTagView_Previews: PreviewProvider {
     static var previews: some View {
         ContainerView()
             .environment(\.managedObjectContext, viewContext)
+            .environmentObject(PersistenceController.preview)
     }
 }
