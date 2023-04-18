@@ -221,11 +221,15 @@ extension PersistenceController {
     /// Deletes the given objects from core data.
     /// - Parameter objects: The objects to delete.
     func deleteObjects<T: NSManagedObject>(_ objects: [T]) async throws {
-        await withThrowingTaskGroup(of: Void.self) { group in
+        try await withThrowingTaskGroup(of: Void.self) { group in
             for object in objects {
                 group.addTask { [weak self] in
                     try await self?.deleteObject(object)
                 }
+            }
+            
+            for try await _ in group {
+                
             }
         }
     }
