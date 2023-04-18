@@ -140,6 +140,7 @@ extension PersistenceController {
     ) async throws {
         let comment = Comment(comment: comment, context: viewContext)
         logger.debug("Adding comment with id: \(comment.wrappedId)")
+        objectWillChange.send()
         
         var attachments = [Attachment]()
         var records = [CKRecord]()
