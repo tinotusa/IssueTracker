@@ -10,8 +10,9 @@ import SwiftUI
 struct TagsEditView: View {
     @State private var showingDeleteAllConfirmation = false
     @State private var selectedTag: Tag?
+    @State private var errorWrapper: ErrorWrapper?
     
-    @Environment(\.managedObjectContext) private var viewContext
+    @EnvironmentObject private var persistenceController: PersistenceController
     @Environment(\.dismiss) private var dismiss
     
     @FetchRequest(sortDescriptors: [.init(\.dateCreated, order: .reverse)])
@@ -42,7 +43,6 @@ struct TagsEditView: View {
                     .onDelete(perform: deleteTag)
                 }
             }
-            .bodyStyle()
             .background(Color.customBackground)
             .navigationTitle("Edit tags")
             .listStyle(.plain)
@@ -76,7 +76,9 @@ struct TagsEditView: View {
         }
         .sheet(item: $selectedTag) { tag in
             EditTagView(tag: tag)
-                .environment(\.managedObjectContext, viewContext)
+        }
+        .sheet(item: $errorWrapper) { error in
+            ErrorView(errorWrapper: error)
         }
     }
 }
@@ -84,32 +86,36 @@ struct TagsEditView: View {
 extension TagsEditView {
     /// Deletes a tag based on the index.
     /// - Parameter offsets: The offset(index) of the tag.
-    func deleteTag(_ offsets: IndexSet) {
-        offsets.map { tags[$0] }.forEach(viewContext.delete)
-        do {
-            try viewContext.save()
-        } catch {
-            viewContext.rollback()
+    func deleteTag(offsets indexSet: IndexSet) {
+        Task {
+            do {
+                for index in indexSet {
+                    try await persistenceController.deleteObject(tags[index])
+                }
+            } catch {
+                errorWrapper = .init(error: error, message: "Failed to delete tag. Try again.")
+            }
         }
     }
     
     /// Deletes all the tags.
     func deleteAllTags() {
-        tags.forEach(viewContext.delete)
-        do {
-            try viewContext.save()
-        } catch {
-            viewContext.rollback()
+        Task {
+            do {
+                let tags = tags.map { $0 }
+                try await persistenceController.deleteObjects(tags)
+            } catch {
+                errorWrapper = .init(error: error, message: "Failed to delete all tags.")
+            }
         }
     }
 }
     
 
-struct TagsEditView_Previews: PreviewProvider {
-    static var viewContext = PersistenceController.preview.container.viewContext
-    
+struct TagsEditView_Previews: PreviewProvider {    
     static var previews: some View {
         TagsEditView()
-            .environment(\.managedObjectContext, viewContext)
+            .environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
+            .environmentObject(PersistenceController.preview)
     }
 }
