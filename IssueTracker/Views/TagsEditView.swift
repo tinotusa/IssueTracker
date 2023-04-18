@@ -14,7 +14,7 @@ struct TagsEditView: View {
     @Environment(\.managedObjectContext) private var viewContext
     @Environment(\.dismiss) private var dismiss
     
-    @FetchRequest(sortDescriptors: [])
+    @FetchRequest(sortDescriptors: [.init(\.dateCreated, order: .reverse)])
     private var tags: FetchedResults<Tag>
     
     var body: some View {
