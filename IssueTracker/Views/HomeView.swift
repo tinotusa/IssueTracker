@@ -47,6 +47,9 @@ struct HomeView: View {
                     .listRowSeparator(.hidden)
                 }
             }
+            .refreshable {
+                viewContext.refreshAllObjects()
+            }
             .navigationTitle("Projects")
             .toolbarBackground(Color.customBackground)
             .toolbar {

@@ -38,7 +38,7 @@ extension EditProjectViewModel {
     }
     
     @MainActor
-    func save(persistenceController: PersistenceController) throws {
+    func save(persistenceController: PersistenceController) async throws {
         guard projectHasChanges else {
             logger.debug("Failed to save changes. Project has no changes.")
             return
@@ -47,7 +47,7 @@ extension EditProjectViewModel {
         project.name = projectName
         project.startDate = startDate
         
-        try persistenceController.save()
+        try await persistenceController.save()
         logger.debug("Successfully saved project edits.")
     }
     

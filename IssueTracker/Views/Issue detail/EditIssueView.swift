@@ -59,10 +59,12 @@ struct EditIssueView: View {
         }
         .safeAreaInset(edge: .bottom) {
             ProminentButton("Save Changes") {
-                do {
-                    try persistenceController.copyIssue(from: issueCopy, to: issue)
-                } catch {
-                    errorWrapper = .init(error: error, message: "Failed to save issue changes.")
+                Task {
+                    do {
+                        try await persistenceController.copyIssue(from: issueCopy, to: issue)
+                    } catch {
+                        errorWrapper = .init(error: error, message: "Failed to save issue changes.")
+                    }
                 }
             }
             .disabled(issueCopy.equals(issue))
@@ -79,11 +81,13 @@ struct EditIssueView: View {
             }
             ToolbarItem(placement: .confirmationAction) {
                 Button("Done") {
-                    do {
-                        try persistenceController.copyIssue(from: issueCopy, to: issue)
-                        editMode?.wrappedValue = .inactive
-                    } catch {
-                        errorWrapper = .init(error: error, message: "Failed to save issue changes.")
+                    Task {
+                        do {
+                            try await persistenceController.copyIssue(from: issueCopy, to: issue)
+                            editMode?.wrappedValue = .inactive
+                        } catch {
+                            errorWrapper = .init(error: error, message: "Failed to save issue changes.")
+                        }
                     }
                 }
                 .disabled(issueCopy.equals(issue))

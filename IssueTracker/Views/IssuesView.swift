@@ -209,13 +209,13 @@ private extension IssuesView {
     
     func changeIssueStatusButton(issue: Issue) -> some View {
         Button {
-            withAnimation {
+            Task {
                 do {
                     switch issue.wrappedStatus {
                     case .closed:
-                        try persistenceController.setIssueStatus(for: issue, to: .open)
+                        try await persistenceController.setIssueStatus(for: issue, to: .open)
                     case .open:
-                        try persistenceController.setIssueStatus(for: issue, to: .closed)
+                        try await persistenceController.setIssueStatus(for: issue, to: .closed)
                     }
                 } catch {
                     errorWrapper = .init(error: error, message: "Failed to change issue status.")

@@ -121,17 +121,19 @@ private extension AddIssueView {
 // MARK: - Functions
 private extension AddIssueView {
     func addIssue() {
-        do {
-            try persistenceController.addIssue(
-                name: issueData.name,
-                issueDescription: issueData.description,
-                priority: issueData.priority,
-                tags: issueData.tags,
-                project: project
-            )
-            dismiss()
-        } catch {
-            errorWrapper = ErrorWrapper(error: error, message: "Failed to add issue.")
+        Task {
+            do {
+                try await persistenceController.addIssue(
+                    name: issueData.name,
+                    issueDescription: issueData.description,
+                    priority: issueData.priority,
+                    tags: issueData.tags,
+                    project: project
+                )
+                dismiss()
+            } catch {
+                errorWrapper = ErrorWrapper(error: error, message: "Failed to add issue.")
+            }
         }
     }
 }

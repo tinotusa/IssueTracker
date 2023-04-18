@@ -111,10 +111,12 @@ private extension EditCommentView {
                 await CloudKitManager().deleteAttachment(withURL: assetURL)
             }
         }
-        do {
-            try persistenceController.save()
-        } catch {
-            errorWrapper = ErrorWrapper(error: error, message: "Failed to delete comment.")
+        Task {
+            do {
+                try await persistenceController.save()
+            } catch {
+                errorWrapper = ErrorWrapper(error: error, message: "Failed to delete comment.")
+            }
         }
     }
     
@@ -129,11 +131,13 @@ private extension EditCommentView {
     }
     
     func save() {
-        do {
-            try persistenceController.save()
-            dismiss()
-        } catch {
-            errorWrapper = .init(error: error, message: "Failed to save comment edit.")
+        Task {
+            do {
+                try await persistenceController.save()
+                dismiss()
+            } catch {
+                errorWrapper = .init(error: error, message: "Failed to save comment edit.")
+            }
         }
     }
 }

@@ -84,11 +84,13 @@ struct EditProjectView: View {
 
 private extension EditProjectView {
     func saveChanges() {
-        do {
-            try viewModel.save(persistenceController: persistenceController)
-            dismiss()
-        } catch {
-            errorWrapper = ErrorWrapper(error: error, message: "Try to save again.")
+        Task {
+            do {
+                try await viewModel.save(persistenceController: persistenceController)
+                dismiss()
+            } catch {
+                errorWrapper = ErrorWrapper(error: error, message: "Try to save again.")
+            }
         }
     }
 }

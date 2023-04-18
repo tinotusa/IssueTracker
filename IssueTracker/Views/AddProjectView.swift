@@ -58,11 +58,13 @@ struct AddProjectView: View {
 
 private extension AddProjectView {
     func addProject() {
-        do {
-            try persistenceController.addProject(name: projectName, dateStarted: dateStarted)
-            dismiss()
-        } catch {
-            errorWrapper = ErrorWrapper(error: error, message: "Failed to add project. Try again.")
+        Task  {
+            do {
+                try await persistenceController.addProject(name: projectName, dateStarted: dateStarted)
+                dismiss()
+            } catch {
+                errorWrapper = ErrorWrapper(error: error, message: "Failed to add project. Try again.")
+            }
         }
     }
     

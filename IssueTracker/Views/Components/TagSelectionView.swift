@@ -35,10 +35,12 @@ struct TagSelectionView: View {
                     .frame(maxWidth: .infinity, alignment: .center)
             } else if allTags.isEmpty {
                 PlainButton("Add \"\(tagName)\"") {
-                    do {
-                        try persistenceController.addTag(named: tagName)
-                    } catch {
-                        errorWrapper = ErrorWrapper(error: error, message: "Failed to add new tag.")
+                    Task {
+                        do {
+                            try await persistenceController.addTag(named: tagName)
+                        } catch {
+                            errorWrapper = ErrorWrapper(error: error, message: "Failed to add new tag.")
+                        }
                     }
                 }
             }

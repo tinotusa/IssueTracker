@@ -53,7 +53,7 @@ struct AddCommentView: View {
                         Task {
                             let attachments = await viewModel.getAttachmentsTransferables()
                             do {
-                                try persistenceController.addComment(
+                                try await persistenceController.addComment(
                                     comment: viewModel.comment,
                                     to: issue,
                                     attachments: attachments,

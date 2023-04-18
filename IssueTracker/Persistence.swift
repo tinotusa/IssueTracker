@@ -17,9 +17,8 @@ final class PersistenceController: ObservableObject {
     )
     
     let container: NSPersistentContainer
-    @Published var persistenceError: PersistenceError?
-    @Published var showingError = false
-    @Published var cloudKitManager = CloudKitManager()
+    @Published var errorWrapper: ErrorWrapper?
+    private let cloudKitManager = CloudKitManager()
     
     init(inMemory: Bool = false) {
         container =  NSPersistentCloudKitContainer(name: "IssueTracker")
@@ -62,22 +61,22 @@ extension PersistenceController {
         priority: Issue.Priority,
         tags: Set<Tag>,
         project: Project
-    ) throws {
+    ) async throws {
         let issue = Issue(name: name, issueDescription: issueDescription, priority: priority, tags: tags, context: viewContext)
         logger.debug("Adding new issue with id: \(issue.wrappedId)")
         project.addToIssues(issue)
-        return try save()
+        return try await save()
     }
     
     /// Toggles the issues status.
     /// - Parameter issue: The issue to toggle.
     @MainActor
-    func toggleIssueStatus(for issue: Issue) throws {
+    func toggleIssueStatus(for issue: Issue) async throws {
         switch issue.wrappedStatus {
         case .open: issue.wrappedStatus = .closed
         case .closed: issue.wrappedStatus = .open
         }
-        return try save()
+        return try await save()
     }
     
     /// Changes the issues status to the given status.
@@ -85,13 +84,13 @@ extension PersistenceController {
     ///   - issue: The issue to change.
     ///   - status: The status to set the issue to.
     @MainActor
-    func setIssueStatus(for issue: Issue, to status: Issue.Status) throws {
+    func setIssueStatus(for issue: Issue, to status: Issue.Status) async throws {
         if issue.wrappedStatus == status {
             return
         }
         objectWillChange.send()
         issue.wrappedStatus = status
-        return try save()
+        return try await save()
     }
     
     /// Copies values from the source issue to the destination issue.
@@ -100,11 +99,11 @@ extension PersistenceController {
     ///   - destination: The issue to copy to.
     ///   - tags: The tags from the source issue to copy to the destination.
     @MainActor
-    func copyIssue(from source: Issue, to destination: Issue) throws {
+    func copyIssue(from source: Issue, to destination: Issue) async throws {
         logger.debug("Copying from issue: \(source.wrappedId) to issue: \(destination.wrappedId)")
         destination.copyProperties(from: source)
         
-        return try save()
+        return try await save()
     }
 }
 
@@ -112,6 +111,18 @@ extension PersistenceController {
     /// The managed object context for the container.
     var viewContext: NSManagedObjectContext {
         container.viewContext
+    }
+    
+    /// Checks that the users is logged in to iCloud.
+    func iCloudAccountCheck() async throws {
+        let status = try await cloudKitManager.getAccountStatus()
+        if status == .available {
+            return
+        }
+        if viewContext.hasChanges {
+            viewContext.rollback()
+        }
+        throw PersistenceError.noICloudAccount
     }
     
     /// Adds a new comment to core data.
@@ -126,7 +137,7 @@ extension PersistenceController {
         to issue: Issue,
         attachments attachmentTransferables: [AttachmentTransferable]? = nil,
         audioAttachmentURL audioURL: URL? = nil
-    ) throws {
+    ) async throws {
         let comment = Comment(comment: comment, context: viewContext)
         logger.debug("Adding comment with id: \(comment.wrappedId)")
         
@@ -192,7 +203,7 @@ extension PersistenceController {
             }
         }
         database.add(modifyOperation)
-        return try save()
+        return try await save()
     }
     
     /// Adds a new project to core data.
@@ -200,10 +211,10 @@ extension PersistenceController {
     ///   - name: The name of the project.
     ///   - dateStarted: The start date for the project.
     @MainActor
-    func addProject(name: String, dateStarted: Date) throws {
+    func addProject(name: String, dateStarted: Date) async throws {
         let project = Project(name: name, startDate: dateStarted, context: viewContext)
         logger.debug("Adding new project with id: \(project.wrappedId)")
-        return try save()
+        return try await save()
     }
     
 //    func requestCloudKitAccount() async throws {
@@ -253,7 +264,7 @@ extension PersistenceController {
         }
         
         viewContext.delete(object)
-        return try save()
+        return try await save()
     }
     
     /// Adds an attachment to a comment.
@@ -262,7 +273,7 @@ extension PersistenceController {
     ///   - attachmentURL: The URL for the attachment.
     ///   - comment: The comment to add the attachment to.
     @MainActor
-    func addAttachment(ofType attachmentType: AttachmentType, attachmentURL: URL, to comment: Comment) throws {
+    func addAttachment(ofType attachmentType: AttachmentType, attachmentURL: URL, to comment: Comment) async throws {
         let attachment = Attachment(context: viewContext)
         attachment.assetURL = attachmentURL
         attachment.type = attachmentType.rawValue
@@ -272,12 +283,13 @@ extension PersistenceController {
         
         comment.addToAttachments(attachment)
         logger.debug("Added new attachment to comment: \(comment.wrappedId).")
-        return try save()
+        return try await save()
     }
     
     @MainActor
     /// Commits the changes made to core data.
-    func save() throws {
+    func save() async throws {
+        try await iCloudAccountCheck()
         if !viewContext.hasChanges {
             logger.debug("Failed to save. managed object has no changes.")
             return
@@ -290,12 +302,12 @@ extension PersistenceController {
     /// Adds a tag to core data
     /// - Parameter name: The name of the tag
     /// - Returns: `true` if the tag was added successfully, `false` otherwise.
-    func addTag(named name: String) throws {
+    func addTag(named name: String) async throws {
         let tag = Tag(context: viewContext)
         tag.name = name
         tag.id = UUID()
         tag.dateCreated = .now
-        return try save()
+        return try await save()
     }
 }
 
