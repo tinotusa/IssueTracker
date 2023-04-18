@@ -11,6 +11,7 @@ import CoreData
 struct AddIssueView: View {
     @ObservedObject var project: Project
     @State private var issueData = IssueData()
+    @State private var errorWrapper: ErrorWrapper?
     
     @Environment(\.managedObjectContext) private var viewContext
     @Environment(\.dismiss) private var dismiss
@@ -35,7 +36,9 @@ struct AddIssueView: View {
             .listStyle(.plain)
             .navigationTitle("Add issue")
             .background(Color.customBackground)
-            .persistenceErrorAlert(isPresented: $persistenceController.showingError, presenting: $persistenceController.persistenceError)
+            .sheet(item: $errorWrapper) { error in
+                ErrorView(errorWrapper: error)
+            }
             .toolbarBackground(Color.customBackground)
             .toolbar {
                 toolbarItems
@@ -118,15 +121,17 @@ private extension AddIssueView {
 // MARK: - Functions
 private extension AddIssueView {
     func addIssue() {
-        let didSave = persistenceController.addIssue(
-            name: issueData.name,
-            issueDescription: issueData.description,
-            priority: issueData.priority,
-            tags: issueData.tags,
-            project: project
-        )
-        if didSave {
+        do {
+            try persistenceController.addIssue(
+                name: issueData.name,
+                issueDescription: issueData.description,
+                priority: issueData.priority,
+                tags: issueData.tags,
+                project: project
+            )
             dismiss()
+        } catch {
+            errorWrapper = ErrorWrapper(error: error, message: "Failed to add issue.")
         }
     }
 }

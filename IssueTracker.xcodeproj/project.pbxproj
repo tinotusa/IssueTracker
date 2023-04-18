@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		21009AE929EE6C56009CAF42 /* ErrorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21009AE829EE6C56009CAF42 /* ErrorView.swift */; };
+		21009AEB29EE6D8D009CAF42 /* ErrorWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21009AEA29EE6D8D009CAF42 /* ErrorWrapper.swift */; };
 		2105DC5229628DFD008F940B /* TODO.md in Resources */ = {isa = PBXBuildFile; fileRef = 2105DC5129628DFD008F940B /* TODO.md */; };
 		2105DC542962CF33008F940B /* TagsEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2105DC532962CF33008F940B /* TagsEditView.swift */; };
 		210650E0297BD46C00E5BCD7 /* TextStyles.swift in Sources */ = {isa = PBXBuildFile; fileRef = 210650DF297BD46C00E5BCD7 /* TextStyles.swift */; };
@@ -26,7 +28,6 @@
 		213E7A3B29AEF91F00CD3BEF /* AddCommentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 213E7A3A29AEF91F00CD3BEF /* AddCommentView.swift */; };
 		213EDD992980DA7C00012198 /* IssueTrackerSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 213EDD982980DA7C00012198 /* IssueTrackerSettings.swift */; };
 		213EDD9B29814C9A00012198 /* TagTableColumn.swift in Sources */ = {isa = PBXBuildFile; fileRef = 213EDD9A29814C9A00012198 /* TagTableColumn.swift */; };
-		2141D3BF29E6A4C300113CA0 /* PersistenceErrorAlert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2141D3BE29E6A4C300113CA0 /* PersistenceErrorAlert.swift */; };
 		2141D3C229E6B5A000113CA0 /* IssueData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2141D3C129E6B5A000113CA0 /* IssueData.swift */; };
 		2150C83E295972E0006CD7D2 /* IssueTrackerApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2150C83D295972E0006CD7D2 /* IssueTrackerApp.swift */; };
 		2150C840295972E0006CD7D2 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2150C83F295972E0006CD7D2 /* ContentView.swift */; };
@@ -150,6 +151,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		21009AE829EE6C56009CAF42 /* ErrorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorView.swift; sourceTree = "<group>"; };
+		21009AEA29EE6D8D009CAF42 /* ErrorWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorWrapper.swift; sourceTree = "<group>"; };
 		2105DC5129628DFD008F940B /* TODO.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = TODO.md; sourceTree = "<group>"; };
 		2105DC532962CF33008F940B /* TagsEditView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagsEditView.swift; sourceTree = "<group>"; };
 		210650DF297BD46C00E5BCD7 /* TextStyles.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextStyles.swift; sourceTree = "<group>"; };
@@ -169,7 +172,6 @@
 		213E7A3A29AEF91F00CD3BEF /* AddCommentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddCommentView.swift; sourceTree = "<group>"; };
 		213EDD982980DA7C00012198 /* IssueTrackerSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IssueTrackerSettings.swift; sourceTree = "<group>"; };
 		213EDD9A29814C9A00012198 /* TagTableColumn.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagTableColumn.swift; sourceTree = "<group>"; };
-		2141D3BE29E6A4C300113CA0 /* PersistenceErrorAlert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersistenceErrorAlert.swift; sourceTree = "<group>"; };
 		2141D3C129E6B5A000113CA0 /* IssueData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IssueData.swift; sourceTree = "<group>"; };
 		2150C83A295972E0006CD7D2 /* IssueTracker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = IssueTracker.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2150C83D295972E0006CD7D2 /* IssueTrackerApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IssueTrackerApp.swift; sourceTree = "<group>"; };
@@ -317,6 +319,7 @@
 				218FD5EB29E65BD50029E1E6 /* PersistenceError.swift */,
 				2141D3C129E6B5A000113CA0 /* IssueData.swift */,
 				21E12CDC29E94E1400EE8255 /* CloudKitManager.swift */,
+				21009AEA29EE6D8D009CAF42 /* ErrorWrapper.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -324,7 +327,6 @@
 		2141D3C029E6A4D200113CA0 /* View modifiers */ = {
 			isa = PBXGroup;
 			children = (
-				2141D3BE29E6A4C300113CA0 /* PersistenceErrorAlert.swift */,
 				2179A40229EBCA2700D69C82 /* SheetWithIndicator.swift */,
 			);
 			path = "View modifiers";
@@ -576,6 +578,7 @@
 				211104AA297239DB00FB8CD1 /* EditTagView.swift */,
 				213E7A3A29AEF91F00CD3BEF /* AddCommentView.swift */,
 				218F93D829C80C3500F9D62A /* EditCommentView.swift */,
+				21009AE829EE6C56009CAF42 /* ErrorView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -853,7 +856,6 @@
 				2127AD62295FB421005893DE /* EditIssueView.swift in Sources */,
 				2150C847295972E2006CD7D2 /* Persistence.swift in Sources */,
 				211104AB297239DB00FB8CD1 /* EditTagView.swift in Sources */,
-				2141D3BF29E6A4C300113CA0 /* PersistenceErrorAlert.swift in Sources */,
 				2179A40329EBCA2700D69C82 /* SheetWithIndicator.swift in Sources */,
 				218FD5EC29E65BD50029E1E6 /* PersistenceError.swift in Sources */,
 				2150C840295972E0006CD7D2 /* ContentView.swift in Sources */,
@@ -863,6 +865,7 @@
 				21E6D2BD295C4B8400BB4AA6 /* CustomTextField.swift in Sources */,
 				21FDE718295D64F10006C24A /* Project+Extensions.swift in Sources */,
 				21FDE757295D80D30006C24A /* EditProjectView.swift in Sources */,
+				21009AE929EE6C56009CAF42 /* ErrorView.swift in Sources */,
 				2159F00C29CABC5C00E01576 /* WrappingHStack.swift in Sources */,
 				21F1DA3D295DBD6500076D73 /* LabeledInputField.swift in Sources */,
 				21BBEBFF295EE1E9008F237B /* TagView.swift in Sources */,
@@ -886,6 +889,7 @@
 				21E6D2BF295C4DD900BB4AA6 /* AddProjectView.swift in Sources */,
 				213E7A3B29AEF91F00CD3BEF /* AddCommentView.swift in Sources */,
 				21E6D2C1295C5B4900BB4AA6 /* ProjectRowView.swift in Sources */,
+				21009AEB29EE6D8D009CAF42 /* ErrorWrapper.swift in Sources */,
 				21E6D2AB295BD9B500BB4AA6 /* Color+Extensions.swift in Sources */,
 				21F1DA35295DB04E00076D73 /* Issue+Extensions.swift in Sources */,
 				211246C929B9B89A00D0EB01 /* AttachmentTransferable.swift in Sources */,

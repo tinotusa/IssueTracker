@@ -11,6 +11,7 @@ struct HomeView: View {
     @State private var showingDeleteConfirmation = false
     @State private var selectedProject: Project?
     @State private var showingAddProjectView = false
+    @State private var errorWrapper: ErrorWrapper?
     
     @Environment(\.managedObjectContext) private var viewContext
     @EnvironmentObject private var persistenceController: PersistenceController
@@ -40,15 +41,8 @@ struct HomeView: View {
                             }
                             .tint(.blue)
                         }
-                        .swipeActions {
-                            Button(role: .destructive) {
-                                selectedProject = project
-                                showingDeleteConfirmation = true
-                            } label: {
-                                Label("Delete", systemImage: "trash")
-                            }
-                        }
                     }
+                    .onDelete(perform: deleteProject)
                     .listRowBackground(Color.customBackground)
                     .listRowSeparator(.hidden)
                 }
@@ -74,7 +68,9 @@ struct HomeView: View {
             }
             .listStyle(.plain)
             .bodyStyle()
-            .persistenceErrorAlert(isPresented: $persistenceController.showingError, presenting: $persistenceController.persistenceError)
+            .sheet(item: $errorWrapper) { error in
+                ErrorView(errorWrapper: error)
+            }
             .sheet(isPresented: $showingAddProjectView) {
                 AddProjectView()
                     .presentationDetents([.large])
@@ -95,12 +91,30 @@ struct HomeView: View {
                         return
                     }
                     Task {
-                        _ = await persistenceController.deleteObject(selectedProject)
-                        self.selectedProject = nil
+                        do {
+                            try await persistenceController.deleteObject(selectedProject)
+                            self.selectedProject = nil
+                        } catch {
+                            errorWrapper = ErrorWrapper(error: error, message: "Failed to delete the project.")
+                        }
                     }
                 }
             } message: {
                 Text("Are you sure you want to delete this project?")
+            }
+        }
+    }
+}
+
+private extension HomeView {
+    func deleteProject(offsets indexSet: IndexSet) {
+        Task {
+            for index in indexSet {
+                do {
+                    try await persistenceController.deleteObject(projects[index])
+                } catch {
+                    errorWrapper = .init(error: error, message: "Failed to delete project.")
+                }
             }
         }
     }

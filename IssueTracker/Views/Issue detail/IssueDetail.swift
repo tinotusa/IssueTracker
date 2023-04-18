@@ -25,7 +25,6 @@ struct IssueDetail: View {
             EditIssueView(issue: issue)
         } else {
             IssueSummary(issue: issue)
-                .persistenceErrorAlert(isPresented: $persistenceController.showingError, presenting: $persistenceController.persistenceError)
                 .toolbar {
                     toolbarItems
                 }

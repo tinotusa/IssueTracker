@@ -11,6 +11,7 @@ struct EditIssueView: View {
     @ObservedObject private(set) var issue: Issue
     @ObservedObject private var issueCopy: Issue
     @State private var showingCancelDialog = false
+    @State private var errorWrapper: ErrorWrapper?
     
     @Environment(\.editMode) private var editMode
     @Environment(\.managedObjectContext) private var viewContext
@@ -53,10 +54,16 @@ struct EditIssueView: View {
         .toolbarBackground(Color.customBackground)
         .navigationBarBackButtonHidden(true)
         .navigationTitle("Edit issue")
-        .persistenceErrorAlert(isPresented: $persistenceController.showingError, presenting: $persistenceController.persistenceError)
+        .sheet(item: $errorWrapper) { error in
+            ErrorView(errorWrapper: error)
+        }
         .safeAreaInset(edge: .bottom) {
             ProminentButton("Save Changes") {
-                _ = persistenceController.copyIssue(from: issueCopy, to: issue)
+                do {
+                    try persistenceController.copyIssue(from: issueCopy, to: issue)
+                } catch {
+                    errorWrapper = .init(error: error, message: "Failed to save issue changes.")
+                }
             }
             .disabled(issueCopy.equals(issue))
         }
@@ -72,8 +79,12 @@ struct EditIssueView: View {
             }
             ToolbarItem(placement: .confirmationAction) {
                 Button("Done") {
-                    _ = persistenceController.copyIssue(from: issueCopy, to: issue)
-                    editMode?.wrappedValue = .inactive
+                    do {
+                        try persistenceController.copyIssue(from: issueCopy, to: issue)
+                        editMode?.wrappedValue = .inactive
+                    } catch {
+                        errorWrapper = .init(error: error, message: "Failed to save issue changes.")
+                    }
                 }
                 .disabled(issueCopy.equals(issue))
             }

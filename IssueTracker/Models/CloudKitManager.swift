@@ -9,21 +9,44 @@ import Foundation
 import CloudKit
 import os
 
-class CloudKitManager {
-    static let shared = CloudKitManager()
+struct CloudKitManager {
     private let logger = Logger(
         subsystem: Bundle.main.bundleIdentifier!,
         category: String(describing: CloudKitManager.self)
     )
+    var cloudKitError: CloudKitManagerError?
+    var isSignedIn = false
+    
+    enum CloudKitManagerError: Error, LocalizedError {
+        case couldNotDetermine
+        case noAccount
+        case restricted
+        case temporarilyUnavailable
+        case unknownError
+        
+        var errorDescription: String? {
+            switch self {
+            case .couldNotDetermine: return "Couldn't determine the account status for cloud kit."
+            case .noAccount: return "Error no cloud kit account."
+            case .restricted: return "The cloud kit account is restricted."
+            case .temporarilyUnavailable: return "The cloud kit account is temporarily restricted."
+            case .unknownError: return "Unknown error."
+            }
+        }
+    }
 }
 
 extension CloudKitManager {
+    func getAccountStatus() async throws -> CKAccountStatus {
+        try await CKContainer.default().accountStatus()
+    }
+    
     func deleteComments(_ comments: [Comment]) async {
         logger.debug("Deleting \(comments.count) comments")
         await withTaskGroup(of: Void.self) { group in
             for comment in comments {
-                group.addTask { [weak self] in
-                    await self?.deleteComment(comment)
+                group.addTask {
+                    await deleteComment(comment)
                 }
             }
         }
@@ -32,8 +55,8 @@ extension CloudKitManager {
     func deleteIssues(_ issues: [Issue]) async {
         await withTaskGroup(of: Void.self) { group in
             for issue in issues {
-                group.addTask { [weak self] in
-                    await self?.deleteIssue(issue)
+                group.addTask {
+                    await deleteIssue(issue)
                 }
             }
         }
@@ -52,8 +75,8 @@ extension CloudKitManager {
                     logger.debug("No asset url for attachment with id: \(attachment.wrappedId)")
                     continue
                 }
-                group.addTask { [weak self] in
-                    await self?.deleteAttachment(withURL: assetURL)
+                group.addTask {
+                    await deleteAttachment(withURL: assetURL)
                 }
             }
         }
@@ -80,20 +103,21 @@ extension CloudKitManager {
             })
             
             let deleteOperation = CKModifyRecordsOperation(recordIDsToDelete: recordIDs)
-            deleteOperation.modifyRecordsResultBlock = { [weak self] result in
+            deleteOperation.modifyRecordsResultBlock = { result in
                 switch result {
                 case .success:
-                    self?.logger.debug("Successfully completed the operation")
+                    logger.debug("Successfully completed the operation")
                 case .failure(let error):
-                    self?.logger.debug("Failed to complete the delete operation. \(error)")
+                    logger.debug("Failed to complete the delete operation. \(error)")
                 }
             }
-            deleteOperation.perRecordDeleteBlock = { [weak self] id, result in
+            
+            deleteOperation.perRecordDeleteBlock = { id, result in
                 switch result {
                 case .success:
-                    self?.logger.debug("Successfully delete record with id: \(id)")
+                    logger.debug("Successfully delete record with id: \(id)")
                 case .failure(let error):
-                    self?.logger.debug("Failed to delete record with id: \(id). \(error)")
+                    logger.debug("Failed to delete record with id: \(id). \(error)")
                 }
             }
             database.add(deleteOperation)

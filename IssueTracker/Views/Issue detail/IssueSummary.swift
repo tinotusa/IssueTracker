@@ -9,8 +9,11 @@ import SwiftUI
 
 struct IssueSummary: View {
     let issue: Issue
+    @State private var issueDetailState: IssueDetailState?
+    @State private var errorWrapper: ErrorWrapper?
+    
     @EnvironmentObject private var persistenceController: PersistenceController
-    @State private var issueDetailState: IssueDetailState? = nil
+
     var body: some View {
         List {
             Group {
@@ -25,6 +28,9 @@ struct IssueSummary: View {
         .background(Color.customBackground)
         .toolbarBackground(Color.customBackground)
         .navigationBarTitleDisplayMode(.inline)
+        .sheet(item: $errorWrapper) { error in
+            ErrorView(errorWrapper: error)
+        }
         .sheet(item: $issueDetailState) { state in
             Group {
                 switch state {
@@ -117,7 +123,11 @@ private extension IssueSummary {
                     .swipeActions {
                         Button(role: .destructive) {
                             Task {
-                                _ = await persistenceController.deleteObject(comment)
+                                do {
+                                    try await persistenceController.deleteObject(comment)
+                                } catch {
+                                    errorWrapper = .init(error: error, message: "Failed to delete comment.")
+                                }
                             }
                         } label: {
                             Label("Delete", systemImage: "trash")

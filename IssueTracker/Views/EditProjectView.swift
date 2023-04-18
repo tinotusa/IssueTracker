@@ -12,6 +12,7 @@ struct EditProjectView: View {
     @Environment(\.managedObjectContext) private var viewContext
     @EnvironmentObject private var persistenceController: PersistenceController
     @Environment(\.dismiss) private var dismiss
+    @State private var errorWrapper: ErrorWrapper?
     
     @StateObject private var viewModel: EditProjectViewModel
     
@@ -40,10 +41,7 @@ struct EditProjectView: View {
                     }
                     
                     ProminentButton("Save changes") {
-                        let didSave = saveChanges()
-                        if didSave {
-                            dismiss()
-                        }
+                        saveChanges()
                     }
                     .frame(maxWidth: .infinity, alignment: .center)
                     .disabled(!viewModel.projectHasChanges)
@@ -67,10 +65,7 @@ struct EditProjectView: View {
                 
                 ToolbarItem(placement: .primaryAction) {
                     Button("Save") {
-                        let didSave = saveChanges()
-                        if didSave {
-                            dismiss()
-                        }
+                        saveChanges()
                     }
                     .disabled(!viewModel.projectHasChanges)
                 }
@@ -88,8 +83,13 @@ struct EditProjectView: View {
 }
 
 private extension EditProjectView {
-    func saveChanges() -> Bool {
-        viewModel.save(persistenceController: persistenceController)
+    func saveChanges() {
+        do {
+            try viewModel.save(persistenceController: persistenceController)
+            dismiss()
+        } catch {
+            errorWrapper = ErrorWrapper(error: error, message: "Try to save again.")
+        }
     }
 }
 

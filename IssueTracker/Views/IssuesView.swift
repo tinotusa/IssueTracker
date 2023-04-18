@@ -13,6 +13,7 @@ struct IssuesView: View {
     @State private var selectedIssue: Issue?
     @State private var issuesViewState: IssuesViewState?
     @State private var showingDeleteIssueConfirmation = false
+    @State private var errorWrapper: ErrorWrapper?
     
     @FetchRequest(sortDescriptors: [])
     private var issues: FetchedResults<Issue>
@@ -55,7 +56,9 @@ struct IssuesView: View {
         .navigationDestination(for: Issue.self) { issue in
             IssueDetail(issue: issue)
         }
-        .persistenceErrorAlert(isPresented: $persistenceController.showingError, presenting: $persistenceController.persistenceError)
+        .sheet(item: $errorWrapper) { error in
+            ErrorView(errorWrapper: error)
+        }
         .listStyle(.plain)
         .searchable(text: $viewModel.searchText)
         .searchScopes($viewModel.searchScope) {
@@ -98,7 +101,11 @@ struct IssuesView: View {
                     return
                 }
                 Task {
-                    _ = await persistenceController.deleteObject(selectedIssue)
+                    do {
+                        try await persistenceController.deleteObject(selectedIssue)
+                    } catch {
+                        errorWrapper = .init(error: error, message: "Failed to delete issue.")
+                    }
                 }
             } label: {
                 Text("Delete")
@@ -203,11 +210,15 @@ private extension IssuesView {
     func changeIssueStatusButton(issue: Issue) -> some View {
         Button {
             withAnimation {
-                switch issue.wrappedStatus {
-                case .closed:
-                    _ = persistenceController.setIssueStatus(for: issue, to: .open)
-                case .open:
-                    _ = persistenceController.setIssueStatus(for: issue, to: .closed)
+                do {
+                    switch issue.wrappedStatus {
+                    case .closed:
+                        try persistenceController.setIssueStatus(for: issue, to: .open)
+                    case .open:
+                        try persistenceController.setIssueStatus(for: issue, to: .closed)
+                    }
+                } catch {
+                    errorWrapper = .init(error: error, message: "Failed to change issue status.")
                 }
             }
         } label: {
@@ -234,7 +245,11 @@ private extension IssuesView {
         for index in indexSet {
             let issue = issues[index]
             Task {
-                _ = await persistenceController.deleteObject(issue)
+                do {
+                    try await persistenceController.deleteObject(issue)
+                } catch {
+                    errorWrapper = .init(error: error, message: "Failed to delete issue.")
+                }
             }
         }
     }

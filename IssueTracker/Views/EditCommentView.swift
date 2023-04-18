@@ -10,6 +10,8 @@ import CloudKit
 
 struct EditCommentView: View {
     @State private var showingCancelDialog = false
+    @State private var errorWrapper: ErrorWrapper?
+    
     @ObservedObject private(set) var comment: Comment
     @Environment(\.dismiss) private var dismiss
     @EnvironmentObject private var persistenceController: PersistenceController
@@ -106,10 +108,14 @@ private extension EditCommentView {
                 continue
             }
             Task {
-                await CloudKitManager.shared.deleteAttachment(withURL: assetURL)
+                await CloudKitManager().deleteAttachment(withURL: assetURL)
             }
         }
-        _ = persistenceController.save()
+        do {
+            try persistenceController.save()
+        } catch {
+            errorWrapper = ErrorWrapper(error: error, message: "Failed to delete comment.")
+        }
     }
     
     var commentHasChanges: Bool {
@@ -123,9 +129,11 @@ private extension EditCommentView {
     }
     
     func save() {
-        let didSave = persistenceController.save()
-        if didSave {
+        do {
+            try persistenceController.save()
             dismiss()
+        } catch {
+            errorWrapper = .init(error: error, message: "Failed to save comment edit.")
         }
     }
 }

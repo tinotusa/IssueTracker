@@ -11,6 +11,7 @@ import Combine
 struct AddProjectView: View {
     @State private var projectName = ""
     @State private var dateStarted: Date = .now
+    @State private var errorWrapper: ErrorWrapper?
     
     @Environment(\.managedObjectContext) private var viewContext
     @Environment(\.dismiss) private var dismiss
@@ -32,7 +33,9 @@ struct AddProjectView: View {
                 }
                 .disabled(addButtonDisabled)
             }
-            .persistenceErrorAlert(isPresented: $persistenceController.showingError, presenting: $persistenceController.persistenceError)
+            .sheet(item: $errorWrapper) { error in
+                ErrorView(errorWrapper: error)
+            }
             .background(Color.customBackground)
             .toolbarBackground(Color.customBackground)
             .navigationTitle("New project")
@@ -55,9 +58,11 @@ struct AddProjectView: View {
 
 private extension AddProjectView {
     func addProject() {
-        let didSave = persistenceController.addProject(name: projectName, dateStarted: dateStarted)
-        if didSave {
+        do {
+            try persistenceController.addProject(name: projectName, dateStarted: dateStarted)
             dismiss()
+        } catch {
+            errorWrapper = ErrorWrapper(error: error, message: "Failed to add project. Try again.")
         }
     }
     

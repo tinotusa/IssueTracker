@@ -10,6 +10,7 @@ import PhotosUI
 
 struct AddCommentView: View {
     @ObservedObject private(set) var issue: Issue
+    @State private var errorWrapper: ErrorWrapper?
     
     @StateObject private var viewModel = AddCommentViewModel()
     @StateObject private var audioRecorder = AudioRecorder()
@@ -43,20 +44,24 @@ struct AddCommentView: View {
                     await viewModel.loadImages(from: photoItems)
                 }
             }
-            .persistenceErrorAlert(isPresented: $persistenceController.showingError, presenting: $persistenceController.persistenceError)
+            .sheet(item: $errorWrapper) { error in
+                ErrorView(errorWrapper: error)
+            }
             .toolbar {
                 ToolbarItem(placement: .primaryAction) {
                     Button {
                         Task {
                             let attachments = await viewModel.getAttachmentsTransferables()
-                            let didSave = persistenceController.addComment(
-                                comment: viewModel.comment,
-                                to: issue,
-                                attachments: attachments,
-                                audioAttachmentURL: audioRecorder.url
-                            )
-                            if didSave {
+                            do {
+                                try persistenceController.addComment(
+                                    comment: viewModel.comment,
+                                    to: issue,
+                                    attachments: attachments,
+                                    audioAttachmentURL: audioRecorder.url
+                                )
                                 dismiss()
+                            } catch {
+                                errorWrapper = .init(error: error, message: "Failed to add comment.")
                             }
                         }
                     } label: {

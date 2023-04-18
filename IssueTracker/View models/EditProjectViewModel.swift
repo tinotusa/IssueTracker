@@ -14,6 +14,8 @@ final class EditProjectViewModel: ObservableObject {
     @Published var showingHasChangesConfirmationDialog = false
     @Published var projectName = ""
     @Published var startDate = Date()
+    @Published var errorWrapper: ErrorWrapper?
+    
     private let viewContext: NSManagedObjectContext
     private let logger = Logger(
         subsystem: Bundle.main.bundleIdentifier!,
@@ -35,24 +37,18 @@ extension EditProjectViewModel {
         }
     }
     
-    @discardableResult
     @MainActor
-    func save(persistenceController: PersistenceController) -> Bool {
+    func save(persistenceController: PersistenceController) throws {
         guard projectHasChanges else {
             logger.debug("Failed to save changes. Project has no changes.")
-            return false
+            return
         }
         objectWillChange.send()
         project.name = projectName
         project.startDate = startDate
         
-        let didSave = persistenceController.save()
-        if didSave {
-            logger.debug("Successfully saved project edits.")
-        } else {
-            logger.debug("Failed to save changes.")
-        }
-        return didSave
+        try persistenceController.save()
+        logger.debug("Successfully saved project edits.")
     }
     
     var projectHasChanges: Bool {

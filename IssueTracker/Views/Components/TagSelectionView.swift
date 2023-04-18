@@ -10,6 +10,7 @@ import CoreData
 
 struct TagSelectionView: View {
     @State private var tagName = ""
+    @State private var errorWrapper: ErrorWrapper?
     @Binding private(set) var selectedTags: Set<Tag>
     @Environment(\.managedObjectContext) private var viewContext
     
@@ -34,7 +35,11 @@ struct TagSelectionView: View {
                     .frame(maxWidth: .infinity, alignment: .center)
             } else if allTags.isEmpty {
                 PlainButton("Add \"\(tagName)\"") {
-                    _ = persistenceController.addTag(named: tagName)
+                    do {
+                        try persistenceController.addTag(named: tagName)
+                    } catch {
+                        errorWrapper = ErrorWrapper(error: error, message: "Failed to add new tag.")
+                    }
                 }
             }
             WrappingHStack {
@@ -48,7 +53,6 @@ struct TagSelectionView: View {
                 }
             }
         }
-        .persistenceErrorAlert(isPresented: $persistenceController.showingError, presenting: $persistenceController.persistenceError)
         .onChange(of: tagName) { text in
             let text = text.trimmingCharacters(in: .whitespacesAndNewlines)
             let predicate = NSPredicate(format: "name CONTAINS[cd] %@", text)
