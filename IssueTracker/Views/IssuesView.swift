@@ -83,8 +83,10 @@ struct IssuesView: View {
                 switch state {
                 case .showingAddIssueView:
                     AddIssueView(project: project)
+                        .environment(\.managedObjectContext, viewContext)
                 case .showingEditTagsView:
                     TagsEditView()
+                        .environment(\.managedObjectContext, viewContext)
                 }
             }
             .sheetWithIndicator()
