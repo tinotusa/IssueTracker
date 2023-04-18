@@ -21,6 +21,7 @@ struct ErrorView: View {
                 Text(errorWrapper.error.localizedDescription)
                     .font(.headline)
                 Text(errorWrapper.message)
+                    .multilineTextAlignment(.center)
             }
             .padding()
             .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
