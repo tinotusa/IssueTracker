@@ -8,22 +8,63 @@
 import SwiftUI
 
 struct CustomTextField: View {
-    private let placeholder: LocalizedStringKey
+    private let title: LocalizedStringKey
     @Binding var text: String
-    
-    init(_ placeholder: LocalizedStringKey, text: Binding<String>) {
-        self.placeholder = placeholder
+    @State private var isValid = false
+    @State private var errorMessage: String?
+
+    @Environment(\.mandatoryFormField) private var isMandatory
+    @Environment(\.textFieldValidation) private var textFieldValidation    
+
+    init(_ title: LocalizedStringKey, text: Binding<String>) {
+        self.title = title
         _text = text
     }
     
     var body: some View {
-        VStack {
-            TextField(placeholder, text: $text, axis: .vertical)
-            Rectangle()
-                .frame(height: 1)
-                .opacity(0.2)
+        VStack(alignment: .leading) {
+            if let errorMessage, !isValid {
+                Text(errorMessage)
+                    .foregroundColor(.red)
+                    .font(.caption)
+                    .transition(.opacity.combined(with: .move(edge: .bottom)))
+            }
+            HStack {
+                TextField(title, text: $text)
+                    .textFieldStyle(.roundedBorder)
+                if textIsEmpty && isMandatory {
+                    Text("*")
+                        .foregroundColor(.red)
+                }
+            }
         }
-        .bodyStyle()
+        .onAppear {
+            validate()
+        }
+        .onChange(of: text) { _ in
+            validate()
+        }
+    }
+}
+
+private extension CustomTextField {
+    var textIsEmpty: Bool {
+        let text = text.trimmingCharacters(in: .whitespacesAndNewlines)
+        return text.isEmpty
+    }
+
+    func validate() {
+        guard let textFieldValidation else { return }
+        let result = textFieldValidation(text)
+        switch result {
+        case .success:
+            withAnimation {
+                isValid = true
+            }
+        case .failure(let error):
+            isValid = false
+            errorMessage = error.localizedDescription
+        }
     }
 }
 
@@ -35,6 +76,7 @@ struct CustomTextField_Previews: PreviewProvider {
             CustomTextField("placeholder", text: $text)
         }
     }
+    
     static var previews: some View {
         ContainerView()
     }

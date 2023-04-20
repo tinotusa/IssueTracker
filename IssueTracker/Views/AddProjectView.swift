@@ -9,9 +9,8 @@ import SwiftUI
 import Combine
 
 struct AddProjectView: View {
-    @State private var projectName = ""
-    @State private var dateStarted: Date = .now
     @State private var errorWrapper: ErrorWrapper?
+    @StateObject private var viewModel = AddProjectViewModel()
     
     @Environment(\.managedObjectContext) private var viewContext
     @Environment(\.dismiss) private var dismiss
@@ -21,17 +20,17 @@ struct AddProjectView: View {
         NavigationStack {
             List {
                 Section("Project name") {
-                    TextField("Project name", text: $projectName)
+                    CustomTextField("Project name",text: $viewModel.projectName)
+                        .isMandatoryFormField(true)
+                        .textFieldInputValidationHandler(viewModel.validateProjectName)
                 }
                 .listRowSeparator(.hidden)
                 .listRowBackground(Color.customBackground)
             }
             .listStyle(.plain)
             .safeAreaInset(edge: .bottom) {
-                ProminentButton("Add project") {
-                    addProject()
-                }
-                .disabled(addButtonDisabled)
+                ProminentButton("Add project", action: addProject)
+                    .disabled(!viewModel.isValidForm)
             }
             .sheet(item: $errorWrapper) { error in
                 ErrorView(errorWrapper: error)
@@ -41,15 +40,11 @@ struct AddProjectView: View {
             .navigationTitle("New project")
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
-                    Button("Close") {
-                        dismiss()
-                    }
+                    Button("Close", action: dismiss.callAsFunction)
                 }
                 ToolbarItem(placement: .confirmationAction) {
-                    Button("Add project") {
-                        addProject()
-                    }
-                    .disabled(addButtonDisabled)
+                    Button("Add project", action: addProject)
+                        .disabled(!viewModel.isValidForm)
                 }
             }
         }
@@ -60,26 +55,13 @@ private extension AddProjectView {
     func addProject() {
         Task  {
             do {
-                try await persistenceController.addProject(name: projectName, dateStarted: dateStarted)
+                try await persistenceController.addProject(name: viewModel.projectName, dateStarted: viewModel.dateStarted)
                 dismiss()
             } catch {
                 errorWrapper = ErrorWrapper(error: error, message: "Failed to add project. Try again.")
             }
         }
     }
-    
-    func filterName(name: String) {
-        let filteredName = Project.filterName(name)
-        if filteredName != projectName {
-            projectName = filteredName
-        }
-    }
-    
-    var addButtonDisabled: Bool {
-        let projectName = projectName.trimmingCharacters(in: .whitespacesAndNewlines)
-        return projectName.isEmpty
-    }
-    
 }
 
 struct AddProjectView_Previews: PreviewProvider {
