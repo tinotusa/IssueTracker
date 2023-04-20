@@ -26,6 +26,18 @@ struct AddProjectView: View {
                 }
                 .listRowSeparator(.hidden)
                 .listRowBackground(Color.customBackground)
+                
+                Section("Start date") {
+                    DatePicker(
+                        "Start date",
+                        selection: $viewModel.dateStarted,
+                        in: ...Date(),
+                        displayedComponents: [.date]
+                    )
+                    .listRowSeparator(.hidden)
+                    .listRowBackground(Color.customBackground)
+                    .labelsHidden()
+                }
             }
             .listStyle(.plain)
             .safeAreaInset(edge: .bottom) {
