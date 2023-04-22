@@ -76,17 +76,15 @@ struct HomeView: View {
             }
             .sheet(isPresented: $showingAddProjectView) {
                 AddProjectView()
-                    .presentationDetents([.large])
-                    .presentationDragIndicator(.visible)
+                    .sheetWithIndicator()
             }
             .sheet(item: $selectedProject) { project in
-                EditProjectView(project: project)
-                    .presentationDetents([.large])
-                    .presentationDragIndicator(.visible)
+                EditProjectView(project: project, initialProjectData: ProjectProperties(name: project.wrappedName, startDate: project.wrappedStartDate))
+                    .sheetWithIndicator()
             }
             .background(Color.customBackground)
             .navigationDestination(for: Project.self) { project in
-                IssuesView(project: project)
+                IssuesListView(project: project)
             }
             .confirmationDialog("Delete project", isPresented: $showingDeleteConfirmation) {
                 Button("Delete", role: .destructive) {

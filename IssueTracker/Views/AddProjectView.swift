@@ -10,8 +10,7 @@ import Combine
 
 struct AddProjectView: View {
     @State private var errorWrapper: ErrorWrapper?
-    @StateObject private var viewModel = AddProjectViewModel()
-    
+    @State private var projectData = ProjectProperties()
     @Environment(\.managedObjectContext) private var viewContext
     @Environment(\.dismiss) private var dismiss
     @EnvironmentObject private var persistenceController: PersistenceController
@@ -20,9 +19,9 @@ struct AddProjectView: View {
         NavigationStack {
             List {
                 Section("Project name") {
-                    CustomTextField("Project name",text: $viewModel.projectName)
+                    CustomTextField("Project name",text: $projectData.name)
                         .isMandatoryFormField(true)
-                        .textFieldInputValidationHandler(viewModel.validateProjectName)
+                        .textFieldInputValidationHandler(ProjectProperties.validateProjectName)
                 }
                 .listRowSeparator(.hidden)
                 .listRowBackground(Color.customBackground)
@@ -30,7 +29,7 @@ struct AddProjectView: View {
                 Section("Start date") {
                     DatePicker(
                         "Start date",
-                        selection: $viewModel.dateStarted,
+                        selection: $projectData.startDate,
                         in: ...Date(),
                         displayedComponents: [.date]
                     )
@@ -42,7 +41,7 @@ struct AddProjectView: View {
             .listStyle(.plain)
             .safeAreaInset(edge: .bottom) {
                 ProminentButton("Add project", action: addProject)
-                    .disabled(!viewModel.isValidForm)
+                    .disabled(!projectData.isValidForm())
             }
             .sheet(item: $errorWrapper) { error in
                 ErrorView(errorWrapper: error)
@@ -56,18 +55,19 @@ struct AddProjectView: View {
                 }
                 ToolbarItem(placement: .confirmationAction) {
                     Button("Add project", action: addProject)
-                        .disabled(!viewModel.isValidForm)
+                        .disabled(!projectData.isValidForm())
                 }
             }
         }
     }
 }
 
+// MARK: - Functions
 private extension AddProjectView {
     func addProject() {
         Task  {
             do {
-                try await persistenceController.addProject(name: viewModel.projectName, dateStarted: viewModel.dateStarted)
+                try await persistenceController.addProject(projectData)
                 dismiss()
             } catch {
                 errorWrapper = ErrorWrapper(error: error, message: "Failed to add project. Try again.")

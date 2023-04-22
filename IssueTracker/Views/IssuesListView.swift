@@ -1,5 +1,5 @@
 //
-//  IssuesView.swift
+//  IssuesListView.swift
 //  IssueTracker
 //
 //  Created by Tino on 29/12/2022.
@@ -8,12 +8,15 @@
 import SwiftUI
 import CoreData
 
-struct IssuesView: View {
+struct IssuesListView: View {
     @ObservedObject private(set) var project: Project
     @State private var selectedIssue: Issue?
     @State private var issuesViewState: IssuesViewState?
     @State private var showingDeleteIssueConfirmation = false
     @State private var errorWrapper: ErrorWrapper?
+    
+    @State private var searchState = SearchState()
+    @State private var sortState = SortState()
     
     @FetchRequest(sortDescriptors: [])
     private var issues: FetchedResults<Issue>
@@ -22,11 +25,8 @@ struct IssuesView: View {
     @Environment(\.dismiss) private var dismiss
     @EnvironmentObject private var persistenceController: PersistenceController
     
-    @StateObject private var viewModel: IssuesViewModel
-    
     init(project: Project) {
         _project = ObservedObject(wrappedValue: project)
-        _viewModel = StateObject(wrappedValue: IssuesViewModel(project: project))
         _issues = FetchRequest(
             sortDescriptors: [.init(\.dateCreated, order: .forward)],
             predicate: NSPredicate(format: "(project == %@) AND (status == %@)",  project, "open")
@@ -60,22 +60,22 @@ struct IssuesView: View {
             ErrorView(errorWrapper: error)
         }
         .listStyle(.plain)
-        .searchable(text: $viewModel.searchText)
-        .searchScopes($viewModel.searchScope) {
-            ForEach(IssuesViewModel.SearchScopes.allCases) { scope in
+        .searchable(text: $searchState.searchText)
+        .searchScopes($searchState.searchScope) {
+            ForEach(SearchState.SearchScopes.allCases) { scope in
                 Text(scope.title).tag(scope)
             }
         }
-        .onChange(of: viewModel.searchText) { _ in
+        .onChange(of: searchState.searchText) { _ in
             handleChange()
         }
-        .onChange(of: viewModel.searchScope) { _ in
+        .onChange(of: searchState.searchScope) { _ in
             handleChange()
         }
-        .onChange(of: viewModel.searchIssueStatus) { _ in
+        .onChange(of: searchState.searchIssueStatus) { _ in
             handleChange()
         }
-        .navigationBarTitle(viewModel.searchIssueStatus == .open ? "Open issues" : "Closed issues")
+        .navigationBarTitle(searchState.searchIssueStatus == .open ? "Open issues" : "Closed issues")
         .toolbarBackground(Color.customBackground, for: .navigationBar, .bottomBar) // this doesn't seem to change the bottom bar at all.
         .background(Color.customBackground)
         .sheet(item: $issuesViewState) { state in
@@ -117,10 +117,10 @@ struct IssuesView: View {
 }
 
 // MARK: - Views
-private extension IssuesView {
+private extension IssuesListView {
     @ViewBuilder
     func labelFor(_ sortOrder: SortOrder, title: LocalizedStringKey) -> some View {
-        if viewModel.sortOrder == sortOrder {
+        if sortState.sortOrder == sortOrder {
             Label(title, systemImage: "checkmark")
         } else {
             Text(title)
@@ -129,11 +129,11 @@ private extension IssuesView {
     
     var sortBySection: some View {
         Section("Sort by") {
-            ForEach(IssuesViewModel.SortType.allCases) { sortType in
+            ForEach(SortState.SortType.allCases) { sortType in
                 Button {
-                    viewModel.sortType = sortType
+                    sortState.sortType = sortType
                 } label: {
-                    if viewModel.sortType == sortType {
+                    if sortState.sortType == sortType {
                         Label(sortType.title, systemImage: "checkmark")
                     } else {
                         Text(sortType.title)
@@ -145,30 +145,30 @@ private extension IssuesView {
     
     var sortTypeSection: some View {
         Section {
-            switch viewModel.sortType {
+            switch sortState.sortType {
             case .date:
                 Button {
-                    viewModel.setSortOrder(to: .reverse)
-                    issues.sortDescriptors = [viewModel.sortDescriptor]
+                    sortState.setSortOrder(to: .reverse)
+                    issues.sortDescriptors = [sortState.sortDescriptor]
                 } label: {
                     labelFor(.reverse, title: "Newest first")
                 }
                 Button {
-                    viewModel.setSortOrder(to: .forward)
-                    issues.sortDescriptors = [viewModel.sortDescriptor]
+                    sortState.setSortOrder(to: .forward)
+                    issues.sortDescriptors = [sortState.sortDescriptor]
                 } label: {
                     labelFor(.forward, title: "Oldest first")
                 }
             case .priority, .title:
                 Button {
-                    viewModel.setSortOrder(to: .forward)
-                    issues.sortDescriptors = [viewModel.sortDescriptor]
+                    sortState.setSortOrder(to: .forward)
+                    issues.sortDescriptors = [sortState.sortDescriptor]
                 } label: {
                     labelFor(.forward, title: "Ascending")
                 }
                 Button {
-                    viewModel.setSortOrder(to: .reverse)
-                    issues.sortDescriptors = [viewModel.sortDescriptor]
+                    sortState.setSortOrder(to: .reverse)
+                    issues.sortDescriptors = [sortState.sortDescriptor]
                 } label: {
                     labelFor(.reverse, title: "Descending")
                 }
@@ -191,11 +191,11 @@ private extension IssuesView {
         }
         ToolbarItemGroup(placement: .bottomBar) {
             Button {
-                viewModel.searchIssueStatus = viewModel.searchIssueStatus == .open ? .closed : .open
+                searchState.searchIssueStatus = searchState.searchIssueStatus == .open ? .closed : .open
             } label: {
                 Label(
                     "Issue status",
-                    systemImage: viewModel.searchIssueStatus == .open ? "tray.and.arrow.down.fill" : "tray.and.arrow.up.fill"
+                    systemImage: searchState.searchIssueStatus == .open ? "tray.and.arrow.down.fill" : "tray.and.arrow.up.fill"
                 )
             }
             
@@ -232,7 +232,7 @@ private extension IssuesView {
 }
 
 // MARK: - Functions
-private extension IssuesView {
+private extension IssuesListView {
     enum IssuesViewState: Identifiable {
         case showingAddIssueView
         case showingEditTagsView
@@ -255,8 +255,8 @@ private extension IssuesView {
     }
     
     func handleChange() {
-        viewModel.runSearch()
-        issues.nsPredicate = viewModel.predicate
+        searchState.runSearch(project)
+        issues.nsPredicate = searchState.predicate
     }
 }
 
@@ -265,7 +265,7 @@ struct IssuesView_Previews: PreviewProvider {
     
     static var previews: some View {
         NavigationStack {
-            IssuesView(project: .example)
+            IssuesListView(project: .example)
                 .environment(\.managedObjectContext, viewContext)
                 .environmentObject(PersistenceController.preview)
         }

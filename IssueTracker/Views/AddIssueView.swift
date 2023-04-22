@@ -10,10 +10,9 @@ import CoreData
 
 struct AddIssueView: View {
     @ObservedObject var project: Project
-    @State private var issueData = IssueData()
+    @State private var issueProperties = IssueProperties()
     @State private var errorWrapper: ErrorWrapper?
     
-    @Environment(\.managedObjectContext) private var viewContext
     @Environment(\.dismiss) private var dismiss
     @EnvironmentObject private var persistenceController: PersistenceController
     
@@ -44,10 +43,8 @@ struct AddIssueView: View {
                 toolbarItems
             }
             .safeAreaInset(edge: .bottom) {
-                ProminentButton("Add Issue") {
-                    addIssue()
-                }
-                .disabled(!issueData.allFieldsFilled)
+                ProminentButton("Add Issue", action: addIssue)
+                    .disabled(!issueProperties.allFieldsFilled)
             }
         }
     }
@@ -57,14 +54,14 @@ struct AddIssueView: View {
 private extension AddIssueView {
     var nameSection: some View{
         Section("Name") {
-            TextField("Issue name", text: $issueData.name)
-                .textFieldStyle(.roundedBorder)
+            CustomTextField("Issue name", text: $issueProperties.name)
+                .isMandatoryFormField(true)
         }
     }
     
     var descriptionSection: some View {
         Section("Description") {
-            TextField("Issue description", text: $issueData.description, axis: .vertical)
+            TextField("Issue description", text: $issueProperties.description, axis: .vertical)
                 .lineLimit(4 ... 8)
                 .textFieldStyle(.roundedBorder)
         }
@@ -72,7 +69,7 @@ private extension AddIssueView {
     
     var prioritySection: some View {
         Section("Priority") {
-            Picker("Issue priority", selection: $issueData.priority) {
+            Picker("Issue priority", selection: $issueProperties.priority) {
                 ForEach(Issue.Priority.allCases) { priority in
                     Text(priority.title)
                 }
@@ -83,19 +80,19 @@ private extension AddIssueView {
     
     var addTagsSection: some View {
         Section("Add tags") {
-            TagSelectionView(selection: $issueData.tags)
+            TagSelectionView(selection: $issueProperties.tags)
         }
     }
     
     var selectedTagsSection: some View {
         Section("Selected tags") {
-            if issueData.tags.isEmpty {
+            if issueProperties.tags.isEmpty {
                 Text("No tags selected.")
                     .foregroundColor(.customSecondary)
                     .frame(maxWidth: .infinity, alignment: .center)
             }
             WrappingHStack {
-                ForEach(Array(issueData.tags)) { tag in
+                ForEach(Array(issueProperties.tags)) { tag in
                     Text(tag.wrappedName)
                 }
             }
@@ -105,15 +102,12 @@ private extension AddIssueView {
     @ToolbarContentBuilder
     var toolbarItems: some ToolbarContent {
         ToolbarItem(placement: .cancellationAction) {
-            Button("Cancel") {
-                dismiss()
-            }
+            Button("Cancel", action: dismiss.callAsFunction)
         }
+        
         ToolbarItem(placement: .confirmationAction) {
-            Button("Add Issue") {
-                addIssue()
-            }
-            .disabled(!issueData.allFieldsFilled)
+            Button("Add Issue", action: addIssue)
+                .disabled(!issueProperties.allFieldsFilled)
         }
     }
 }
@@ -123,13 +117,7 @@ private extension AddIssueView {
     func addIssue() {
         Task {
             do {
-                try await persistenceController.addIssue(
-                    name: issueData.name,
-                    issueDescription: issueData.description,
-                    priority: issueData.priority,
-                    tags: issueData.tags,
-                    project: project
-                )
+                try await persistenceController.addIssue(issueProperties, project: project)
                 dismiss()
             } catch {
                 errorWrapper = ErrorWrapper(error: error, message: "Failed to add issue.")

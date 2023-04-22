@@ -75,4 +75,8 @@ extension Project {
             self.startDate = newValue
         }
     }
+    
+    var projectProperties: ProjectProperties {
+        .init(name: wrappedName, startDate: wrappedStartDate)
+    }
 }

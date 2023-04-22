@@ -8,112 +8,123 @@
 import SwiftUI
 import PhotosUI
 
-struct AddCommentView: View {
-    @ObservedObject private(set) var issue: Issue
-    @State private var errorWrapper: ErrorWrapper?
-    
-    @StateObject private var viewModel = AddCommentViewModel()
-    @StateObject private var audioRecorder = AudioRecorder()
-    
-    @Environment(\.dismiss) private var dismiss
-    @Environment(\.managedObjectContext) private var viewContext
-    @EnvironmentObject private var persistenceController: PersistenceController
+struct ImageAttachmentsRow: View {
+    let images: [Image]
+    let deleteAction: (Int) -> Void
     
     var body: some View {
-        NavigationStack {
-            VStack(alignment: .leading) {
-                imageAttachmentsRow
-                
-                if !audioRecorder.isRecording, let url = audioRecorder.url {
-                    AudioAttachmentPreview(url: url)
-                }
-                
-                if viewModel.recordingAudio {
-                    audioRecordingButtons
-                }
-            }
-            .safeAreaInset(edge: .bottom) {
-                TextField("Comment", text: $viewModel.comment, axis: .vertical)
-                    .lineLimit(3...)
-                    .textFieldStyle(.roundedBorder)
-            }
-            .padding()
-            .navigationTitle("Add comment")
-            .onChange(of: viewModel.photoPickerItems) { photoItems in
-                Task {
-                    await viewModel.loadImages(from: photoItems)
-                }
-            }
-            .sheet(item: $errorWrapper) { error in
-                ErrorView(errorWrapper: error)
-            }
-            .toolbar {
-                ToolbarItem(placement: .primaryAction) {
-                    Button {
-                        Task {
-                            let attachments = await viewModel.getAttachmentsTransferables()
-                            do {
-                                try await persistenceController.addComment(
-                                    comment: viewModel.comment,
-                                    to: issue,
-                                    attachments: attachments,
-                                    audioAttachmentURL: audioRecorder.url
-                                )
-                                dismiss()
-                            } catch {
-                                errorWrapper = .init(error: error, message: "Failed to add comment.")
-                            }
-                        }
-                    } label: {
-                        Label("add", systemImage: "plus")
+        ScrollView(.horizontal) {
+            HStack {
+                ForEach(0 ..< images.count, id: \.self) { index in
+                    ImageAttachmentPreview(image: images[index]) {
+                        deleteAction(index)
                     }
-                    .disabled(!viewModel.hasComment || audioRecorder.isRecording)
-                }
-                ToolbarItem(placement: .cancellationAction) {
-                    Button("Cancel") {
-                        dismiss()
-                    }
-                }
-                ToolbarItem(placement: .keyboard) {
-                    attachmentButtons
                 }
             }
         }
     }
 }
 
-private extension AddCommentView {
-    var imageAttachmentsRow: some View {
-        ScrollView(.horizontal) {
-            HStack {
-                ForEach(0 ..< viewModel.attachmentImages.count, id: \.self) { index in
-                    ImageAttachmentPreview(image: viewModel.attachmentImages[index]) {
-                        viewModel.deletePhotoItem(at: index)
+struct AddCommentView: View {
+    @ObservedObject private(set) var issue: Issue
+    @State private var errorWrapper: ErrorWrapper?
+    @State private var showingPhotoPicker = false
+    @State private var commentProperties = CommentProperties()
+    @StateObject private var audioRecorder = AudioRecorder()
+    
+    @Environment(\.dismiss) private var dismiss
+    @EnvironmentObject private var persistenceController: PersistenceController
+    
+    var body: some View {
+        NavigationStack {
+            VStack(alignment: .leading) {
+                ImageAttachmentsRow(images: commentProperties.images) { index in
+                    commentProperties.deleteImage(at: index)
+                }
+                
+                if !audioRecorder.isRecording, let url = audioRecorder.url {
+                    AudioAttachmentPreview(url: url)
+                }
+                
+                TextField("Comment", text: $commentProperties.comment, axis: .vertical)
+                    .lineLimit(3...)
+                    .textFieldStyle(.roundedBorder)
+                
+                if commentProperties.isRecordingAudio {
+                    audioRecordingButtons
+                }
+                Spacer()
+            }
+            .padding()
+            .navigationTitle("Add comment")
+            .onChange(of: commentProperties.photoPickerItems) { _ in
+                Task {
+                    do {
+                        try await $commentProperties.loadImages()
+                    } catch {
+                        errorWrapper = .init(error: error, message: "Failed to load photo.")
                     }
                 }
             }
+            .sheet(item: $errorWrapper) { error in
+                ErrorView(errorWrapper: error)
+            }
+            .toolbar {
+                toolbarItems
+                keyboardAttachmentButtons
+            }
+        }
+    }
+}
+
+private extension AddCommentView {
+    @ToolbarContentBuilder
+    var toolbarItems: some ToolbarContent {
+        ToolbarItem(placement: .primaryAction) {
+            Button {
+                Task {
+                    do {
+                        try await persistenceController.addComment(commentProperties, to: issue)
+                        dismiss()
+                    } catch {
+                        errorWrapper = .init(error: error, message: "Failed to add comment.")
+                    }
+                }
+            } label: {
+                Label("Add", systemImage: "plus")
+            }
+            .disabled(!commentProperties.canAddComment)
+        }
+    
+        ToolbarItem(placement: .cancellationAction) {
+            Button("Cancel", action: dismiss.callAsFunction)
         }
     }
     
-    var attachmentButtons: some View {
-        HStack {
+    @ToolbarContentBuilder
+    var keyboardAttachmentButtons: some ToolbarContent {
+        ToolbarItem(placement: .keyboard) {
             PhotosPicker(
-                selection: $viewModel.photoPickerItems,
+                selection: $commentProperties.photoPickerItems,
                 selectionBehavior: .ordered,
                 matching: .any(of: [.images, .videos])
             ) {
                 Label("Add photo attachment", systemImage: "photo.on.rectangle.angled")
+                    .labelStyle(.iconOnly)
             }
+        }
+        
+        ToolbarItem(placement: .keyboard) {
             Button {
                 withAnimation {
-                    viewModel.recordingAudio.toggle()
+                    commentProperties.toggleRecording()
                 }
             } label: {
                 Label("Add audio attachment", systemImage: "mic.fill")
             }
             .disabled(audioRecorder.isRecording)
+            .labelStyle(.iconOnly)
         }
-        .labelStyle(.iconOnly)
     }
     
     var audioRecordingButtons: some View {
@@ -133,6 +144,7 @@ private extension AddCommentView {
                     systemImage: audioRecorder.isRecording ? "pause.circle.fill" : "play.circle.fill"
                 )
             }
+            
             Button(role: .destructive) {
                 audioRecorder.deleteRecording()
             } label: {

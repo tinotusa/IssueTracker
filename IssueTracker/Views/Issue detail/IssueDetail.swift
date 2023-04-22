@@ -8,17 +8,13 @@
 import SwiftUI
 
 struct IssueDetail: View {
-    @StateObject private var viewModel: IssueDetailViewModel
     @ObservedObject private(set) var issue: Issue
+    
     @Environment(\.editMode) private var editMode
     @Environment(\.dismiss) private var dismiss
     @Environment(\.managedObjectContext) private var viewContext
-    @EnvironmentObject private var persistenceController: PersistenceController
     
-    init(issue: Issue) {
-        _issue = ObservedObject(wrappedValue: issue)
-        _viewModel = StateObject(wrappedValue: IssueDetailViewModel(issue: issue))
-    }
+    @EnvironmentObject private var persistenceController: PersistenceController
     
     var body: some View {
         if editMode?.wrappedValue == .active {
@@ -35,8 +31,8 @@ struct IssueDetail: View {
     }
 }
 
+// MARK: - Views
 private extension IssueDetail {
-    
     @ToolbarContentBuilder
     var toolbarItems: some ToolbarContent {
         ToolbarItem(placement: .primaryAction) {

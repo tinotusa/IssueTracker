@@ -47,22 +47,19 @@ final class PersistenceController: ObservableObject {
 
 // MARK: - Issue functions
 extension PersistenceController {
+    @MainActor
     /// Adds a new issue to core data.
     /// - Parameters:
-    ///   - name: The name of the issue.
-    ///   - issueDescription: The description of the issue.
-    ///   - priority: The priority of the issue.
-    ///   - tags: The tags associated with the issue.
+    ///   - issueData: The data for the issue.
     ///   - project: The project the issue is a part of.
-    @MainActor
-    func addIssue(
-        name: String,
-        issueDescription: String,
-        priority: Issue.Priority,
-        tags: Set<Tag>,
-        project: Project
-    ) async throws {
-        let issue = Issue(name: name, issueDescription: issueDescription, priority: priority, tags: tags, context: viewContext)
+    func addIssue(_ issueData: IssueProperties,project: Project) async throws {
+        let issue = Issue(
+            name: issueData.name,
+            issueDescription: issueData.description,
+            priority: issueData.priority,
+            tags: issueData.tags,
+            context: viewContext
+        )
         logger.debug("Adding new issue with id: \(issue.wrappedId)")
         project.addToIssues(issue)
         return try await save()
@@ -132,41 +129,37 @@ extension PersistenceController {
     ///   - attachmentTransferables: The image attachment(s) of the comment.
     ///   - audioURL: The audio attachment of the comment.
     @MainActor
-    func addComment(
-        comment: String,
-        to issue: Issue,
-        attachments attachmentTransferables: [AttachmentTransferable]? = nil,
-        audioAttachmentURL audioURL: URL? = nil
-    ) async throws {
-        let comment = Comment(comment: comment, context: viewContext)
+    func addComment(_ commentProperties: CommentProperties, to issue: Issue) async throws {
+        let comment = Comment(comment: commentProperties.comment, context: viewContext)
+        let attachmentTransferables = try await commentProperties.getAttachmentsTransferables()
         logger.debug("Adding comment with id: \(comment.wrappedId)")
         objectWillChange.send()
         
         var attachments = [Attachment]()
         var records = [CKRecord]()
-        if let attachmentTransferables {
-            for attachmentTransferable in attachmentTransferables {
-                // create coredata attachment entity
-                let attachment = Attachment(context: viewContext)
-                attachment.comment = comment
-                attachment.dateCreated = .now
-                attachment.id = UUID()
-                attachment.type = attachmentTransferable.attachmentType.rawValue
-                
-                // create cloudkit attachment asset
-                let imageAttachmentRecord = CKRecord(recordType: "Attachment")
-                let asset = CKAsset(fileURL: attachmentTransferable.url)
-                imageAttachmentRecord["type"] = attachmentTransferable.attachmentType.rawValue
-                imageAttachmentRecord["attachment"] = asset
-                imageAttachmentRecord["attachmentURL"] = asset.fileURL!.absoluteString
-                
-                records.append(imageAttachmentRecord)
-                attachment.assetURL = asset.fileURL!
-                attachments.append(attachment)
-            }
+        
+        for attachmentTransferable in attachmentTransferables {
+            // create coredata attachment entity
+            let attachment = Attachment(context: viewContext)
+            attachment.comment = comment
+            attachment.dateCreated = .now
+            attachment.id = UUID()
+            attachment.type = attachmentTransferable.attachmentType.rawValue
+            
+            // create cloudkit attachment asset
+            let imageAttachmentRecord = CKRecord(recordType: "Attachment")
+            let asset = CKAsset(fileURL: attachmentTransferable.url)
+            imageAttachmentRecord["type"] = attachmentTransferable.attachmentType.rawValue
+            imageAttachmentRecord["attachment"] = asset
+            imageAttachmentRecord["attachmentURL"] = asset.fileURL!.absoluteString
+            
+            records.append(imageAttachmentRecord)
+            attachment.assetURL = asset.fileURL!
+            attachments.append(attachment)
         }
+        
         // adding audio
-        if let audioURL {
+        if let audioURL = commentProperties.audioURL {
             // cloudkit audio attachment
             let audioAttachmentRecord = CKRecord(recordType: "Attachment")
             let asset = CKAsset(fileURL: audioURL)
@@ -207,13 +200,11 @@ extension PersistenceController {
         return try await save()
     }
     
-    /// Adds a new project to core data.
-    /// - Parameters:
-    ///   - name: The name of the project.
-    ///   - dateStarted: The start date for the project.
     @MainActor
-    func addProject(name: String, dateStarted: Date) async throws {
-        let project = Project(name: name, startDate: dateStarted, context: viewContext)
+    /// Adds a new project to core data.
+    /// - Parameter projectData: The data for the project.
+    func addProject(_ projectData: ProjectProperties) async throws {
+        let project = Project(name: projectData.name, startDate: projectData.startDate, context: viewContext)
         logger.debug("Adding new project with id: \(project.wrappedId)")
         return try await save()
     }
@@ -234,6 +225,18 @@ extension PersistenceController {
         }
     }
     
+    
+    /// Updates a project with the project data.
+    /// - Parameters:
+    ///   - project: The project to update.
+    ///   - projectData: The data used for the update.
+    @MainActor
+    func updateProject(_ project: Project, projectData: ProjectProperties) async throws {
+        objectWillChange.send()
+        project.wrappedName = projectData.name
+        project.wrappedStartDate = projectData.startDate
+        try await save()
+    }
     
     /// Deletes the given object from core data.
     /// - Parameter object: The object to delete.
