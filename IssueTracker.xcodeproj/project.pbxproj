@@ -370,7 +370,6 @@
 				21E6D2A9295BD9A800BB4AA6 /* Extensions */,
 				21E6D2A8295BD8BC00BB4AA6 /* Resources */,
 				21E6D2A5295BD4B800BB4AA6 /* Styles */,
-				21E6D290295BC82900BB4AA6 /* CoreData Extensions */,
 				2150C83D295972E0006CD7D2 /* IssueTrackerApp.swift */,
 				2150C841295972E2006CD7D2 /* Assets.xcassets */,
 				2150C846295972E2006CD7D2 /* Persistence.swift */,
@@ -544,7 +543,7 @@
 			path = "Environment values";
 			sourceTree = "<group>";
 		};
-		21E6D290295BC82900BB4AA6 /* CoreData Extensions */ = {
+		21E6D290295BC82900BB4AA6 /* Core data */ = {
 			isa = PBXGroup;
 			children = (
 				21FDE717295D64F10006C24A /* Project+Extensions.swift */,
@@ -552,7 +551,7 @@
 				21BBEBF2295E8465008F237B /* Tag+Extensions.swift */,
 				21BBEBFA295ECF8B008F237B /* Comment+Extensions.swift */,
 			);
-			path = "CoreData Extensions";
+			path = "Core data";
 			sourceTree = "<group>";
 		};
 		21E6D2A5295BD4B800BB4AA6 /* Styles */ = {
@@ -575,6 +574,7 @@
 		21E6D2A9295BD9A800BB4AA6 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
+				21E6D290295BC82900BB4AA6 /* Core data */,
 				21D031F029F1092600F20E1B /* Environment values */,
 				21E6D2AA295BD9B500BB4AA6 /* Color+Extensions.swift */,
 				21F1DA28295D9C0E00076D73 /* String+filterWhitespace.swift */,
