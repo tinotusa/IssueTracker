@@ -20,10 +20,13 @@ struct CustomTextField: View {
         self.title = title
         _text = text
     }
+
+    @FocusState private var isFocused
+    @State private var hasAlreadySeenField = false
     
     var body: some View {
         VStack(alignment: .leading) {
-            if let errorMessage, !isValid {
+            if let errorMessage, (hasAlreadySeenField || isFocused), !isValid {
                 Text(errorMessage)
                     .foregroundColor(.red)
                     .font(.caption)
@@ -32,6 +35,7 @@ struct CustomTextField: View {
             HStack {
                 TextField(title, text: $text)
                     .textFieldStyle(.roundedBorder)
+                    .focused($isFocused)
                 if textIsEmpty && isMandatory {
                     Text("*")
                         .foregroundColor(.red)
@@ -43,6 +47,10 @@ struct CustomTextField: View {
         }
         .onChange(of: text) { _ in
             validate()
+        }
+        .onChange(of: isFocused) { _ in
+            if hasAlreadySeenField { return }
+            hasAlreadySeenField = true
         }
     }
 }
@@ -74,6 +82,14 @@ struct CustomTextField_Previews: PreviewProvider {
         
         var body: some View {
             CustomTextField("placeholder", text: $text)
+                .isMandatoryFormField(true)
+                .textFieldInputValidationHandler { text in
+                    let text = text.trimmingCharacters(in: .whitespacesAndNewlines)
+                    if text.isEmpty {
+                        return .failure(ValidationError.invalidInput(message: "Empty text"))
+                    }
+                    return .success(true)
+                }
         }
     }
     
