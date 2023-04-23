@@ -33,6 +33,7 @@ struct AddProjectView: View {
                         in: ...Date(),
                         displayedComponents: [.date]
                     )
+                    .datePickerStyle(.graphical)
                     .listRowSeparator(.hidden)
                     .listRowBackground(Color.customBackground)
                     .labelsHidden()
