@@ -20,4 +20,5 @@ enum SFSymbol {
     static let checkmark = "checkmark"
     static let trayAndArrowDownFill = "tray.and.arrow.down.fill"
     static let trayAndArrowUpFill = "tray.and.arrow.up.fill"
+    static let ellipsisCircle = "ellipsis.circle"
 }
