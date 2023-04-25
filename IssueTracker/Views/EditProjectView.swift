@@ -9,7 +9,7 @@ import SwiftUI
 
 struct EditProjectView: View {
     @ObservedObject private(set) var project: Project
-    let initialProjectData: ProjectProperties
+    private let initialProjectData: ProjectProperties
     
     @State private var projectProperties = ProjectProperties()
     @State private var showingHasChangesConfirmationDialog = false
@@ -17,6 +17,11 @@ struct EditProjectView: View {
 
     @EnvironmentObject private var persistenceController: PersistenceController
     @Environment(\.dismiss) private var dismiss
+    
+    init(project: Project) {
+        _project = ObservedObject(wrappedValue: project)
+        initialProjectData = project.projectProperties
+    }
     
     var body: some View {
         NavigationStack {
@@ -102,7 +107,7 @@ struct EditProjectView_Previews: PreviewProvider {
     static var viewContext = PersistenceController.preview.container.viewContext
     static var previews: some View {
         NavigationStack {
-            EditProjectView(project: .example, initialProjectData: ProjectProperties())
+            EditProjectView(project: .example)
                 .environment(\.managedObjectContext, viewContext)
                 .environmentObject(PersistenceController.preview)
         }

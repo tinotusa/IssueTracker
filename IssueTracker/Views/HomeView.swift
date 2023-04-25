@@ -8,8 +8,6 @@
 import SwiftUI
 
 struct HomeView: View {
-    @State private var showingDeleteConfirmation = false
-    @State private var selectedProject: Project?
     @State private var showingAddProjectView = false
     @State private var errorWrapper: ErrorWrapper?
     
@@ -32,16 +30,7 @@ struct HomeView: View {
                         NavigationLink(value: project) {
                             ProjectRowView(project: project)
                         }
-                        .swipeActions(edge: .leading) {
-                            Button {
-                                selectedProject = project
-                            } label: {
-                                Label("Edit", systemImage: SFSymbol.pencil)
-                            }
-                            .tint(.blue)
-                        }
                     }
-                    .onDelete(perform: deleteProject)
                     .listRowBackground(Color.customBackground)
                     .listRowSeparator(.hidden)
                 }
@@ -65,52 +54,18 @@ struct HomeView: View {
                 AddProjectView()
                     .sheetWithIndicator()
             }
-            .sheet(item: $selectedProject) { project in
-                EditProjectView(project: project, initialProjectData: project.projectProperties)
-                    .sheetWithIndicator()
-            }
             .background(Color.customBackground)
             .navigationDestination(for: Project.self) { project in
                 IssuesListView(project: project)
-            }
-            .confirmationDialog("Delete project", isPresented: $showingDeleteConfirmation) {
-                Button("Delete", role: .destructive, action: deleteSelectedProject)
-            } message: {
-                Text("Are you sure you want to delete this project?")
             }
         }
     }
 }
 
+// MARK: Functions
 private extension HomeView {
     func showAddProjectView() {
         showingAddProjectView = true
-    }
-    
-    func deleteSelectedProject() {
-        guard let selectedProject else {
-            return
-        }
-        Task {
-            do {
-                try await persistenceController.deleteObject(selectedProject)
-                self.selectedProject = nil
-            } catch {
-                errorWrapper = ErrorWrapper(error: error, message: "Failed to delete the project.")
-            }
-        }
-    }
-    
-    func deleteProject(offsets indexSet: IndexSet) {
-        Task {
-            for index in indexSet {
-                do {
-                    try await persistenceController.deleteObject(projects[index])
-                } catch {
-                    errorWrapper = .init(error: error, message: "Failed to delete project.")
-                }
-            }
-        }
     }
 }
 

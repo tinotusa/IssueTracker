@@ -13,6 +13,8 @@ struct IssuesListView: View {
     @State private var selectedIssue: Issue?
     @State private var issuesViewState: IssuesViewState?
     @State private var showingDeleteIssueConfirmation = false
+    @State private var showingDeleteProjectConfirmation = false
+    @State private var showingEditProjectView = false
     @State private var errorWrapper: ErrorWrapper?
     
     @State private var searchState = SearchState()
@@ -91,6 +93,10 @@ struct IssuesListView: View {
             }
             .sheetWithIndicator()
         }
+        .sheet(isPresented: $showingEditProjectView) {
+            EditProjectView(project: project)
+                .sheetWithIndicator()
+        }
         .toolbar {
             toolbarItems
         }
@@ -112,6 +118,11 @@ struct IssuesListView: View {
             }
         } message: {
             Text("Are you sure you want to delete this issue?")
+        }
+        .confirmationDialog("Delete project", isPresented: $showingDeleteProjectConfirmation) {
+            Button("Delete", role: .destructive, action: deleteProject)
+        } message: {
+            Text("Are you sure you want to delete this project?")
         }
     }
 }
@@ -180,15 +191,30 @@ private extension IssuesListView {
     var toolbarItems: some ToolbarContent {
         ToolbarItemGroup {
             Menu {
-                sortBySection
-                sortTypeSection
+                Button {
+                    showingEditProjectView = true
+                } label: {
+                    Label("Edit project", systemImage: SFSymbol.infoCircle)
+                }
+                Menu {
+                    sortBySection
+                    sortTypeSection
+                } label: {
+                    Label("Sort by", systemImage: SFSymbol.arrowUpArrowDown)
+                }
+                Button {
+                    issuesViewState = .showingEditTagsView
+                } label: {
+                    Label("Edit tags", systemImage: SFSymbol.tag)
+                }
+                Button(role: .destructive, action: showDeleteConfirmation) {
+                    Label("Delete project", systemImage: SFSymbol.trash)
+                }
             } label: {
-                Text("Sort")
-            }
-            Button("Edit tags") {
-                issuesViewState = .showingEditTagsView
+                Label("Options", systemImage: SFSymbol.ellipsisCircle)
             }
         }
+        
         ToolbarItemGroup(placement: .bottomBar) {
             Button {
                 searchState.searchIssueStatus = searchState.searchIssueStatus == .open ? .closed : .open
@@ -239,8 +265,22 @@ private extension IssuesListView {
         
         var id: Self { self }
     }
-
-
+    
+    func showDeleteConfirmation() {
+        showingDeleteProjectConfirmation = true
+    }
+    
+    func deleteProject() {
+        Task {
+            do {
+                try await persistenceController.deleteObject(project)
+                dismiss()
+            } catch {
+                errorWrapper = .init(error: error, message: "Failed to delete project.")
+            }
+        }
+    }
+    
     func deleteIssue(offsets indexSet: IndexSet) {
         for index in indexSet {
             let issue = issues[index]
