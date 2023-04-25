@@ -13,7 +13,6 @@ struct HomeView: View {
     @State private var showingAddProjectView = false
     @State private var errorWrapper: ErrorWrapper?
     
-    @Environment(\.managedObjectContext) private var viewContext
     @EnvironmentObject private var persistenceController: PersistenceController
     
     @FetchRequest(sortDescriptors: [.init(\.dateCreated, order: .reverse)])
@@ -47,23 +46,18 @@ struct HomeView: View {
                     .listRowSeparator(.hidden)
                 }
             }
-            .refreshable {
-                viewContext.refreshAllObjects()
-            }
             .navigationTitle("Projects")
             .toolbarBackground(Color.customBackground)
             .toolbar {
                 ToolbarItem(placement: .bottomBar) {
-                    Button {
-                        showingAddProjectView = true
-                    } label: {
-                        Label("Add project", systemImage: SFSymbol.plus)
+                    Button(action: showAddProjectView) {
+                        Label("Add project", systemImage: SFSymbol.plusCircleFill)
+                            .labelStyle(.titleAndIcon)
                     }
                     .frame(maxWidth: .infinity, alignment: .trailing)
                 }
             }
             .listStyle(.plain)
-            .bodyStyle()
             .sheet(item: $errorWrapper) { error in
                 ErrorView(errorWrapper: error)
             }
@@ -72,7 +66,7 @@ struct HomeView: View {
                     .sheetWithIndicator()
             }
             .sheet(item: $selectedProject) { project in
-                EditProjectView(project: project, initialProjectData: ProjectProperties(name: project.wrappedName, startDate: project.wrappedStartDate))
+                EditProjectView(project: project, initialProjectData: project.projectProperties)
                     .sheetWithIndicator()
             }
             .background(Color.customBackground)
@@ -80,19 +74,7 @@ struct HomeView: View {
                 IssuesListView(project: project)
             }
             .confirmationDialog("Delete project", isPresented: $showingDeleteConfirmation) {
-                Button("Delete", role: .destructive) {
-                    guard let selectedProject else {
-                        return
-                    }
-                    Task {
-                        do {
-                            try await persistenceController.deleteObject(selectedProject)
-                            self.selectedProject = nil
-                        } catch {
-                            errorWrapper = ErrorWrapper(error: error, message: "Failed to delete the project.")
-                        }
-                    }
-                }
+                Button("Delete", role: .destructive, action: deleteSelectedProject)
             } message: {
                 Text("Are you sure you want to delete this project?")
             }
@@ -101,6 +83,24 @@ struct HomeView: View {
 }
 
 private extension HomeView {
+    func showAddProjectView() {
+        showingAddProjectView = true
+    }
+    
+    func deleteSelectedProject() {
+        guard let selectedProject else {
+            return
+        }
+        Task {
+            do {
+                try await persistenceController.deleteObject(selectedProject)
+                self.selectedProject = nil
+            } catch {
+                errorWrapper = ErrorWrapper(error: error, message: "Failed to delete the project.")
+            }
+        }
+    }
+    
     func deleteProject(offsets indexSet: IndexSet) {
         Task {
             for index in indexSet {

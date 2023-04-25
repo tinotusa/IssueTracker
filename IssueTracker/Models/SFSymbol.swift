@@ -9,7 +9,7 @@ import Foundation
 
 /// The symbols used in the app.
 enum SFSymbol {
-    static let plus = "plus"
+    static let plusCircleFill = "plus.circle.fill"
     static let photoOnRectangleAngled = "photo.on.rectangle.angled"
     static let micFill = "mic.fill"
     static let trash = "trash"

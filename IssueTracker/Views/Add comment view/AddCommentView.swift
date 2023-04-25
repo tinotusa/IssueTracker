@@ -91,7 +91,7 @@ private extension AddCommentView {
                     }
                 }
             } label: {
-                Label("Add", systemImage: SFSymbol.plus)
+                Label("Add", systemImage: SFSymbol.plusCircleFill)
             }
             .disabled(!commentProperties.canAddComment)
         }

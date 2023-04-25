@@ -202,7 +202,7 @@ private extension IssuesListView {
             Button {
                 issuesViewState = .showingAddIssueView
             } label: {
-                Label("Add Issue", systemImage: SFSymbol.plus)
+                Label("Add Issue", systemImage: SFSymbol.plusCircleFill)
             }
         }
     }
