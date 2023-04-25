@@ -78,11 +78,12 @@ private extension EditProjectView {
     }
     
     func cancel() {
-        if initialProjectData != projectProperties {
-            dismiss()
+        let hasChanges = initialProjectData != projectProperties
+        if hasChanges {
+            showingHasChangesConfirmationDialog = true
             return
         }
-        showingHasChangesConfirmationDialog = true
+        dismiss()
     }
     
     func saveChanges() {
