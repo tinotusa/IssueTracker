@@ -91,7 +91,7 @@ private extension AddCommentView {
                     }
                 }
             } label: {
-                Label("Add", systemImage: "plus")
+                Label("Add", systemImage: SFSymbol.plus)
             }
             .disabled(!commentProperties.canAddComment)
         }
@@ -109,7 +109,7 @@ private extension AddCommentView {
                 selectionBehavior: .ordered,
                 matching: .any(of: [.images, .videos])
             ) {
-                Label("Add photo attachment", systemImage: "photo.on.rectangle.angled")
+                Label("Add photo attachment", systemImage: SFSymbol.photoOnRectangleAngled)
                     .labelStyle(.iconOnly)
             }
         }
@@ -120,7 +120,7 @@ private extension AddCommentView {
                     commentProperties.toggleRecording()
                 }
             } label: {
-                Label("Add audio attachment", systemImage: "mic.fill")
+                Label("Add audio attachment", systemImage: SFSymbol.micFill)
             }
             .disabled(audioRecorder.isRecording)
             .labelStyle(.iconOnly)
@@ -141,14 +141,14 @@ private extension AddCommentView {
             } label: {
                 Label(
                     audioRecorder.isRecording ? "Stop recording" : "Start recording",
-                    systemImage: audioRecorder.isRecording ? "pause.circle.fill" : "play.circle.fill"
+                    systemImage: audioRecorder.isRecording ? SFSymbol.pauseCircleFill : SFSymbol.playCircleFill
                 )
             }
             
             Button(role: .destructive) {
                 audioRecorder.deleteRecording()
             } label: {
-                Label("Delete recording", systemImage: "trash")
+                Label("Delete recording", systemImage: SFSymbol.trash)
             }
             .disabled(audioRecorder.isRecording)
         }

@@ -116,7 +116,7 @@ private extension IssueSummary {
                         Button {
                             issueDetailState = .showingEditCommentView(comment: comment)
                         } label: {
-                            Label("Edit", systemImage: "rectangle.and.pencil.and.ellipsis")
+                            Label("Edit", systemImage: SFSymbol.rectangleAndPencilAndEllipsis)
                         }
                         .tint(.blue)
                     }
@@ -130,7 +130,7 @@ private extension IssueSummary {
                                 }
                             }
                         } label: {
-                            Label("Delete", systemImage: "trash")
+                            Label("Delete", systemImage: SFSymbol.trash)
                         }
                     }
             }

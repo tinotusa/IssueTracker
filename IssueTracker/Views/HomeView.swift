@@ -37,7 +37,7 @@ struct HomeView: View {
                             Button {
                                 selectedProject = project
                             } label: {
-                                Label("Edit", systemImage: "pencil")
+                                Label("Edit", systemImage: SFSymbol.pencil)
                             }
                             .tint(.blue)
                         }
@@ -57,16 +57,9 @@ struct HomeView: View {
                     Button {
                         showingAddProjectView = true
                     } label: {
-                        Label("Add project", systemImage: "square.and.pencil")
+                        Label("Add project", systemImage: SFSymbol.plus)
                     }
                     .frame(maxWidth: .infinity, alignment: .trailing)
-                }
-                ToolbarItem {
-                    Button {
-                        // TODO: make sheet appear?
-                    } label: {
-                        Image(systemName: "gear")
-                    }
                 }
             }
             .listStyle(.plain)

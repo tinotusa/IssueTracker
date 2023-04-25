@@ -121,7 +121,7 @@ private extension IssuesListView {
     @ViewBuilder
     func labelFor(_ sortOrder: SortOrder, title: LocalizedStringKey) -> some View {
         if sortState.sortOrder == sortOrder {
-            Label(title, systemImage: "checkmark")
+            Label(title, systemImage: SFSymbol.checkmark)
         } else {
             Text(title)
         }
@@ -134,7 +134,7 @@ private extension IssuesListView {
                     sortState.sortType = sortType
                 } label: {
                     if sortState.sortType == sortType {
-                        Label(sortType.title, systemImage: "checkmark")
+                        Label(sortType.title, systemImage: SFSymbol.checkmark)
                     } else {
                         Text(sortType.title)
                     }
@@ -195,14 +195,14 @@ private extension IssuesListView {
             } label: {
                 Label(
                     "Issue status",
-                    systemImage: searchState.searchIssueStatus == .open ? "tray.and.arrow.down.fill" : "tray.and.arrow.up.fill"
+                    systemImage: searchState.searchIssueStatus == .open ? SFSymbol.trayAndArrowDownFill : SFSymbol.trayAndArrowUpFill
                 )
             }
             
             Button {
                 issuesViewState = .showingAddIssueView
             } label: {
-                Label("Add Issue", systemImage: "square.and.pencil")
+                Label("Add Issue", systemImage: SFSymbol.plus)
             }
         }
     }
@@ -224,7 +224,7 @@ private extension IssuesListView {
         } label: {
             Label(
                 issue.isOpenStatus ? "Close issue" : "Open Issue",
-                systemImage: issue.isOpenStatus ? "tray.and.arrow.down.fill" : "tray.and.arrow.up.fill"
+                systemImage: issue.isOpenStatus ? SFSymbol.trayAndArrowDownFill : SFSymbol.trayAndArrowUpFill
             )
         }
         .tint(issue.isOpenStatus ? .green : .purple)
