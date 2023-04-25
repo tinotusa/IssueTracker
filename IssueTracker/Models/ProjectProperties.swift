@@ -31,10 +31,10 @@ extension ProjectProperties {
     /// Checks that the given project name is valid.
     /// - Parameter name: The project name to check.
     /// - Returns: A Result with a `Bool` if successful or a `ValidationError` otherwise.
-    static func validateProjectName(_ name: String) -> Result<Bool, ValidationError> {
+    static func validateProjectName(_ name: String) -> Result<Void, TextFieldValidation.ValidationError> {
         let name = name.trimmingCharacters(in: .whitespacesAndNewlines)
         if name.isEmpty {
-            return .failure(.invalidInput(message: "Name cannot be empty"))
+            return .failure(.emptyText)
         }
         
         let filteredName = name.filter { char in
@@ -45,7 +45,7 @@ extension ProjectProperties {
         }
         
         if filteredName == name {
-            return .success(true)
+            return .success(())
         } else {
             return .failure(.invalidInput(message: "Name cannot contain special characters."))
         }

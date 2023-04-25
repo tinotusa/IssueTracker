@@ -18,9 +18,7 @@ struct ImageAttachmentPreview: View {
                 .scaledToFill()
                 .frame(width: 100, height: 100)
                 .cornerRadius(10)
-            Button(role: .destructive) {
-                deleteAction()
-            } label: {
+            Button(role: .destructive, action: deleteAction) {
                 Image(systemName: "xmark.circle.fill")
                     .foregroundColor(.red)
             }

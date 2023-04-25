@@ -86,9 +86,9 @@ struct CustomTextField_Previews: PreviewProvider {
                 .textFieldInputValidationHandler { text in
                     let text = text.trimmingCharacters(in: .whitespacesAndNewlines)
                     if text.isEmpty {
-                        return .failure(ValidationError.invalidInput(message: "Empty text"))
+                        return .failure(.invalidInput(message: "Empty text"))
                     }
-                    return .success(true)
+                    return .success(())
                 }
         }
     }

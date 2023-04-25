@@ -94,7 +94,6 @@
 		21CEAAC2297D4EC500A7A344 /* EditIssueView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21CEAAC1297D4EC500A7A344 /* EditIssueView.swift */; };
 		21D031F229F1098C00F20E1B /* MandatoryFormField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21D031F129F1098C00F20E1B /* MandatoryFormField.swift */; };
 		21D031F429F109A300F20E1B /* TextFieldValidation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21D031F329F109A300F20E1B /* TextFieldValidation.swift */; };
-		21D031F629F109B500F20E1B /* ValidationError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21D031F529F109B500F20E1B /* ValidationError.swift */; };
 		21E12CDD29E94E1400EE8255 /* CloudKitManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21E12CDC29E94E1400EE8255 /* CloudKitManager.swift */; };
 		21E6D2A7295BD4C500BB4AA6 /* TextStyles.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21E6D2A6295BD4C500BB4AA6 /* TextStyles.swift */; };
 		21E6D2AB295BD9B500BB4AA6 /* Color+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21E6D2AA295BD9B500BB4AA6 /* Color+Extensions.swift */; };
@@ -231,7 +230,6 @@
 		21CEAAC1297D4EC500A7A344 /* EditIssueView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditIssueView.swift; sourceTree = "<group>"; };
 		21D031F129F1098C00F20E1B /* MandatoryFormField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MandatoryFormField.swift; sourceTree = "<group>"; };
 		21D031F329F109A300F20E1B /* TextFieldValidation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextFieldValidation.swift; sourceTree = "<group>"; };
-		21D031F529F109B500F20E1B /* ValidationError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ValidationError.swift; sourceTree = "<group>"; };
 		21E12CDC29E94E1400EE8255 /* CloudKitManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudKitManager.swift; sourceTree = "<group>"; };
 		21E6D2A6295BD4C500BB4AA6 /* TextStyles.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextStyles.swift; sourceTree = "<group>"; };
 		21E6D2AA295BD9B500BB4AA6 /* Color+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Color+Extensions.swift"; sourceTree = "<group>"; };
@@ -317,7 +315,6 @@
 				2141D3C129E6B5A000113CA0 /* IssueProperties.swift */,
 				21E12CDC29E94E1400EE8255 /* CloudKitManager.swift */,
 				21009AEA29EE6D8D009CAF42 /* ErrorWrapper.swift */,
-				21D031F529F109B500F20E1B /* ValidationError.swift */,
 				216A276929F3815C00C3B9C4 /* ProjectProperties.swift */,
 				21562B9E29F3E4D6006AB379 /* CommentProperties.swift */,
 				21562BA029F42951006AB379 /* SortState.swift */,
@@ -852,7 +849,6 @@
 				2168A62D29CC373D004CF64B /* Issue+Example.swift in Sources */,
 				21BBEBF3295E8465008F237B /* Tag+Extensions.swift in Sources */,
 				2168A63329CC763B004CF64B /* Tag+Example.swift in Sources */,
-				21D031F629F109B500F20E1B /* ValidationError.swift in Sources */,
 				211246C729B9B84500D0EB01 /* AudioRecorder.swift in Sources */,
 				21BBEBF5295E9A5E008F237B /* IssueRowView.swift in Sources */,
 				218F93D929C80C3500F9D62A /* EditCommentView.swift in Sources */,
