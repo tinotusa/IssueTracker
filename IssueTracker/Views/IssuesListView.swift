@@ -10,13 +10,11 @@ import CoreData
 
 struct IssuesListView: View {
     @ObservedObject private(set) var project: Project
-    @State private var selectedIssue: Issue?
-    @State private var issuesViewState: IssuesViewState?
-    @State private var showingDeleteIssueConfirmation = false
-    @State private var showingDeleteProjectConfirmation = false
-    @State private var showingEditProjectView = false
-    @State private var errorWrapper: ErrorWrapper?
     
+    @State private var sheetState: SheetState?
+    @State private var showingDeleteProjectConfirmation = false
+    @State private var errorWrapper: ErrorWrapper?
+    @State private var issueStatus = Issue.Status.open
     @State private var searchState = SearchState()
     @State private var sortState = SortState()
     
@@ -25,6 +23,7 @@ struct IssuesListView: View {
     
     @Environment(\.managedObjectContext) private var viewContext
     @Environment(\.dismiss) private var dismiss
+    
     @EnvironmentObject private var persistenceController: PersistenceController
     
     init(project: Project) {
@@ -37,6 +36,14 @@ struct IssuesListView: View {
     
     var body: some View {
         List {
+            Picker("Issue status", selection: $issueStatus) {
+                ForEach(Issue.Status.allCases) { status in
+                    Text(status.label)
+                }
+            }
+            .pickerStyle(.segmented)
+            .listRowBackground(Color.customBackground)
+            
             if issues.isEmpty {
                 Text("No issues.")
                     .font(.headline)
@@ -77,47 +84,27 @@ struct IssuesListView: View {
         .onChange(of: searchState.searchIssueStatus) { _ in
             handleChange()
         }
-        .navigationBarTitle(searchState.searchIssueStatus == .open ? "Open issues" : "Closed issues")
+        .onChange(of: issueStatus, perform: updateIssuesPredicate)
+        .navigationTitle("Issues")
         .toolbarBackground(Color.customBackground, for: .navigationBar, .bottomBar) // this doesn't seem to change the bottom bar at all.
         .background(Color.customBackground)
-        .sheet(item: $issuesViewState) { state in
+        .sheet(item: $sheetState) { state in
             Group {
                 switch state {
-                case .showingAddIssueView:
+                case .addView:
                     AddIssueView(project: project)
                         .environment(\.managedObjectContext, viewContext)
-                case .showingEditTagsView:
+                case .editTags:
                     TagsEditView()
                         .environment(\.managedObjectContext, viewContext)
+                case .editProject:
+                    EditProjectView(project: project)
                 }
             }
             .sheetWithIndicator()
         }
-        .sheet(isPresented: $showingEditProjectView) {
-            EditProjectView(project: project)
-                .sheetWithIndicator()
-        }
         .toolbar {
             toolbarItems
-        }
-        .confirmationDialog("Delete issue", isPresented: $showingDeleteIssueConfirmation) {
-            Button(role: .destructive) {
-                // TODO: Remove code from ui (make a func)
-                guard let selectedIssue else {
-                    return
-                }
-                Task {
-                    do {
-                        try await persistenceController.deleteObject(selectedIssue)
-                    } catch {
-                        errorWrapper = .init(error: error, message: "Failed to delete issue.")
-                    }
-                }
-            } label: {
-                Text("Delete")
-            }
-        } message: {
-            Text("Are you sure you want to delete this issue?")
         }
         .confirmationDialog("Delete project", isPresented: $showingDeleteProjectConfirmation) {
             Button("Delete", role: .destructive, action: deleteProject)
@@ -191,9 +178,7 @@ private extension IssuesListView {
     var toolbarItems: some ToolbarContent {
         ToolbarItemGroup {
             Menu {
-                Button {
-                    showingEditProjectView = true
-                } label: {
+                Button(action: showEditProjectView) {
                     Label("Edit project", systemImage: SFSymbol.infoCircle)
                 }
                 Menu {
@@ -202,9 +187,7 @@ private extension IssuesListView {
                 } label: {
                     Label("Sort by", systemImage: SFSymbol.arrowUpArrowDown)
                 }
-                Button {
-                    issuesViewState = .showingEditTagsView
-                } label: {
+                Button(action: showEditTagsView) {
                     Label("Edit tags", systemImage: SFSymbol.tag)
                 }
                 Button(role: .destructive, action: showDeleteConfirmation) {
@@ -216,20 +199,11 @@ private extension IssuesListView {
         }
         
         ToolbarItemGroup(placement: .bottomBar) {
-            Button {
-                searchState.searchIssueStatus = searchState.searchIssueStatus == .open ? .closed : .open
-            } label: {
-                Label(
-                    "Issue status",
-                    systemImage: searchState.searchIssueStatus == .open ? SFSymbol.trayAndArrowDownFill : SFSymbol.trayAndArrowUpFill
-                )
-            }
-            
-            Button {
-                issuesViewState = .showingAddIssueView
-            } label: {
+            Button(action: showAddIssueView) {
                 Label("Add Issue", systemImage: SFSymbol.plusCircleFill)
+                    .labelStyle(.titleAndIcon)
             }
+            .frame(maxWidth: .infinity, alignment: .trailing)
         }
     }
     
@@ -259,15 +233,33 @@ private extension IssuesListView {
 
 // MARK: - Functions
 private extension IssuesListView {
-    enum IssuesViewState: Identifiable {
-        case showingAddIssueView
-        case showingEditTagsView
+    enum SheetState: Identifiable {
+        case addView
+        case editTags
+        case editProject
         
         var id: Self { self }
     }
     
     func showDeleteConfirmation() {
         showingDeleteProjectConfirmation = true
+    }
+    
+    func showEditProjectView() {
+        sheetState = .editProject
+    }
+    
+    func showAddIssueView() {
+        sheetState = .addView
+    }
+    
+    func showEditTagsView() {
+        sheetState = .editTags
+    }
+    
+    func updateIssuesPredicate(to issueStatus: Issue.Status) {
+        let format = "project == %@ AND status == %@"
+        issues.nsPredicate = .init(format: format, project, issueStatus.rawValue)
     }
     
     func deleteProject() {
