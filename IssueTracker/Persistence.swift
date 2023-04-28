@@ -55,7 +55,7 @@ extension PersistenceController {
     func addIssue(_ issueData: IssueProperties,project: Project) async throws {
         let issue = Issue(
             name: issueData.name,
-            issueDescription: issueData.description,
+            issueDescription: issueData.issueDescription,
             priority: issueData.priority,
             tags: issueData.tags,
             context: viewContext
@@ -93,9 +93,9 @@ extension PersistenceController {
     ///   - destination: The issue to copy to.
     ///   - tags: The tags from the source issue to copy to the destination.
     @MainActor
-    func copyIssue(from source: Issue, to destination: Issue) async throws {
-        logger.debug("Copying from issue: \(source.wrappedId) to issue: \(destination.wrappedId)")
-        destination.copyProperties(from: source)
+    func updateIssue(_ issue: Issue, with issueProperties: IssueProperties) async throws {
+        logger.debug("Updating issue: \(issue.wrappedId) with properties: \(issueProperties)")
+        issue.copyProperties(from: issueProperties)
         
         return try await save()
     }

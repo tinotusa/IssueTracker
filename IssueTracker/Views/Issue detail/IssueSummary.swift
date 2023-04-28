@@ -13,7 +13,7 @@ struct IssueSummary: View {
     @State private var errorWrapper: ErrorWrapper?
     
     @EnvironmentObject private var persistenceController: PersistenceController
-
+    
     var body: some View {
         List {
             Group {
@@ -38,8 +38,6 @@ struct IssueSummary: View {
                     AddCommentView(issue: issue)
                 case .showingEditCommentView(let comment):
                     EditCommentView(comment: comment)
-                case .showingEditIssueView:
-                    EditIssueView(issue: issue)
                 }
             }
             .sheetWithIndicator()
@@ -52,7 +50,6 @@ private extension IssueSummary {
     enum IssueDetailState: Hashable, Identifiable {
         case showingAddCommentSheet
         case showingEditCommentView(comment: Comment)
-        case showingEditIssueView
         
         var id: Self { self }
     }

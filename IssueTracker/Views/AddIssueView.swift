@@ -61,7 +61,7 @@ private extension AddIssueView {
     
     var descriptionSection: some View {
         Section("Description") {
-            TextField("Issue description", text: $issueProperties.description, axis: .vertical)
+            TextField("Issue description", text: $issueProperties.issueDescription, axis: .vertical)
                 .lineLimit(4 ... 8)
                 .textFieldStyle(.roundedBorder)
         }

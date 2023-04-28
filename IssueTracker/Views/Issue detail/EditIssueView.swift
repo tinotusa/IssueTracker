@@ -8,52 +8,22 @@
 import SwiftUI
 
 struct EditIssueView: View {
-    @ObservedObject private(set) var issue: Issue
-    @ObservedObject private var issueCopy: Issue
-    @State private var showingCancelDialog = false
+    @Binding var issueProperties: IssueProperties
     @State private var errorWrapper: ErrorWrapper?
     
     @Environment(\.editMode) private var editMode
     @Environment(\.managedObjectContext) private var viewContext
     @EnvironmentObject private var persistenceController: PersistenceController
     
-    init(issue: Issue) {
-        self.issue = issue
-        _issueCopy = ObservedObject(wrappedValue: Issue.copyIssue(issue: issue))
-    }
     
     var body: some View {
         List {
             Group {
-                Section("Issue name") {
-                    TextField("Issue name", text: $issueCopy.wrappedName)
-                        .textFieldStyle(.roundedBorder)
-                }
-                Section("Description") {
-                    TextField("Issue Description", text: $issueCopy.wrappedIssueDescription, axis: .vertical)
-                        .lineLimit(3...)
-                        .textFieldStyle(.roundedBorder)
-                }
-                Section("Priority") {
-                    Picker("Issue priority", selection: $issueCopy.wrappedPriority) {
-                        ForEach(Issue.Priority.allCases) { priority in
-                            Text(priority.title)
-                        }
-                    }
-                    .pickerStyle(.segmented)
-                }
-                Section("Status") {
-                    Picker("Issue status", selection: $issueCopy.isOpen) {
-                        Text("Open")
-                            .tag(true)
-                        Text("Closed")
-                            .tag(false)
-                    }
-                    .pickerStyle(.segmented)
-                }
-                Section("Tags") {
-                    TagSelectionView(selection: $issueCopy.wrappedTags)
-                }
+                nameSection
+                descriptionSection
+                prioritySection
+                statusSection
+                tagsSection
             }
             .listRowSeparator(.hidden)
             .listRowBackground(Color.customBackground)
@@ -67,56 +37,81 @@ struct EditIssueView: View {
             ErrorView(errorWrapper: error)
         }
         .safeAreaInset(edge: .bottom) {
-            ProminentButton("Save Changes") {
-                Task {
-                    do {
-                        try await persistenceController.copyIssue(from: issueCopy, to: issue)
-                    } catch {
-                        errorWrapper = .init(error: error, message: "Failed to save issue changes.")
-                    }
-                }
-            }
-            .disabled(issueCopy.equals(issue))
+            ProminentButton("Done", action: cancel)
         }
         .toolbar {
-            ToolbarItem(placement: .cancellationAction) {
-                Button("Cancel") {
-                    if !issueCopy.equals(issue) {
-                        showingCancelDialog = true
-                    } else {
-                        editMode?.wrappedValue = .inactive
-                    }
+            toolbarItems
+        }
+    }
+}
+
+// MARK: - Views {
+private extension EditIssueView {
+    @ToolbarContentBuilder
+    var toolbarItems: some ToolbarContent {
+        ToolbarItem(placement: .confirmationAction) {
+            Button("Done", action: cancel)
+        }
+    }
+}
+
+// MARK: - List sections
+private extension EditIssueView {
+    var nameSection: some View {
+        Section("Issue name") {
+            CustomTextField("Issue name", text: $issueProperties.name)
+        }
+    }
+    
+    var descriptionSection: some View {
+        Section("Description") {
+            TextField("Issue Description", text: $issueProperties.issueDescription, axis: .vertical)
+                .lineLimit(3...)
+                .textFieldStyle(.roundedBorder)
+        }
+    }
+    
+    var prioritySection: some View {
+        Section("Priority") {
+            Picker("Issue priority", selection: $issueProperties.priority) {
+                ForEach(Issue.Priority.allCases) { priority in
+                    Text(priority.title)
                 }
             }
-            ToolbarItem(placement: .confirmationAction) {
-                Button("Done") {
-                    Task {
-                        do {
-                            try await persistenceController.copyIssue(from: issueCopy, to: issue)
-                            editMode?.wrappedValue = .inactive
-                        } catch {
-                            errorWrapper = .init(error: error, message: "Failed to save issue changes.")
-                        }
-                    }
-                }
-                .disabled(issueCopy.equals(issue))
-            }
+            .pickerStyle(.segmented)
         }
-        .confirmationDialog("Cancel changes", isPresented: $showingCancelDialog) {
-            Button("Don't save", role: .destructive) {
-                editMode?.wrappedValue = .inactive
+    }
+    
+    var statusSection: some View {
+        Section("Status") {
+            Picker("Issue status", selection: $issueProperties.isOpen) {
+                Text("Open")
+                    .tag(true)
+                Text("Closed")
+                    .tag(false)
             }
-        } message: {
-            Text("You haven't saved these changes.")
+            .pickerStyle(.segmented)
         }
+    }
+    
+    var tagsSection: some View {
+        Section("Tags") {
+            TagSelectionView(selection: $issueProperties.tags)
+        }
+    }
+}
+
+// MARK: - Functions
+private extension EditIssueView {
+    func cancel() {
+        editMode?.wrappedValue = .inactive
     }
 }
 
 struct IssueEditView_Previews: PreviewProvider {
     static var previews: some View {
         NavigationStack {
-            EditIssueView(issue: .example)
-                .environmentObject(PersistenceController.preview)
+            EditIssueView(issueProperties: .constant(.default))
         }
     }
 }

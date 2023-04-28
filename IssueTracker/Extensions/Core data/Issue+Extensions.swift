@@ -138,46 +138,15 @@ extension Issue {
 extension Issue {
     /// Copies the properties of the given issue to self.
     /// - Parameter issue: The issue to copy properties from.
-    func copyProperties(from issue: Issue) {
-        self.name = issue.name
-        self.issueDescription = issue.issueDescription
-        self.tags = issue.tags
-        self.priority = issue.priority
-    }
-    
-    static func copyIssue(issue: Issue) -> Issue {
-        Issue(
-            name: issue.wrappedName,
-            issueDescription: issue.wrappedIssueDescription,
-            priority: issue.wrappedPriority,
-            tags: issue.wrappedTags,
-            context: issue.managedObjectContext!
-        )
-    }
-    
-    func equals(_ otherIssue: Issue) -> Bool {
-        let tagCountIsEqual = wrappedTags.count == otherIssue.wrappedTags.count
-        var tagsAreEqual = true
-        for tag in wrappedTags {
-            let otherIssueTag = otherIssue.wrappedTags.first { otherTag in
-                tag.wrappedName == otherTag.wrappedName
-            }
-            if tag.wrappedName != otherIssueTag?.wrappedName {
-                tagsAreEqual = false
-                break
-            }
-        }
-    
-        return (
-            wrappedName == otherIssue.wrappedName &&
-            wrappedIssueDescription == otherIssue.wrappedIssueDescription &&
-            wrappedPriority == otherIssue.wrappedPriority &&
-            wrappedName == otherIssue.wrappedName &&
-            tagCountIsEqual && tagsAreEqual
-        )
+    func copyProperties(from issueProperties: IssueProperties) {
+        self.name = issueProperties.name
+        self.issueDescription = issueProperties.issueDescription
+        self.tags = NSSet(set: issueProperties.tags)
+        self.priority = issueProperties.priority.rawValue
+        self.isOpen = issueProperties.isOpen
     }
     
     var issueProperties: IssueProperties {
-        .init(name: wrappedName, description: wrappedIssueDescription, priority: wrappedPriority, tags: wrappedTags, isOpen: isOpen)
+        .init(name: wrappedName, issueDescription: wrappedIssueDescription, priority: wrappedPriority, tags: wrappedTags, isOpen: isOpen)
     }
 }

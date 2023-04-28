@@ -22,8 +22,8 @@ struct IssueRowView: View {
                     .lineLimit(2)
                     .multilineTextAlignment(.leading)
                 
-                if !issueProperties.description.isEmpty {
-                    Text(issueProperties.description)
+                if !issueProperties.issueDescription.isEmpty {
+                    Text(issueProperties.issueDescription)
                         .footerStyle()
                 } else {
                     Text("Description: N/A")
@@ -58,7 +58,7 @@ private extension IssueRowView {
 
 struct IssueRowView_Previews: PreviewProvider {
     static var previews: some View {
-        IssueRowView(issueProperties: .init(name: "testing", description: "some description", priority: .low, tags: [])) {
+        IssueRowView(issueProperties: .init(name: "testing", issueDescription: "some description", priority: .low, tags: [])) {
             
         }
     }
