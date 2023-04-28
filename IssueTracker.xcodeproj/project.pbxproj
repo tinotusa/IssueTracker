@@ -104,6 +104,7 @@
 		21E6D2BD295C4B8400BB4AA6 /* CustomTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21E6D2BC295C4B8400BB4AA6 /* CustomTextField.swift */; };
 		21E6D2BF295C4DD900BB4AA6 /* AddProjectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21E6D2BE295C4DD900BB4AA6 /* AddProjectView.swift */; };
 		21E6D2C1295C5B4900BB4AA6 /* ProjectRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21E6D2C0295C5B4900BB4AA6 /* ProjectRowView.swift */; };
+		21EBB37F29FBCEC300CBC88D /* RadioToggleStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21EBB37E29FBCEC300CBC88D /* RadioToggleStyle.swift */; };
 		21F1DA27295D90CF00076D73 /* AddProjectViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21F1DA26295D90CF00076D73 /* AddProjectViewModelTests.swift */; };
 		21F1DA29295D9C0E00076D73 /* String+filterWhitespace.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21F1DA28295D9C0E00076D73 /* String+filterWhitespace.swift */; };
 		21F1DA2D295DA1C200076D73 /* EditProjectViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21F1DA2C295DA1C200076D73 /* EditProjectViewModelTests.swift */; };
@@ -241,6 +242,7 @@
 		21E6D2BC295C4B8400BB4AA6 /* CustomTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTextField.swift; sourceTree = "<group>"; };
 		21E6D2BE295C4DD900BB4AA6 /* AddProjectView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddProjectView.swift; sourceTree = "<group>"; };
 		21E6D2C0295C5B4900BB4AA6 /* ProjectRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProjectRowView.swift; sourceTree = "<group>"; };
+		21EBB37E29FBCEC300CBC88D /* RadioToggleStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadioToggleStyle.swift; sourceTree = "<group>"; };
 		21F1DA26295D90CF00076D73 /* AddProjectViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddProjectViewModelTests.swift; sourceTree = "<group>"; };
 		21F1DA28295D9C0E00076D73 /* String+filterWhitespace.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+filterWhitespace.swift"; sourceTree = "<group>"; };
 		21F1DA2C295DA1C200076D73 /* EditProjectViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProjectViewModelTests.swift; sourceTree = "<group>"; };
@@ -619,6 +621,7 @@
 				2132CB7529C5D0FC003D5C12 /* AudioAttachmentView.swift */,
 				218F93D629C8044500F9D62A /* ImageDetailView.swift */,
 				2159F00B29CABC5C00E01576 /* WrappingHStack.swift */,
+				21EBB37E29FBCEC300CBC88D /* RadioToggleStyle.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -868,6 +871,7 @@
 				2150C84A295972E2006CD7D2 /* IssueTracker.xcdatamodeld in Sources */,
 				21E12CDD29E94E1400EE8255 /* CloudKitManager.swift in Sources */,
 				2150C83E295972E0006CD7D2 /* IssueTrackerApp.swift in Sources */,
+				21EBB37F29FBCEC300CBC88D /* RadioToggleStyle.swift in Sources */,
 				21E6D2BD295C4B8400BB4AA6 /* CustomTextField.swift in Sources */,
 				21562BA129F42951006AB379 /* SortState.swift in Sources */,
 				21FDE718295D64F10006C24A /* Project+Extensions.swift in Sources */,
