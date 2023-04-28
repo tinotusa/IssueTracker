@@ -17,6 +17,8 @@ struct IssueProperties {
     var priority: Issue.Priority = .low
     /// The tags of the issue.
     var tags: Set<Tag> = []
+    
+    var isOpen: Bool = false
 }
 
 extension IssueProperties {

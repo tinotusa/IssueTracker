@@ -28,6 +28,7 @@ extension Issue {
         self.id = UUID()
         self.dateCreated = .now
         self.wrappedStatus = .open
+        self.isOpen = true
     }
 }
 
@@ -174,5 +175,9 @@ extension Issue {
             wrappedName == otherIssue.wrappedName &&
             tagCountIsEqual && tagsAreEqual
         )
+    }
+    
+    var issueProperties: IssueProperties {
+        .init(name: wrappedName, description: wrappedIssueDescription, priority: wrappedPriority, tags: wrappedTags, isOpen: isOpen)
     }
 }

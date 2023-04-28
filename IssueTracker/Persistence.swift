@@ -69,10 +69,7 @@ extension PersistenceController {
     /// - Parameter issue: The issue to toggle.
     @MainActor
     func toggleIssueStatus(for issue: Issue) async throws {
-        switch issue.wrappedStatus {
-        case .open: issue.wrappedStatus = .closed
-        case .closed: issue.wrappedStatus = .open
-        }
+        issue.isOpen.toggle()
         return try await save()
     }
     

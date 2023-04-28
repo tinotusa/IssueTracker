@@ -24,4 +24,8 @@ enum SFSymbol {
     static let tag = "tag"
     static let arrowUpArrowDown = "arrow.up.arrow.down"
     static let infoCircle = "info.circle"
+    static let envelope = "envelope"
+    static let envelopeOpen = "envelope.open"
+    static let circle = "circle"
+    static let largeCircleFillCircle = "largecircle.fill.circle"
 }

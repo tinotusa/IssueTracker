@@ -7,45 +7,78 @@
 
 import SwiftUI
 
+struct RadioToggleStyle: ToggleStyle {
+    func makeBody(configuration: Configuration) -> some View {
+        Button {
+            configuration.isOn.toggle()
+        } label: {
+            Image(systemName: configuration.isOn ? SFSymbol.largeCircleFillCircle : SFSymbol.circle)
+                .font(.title)
+                .animation(.default, value: configuration.isOn)
+        }
+        .buttonStyle(.plain)
+    }
+}
+
+extension ToggleStyle where Self == RadioToggleStyle {
+    static var radioButton: RadioToggleStyle {
+        RadioToggleStyle()
+    }
+}
+
 struct IssueRowView: View {
-    let issue: Issue
+    var issueProperties: IssueProperties
+    @State private var isOpen = false
+    let closeIssueAction: () -> Void
     
     var body: some View {
-        VStack(alignment: .leading) {
-            Text(issue.wrappedName)
-                .lineLimit(2)
-                .multilineTextAlignment(.leading)
-            
-            if !issue.wrappedIssueDescription.isEmpty {
-                Text(issue.wrappedIssueDescription)
-                    .footerStyle()
-            } else {
-                Text("Description: N/A")
-                    .footerStyle()
-            }
-            
-            if let tags = issue.tags {
-                if tags.allObjects.isEmpty {
-                    Text("No tags")
+        HStack {
+            Toggle("Issue status", isOn: $isOpen)
+                .toggleStyle(.radioButton)
+            VStack(alignment: .leading) {
+                Text(issueProperties.name)
+                    .font(.title3)
+                    .lineLimit(2)
+                    .multilineTextAlignment(.leading)
+                
+                if !issueProperties.description.isEmpty {
+                    Text(issueProperties.description)
                         .footerStyle()
                 } else {
-                    HStack {
-                        Text("Tags: ")
-                        ForEach(tags.allObjects as? [Tag] ?? []) { tag in
-                            Text(tag.wrappedName)
+                    Text("Description: N/A")
+                        .footerStyle()
+                }
+                
+                if let tags = issueProperties.tags {
+                    if tags.isEmpty {
+                        Text("No tags")
+                            .footerStyle()
+                    } else {
+                        HStack {
+                            Text("Tags: ")
+                            ForEach(Array(tags)) { tag in
+                                Text(tag.wrappedName)
+                            }
                         }
+                        .footerStyle()
                     }
-                    .footerStyle()
                 }
             }
         }
-        .bodyStyle()
+        .onChange(of: isOpen, perform: changeIssueStatus)
+    }
+}
+
+private extension IssueRowView {
+    func changeIssueStatus(isOpen: Bool) {
+        closeIssueAction()
     }
 }
 
 struct IssueRowView_Previews: PreviewProvider {
-    static var viewContext = PersistenceController.preview.container.viewContext
     static var previews: some View {
-        IssueRowView(issue: .init(name: "test issue", issueDescription: "", priority: .low, tags: [], context: viewContext))
+        IssueRowView(issueProperties: .init(name: "testing", description: "some description", priority: .low, tags: [])) {
+            
+        }
     }
 }

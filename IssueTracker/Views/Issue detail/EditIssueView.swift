@@ -42,6 +42,15 @@ struct EditIssueView: View {
                     }
                     .pickerStyle(.segmented)
                 }
+                Section("Status") {
+                    Picker("Issue status", selection: $issueCopy.isOpen) {
+                        Text("Open")
+                            .tag(true)
+                        Text("Closed")
+                            .tag(false)
+                    }
+                    .pickerStyle(.segmented)
+                }
                 Section("Tags") {
                     TagSelectionView(selection: $issueCopy.wrappedTags)
                 }
