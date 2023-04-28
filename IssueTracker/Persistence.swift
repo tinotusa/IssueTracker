@@ -232,7 +232,6 @@ extension PersistenceController {
     ///   - projectData: The data used for the update.
     @MainActor
     func updateProject(_ project: Project, projectData: ProjectProperties) async throws {
-        objectWillChange.send()
         project.wrappedName = projectData.name
         project.wrappedStartDate = projectData.startDate
         try await save()

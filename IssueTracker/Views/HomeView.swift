@@ -10,7 +10,7 @@ import SwiftUI
 struct HomeView: View {
     @State private var showingAddProjectView = false
     @State private var errorWrapper: ErrorWrapper?
-    
+    @State private var refreshID = UUID()
     @EnvironmentObject private var persistenceController: PersistenceController
     
     @FetchRequest(sortDescriptors: [.init(\.dateCreated, order: .reverse)])
@@ -33,6 +33,7 @@ struct HomeView: View {
                     }
                     .listRowBackground(Color.customBackground)
                     .listRowSeparator(.hidden)
+                    .id(refreshID) // TODO: See if there is another way to update ui without doing this.
                 }
             }
             .navigationTitle("Projects")
@@ -57,6 +58,9 @@ struct HomeView: View {
             .background(Color.customBackground)
             .navigationDestination(for: Project.self) { project in
                 IssuesListView(project: project)
+                    .onDisappear {
+                        refreshID = UUID()
+                    }
             }
         }
     }

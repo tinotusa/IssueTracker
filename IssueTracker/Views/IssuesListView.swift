@@ -17,6 +17,7 @@ struct IssuesListView: View {
     @State private var issueStatus = Issue.Status.open
     @State private var searchState = SearchState()
     @State private var sortState = SortState()
+    @State private var draftProperties = ProjectProperties()
     
     @FetchRequest(sortDescriptors: [])
     private var issues: FetchedResults<Issue>
@@ -98,7 +99,9 @@ struct IssuesListView: View {
                     TagsEditView()
                         .environment(\.managedObjectContext, viewContext)
                 case .editProject:
-                    EditProjectView(project: project)
+                    EditProjectView(projectProperties: $draftProperties)
+                        .onAppear(perform: setDraftProperties)
+                        .onDisappear(perform: updateProject)
                 }
             }
             .sheetWithIndicator()
@@ -290,6 +293,25 @@ private extension IssuesListView {
         searchState.runSearch(project)
         issues.nsPredicate = searchState.predicate
     }
+    
+    func setDraftProperties() {
+        draftProperties = project.projectProperties
+    }
+    
+    func updateProject() {
+        if draftProperties == project.projectProperties {
+            return
+        }
+        Task {
+            do {
+                try await persistenceController.updateProject(project, projectData: draftProperties)
+                draftProperties = .init()
+            } catch {
+                errorWrapper = .init(error: error, message: "Failed to save project edits.")
+            }
+        }
+    }
+    
 }
 
 struct IssuesView_Previews: PreviewProvider {
