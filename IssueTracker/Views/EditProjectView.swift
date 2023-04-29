@@ -10,6 +10,7 @@ import SwiftUI
 struct EditProjectView: View {
     @Binding var projectProperties: ProjectProperties
     @Environment(\.dismiss) private var dismiss
+    let cancelAction: () -> Void
     
     var body: some View {
         NavigationStack {
@@ -40,7 +41,10 @@ struct EditProjectView: View {
             .navigationTitle("Edit Project")
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
-                    Button("Cancel", role: .cancel, action: dismiss.callAsFunction)
+                    Button("Cancel", role: .cancel) {
+                        cancelAction()
+                        dismiss()
+                    }
                 }
                 
                 ToolbarItem(placement: .primaryAction) {
@@ -55,7 +59,9 @@ struct EditProjectView: View {
 struct EditProjectView_Previews: PreviewProvider {
     static var previews: some View {
         NavigationStack {
-            EditProjectView(projectProperties: .constant(.init(name: "testing", startDate: .now)))
+            EditProjectView(projectProperties: .constant(.init(name: "testing", startDate: .now))) {
+                // No cancel action needed for previews
+            }
         }
     }
 }

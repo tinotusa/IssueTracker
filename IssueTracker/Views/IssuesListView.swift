@@ -92,7 +92,7 @@ struct IssuesListView: View {
                     TagsEditView()
                         .environment(\.managedObjectContext, viewContext)
                 case .editProject:
-                    EditProjectView(projectProperties: $draftProperties)
+                    EditProjectView(projectProperties: $draftProperties, cancelAction: cancelEditProject)
                         .onAppear(perform: setDraftProperties)
                         .onDisappear(perform: updateProject)
                 }
@@ -247,7 +247,7 @@ private extension IssuesListView {
     func changeIssueStatus() {
         showingOpenIssues.toggle()
     }
-                    
+    
     func updateIssuesPredicate(to issueStatus: Bool) {
         let format = "project == %@ AND isOpen == %@"
         issues.nsPredicate = .init(format: format, project, NSNumber(value: issueStatus))
@@ -283,6 +283,10 @@ private extension IssuesListView {
     }
     
     func setDraftProperties() {
+        draftProperties = project.projectProperties
+    }
+    
+    func cancelEditProject() {
         draftProperties = project.projectProperties
     }
     
