@@ -451,6 +451,48 @@
 			path = "Issue detail";
 			sourceTree = "<group>";
 		};
+		217D506E29FD17FB0064FE8A /* Issue */ = {
+			isa = PBXGroup;
+			children = (
+				2179A40429EBEA2300D69C82 /* Issue detail */,
+				21F1DA32295DABB700076D73 /* IssuesListView.swift */,
+				21654BC529605245009C434B /* AddIssueView.swift */,
+			);
+			path = Issue;
+			sourceTree = "<group>";
+		};
+		217D506F29FD180A0064FE8A /* Project */ = {
+			isa = PBXGroup;
+			children = (
+				21E6D2BE295C4DD900BB4AA6 /* AddProjectView.swift */,
+				21FDE756295D80D30006C24A /* EditProjectView.swift */,
+			);
+			path = Project;
+			sourceTree = "<group>";
+		};
+		217D507029FD18140064FE8A /* Tags */ = {
+			isa = PBXGroup;
+			children = (
+				2105DC532962CF33008F940B /* TagsEditView.swift */,
+				211104AA297239DB00FB8CD1 /* EditTagView.swift */,
+			);
+			path = Tags;
+			sourceTree = "<group>";
+		};
+		217D507129FD18280064FE8A /* Screens */ = {
+			isa = PBXGroup;
+			children = (
+				2150C83F295972E0006CD7D2 /* ContentView.swift */,
+				21E6D2B2295BF94800BB4AA6 /* HomeView.swift */,
+				218F93D829C80C3500F9D62A /* EditCommentView.swift */,
+				21009AE829EE6C56009CAF42 /* ErrorView.swift */,
+				217D507029FD18140064FE8A /* Tags */,
+				217D506F29FD180A0064FE8A /* Project */,
+				217D506E29FD17FB0064FE8A /* Issue */,
+			);
+			path = Screens;
+			sourceTree = "<group>";
+		};
 		218A50B92975088000DF29F5 /* MacIssueTracker */ = {
 			isa = PBXGroup;
 			children = (
@@ -590,18 +632,8 @@
 		21E6D2B1295BF89700BB4AA6 /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				2179A40429EBEA2300D69C82 /* Issue detail */,
+				217D507129FD18280064FE8A /* Screens */,
 				21E6D2BB295C4B7900BB4AA6 /* Components */,
-				2150C83F295972E0006CD7D2 /* ContentView.swift */,
-				21E6D2B2295BF94800BB4AA6 /* HomeView.swift */,
-				21E6D2BE295C4DD900BB4AA6 /* AddProjectView.swift */,
-				21FDE756295D80D30006C24A /* EditProjectView.swift */,
-				21F1DA32295DABB700076D73 /* IssuesListView.swift */,
-				21654BC529605245009C434B /* AddIssueView.swift */,
-				2105DC532962CF33008F940B /* TagsEditView.swift */,
-				211104AA297239DB00FB8CD1 /* EditTagView.swift */,
-				218F93D829C80C3500F9D62A /* EditCommentView.swift */,
-				21009AE829EE6C56009CAF42 /* ErrorView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
