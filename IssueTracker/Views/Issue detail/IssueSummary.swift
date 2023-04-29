@@ -24,6 +24,10 @@ struct IssueSummary: View {
             }
             .listRowBackground(Color.customBackground)
         }
+        .safeAreaInset(edge: .bottom) {
+            AddCommentBox(postAction: addComment)
+                .padding(.horizontal)
+        }
         .listStyle(.plain)
         .background(Color.customBackground)
         .toolbarBackground(Color.customBackground)
@@ -34,8 +38,6 @@ struct IssueSummary: View {
         .sheet(item: $issueDetailState) { state in
             Group {
                 switch state {
-                case .showingAddCommentSheet:
-                    AddCommentView(issue: issue)
                 case .showingEditCommentView(let comment):
                     EditCommentView(comment: comment)
                 }
@@ -48,7 +50,6 @@ struct IssueSummary: View {
 // MARK: - Views
 private extension IssueSummary {
     enum IssueDetailState: Hashable, Identifiable {
-        case showingAddCommentSheet
         case showingEditCommentView(comment: Comment)
         
         var id: Self { self }
@@ -75,6 +76,24 @@ private extension IssueSummary {
         .listRowSeparator(.hidden)
     }
     
+    var tagsSection: some View {
+        Section("Tags") {
+            ScrollView(.horizontal, showsIndicators: false) {
+                let tags = issue.tags?.allObjects as? [Tag] ?? []
+                if tags.isEmpty {
+                    Text("No tags")
+                        .foregroundColor(.customSecondary)
+                } else {
+                    HStack {
+                        ForEach(tags) { tag in
+                            TagView(tag: tag)
+                        }
+                    }
+                }
+            }
+        }
+        .listRowSeparator(.hidden)
+    }
     
     var infoSection: some View {
         Section("Info") {
@@ -83,22 +102,6 @@ private extension IssueSummary {
                 HStack {
                     Text("Priority:")
                     Text(issue.wrappedPriority.title)
-                }
-                
-                LabeledInputField("Tags:") {
-                    ScrollView(.horizontal, showsIndicators: false) {
-                        let tags = issue.tags?.allObjects as? [Tag] ?? []
-                        if tags.isEmpty {
-                            Text("No tags")
-                                .foregroundColor(.customSecondary)
-                        } else {
-                            HStack {
-                                ForEach(tags) { tag in
-                                    TagView(tag: tag)
-                                }
-                            }
-                        }
-                    }
                 }
             }
         }
@@ -131,13 +134,21 @@ private extension IssueSummary {
                         }
                     }
             }
-            
-            Button("Add comment") {
-                issueDetailState = .showingAddCommentSheet
-            }
-            .buttonStyle(.borderedProminent)
         }
         .listRowSeparator(.hidden)
+    }
+}
+
+// MARK: - Functions
+private extension IssueSummary {
+    func addComment(_ commentProperties: CommentProperties) {
+        Task {
+            do {
+                try await persistenceController.addComment(commentProperties, to: issue)
+            } catch {
+                errorWrapper = .init(error: error, message: "Failed to add comment.")
+            }
+        }
     }
 }
 

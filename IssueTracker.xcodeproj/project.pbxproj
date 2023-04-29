@@ -24,7 +24,7 @@
 		2132CB6E29C5C76B003D5C12 /* ImageAttachmentPreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2132CB6D29C5C76B003D5C12 /* ImageAttachmentPreview.swift */; };
 		2132CB7429C5CF9A003D5C12 /* ImageAttachmentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2132CB7329C5CF9A003D5C12 /* ImageAttachmentView.swift */; };
 		2132CB7629C5D0FC003D5C12 /* AudioAttachmentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2132CB7529C5D0FC003D5C12 /* AudioAttachmentView.swift */; };
-		213E7A3B29AEF91F00CD3BEF /* AddCommentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 213E7A3A29AEF91F00CD3BEF /* AddCommentView.swift */; };
+		213E7A3B29AEF91F00CD3BEF /* AddCommentBox.swift in Sources */ = {isa = PBXBuildFile; fileRef = 213E7A3A29AEF91F00CD3BEF /* AddCommentBox.swift */; };
 		213EDD992980DA7C00012198 /* IssueTrackerSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 213EDD982980DA7C00012198 /* IssueTrackerSettings.swift */; };
 		213EDD9B29814C9A00012198 /* TagTableColumn.swift in Sources */ = {isa = PBXBuildFile; fileRef = 213EDD9A29814C9A00012198 /* TagTableColumn.swift */; };
 		2141D3C229E6B5A000113CA0 /* IssueProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2141D3C129E6B5A000113CA0 /* IssueProperties.swift */; };
@@ -56,6 +56,7 @@
 		21734A9529764FFB00EB3942 /* IssuesListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21734A9429764FFB00EB3942 /* IssuesListView.swift */; };
 		2179A40329EBCA2700D69C82 /* SheetWithIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2179A40229EBCA2700D69C82 /* SheetWithIndicator.swift */; };
 		2179A40629EBEA3D00D69C82 /* IssueSummary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2179A40529EBEA3D00D69C82 /* IssueSummary.swift */; };
+		217D506D29FD08340064FE8A /* ImageAttachmentsRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 217D506C29FD08340064FE8A /* ImageAttachmentsRow.swift */; };
 		218A50BD2975088000DF29F5 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 218A50BC2975088000DF29F5 /* ContentView.swift */; };
 		218A50BF2975088200DF29F5 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 218A50BE2975088200DF29F5 /* Assets.xcassets */; };
 		218A50C22975088200DF29F5 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 218A50C12975088200DF29F5 /* Preview Assets.xcassets */; };
@@ -165,7 +166,7 @@
 		2132CB6D29C5C76B003D5C12 /* ImageAttachmentPreview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageAttachmentPreview.swift; sourceTree = "<group>"; };
 		2132CB7329C5CF9A003D5C12 /* ImageAttachmentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageAttachmentView.swift; sourceTree = "<group>"; };
 		2132CB7529C5D0FC003D5C12 /* AudioAttachmentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioAttachmentView.swift; sourceTree = "<group>"; };
-		213E7A3A29AEF91F00CD3BEF /* AddCommentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddCommentView.swift; sourceTree = "<group>"; };
+		213E7A3A29AEF91F00CD3BEF /* AddCommentBox.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddCommentBox.swift; sourceTree = "<group>"; };
 		213EDD982980DA7C00012198 /* IssueTrackerSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IssueTrackerSettings.swift; sourceTree = "<group>"; };
 		213EDD9A29814C9A00012198 /* TagTableColumn.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagTableColumn.swift; sourceTree = "<group>"; };
 		2141D3C129E6B5A000113CA0 /* IssueProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IssueProperties.swift; sourceTree = "<group>"; };
@@ -200,6 +201,7 @@
 		21734A9429764FFB00EB3942 /* IssuesListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IssuesListView.swift; sourceTree = "<group>"; };
 		2179A40229EBCA2700D69C82 /* SheetWithIndicator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SheetWithIndicator.swift; sourceTree = "<group>"; };
 		2179A40529EBEA3D00D69C82 /* IssueSummary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IssueSummary.swift; sourceTree = "<group>"; };
+		217D506C29FD08340064FE8A /* ImageAttachmentsRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageAttachmentsRow.swift; sourceTree = "<group>"; };
 		218A50B82975087F00DF29F5 /* MacIssueTracker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MacIssueTracker.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		218A50BC2975088000DF29F5 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		218A50BE2975088200DF29F5 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -416,12 +418,13 @@
 			path = IssueTrackerUITests;
 			sourceTree = "<group>";
 		};
-		21562B9D29F3D949006AB379 /* Add comment view */ = {
+		21562B9D29F3D949006AB379 /* Add comment box */ = {
 			isa = PBXGroup;
 			children = (
-				213E7A3A29AEF91F00CD3BEF /* AddCommentView.swift */,
+				213E7A3A29AEF91F00CD3BEF /* AddCommentBox.swift */,
+				217D506C29FD08340064FE8A /* ImageAttachmentsRow.swift */,
 			);
-			path = "Add comment view";
+			path = "Add comment box";
 			sourceTree = "<group>";
 		};
 		21734A8B29764D7100EB3942 /* Views */ = {
@@ -587,7 +590,6 @@
 		21E6D2B1295BF89700BB4AA6 /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				21562B9D29F3D949006AB379 /* Add comment view */,
 				2179A40429EBEA2300D69C82 /* Issue detail */,
 				21E6D2BB295C4B7900BB4AA6 /* Components */,
 				2150C83F295972E0006CD7D2 /* ContentView.swift */,
@@ -607,6 +609,7 @@
 		21E6D2BB295C4B7900BB4AA6 /* Components */ = {
 			isa = PBXGroup;
 			children = (
+				21562B9D29F3D949006AB379 /* Add comment box */,
 				21E6D2BC295C4B8400BB4AA6 /* CustomTextField.swift */,
 				21E6D2C0295C5B4900BB4AA6 /* ProjectRowView.swift */,
 				21F1DA3C295DBD6500076D73 /* LabeledInputField.swift */,
@@ -852,6 +855,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				21BBEBFB295ECF8B008F237B /* Comment+Extensions.swift in Sources */,
+				217D506D29FD08340064FE8A /* ImageAttachmentsRow.swift in Sources */,
 				2168A62D29CC373D004CF64B /* Issue+Example.swift in Sources */,
 				21BBEBF3295E8465008F237B /* Tag+Extensions.swift in Sources */,
 				2168A63329CC763B004CF64B /* Tag+Example.swift in Sources */,
@@ -899,7 +903,7 @@
 				2168A63129CC75B7004CF64B /* Comment+Example.swift in Sources */,
 				21BBEBF1295E8176008F237B /* TagSelectionView.swift in Sources */,
 				21E6D2BF295C4DD900BB4AA6 /* AddProjectView.swift in Sources */,
-				213E7A3B29AEF91F00CD3BEF /* AddCommentView.swift in Sources */,
+				213E7A3B29AEF91F00CD3BEF /* AddCommentBox.swift in Sources */,
 				21E6D2C1295C5B4900BB4AA6 /* ProjectRowView.swift in Sources */,
 				21009AEB29EE6D8D009CAF42 /* ErrorWrapper.swift in Sources */,
 				21E6D2AB295BD9B500BB4AA6 /* Color+Extensions.swift in Sources */,

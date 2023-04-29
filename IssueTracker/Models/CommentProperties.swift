@@ -34,6 +34,10 @@ struct CommentProperties {
     var canAddComment: Bool  {
         hasValidComment && !isRecordingAudio
     }
+    
+    static var `default`: Self {
+        .init()
+    }
 }
 
 // MARK: - Functions
