@@ -8,11 +8,11 @@
 import SwiftUI
 
 struct IssueSummary: View {
-    let issue: Issue
-    @State private var issueDetailState: IssueDetailState?
+    let issueProperties: IssueProperties
+    let comments: [Comment]
+    let deleteCommentAction: (Comment) -> Void
+    let addCommentAction: (CommentProperties) -> Void
     @State private var errorWrapper: ErrorWrapper?
-    
-    @EnvironmentObject private var persistenceController: PersistenceController
     
     var body: some View {
         List {
@@ -25,7 +25,7 @@ struct IssueSummary: View {
             .listRowBackground(Color.customBackground)
         }
         .safeAreaInset(edge: .bottom) {
-            AddCommentBox(postAction: addComment)
+            AddCommentBox(postAction: addCommentAction)
                 .padding(.horizontal)
         }
         .listStyle(.plain)
@@ -35,38 +35,22 @@ struct IssueSummary: View {
         .sheet(item: $errorWrapper) { error in
             ErrorView(errorWrapper: error)
         }
-        .sheet(item: $issueDetailState) { state in
-            Group {
-                switch state {
-                case .showingEditCommentView(let comment):
-                    EditCommentView(comment: comment)
-                }
-            }
-            .sheetWithIndicator()
-        }
     }
 }
 
 // MARK: - Views
 private extension IssueSummary {
-    enum IssueDetailState: Hashable, Identifiable {
-        case showingEditCommentView(comment: Comment)
-        
-        var id: Self { self }
-    }
-    
     var titleSection: some View {
         Section("Title") {
-            Text(issue.wrappedName)
-                .headerStyle()
-                .listRowSeparator(.hidden)
+            Text(issueProperties.name)
         }
+        .listRowSeparator(.hidden)
     }
     
     var descriptionSection: some View {
         Section("Description") {
-            if !issue.wrappedIssueDescription.isEmpty {
-                Text(issue.wrappedIssueDescription)
+            if !issueProperties.issueDescription.isEmpty {
+                Text(issueProperties.issueDescription)
                     .padding(.bottom)
             } else {
                 Text("No Description")
@@ -79,13 +63,13 @@ private extension IssueSummary {
     var tagsSection: some View {
         Section("Tags") {
             ScrollView(.horizontal, showsIndicators: false) {
-                let tags = issue.tags?.allObjects as? [Tag] ?? []
+                let tags = issueProperties.tags
                 if tags.isEmpty {
                     Text("No tags")
                         .foregroundColor(.customSecondary)
                 } else {
                     HStack {
-                        ForEach(tags) { tag in
+                        ForEach(Array(tags)) { tag in
                             TagView(tag: tag)
                         }
                     }
@@ -98,10 +82,10 @@ private extension IssueSummary {
     var infoSection: some View {
         Section("Info") {
             VStack(alignment: .leading) {
-                Text("Created: \(issue.wrappedDateCreated.formatted(date: .abbreviated, time: .omitted))")
+                Text("Created: \(issueProperties.dateCreated.formatted(date: .abbreviated, time: .omitted))")
                 HStack {
                     Text("Priority:")
-                    Text(issue.wrappedPriority.title)
+                    Text(issueProperties.priority.title)
                 }
             }
         }
@@ -110,25 +94,11 @@ private extension IssueSummary {
     
     var commentsSection: some View {
         Section("Comments") {
-            ForEach(issue.sortedComments) { comment in
-                CommentBoxView(comment: comment, issue: issue)
-                    .swipeActions(edge: .leading) {
-                        Button {
-                            issueDetailState = .showingEditCommentView(comment: comment)
-                        } label: {
-                            Label("Edit", systemImage: SFSymbol.rectangleAndPencilAndEllipsis)
-                        }
-                        .tint(.blue)
-                    }
+            ForEach(comments) { comment in
+                CommentBoxView(comment: comment.wrappedComment, attachments: comment.sortedAttachments)
                     .swipeActions {
                         Button(role: .destructive) {
-                            Task {
-                                do {
-                                    try await persistenceController.deleteObject(comment)
-                                } catch {
-                                    errorWrapper = .init(error: error, message: "Failed to delete comment.")
-                                }
-                            }
+                            deleteCommentAction(comment)
                         } label: {
                             Label("Delete", systemImage: SFSymbol.trash)
                         }
@@ -139,21 +109,13 @@ private extension IssueSummary {
     }
 }
 
-// MARK: - Functions
-private extension IssueSummary {
-    func addComment(_ commentProperties: CommentProperties) {
-        Task {
-            do {
-                try await persistenceController.addComment(commentProperties, to: issue)
-            } catch {
-                errorWrapper = .init(error: error, message: "Failed to add comment.")
-            }
-        }
-    }
-}
-
 struct IssueSummary_Previews: PreviewProvider {
     static var previews: some View {
-        IssueSummary(issue: .example)
+        IssueSummary(
+            issueProperties: .default,
+            comments: [],
+            deleteCommentAction: { _ in },
+            addCommentAction: { _ in }
+        )
     }
 }

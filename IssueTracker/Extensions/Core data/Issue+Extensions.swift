@@ -147,6 +147,13 @@ extension Issue {
     }
     
     var issueProperties: IssueProperties {
-        .init(name: wrappedName, issueDescription: wrappedIssueDescription, priority: wrappedPriority, tags: wrappedTags, isOpen: isOpen)
+        IssueProperties.init(
+            name: wrappedName,
+            issueDescription: wrappedIssueDescription,
+            priority: wrappedPriority,
+            tags: wrappedTags,
+            isOpen: isOpen,
+            dateCreated: wrappedDateCreated
+        )
     }
 }

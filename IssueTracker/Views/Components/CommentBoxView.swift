@@ -10,18 +10,18 @@ import SwiftUI
 struct CommentBoxView: View {
     @State private var showingAttachments = false
     
-    @ObservedObject private(set) var comment: Comment
-    @ObservedObject private(set) var issue: Issue
+    let comment: String
+    let attachments: [Attachment]
     
     @Environment(\.managedObjectContext) private var viewContext
     
     var body: some View {
         VStack(alignment: .leading) {
-            Text(comment.wrappedComment)
+            Text(comment)
             
-            if comment.hasAttachments {
+            if !attachments.isEmpty {
                 HStack {
-                    Text("^[\(comment.wrappedAttachments.count) Attachment](inflect: true)")
+                    Text("^[\(attachments.count) Attachment](inflect: true)")
                         .foregroundColor(.secondary)
                     Button(showingAttachments ? "Hide" : "Show") {
                         withAnimation {
@@ -35,7 +35,7 @@ struct CommentBoxView: View {
             if showingAttachments {
                 ScrollView(.horizontal) {
                     HStack {
-                        ForEach(comment.sortedAttachments) { attachment in
+                        ForEach(attachments) { attachment in
                             let attachmentType = AttachmentType(rawValue: attachment.type)!
                             let url = attachment.assetURL!
                             switch attachmentType {
@@ -50,8 +50,9 @@ struct CommentBoxView: View {
                     }
                 }
             }
-            Text(comment.wrappedDateCreated.formatted(date: .abbreviated, time: .omitted))
-                .footerStyle()
+            // TODO: either add date property or add comment properties struct
+//            Text(comment.wrappedDateCreated.formatted(date: .abbreviated, time: .omitted))
+//                .footerStyle()
         }
         .padding()
         .background(Color.popup)
@@ -62,8 +63,8 @@ struct CommentBoxView: View {
 struct CommentBoxView_Previews: PreviewProvider {
     static var previews: some View {
         CommentBoxView(
-            comment: .example,
-            issue: .example
+            comment: "Some test comment",
+            attachments: []
         )
     }
 }

@@ -30,14 +30,19 @@ struct IssueDetail: View {
                             .sheetWithIndicator()
                     }
             } else {
-                IssueSummary(issue: issue)
-                    .toolbar {
-                        toolbarItems
-                    }
-                    .navigationDestination(for: URL.self) { imageURL in
-                        ImageDetailView(url: imageURL)
-                    }
-                    .id(refreshID)
+                IssueSummary(
+                    issueProperties: issue.issueProperties,
+                    comments: issue.sortedComments,
+                    deleteCommentAction: deleteComment,
+                    addCommentAction: addComment
+                )
+                .toolbar {
+                    toolbarItems
+                }
+                .navigationDestination(for: URL.self) { imageURL in
+                    ImageDetailView(url: imageURL)
+                }
+                .id(refreshID)
             }
         }
         .toolbar {
@@ -69,6 +74,26 @@ private extension IssueDetail {
     func cancel() {
         draftIssueProperties = issue.issueProperties
         editMode?.wrappedValue = .inactive
+    }
+    
+    func addComment(_ commentProperties: CommentProperties) {
+        Task {
+            do {
+                try await persistenceController.addComment(commentProperties, to: issue)
+            } catch {
+                errorWrapper = .init(error: error, message: "Failed to add comment")
+            }
+        }
+    }
+    
+    func deleteComment(_ comment: Comment) {
+        Task {
+            do {
+                try await persistenceController.deleteObject(comment)
+            } catch {
+                errorWrapper = .init(error: error, message: "Failed to delete comment.")
+            }
+        }
     }
     
     func saveEdits() {
