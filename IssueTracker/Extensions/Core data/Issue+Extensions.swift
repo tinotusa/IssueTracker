@@ -27,7 +27,6 @@ extension Issue {
     public override func awakeFromInsert() {
         self.id = UUID()
         self.dateCreated = .now
-        self.wrappedStatus = .open
         self.isOpen = true
     }
 }
@@ -101,16 +100,6 @@ extension Issue {
         set { self.priority = newValue.rawValue }
     }
     
-    var wrappedStatus: Status {
-        get {
-            if let status = status {
-                return Status(rawValue: status) ?? Status.open
-            }
-            return Status.open
-        }
-        set { self.status = newValue.rawValue }
-    }
-    
     var wrappedComments: [Comment] {
         get { self.comments?.allObjects as? [Comment] ?? [] }
         set { self.comments = NSSet(array: newValue) }
@@ -123,14 +112,6 @@ extension Issue {
     
     var sortedComments: [Comment] {
         wrappedComments.sorted { $0.wrappedDateCreated < $1.wrappedDateCreated }
-    }
-    
-    /// A boolean value indicating whether the issue's status is open.
-    var isOpenStatus: Bool {
-        guard let status, let status = Status(rawValue: status), status == .open else {
-            return false
-        }
-        return status == .open
     }
 }
 

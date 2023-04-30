@@ -73,20 +73,6 @@ extension PersistenceController {
         return try await save()
     }
     
-    /// Changes the issues status to the given status.
-    /// - Parameters:
-    ///   - issue: The issue to change.
-    ///   - status: The status to set the issue to.
-    @MainActor
-    func setIssueStatus(for issue: Issue, to status: Issue.Status) async throws {
-        if issue.wrappedStatus == status {
-            return
-        }
-        objectWillChange.send()
-        issue.wrappedStatus = status
-        return try await save()
-    }
-    
     /// Copies values from the source issue to the destination issue.
     /// - Parameters:
     ///   - source: The issue to copy from.
