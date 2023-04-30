@@ -14,6 +14,7 @@ struct AddCommentBox: View {
     @State private var showingPhotoPicker = false
     @State private var commentProperties = CommentProperties()
     @StateObject private var audioRecorder = AudioRecorder()
+    @FocusState private var isFocused: Bool
     
     var body: some View {
         VStack(alignment: .leading) {
@@ -31,10 +32,10 @@ struct AddCommentBox: View {
             }
             
             HStack {
-                TextField("Comment", text: $commentProperties.comment, axis: .vertical)
+                TextField("Add your comment here", text: $commentProperties.comment, axis: .vertical)
                     .lineLimit(2...4)
                     .textFieldStyle(.roundedBorder)
-                
+                    .focused($isFocused)
                 Button("Post") {
                     postAction(commentProperties)
                     commentProperties = .default
@@ -46,6 +47,14 @@ struct AddCommentBox: View {
             }
         }
         .onChange(of: commentProperties.photoPickerItems, perform: loadPhotos)
+        .toolbar {
+            ToolbarItem(placement: .keyboard) {
+                Button("Done") {
+                    isFocused = false
+                }
+                .frame(maxWidth: .infinity, alignment: .trailing)
+            }
+        }
     }
 }
 
