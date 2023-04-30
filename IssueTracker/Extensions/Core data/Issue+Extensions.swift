@@ -147,11 +147,13 @@ extension Issue {
     }
     
     var issueProperties: IssueProperties {
-        IssueProperties.init(
+        let sortedTags = wrappedTags.sorted { $0.wrappedName < $1.wrappedName }
+        return IssueProperties.init(
             name: wrappedName,
             issueDescription: wrappedIssueDescription,
             priority: wrappedPriority,
             tags: wrappedTags,
+            sortedTags: sortedTags,
             isOpen: isOpen,
             dateCreated: wrappedDateCreated
         )

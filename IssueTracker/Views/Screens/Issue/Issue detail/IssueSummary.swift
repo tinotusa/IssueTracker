@@ -19,6 +19,7 @@ struct IssueSummary: View {
             Group {
                 titleSection
                 descriptionSection
+                tagsSection
                 infoSection
                 commentsSection
             }
@@ -63,13 +64,13 @@ private extension IssueSummary {
     var tagsSection: some View {
         Section("Tags") {
             ScrollView(.horizontal, showsIndicators: false) {
-                let tags = issueProperties.tags
+                let tags = issueProperties.sortedTags
                 if tags.isEmpty {
                     Text("No tags")
                         .foregroundColor(.customSecondary)
                 } else {
                     HStack {
-                        ForEach(Array(tags)) { tag in
+                        ForEach(tags) { tag in
                             TagView(tag: tag)
                         }
                     }

@@ -30,14 +30,14 @@ struct IssueRowView: View {
                         .footerStyle()
                 }
                 
-                if let tags = issueProperties.tags {
+                if let tags = issueProperties.sortedTags {
                     if tags.isEmpty {
                         Text("No tags")
                             .footerStyle()
                     } else {
                         HStack {
                             Text("Tags: ")
-                            ForEach(Array(tags)) { tag in
+                            ForEach(tags) { tag in
                                 Text(tag.wrappedName)
                             }
                         }

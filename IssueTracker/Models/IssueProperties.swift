@@ -17,6 +17,8 @@ struct IssueProperties: Equatable, CustomStringConvertible {
     var priority: Issue.Priority = .low
     /// The tags of the issue.
     var tags: Set<Tag> = []
+    /// The tags sorted in alphabetical order.
+    var sortedTags: [Tag] = []
     /// A boolean value indicating whether or not the issue is open.
     var isOpen: Bool = false
     /// The date the issue was created.
