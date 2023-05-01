@@ -98,10 +98,3 @@ extension CommentProperties {
         return attachmentTransferables
     }
 }
-
-@MainActor
-extension Binding where Value == CommentProperties {
-    func loadImages() async throws {
-        try await wrappedValue.loadImages()
-    }
-}

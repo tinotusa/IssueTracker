@@ -41,74 +41,85 @@ extension CloudKitManager {
         try await CKContainer.default().accountStatus()
     }
     
-    func deleteComments(_ comments: [Comment]) async {
+    func deleteComments(_ comments: [Comment]) async throws {
         logger.debug("Deleting \(comments.count) comments")
-        await withTaskGroup(of: Void.self) { group in
+        await withThrowingTaskGroup(of: Void.self) { group in
             for comment in comments {
                 group.addTask {
-                    await deleteComment(comment)
+                    try await deleteComment(comment)
                 }
             }
         }
     }
     
     func deleteIssues(_ issues: [Issue]) async {
-        await withTaskGroup(of: Void.self) { group in
+        await withThrowingTaskGroup(of: Void.self) { group in
             for issue in issues {
                 group.addTask {
-                    await deleteIssue(issue)
+                    try await deleteIssue(issue)
                 }
             }
         }
     }
     
-    func deleteIssue(_ issue: Issue) async {
-        await deleteComments(issue.wrappedComments)
+    func deleteIssue(_ issue: Issue) async throws {
+        try await deleteComments(issue.wrappedComments)
     }
     
-    func deleteComment(_ comment: Comment) async {
+    func deleteComment(_ comment: Comment) async throws {
         logger.debug("Deleting comment with id: \(comment.wrappedId)")
         logger.debug("\(comment.wrappedAttachments.count) attachment")
-        await withTaskGroup(of: Void.self) { group in
+        try await withThrowingTaskGroup(of: Void.self) { group in
             for attachment in comment.wrappedAttachments {
                 guard let assetURL = attachment.assetURL else {
                     logger.debug("No asset url for attachment with id: \(attachment.wrappedId)")
                     continue
                 }
                 group.addTask {
-                    await deleteAttachment(withURL: assetURL)
+                    try await deleteAttachment(withURL: assetURL)
                 }
+            }
+            
+            for try await _ in group {
+                
             }
         }
     }
     
-    func deleteAttachment(withURL assetURL: URL) async {
+    func deleteAttachment(withURL assetURL: URL) async throws {
         logger.debug("Deleting record with asset url: \(assetURL)")
         let database = CKContainer.default().privateCloudDatabase
         let query = CKQuery(recordType: "Attachment", predicate: .init(format: "attachmentURL == %@", assetURL.absoluteString))
-        do {
-            let records = try await database.records(matching: query)
-            for (id, result) in records.matchResults {
-                switch result {
-                case .success(let record):
-                    // TODO: is this necessary?
-                    record["attachment"] = nil // set the asset to nil. which will be removed lazily later.
-                case .failure(let error):
-                    logger.debug("Error trying to set record: \(id) asset url to nil. \(error)")
-                }
+        let records = try await database.records(matching: query)
+        for (id, result) in records.matchResults {
+            switch result {
+            case .success(let record):
+                // TODO: is this necessary?
+                record["attachment"] = nil // set the asset to nil. which will be removed lazily later.
+            case .failure(let error):
+                logger.debug("Error trying to set record: \(id) asset url to nil. \(error)")
             }
-            
-            let recordIDs = records.matchResults.compactMap( { recordID, _ in
-                recordID
-            })
-            
+        }
+        
+        let recordIDs = records.matchResults.compactMap( { recordID, _ in
+            recordID
+        })
+        
+        try await deleteRecords(recordIDs)
+    }
+    
+    private func deleteRecords(_ recordIDs: [CKRecord.ID]) async throws {
+        try await withCheckedThrowingContinuation { continuation in
+            let database = CKContainer.default().privateCloudDatabase
             let deleteOperation = CKModifyRecordsOperation(recordIDsToDelete: recordIDs)
             deleteOperation.modifyRecordsResultBlock = { result in
                 switch result {
                 case .success:
                     logger.debug("Successfully completed the operation")
+                    continuation.resume()
                 case .failure(let error):
                     logger.debug("Failed to complete the delete operation. \(error)")
+                    continuation.resume(throwing: error)
                 }
             }
             
@@ -121,8 +132,6 @@ extension CloudKitManager {
                 }
             }
             database.add(deleteOperation)
-        } catch {
-            logger.debug("something went wrong. \(error)")
         }
     }
 }

@@ -80,6 +80,7 @@ private extension IssueDetail {
         Task {
             do {
                 try await persistenceController.addComment(commentProperties, to: issue)
+                commentProperties.reset()
             } catch {
                 errorWrapper = .init(error: error, message: "Failed to add comment")
             }

@@ -40,7 +40,6 @@ struct AddCommentBox: View {
                     .focused($isFocused)
                 Button("Post") {
                     postAction(commentProperties)
-                    commentProperties.reset()
                 }
                 .disabled(!commentProperties.hasValidComment)
             }

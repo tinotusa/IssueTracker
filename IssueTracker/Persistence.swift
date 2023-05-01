@@ -114,8 +114,10 @@ extension PersistenceController {
     @MainActor
     func addComment(_ commentProperties: CommentProperties, to issue: Issue) async throws {
         let comment = Comment(comment: commentProperties.comment, context: viewContext)
+        
         let attachmentTransferables = try await commentProperties.getAttachmentsTransferables()
         logger.debug("Adding comment with id: \(comment.wrappedId)")
+        logger.debug("comment: \(comment.wrappedComment)")
         objectWillChange.send()
         
         var attachments = [Attachment]()
@@ -233,7 +235,7 @@ extension PersistenceController {
                         continue
                     }
                     
-                    await cloudKitManager.deleteAttachment(withURL: assetURL)
+                    try await cloudKitManager.deleteAttachment(withURL: assetURL)
                 }
             }
         } else if let project = object as? Project {
@@ -250,7 +252,7 @@ extension PersistenceController {
         } else if let comment = object as? Comment {
             logger.debug("comment \(comment.wrappedId) has \(comment.wrappedAttachments.count) attachments")
             
-            await cloudKitManager.deleteComment(comment)
+            try await cloudKitManager.deleteComment(comment)
         }
         
         viewContext.delete(object)
