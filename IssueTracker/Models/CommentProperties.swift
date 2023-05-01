@@ -22,8 +22,14 @@ private actor ImageAttachmentLoader {
                     let data = try await photo.loadTransferable(type: Data.self)
                     guard let data else { return nil }
                     let uiImage = UIImage(data: data)
-                    guard let uiImage else { return nil }
-                    let image = Image(uiImage: uiImage)
+                    guard let uiImage,
+                          let compressedData = uiImage.jpegData(compressionQuality: 0.5),
+                          let compressedUIImage = UIImage(data: compressedData)
+                    else {
+                        return nil
+                    }
+                    
+                    let image = Image(uiImage: compressedUIImage)
                     return image
                 }
             }
