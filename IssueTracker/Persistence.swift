@@ -117,7 +117,6 @@ extension PersistenceController {
         
         let attachmentTransferables = try await commentProperties.getAttachmentsTransferables()
         logger.debug("Adding comment with id: \(comment.wrappedId)")
-        logger.debug("comment: \(comment.wrappedComment)")
         objectWillChange.send()
         
         var attachments = [Attachment]()
@@ -167,22 +166,30 @@ extension PersistenceController {
         logger.debug("Added \(attachments.count) attachments to comment")
         comment.addToAttachments(.init(array: attachments))
         issue.addToComments(comment)
+        
         // save to coredata and cloudkit
+        try await saveCloudKit(recordsToSave: records)
         
-        
-        let database = CKContainer.default().privateCloudDatabase
-        let modifyOperation = CKModifyRecordsOperation(recordsToSave: records)
-        modifyOperation.qualityOfService = .userInitiated
-        modifyOperation.modifyRecordsResultBlock = { [weak self] result in
-            switch result {
-            case .success:
-                self?.logger.debug("Successfully saved records")
-            case .failure(let error):
-                self?.logger.error("Failed to save attachment records. \(error)")
-            }
-        }
-        database.add(modifyOperation)
         return try await save()
+    }
+    
+    private func saveCloudKit(recordsToSave records: [CKRecord]) async throws {
+        try await withCheckedThrowingContinuation { continuation in
+            let database = CKContainer.default().privateCloudDatabase
+            let modifyOperation = CKModifyRecordsOperation(recordsToSave: records)
+            modifyOperation.qualityOfService = .userInitiated
+            modifyOperation.modifyRecordsResultBlock = { [weak self] result in
+                switch result {
+                case .success:
+                    self?.logger.debug("Successfully saved records")
+                    continuation.resume()
+                case .failure(let error):
+                    self?.logger.error("Failed to save attachment records. \(error)")
+                    continuation.resume(throwing: error)
+                }
+            }
+            database.add(modifyOperation)
+        }
     }
     
     @MainActor
@@ -245,7 +252,7 @@ extension PersistenceController {
             do {
                 let issues = try PersistenceController.shared.viewContext.fetch(request)
                 print("\(issues.count) to be deleted.")
-                await cloudKitManager.deleteIssues(issues)
+                try await cloudKitManager.deleteIssues(issues)
             } catch {
                 logger.error("Failed to get issue. \(error)")
             }

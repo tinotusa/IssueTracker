@@ -43,22 +43,24 @@ extension CloudKitManager {
     
     func deleteComments(_ comments: [Comment]) async throws {
         logger.debug("Deleting \(comments.count) comments")
-        await withThrowingTaskGroup(of: Void.self) { group in
+        try await withThrowingTaskGroup(of: Void.self) { group in
             for comment in comments {
                 group.addTask {
                     try await deleteComment(comment)
                 }
             }
+            try await group.next()
         }
     }
     
-    func deleteIssues(_ issues: [Issue]) async {
-        await withThrowingTaskGroup(of: Void.self) { group in
+    func deleteIssues(_ issues: [Issue]) async throws {
+        try await withThrowingTaskGroup(of: Void.self) { group in
             for issue in issues {
                 group.addTask {
                     try await deleteIssue(issue)
                 }
             }
+            try await group.next()
         }
     }
     
@@ -80,9 +82,7 @@ extension CloudKitManager {
                 }
             }
             
-            for try await _ in group {
-                
-            }
+            try await group.next()
         }
     }
     
