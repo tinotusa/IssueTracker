@@ -27,7 +27,6 @@ extension Issue {
     public override func awakeFromInsert() {
         self.id = UUID()
         self.dateCreated = .now
-        self.isOpen = true
     }
 }
 
@@ -124,7 +123,6 @@ extension Issue {
         self.issueDescription = issueProperties.issueDescription
         self.tags = NSSet(set: issueProperties.tags)
         self.priority = issueProperties.priority.rawValue
-        self.isOpen = issueProperties.isOpen
     }
     
     var issueProperties: IssueProperties {
@@ -135,7 +133,6 @@ extension Issue {
             priority: wrappedPriority,
             tags: wrappedTags,
             sortedTags: sortedTags,
-            isOpen: isOpen,
             dateCreated: wrappedDateCreated
         )
     }

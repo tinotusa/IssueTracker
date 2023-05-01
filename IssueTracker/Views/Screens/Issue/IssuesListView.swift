@@ -14,7 +14,6 @@ struct IssuesListView: View {
     @State private var sheetState: SheetState?
     @State private var showingDeleteProjectConfirmation = false
     @State private var errorWrapper: ErrorWrapper?
-    @State private var showingOpenIssues = true
     @State private var searchState = SearchState()
     @State private var sortState = SortState()
     @State private var draftProperties = ProjectProperties()
@@ -31,7 +30,7 @@ struct IssuesListView: View {
         _project = ObservedObject(wrappedValue: project)
         _issues = FetchRequest(
             sortDescriptors: [.init(\.dateCreated, order: .forward)],
-            predicate: NSPredicate(format: "(project == %@) AND (isOpen == true)",  project)
+            predicate: NSPredicate(format: "project == %@",  project)
         )
     }
     
@@ -45,10 +44,7 @@ struct IssuesListView: View {
             } else {
                 ForEach(issues) { issue in
                     NavigationLink(value: issue) {
-                        IssueRowView(issueProperties: issue.issueProperties) {
-                            print("this happened")
-                            changeIssueStatus(issue: issue)
-                        }
+                        IssueRowView(issueProperties: issue.issueProperties)
                     }
                     .listRowBackground(Color.customBackground)
                 }
@@ -78,7 +74,6 @@ struct IssuesListView: View {
         .onChange(of: searchState.searchIssueStatus) { _ in
             handleChange()
         }
-        .onChange(of: showingOpenIssues, perform: updateIssuesPredicate)
         .navigationTitle("Issues")
         .toolbarBackground(Color.customBackground, for: .navigationBar, .bottomBar) // this doesn't seem to change the bottom bar at all.
         .background(Color.customBackground)
@@ -189,9 +184,6 @@ private extension IssuesListView {
                 Button(role: .destructive, action: showDeleteConfirmation) {
                     Label("Delete project", systemImage: SFSymbol.trash)
                 }
-                Button(action: changeIssueStatus) {
-                    Label(openIssueLabel, systemImage: issueIcon)
-                }
             } label: {
                 Label("Options", systemImage: SFSymbol.ellipsisCircle)
             }
@@ -204,17 +196,6 @@ private extension IssuesListView {
             }
             .frame(maxWidth: .infinity, alignment: .trailing)
         }
-    }
-}
-
-// MARK: - Computed properties
-private extension IssuesListView {
-    var openIssueLabel: String {
-        showingOpenIssues ? "Show closed issues" : "Show open issues"
-    }
-    
-    var issueIcon: String {
-        showingOpenIssues ? SFSymbol.envelope : SFSymbol.envelopeOpen
     }
 }
 
@@ -242,15 +223,6 @@ private extension IssuesListView {
     
     func showEditTagsView() {
         sheetState = .editTags
-    }
-    
-    func changeIssueStatus() {
-        showingOpenIssues.toggle()
-    }
-    
-    func updateIssuesPredicate(to issueStatus: Bool) {
-        let format = "project == %@ AND isOpen == %@"
-        issues.nsPredicate = .init(format: format, project, NSNumber(value: issueStatus))
     }
     
     func deleteProject() {
@@ -300,16 +272,6 @@ private extension IssuesListView {
                 draftProperties = .init()
             } catch {
                 errorWrapper = .init(error: error, message: "Failed to save project edits.")
-            }
-        }
-    }
-    
-    func changeIssueStatus(issue: Issue) {
-        Task {
-            do {
-                try await persistenceController.toggleIssueStatus(for: issue)
-            } catch {
-                errorWrapper = .init(error: error, message: "Failed to change issue status.")
             }
         }
     }

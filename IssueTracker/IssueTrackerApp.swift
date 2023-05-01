@@ -54,13 +54,6 @@ struct IssueTrackerCommands: Commands {
             .keyboardShortcut("e")
             .disabled(selectedIssue == nil)
             
-            if let selectedIssueKey = selectedIssue, let selectedIssue = selectedIssueKey {
-                Button("\(selectedIssue.isOpen ? "Close" : "Open") issue") {
-                    setIssueStatusAction?()
-                }
-                .keyboardShortcut(selectedIssue.isOpen ? "c" : "o", modifiers: [.command, .shift])
-            }
-            
             Divider()
             Button("Delete issue", role: .destructive) {
                 if let selectedIssueKey = selectedIssue, let selectedIssue = selectedIssueKey {

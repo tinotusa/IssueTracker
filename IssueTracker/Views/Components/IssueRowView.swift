@@ -9,13 +9,9 @@ import SwiftUI
 
 struct IssueRowView: View {
     var issueProperties: IssueProperties
-    @State private var isOpen = false
-    let closeIssueAction: () -> Void
     
     var body: some View {
         HStack {
-            Toggle("Issue status", isOn: $isOpen)
-                .toggleStyle(.radioButton)
             VStack(alignment: .leading) {
                 Text(issueProperties.name)
                     .font(.title3)
@@ -46,20 +42,11 @@ struct IssueRowView: View {
                 }
             }
         }
-        .onChange(of: isOpen, perform: changeIssueStatus)
-    }
-}
-
-private extension IssueRowView {
-    func changeIssueStatus(isOpen: Bool) {
-        closeIssueAction()
     }
 }
 
 struct IssueRowView_Previews: PreviewProvider {
     static var previews: some View {
-        IssueRowView(issueProperties: .init(name: "testing", issueDescription: "some description", priority: .low, tags: [])) {
-            
-        }
+        IssueRowView(issueProperties: .init(name: "testing", issueDescription: "some description", priority: .low, tags: []))
     }
 }

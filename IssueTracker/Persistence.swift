@@ -65,14 +65,6 @@ extension PersistenceController {
         return try await save()
     }
     
-    /// Toggles the issues status.
-    /// - Parameter issue: The issue to toggle.
-    @MainActor
-    func toggleIssueStatus(for issue: Issue) async throws {
-        issue.isOpen.toggle()
-        return try await save()
-    }
-    
     /// Copies values from the source issue to the destination issue.
     /// - Parameters:
     ///   - source: The issue to copy from.

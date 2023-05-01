@@ -22,7 +22,6 @@ struct EditIssueView: View {
                 nameSection
                 descriptionSection
                 prioritySection
-                statusSection
                 tagsSection
             }
             .listRowSeparator(.hidden)
@@ -77,18 +76,6 @@ private extension EditIssueView {
                 ForEach(Issue.Priority.allCases) { priority in
                     Text(priority.title)
                 }
-            }
-            .pickerStyle(.segmented)
-        }
-    }
-    
-    var statusSection: some View {
-        Section("Status") {
-            Picker("Issue status", selection: $issueProperties.isOpen) {
-                Text("Open")
-                    .tag(true)
-                Text("Closed")
-                    .tag(false)
             }
             .pickerStyle(.segmented)
         }

@@ -19,13 +19,11 @@ struct IssueProperties: Equatable, CustomStringConvertible {
     var tags: Set<Tag> = []
     /// The tags sorted in alphabetical order.
     var sortedTags: [Tag] = []
-    /// A boolean value indicating whether or not the issue is open.
-    var isOpen: Bool = false
     /// The date the issue was created.
     var dateCreated: Date = .now
     
     var description: String {
-        "name: \(name), issueDescription: \(issueDescription), priority: \(priority),  tags: \(tags), isOpen: \(isOpen)"
+        "name: \(name), issueDescription: \(issueDescription), priority: \(priority),  tags: \(tags)"
     }
 }
 
