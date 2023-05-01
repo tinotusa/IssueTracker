@@ -9,25 +9,35 @@ import SwiftUI
 
 struct ImageAttachmentsRow: View {
     let images: [Image]
-    let deleteAction: (Int) -> Void
     
     var body: some View {
         ScrollView(.horizontal) {
             HStack {
                 ForEach(0 ..< images.count, id: \.self) { index in
-                    ImageAttachmentPreview(image: images[index]) {
-                        deleteAction(index)
-                    }
+                    previewImage(images[index])
                 }
             }
         }
     }
 }
 
+private extension ImageAttachmentsRow {
+    enum Constants {
+        static let size = 100.0
+        static let cornerRadius = 10.0
+    }
+    
+    func previewImage(_ image: Image) -> some View {
+        image
+            .resizable()
+            .scaledToFill()
+            .frame(width: Constants.size, height: Constants.size)
+            .cornerRadius(Constants.cornerRadius)
+    }
+}
+
 struct ImageAttachmentsRow_Previews: PreviewProvider {
     static var previews: some View {
-        ImageAttachmentsRow(images: []) { _ in
-            // no action for preview
-        }
+        ImageAttachmentsRow(images: [])
     }
 }

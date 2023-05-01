@@ -10,17 +10,19 @@ import PhotosUI
 
 struct AddCommentBox: View {
     let postAction: (CommentProperties) -> Void
+    
     @State private var errorWrapper: ErrorWrapper?
     @State private var showingPhotoPicker = false
-    @State private var commentProperties = CommentProperties()
+    @State private var showingAudioControls = false
+    
+    @StateObject private var commentProperties = CommentProperties()
     @StateObject private var audioRecorder = AudioRecorder()
+    
     @FocusState private var isFocused: Bool
     
     var body: some View {
         VStack(alignment: .leading) {
-            ImageAttachmentsRow(images: commentProperties.images) { index in
-                commentProperties.deleteImage(at: index)
-            }
+            ImageAttachmentsRow(images: commentProperties.images)
             
             if !audioRecorder.isRecording, let url = audioRecorder.url {
                 AudioAttachmentPreview(url: url)
@@ -38,15 +40,23 @@ struct AddCommentBox: View {
                     .focused($isFocused)
                 Button("Post") {
                     postAction(commentProperties)
-                    commentProperties = .default
+                    commentProperties.reset()
                 }
-                .disabled(!commentProperties.canAddComment)
+                .disabled(!commentProperties.hasValidComment)
             }
-            if commentProperties.isRecordingAudio {
+            if showingAudioControls {
                 audioRecordingControlButtons
             }
         }
-        .onChange(of: commentProperties.photoPickerItems, perform: loadPhotos)
+        .onChange(of: commentProperties.photoPickerItems) { _ in
+            Task {
+                do {
+                    try await commentProperties.loadImages()
+                } catch {
+                    errorWrapper = .init(error: error, message: "Failed to load images")
+                }
+            }
+        }
         .toolbar {
             ToolbarItem(placement: .keyboard) {
                 Button("Done") {
@@ -73,9 +83,7 @@ private extension AddCommentBox {
     
     var audioRecorderButton: some View {
         Button {
-            withAnimation {
-                commentProperties.toggleRecording()
-            }
+            showingAudioControls.toggle()
         } label: {
             Label("Add audio attachment", systemImage: SFSymbol.micFill)
         }
@@ -109,19 +117,6 @@ private extension AddCommentBox {
             .disabled(audioRecorder.isRecording)
         }
         .labelStyle(.iconOnly)
-    }
-}
-
-// MARK: Functions
-private extension AddCommentBox {
-    func loadPhotos(from photoPickerItems: [PhotosPickerItem]) {
-        Task {
-            do {
-                try await $commentProperties.loadImages()
-            } catch {
-                errorWrapper = .init(error: error, message: "Failed to load photo.")
-            }
-        }
     }
 }
 

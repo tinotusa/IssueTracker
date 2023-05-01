@@ -9,54 +9,78 @@ import SwiftUI
 import PhotosUI
 import os
 
-/// A struct that encapsulates the properties of a `Comment`.
-struct CommentProperties {
-    /// The comment text of the `Comment`.
-    var comment = ""
-    var photoPickerItems = [PhotosPickerItem]()
-    /// The image attachments of the Comment.
-    var images: [Image] = []
-    /// The audio attachment of the Comment.
-    var audioURL: URL? = nil
-    /// A boolean value indicating whether or no audio is being recorded
-    var isRecordingAudio = false
+private actor ImageAttachmentLoader {
+    private let logger = Logger(
+        subsystem: Bundle.main.bundleIdentifier!,
+        category: String(describing: ImageAttachmentLoader.self)
+    )
+    
+    func loadImages(_ photoPickerItems: [PhotosPickerItem]) async throws -> [Image] {
+        try await withThrowingTaskGroup(of: Image?.self) { group in
+            for photo in photoPickerItems {
+                group.addTask {
+                    let data = try await photo.loadTransferable(type: Data.self)
+                    guard let data else { return nil }
+                    let uiImage = UIImage(data: data)
+                    guard let uiImage else { return nil }
+                    let image = Image(uiImage: uiImage)
+                    return image
+                }
+            }
+            var attachmentImages: [Image] = []
+            for try await image in group {
+                guard let image else { continue }
+                attachmentImages.append(image)
+            }
+            logger.debug("Finished loading the images.")
+            return attachmentImages
+        }
+    }
+}
 
-    static let logger = Logger(
+/// A struct that encapsulates the properties of a `Comment`.
+@MainActor
+class CommentProperties: ObservableObject {
+    /// The comment text of the `Comment`.
+    @Published var comment = ""
+    /// The selected photos from the photo picker.
+    @Published var photoPickerItems = [PhotosPickerItem]()
+    /// The image attachments of the Comment.
+    @Published var images: [Image] = []
+    /// The audio attachment of the Comment.
+    @Published var audioURL: URL? = nil
+    private let imageLoader = ImageAttachmentLoader()
+    
+    private let logger = Logger(
         subsystem: Bundle.main.bundleIdentifier!,
         category: String(describing: CommentProperties.self)
     )
-    
+}
+
+// MARK: - Computed Properties
+extension CommentProperties {
+    /// A boolean value indicating whether or not the comment is valid.
+    /// A comment is valid if it is not empty.
     var hasValidComment: Bool {
         let comment = comment.trimmingCharacters(in: .whitespacesAndNewlines)
         return !comment.isEmpty
     }
     
-    var canAddComment: Bool  {
-        hasValidComment && !isRecordingAudio
-    }
-    
-    static var `default`: Self {
-        .init()
+    /// Resets to the default state.
+    func reset() {
+        comment = ""
+        photoPickerItems = []
+        images = []
+        audioURL = nil
     }
 }
 
 // MARK: - Functions
 extension CommentProperties {
-    mutating func loadImages() async throws {
-        var attachmentImages: [Image] = []
-        
-        for photo in photoPickerItems {
-            guard let data = try await photo.loadTransferable(type: Data.self) else {
-                continue
-            }
-            guard let uiImage = UIImage(data: data) else {
-                continue
-            }
-            let image = Image(uiImage: uiImage)
-            attachmentImages.append(image)
-        }
-        
-        self.images = attachmentImages
+    func loadImages() async throws {
+        logger.debug("Loading images with \(self.photoPickerItems.count) photos picker items")
+        let images = try await imageLoader.loadImages(photoPickerItems)
+        self.images = images
     }
     
     func getAttachmentsTransferables() async throws -> [AttachmentTransferable] {
@@ -65,24 +89,13 @@ extension CommentProperties {
         for photo in photoPickerItems {
             let transferable = try await photo.loadTransferable(type: AttachmentTransferable.self)
             guard let transferable else {
-                Self.logger.debug("failed to get image data")
+                logger.debug("failed to get image data")
                 continue
             }
             attachmentTransferables.append(transferable)
         }
         
         return attachmentTransferables
-    }
-    
-    mutating func deleteImage(at index: Int) {
-        guard index >= 0 && index < photoPickerItems.count else {
-            return
-        }
-        photoPickerItems.remove(at: index)
-    }
-    
-    mutating func toggleRecording() {
-        isRecordingAudio.toggle()
     }
 }
 
