@@ -6,12 +6,12 @@
 //
 
 import SwiftUI
-import CloudKit
 
 struct AudioAttachmentView: View {
     let url: URL
     @State private var audioURL: URL?
     @StateObject private var audioPlayer = AudioPlayer()
+    private let attachmentLoader = AttachmentLoader()
     
     var body: some View {
         Group {
@@ -44,47 +44,18 @@ struct AudioAttachmentView: View {
             }
         }
         .onAppear {
-            loadAudioAttachment()
+            Task {
+                do {
+                    audioURL = try await attachmentLoader.getAttachmentAssetURL(fromURL: url)
+                } catch {
+                    // TODO: Do something else here.
+                    print("Something went wrong \(error)")
+                }
+            }
         }
     }
 }
 
-private extension AudioAttachmentView {
-    func loadAudioAttachment() {
-        let query = CKQuery(
-            recordType: "Attachment",
-            predicate: .init(format: "attachmentURL == %@", url.absoluteString)
-        )
-        var url: URL?
-        let operation = CKQueryOperation(query: query)
-        operation.qualityOfService = .userInitiated
-        
-        operation.recordMatchedBlock = { id, result in
-            switch result {
-            case .failure(let error):
-                print("Failed to get audio record. \(error)")
-            case .success(let record):
-                guard let asset = record["attachment"] as? CKAsset else {
-                    print("failed to get audio asset")
-                    return
-                }
-                url = asset.fileURL
-            }
-        }
-        operation.queryResultBlock = { result in
-            switch result {
-            case.success(_):
-                DispatchQueue.main.async {
-                    self.audioURL = url
-                }
-            case .failure(let error):
-                print("failed to get audio from cloudkit. \(error)")
-            }
-        }
-        let database = CKContainer.default().privateCloudDatabase
-        database.add(operation)
-    }
-}
 struct AudioAttachmentView_Previews: PreviewProvider {
     static var previews: some View {
         // TODO: Change this url
