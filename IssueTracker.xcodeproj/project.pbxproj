@@ -428,6 +428,25 @@
 			path = Attachments;
 			sourceTree = "<group>";
 		};
+		2167EA062A027A10001A2221 /* Tags */ = {
+			isa = PBXGroup;
+			children = (
+				21BBEBF0295E8176008F237B /* TagSelectionView.swift */,
+				21BBEBFE295EE1E9008F237B /* TagView.swift */,
+				2127AD65295FBD0E005893DE /* ProminentTagView.swift */,
+			);
+			path = Tags;
+			sourceTree = "<group>";
+		};
+		2167EA072A027A28001A2221 /* Form */ = {
+			isa = PBXGroup;
+			children = (
+				21E6D2BC295C4B8400BB4AA6 /* CustomTextField.swift */,
+				21F1DA3C295DBD6500076D73 /* LabeledInputField.swift */,
+			);
+			path = Form;
+			sourceTree = "<group>";
+		};
 		21734A8B29764D7100EB3942 /* Views */ = {
 			isa = PBXGroup;
 			children = (
@@ -641,16 +660,13 @@
 		21E6D2BB295C4B7900BB4AA6 /* Components */ = {
 			isa = PBXGroup;
 			children = (
+				2167EA072A027A28001A2221 /* Form */,
+				2167EA062A027A10001A2221 /* Tags */,
 				2167EA032A0278A1001A2221 /* Attachments */,
 				21562B9D29F3D949006AB379 /* Add comment box */,
-				21E6D2BC295C4B8400BB4AA6 /* CustomTextField.swift */,
 				21E6D2C0295C5B4900BB4AA6 /* ProjectRowView.swift */,
-				21F1DA3C295DBD6500076D73 /* LabeledInputField.swift */,
-				21BBEBF0295E8176008F237B /* TagSelectionView.swift */,
 				21BBEBF4295E9A5E008F237B /* IssueRowView.swift */,
 				21BBEBFC295EDBE8008F237B /* CommentBoxView.swift */,
-				21BBEBFE295EE1E9008F237B /* TagView.swift */,
-				2127AD65295FBD0E005893DE /* ProminentTagView.swift */,
 				218F93D629C8044500F9D62A /* ImageDetailView.swift */,
 				2159F00B29CABC5C00E01576 /* WrappingHStack.swift */,
 			);
