@@ -28,4 +28,6 @@ enum SFSymbol {
     static let envelopeOpen = "envelope.open"
     static let circle = "circle"
     static let largeCircleFillCircle = "largecircle.fill.circle"
+    static let exclamationmarkOctagonFill = "exclamationmark.octagon.fill"
+    static let xmarkOctagonFill = "xmark.octagon.fill"
 }
