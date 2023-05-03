@@ -33,7 +33,6 @@
 		2150C845295972E2006CD7D2 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2150C844295972E2006CD7D2 /* Preview Assets.xcassets */; };
 		2150C847295972E2006CD7D2 /* Persistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2150C846295972E2006CD7D2 /* Persistence.swift */; };
 		2150C84A295972E2006CD7D2 /* IssueTracker.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 2150C848295972E2006CD7D2 /* IssueTracker.xcdatamodeld */; };
-		2150C854295972E2006CD7D2 /* HomeViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2150C853295972E2006CD7D2 /* HomeViewModelTests.swift */; };
 		2150C85E295972E2006CD7D2 /* IssueTrackerUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2150C85D295972E2006CD7D2 /* IssueTrackerUITests.swift */; };
 		2150C860295972E2006CD7D2 /* IssueTrackerUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2150C85F295972E2006CD7D2 /* IssueTrackerUITestsLaunchTests.swift */; };
 		2154B59D297F85910040FE69 /* IssueRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2154B59C297F85910040FE69 /* IssueRow.swift */; };
@@ -103,10 +102,7 @@
 		21E6D2BD295C4B8400BB4AA6 /* CustomTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21E6D2BC295C4B8400BB4AA6 /* CustomTextField.swift */; };
 		21E6D2BF295C4DD900BB4AA6 /* AddProjectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21E6D2BE295C4DD900BB4AA6 /* AddProjectView.swift */; };
 		21E6D2C1295C5B4900BB4AA6 /* ProjectRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21E6D2C0295C5B4900BB4AA6 /* ProjectRowView.swift */; };
-		21F1DA27295D90CF00076D73 /* AddProjectViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21F1DA26295D90CF00076D73 /* AddProjectViewModelTests.swift */; };
 		21F1DA29295D9C0E00076D73 /* String+filterWhitespace.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21F1DA28295D9C0E00076D73 /* String+filterWhitespace.swift */; };
-		21F1DA2D295DA1C200076D73 /* EditProjectViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21F1DA2C295DA1C200076D73 /* EditProjectViewModelTests.swift */; };
-		21F1DA31295DA7E300076D73 /* DeleteProjectViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21F1DA30295DA7E300076D73 /* DeleteProjectViewModelTests.swift */; };
 		21F1DA33295DABB700076D73 /* IssuesListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21F1DA32295DABB700076D73 /* IssuesListView.swift */; };
 		21F1DA35295DB04E00076D73 /* Issue+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21F1DA34295DB04E00076D73 /* Issue+Extensions.swift */; };
 		21F1DA3D295DBD6500076D73 /* LabeledInputField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21F1DA3C295DBD6500076D73 /* LabeledInputField.swift */; };
@@ -174,7 +170,6 @@
 		2150C846295972E2006CD7D2 /* Persistence.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Persistence.swift; sourceTree = "<group>"; };
 		2150C849295972E2006CD7D2 /* IssueTracker.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = IssueTracker.xcdatamodel; sourceTree = "<group>"; };
 		2150C84F295972E2006CD7D2 /* IssueTrackerTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = IssueTrackerTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		2150C853295972E2006CD7D2 /* HomeViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewModelTests.swift; sourceTree = "<group>"; };
 		2150C859295972E2006CD7D2 /* IssueTrackerUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = IssueTrackerUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		2150C85D295972E2006CD7D2 /* IssueTrackerUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IssueTrackerUITests.swift; sourceTree = "<group>"; };
 		2150C85F295972E2006CD7D2 /* IssueTrackerUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IssueTrackerUITestsLaunchTests.swift; sourceTree = "<group>"; };
@@ -239,10 +234,7 @@
 		21E6D2BC295C4B8400BB4AA6 /* CustomTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTextField.swift; sourceTree = "<group>"; };
 		21E6D2BE295C4DD900BB4AA6 /* AddProjectView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddProjectView.swift; sourceTree = "<group>"; };
 		21E6D2C0295C5B4900BB4AA6 /* ProjectRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProjectRowView.swift; sourceTree = "<group>"; };
-		21F1DA26295D90CF00076D73 /* AddProjectViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddProjectViewModelTests.swift; sourceTree = "<group>"; };
 		21F1DA28295D9C0E00076D73 /* String+filterWhitespace.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+filterWhitespace.swift"; sourceTree = "<group>"; };
-		21F1DA2C295DA1C200076D73 /* EditProjectViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProjectViewModelTests.swift; sourceTree = "<group>"; };
-		21F1DA30295DA7E300076D73 /* DeleteProjectViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteProjectViewModelTests.swift; sourceTree = "<group>"; };
 		21F1DA32295DABB700076D73 /* IssuesListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IssuesListView.swift; sourceTree = "<group>"; };
 		21F1DA34295DB04E00076D73 /* Issue+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Issue+Extensions.swift"; sourceTree = "<group>"; };
 		21F1DA3C295DBD6500076D73 /* LabeledInputField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LabeledInputField.swift; sourceTree = "<group>"; };
@@ -395,10 +387,6 @@
 		2150C852295972E2006CD7D2 /* IssueTrackerTests */ = {
 			isa = PBXGroup;
 			children = (
-				2150C853295972E2006CD7D2 /* HomeViewModelTests.swift */,
-				21F1DA26295D90CF00076D73 /* AddProjectViewModelTests.swift */,
-				21F1DA2C295DA1C200076D73 /* EditProjectViewModelTests.swift */,
-				21F1DA30295DA7E300076D73 /* DeleteProjectViewModelTests.swift */,
 			);
 			path = IssueTrackerTests;
 			sourceTree = "<group>";
@@ -943,10 +931,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				21F1DA2D295DA1C200076D73 /* EditProjectViewModelTests.swift in Sources */,
-				21F1DA27295D90CF00076D73 /* AddProjectViewModelTests.swift in Sources */,
-				2150C854295972E2006CD7D2 /* HomeViewModelTests.swift in Sources */,
-				21F1DA31295DA7E300076D73 /* DeleteProjectViewModelTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
