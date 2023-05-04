@@ -41,6 +41,7 @@ final class PersistenceController: ObservableObject {
             }
         })
         container.viewContext.automaticallyMergesChangesFromParent = true
+        container.viewContext.undoManager = UndoManager()
     }
 }
 
@@ -269,6 +270,7 @@ extension PersistenceController {
         return try await save()
     }
     
+    @MainActor
     /// Commits the changes made to core data.
     func save() async throws {
         try await iCloudAccountCheck()
