@@ -25,8 +25,8 @@ extension Comment {
     }
     
     /// A preview comment.
-    static var preview: Comment {
+    static var preview: Comment = {
         let comments = Comment.makePreviews(count: 1)
         return comments[0]
-    }
+    }()
 }

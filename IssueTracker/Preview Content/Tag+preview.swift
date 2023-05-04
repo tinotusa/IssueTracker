@@ -28,8 +28,8 @@ extension Tag {
     }
     
     /// A preview tag.
-    static var preview: Tag {
-        let tags = Self.makePreviews(count: 1)
+    static var preview: Tag = {
+        let tags = Tag.makePreviews(count: 1)
         return tags[0]
-    }
+    }()
 }

@@ -11,7 +11,7 @@ extension Issue {
     /// Creates preview Issues.
     /// - Parameter count: The number of issues to create.
     /// - Returns: An array of issues.
-    static func makePreviews(count: Int) -> [Issue] {
+    static func makePreviews(count: Int, createTags: Bool = true) -> [Issue] {
         let viewContext = PersistenceController.preview.container.viewContext
         var issues = [Issue]()
         
@@ -23,10 +23,13 @@ extension Issue {
             issue.name = String.generateLorem(ofLength: 4)
             issue.priority = Issue.Priority.allCases.randomElement()!.rawValue
             
-            let tags = Tag.makePreviews(count: Int.random(in: 1 ..< 5))
+            if createTags {
+                let tags = Tag.makePreviews(count: Int.random(in: 1 ..< 5))
+                issue.addToTags(.init(set: Set(tags)))
+            }
+            
             let comments = Comment.makePreviews(count: Int.random(in: 1 ..< 3))
             
-            issue.addToTags(.init(array: tags))
             issue.addToComments(.init(array: comments))
             
             issues.append(issue)
@@ -35,8 +38,8 @@ extension Issue {
     }
     
     /// A preview issue.
-    static var preview: Issue {
-        let issues = Self.makePreviews(count: 1)
+    static var preview: Issue = {
+        let issues = Issue.makePreviews(count: 1)
         return issues[0]
-    }
+    }()
 }
