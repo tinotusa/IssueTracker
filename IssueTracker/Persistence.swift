@@ -17,7 +17,6 @@ final class PersistenceController: ObservableObject {
     )
     
     let container: NSPersistentContainer
-    @Published var errorWrapper: ErrorWrapper?
     private let cloudKitManager = CloudKitManager()
     
     init(inMemory: Bool = false) {
@@ -47,7 +46,6 @@ final class PersistenceController: ObservableObject {
 
 // MARK: - Issue functions
 extension PersistenceController {
-    @MainActor
     /// Adds a new issue to core data.
     /// - Parameters:
     ///   - issueData: The data for the issue.
@@ -70,7 +68,6 @@ extension PersistenceController {
     ///   - source: The issue to copy from.
     ///   - destination: The issue to copy to.
     ///   - tags: The tags from the source issue to copy to the destination.
-    @MainActor
     func updateIssue(_ issue: Issue, with issueProperties: IssueProperties) async throws {
         logger.debug("Updating issue: \(issue.wrappedId) with properties: \(issueProperties)")
         issue.copyProperties(from: issueProperties)
@@ -103,9 +100,8 @@ extension PersistenceController {
     ///   - issue: The issue to add the comment to.
     ///   - attachmentTransferables: The image attachment(s) of the comment.
     ///   - audioURL: The audio attachment of the comment.
-    @MainActor
     func addComment(_ commentProperties: CommentProperties, to issue: Issue) async throws {
-        let comment = Comment(comment: commentProperties.comment, context: viewContext)
+        let comment = Comment(comment: await commentProperties.comment, context: viewContext)
         
         let attachmentTransferables = try await commentProperties.getAttachmentsTransferables()
         logger.debug("Adding comment with id: \(comment.wrappedId)")
@@ -135,7 +131,7 @@ extension PersistenceController {
         }
         
         // adding audio
-        if let audioURL = commentProperties.audioURL {
+        if let audioURL = await commentProperties.audioURL {
             // cloudkit audio attachment
             let audioAttachmentRecord = CKRecord(recordType: "Attachment")
             let asset = CKAsset(fileURL: audioURL)
@@ -183,8 +179,7 @@ extension PersistenceController {
             database.add(modifyOperation)
         }
     }
-    
-    @MainActor
+
     /// Adds a new project to core data.
     /// - Parameter projectData: The data for the project.
     func addProject(_ projectData: ProjectProperties) async throws {
@@ -214,7 +209,6 @@ extension PersistenceController {
     /// - Parameters:
     ///   - project: The project to update.
     ///   - projectData: The data used for the update.
-    @MainActor
     func updateProject(_ project: Project, projectData: ProjectProperties) async throws {
         project.wrappedName = projectData.name
         project.wrappedStartDate = projectData.startDate
@@ -223,7 +217,6 @@ extension PersistenceController {
     
     /// Deletes the given object from core data.
     /// - Parameter object: The object to delete.
-    @MainActor
     func deleteObject<T: NSManagedObject>(_ object: T) async throws {
         logger.debug("Deleting object with id: \(object.objectID)")
 
@@ -263,7 +256,6 @@ extension PersistenceController {
     ///   - attachmentType: The type of the attachment (Image or audio).
     ///   - attachmentURL: The URL for the attachment.
     ///   - comment: The comment to add the attachment to.
-    @MainActor
     func addAttachment(ofType attachmentType: AttachmentType, attachmentURL: URL, to comment: Comment) async throws {
         let attachment = Attachment(context: viewContext)
         attachment.assetURL = attachmentURL
@@ -277,7 +269,6 @@ extension PersistenceController {
         return try await save()
     }
     
-    @MainActor
     /// Commits the changes made to core data.
     func save() async throws {
         try await iCloudAccountCheck()
@@ -289,7 +280,7 @@ extension PersistenceController {
         logger.debug("Successfully saved managed object context.")
     }
     
-    @MainActor
+
     /// Adds a tag to core data
     /// - Parameter name: The name of the tag
     /// - Returns: `true` if the tag was added successfully, `false` otherwise.

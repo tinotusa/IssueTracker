@@ -9,14 +9,15 @@ import SwiftUI
 import PhotosUI
 
 struct AddCommentBox: View {
-    let postAction: (CommentProperties) -> Void
-    
+    let issue: Issue
     @State private var errorWrapper: ErrorWrapper?
     @State private var showingPhotoPicker = false
     @State private var showingAudioControls = false
     
     @StateObject private var commentProperties = CommentProperties()
     @StateObject private var audioRecorder = AudioRecorder()
+
+    @EnvironmentObject private var persistenceController: PersistenceController
     
     @FocusState private var isFocused: Bool
     
@@ -38,11 +39,8 @@ struct AddCommentBox: View {
                     .lineLimit(2...4)
                     .textFieldStyle(.roundedBorder)
                     .focused($isFocused)
-                Button("Post") {
-                    postAction(commentProperties)
-                    audioRecorder.deleteRecording()
-                }
-                .disabled(!commentProperties.hasValidComment)
+                Button("Post", action: postComment)
+                    .disabled(!commentProperties.hasValidComment)
             }
             if showingAudioControls {
                 audioRecordingControlButtons
@@ -60,6 +58,10 @@ struct AddCommentBox: View {
         .onChange(of: audioRecorder.isRecording) { isRecording in
             if isRecording { return }
             commentProperties.audioURL = audioRecorder.url
+        }
+        .sheet(item: $errorWrapper) { error in
+            ErrorView(errorWrapper: error)
+                .sheetWithIndicator()
         }
         .toolbar {
             ToolbarItem(placement: .keyboard) {
@@ -124,10 +126,24 @@ private extension AddCommentBox {
     }
 }
 
+// MARK: - Functions
+private extension AddCommentBox {
+    func postComment() {
+        Task {
+            do {
+                try await persistenceController.addComment(commentProperties, to: issue)
+                commentProperties.reset()
+                audioRecorder.deleteRecording()
+            } catch {
+                errorWrapper = .init(error: error, message: "Failed to add comment.")
+            }
+        }
+    }
+}
+
 struct AddCommentBox_Previews: PreviewProvider {
     static var previews: some View {
-        AddCommentBox() { _ in
-            // no post action for previews
-        }
+        AddCommentBox(issue: .example)
+            .environmentObject(PersistenceController.preview)
     }
 }

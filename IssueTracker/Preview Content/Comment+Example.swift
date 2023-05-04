@@ -7,18 +7,26 @@
 
 import Foundation
 
+extension String {
+    
+}
+
 extension Comment {
-    static var example: Comment {
-        let viewContext = PersistenceController.preview.container.viewContext
-        let fetchRequest = fetchRequest()
-        do {
-            let results = try viewContext.fetch(fetchRequest)
-            guard let comment = results.first else {
-                fatalError("Failed to get example comment. No comments found.")
-            }
-            return comment
-        } catch {
-            fatalError("Failed to get comment. \(error)")
+    @discardableResult
+    static func makePreviews(count: Int) -> [Comment] {
+        var comments = [Comment]()
+        for _ in 0 ..< count {
+            let comment = Comment(context: PersistenceController.preview.container.viewContext)
+            comment.comment = String.generateLorem()
+            comment.id = UUID()
+            comment.dateCreated = .now
+            comments.append(comment)
         }
+        return comments
+    }
+    
+    static var preview: Comment {
+        let comments = Comment.makePreviews(count: 1)
+        return comments[0]
     }
 }

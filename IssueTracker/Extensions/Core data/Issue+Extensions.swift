@@ -109,6 +109,10 @@ extension Issue {
         set { self.tags = NSSet(set: newValue) }
     }
     
+    var sortedTags: [Tag] {
+        wrappedTags.sorted { $0.wrappedName < $1.wrappedName }
+    }
+    
     var sortedComments: [Comment] {
         wrappedComments.sorted { $0.wrappedDateCreated < $1.wrappedDateCreated }
     }

@@ -8,16 +8,16 @@
 import SwiftUI
 
 struct CommentBoxView: View {
+    let comment: Comment
     @State private var showingAttachments = false
     
-    let comment: String
-    let attachments: [Attachment]
-    
-    @Environment(\.managedObjectContext) private var viewContext
+    var attachments: [Attachment] {
+        comment.wrappedAttachments
+    }
     
     var body: some View {
         VStack(alignment: .leading) {
-            Text(comment)
+            Text(comment.wrappedComment)
             
             if !attachments.isEmpty {
                 HStack {
@@ -50,9 +50,8 @@ struct CommentBoxView: View {
                     }
                 }
             }
-            // TODO: either add date property or add comment properties struct
-//            Text(comment.wrappedDateCreated.formatted(date: .abbreviated, time: .omitted))
-//                .footerStyle()
+            Text(comment.wrappedDateCreated.formatted(date: .abbreviated, time: .omitted))
+                .footerStyle()
         }
         .padding()
         .background(Color.popup)
@@ -62,9 +61,6 @@ struct CommentBoxView: View {
 
 struct CommentBoxView_Previews: PreviewProvider {
     static var previews: some View {
-        CommentBoxView(
-            comment: "Some test comment",
-            attachments: []
-        )
+        CommentBoxView(comment: .preview)
     }
 }

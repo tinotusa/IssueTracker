@@ -30,19 +30,14 @@ struct IssueDetail: View {
                             .sheetWithIndicator()
                     }
             } else {
-                IssueSummary(
-                    issueProperties: issue.issueProperties,
-                    comments: issue.sortedComments,
-                    deleteCommentAction: deleteComment,
-                    addCommentAction: addComment
-                )
-                .toolbar {
-                    toolbarItems
-                }
-                .navigationDestination(for: URL.self) { imageURL in
-                    ImageDetailView(url: imageURL)
-                }
-                .id(refreshID)
+                IssueSummary(issue: issue)
+                    .toolbar {
+                        toolbarItems
+                    }
+                    .navigationDestination(for: URL.self) { imageURL in
+                        ImageDetailView(url: imageURL)
+                    }
+                    .id(refreshID)
             }
         }
         .toolbar {
