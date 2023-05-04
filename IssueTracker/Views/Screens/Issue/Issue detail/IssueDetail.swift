@@ -111,7 +111,7 @@ struct IssueDetail_Previews: PreviewProvider {
     static let viewContext = PersistenceController.preview.container.viewContext
     static var previews: some View {
         NavigationStack {
-            IssueDetail(issue: .example)
+            IssueDetail(issue: .preview)
                 .environment(\.managedObjectContext, viewContext)
                 .environmentObject(PersistenceController.preview)
         }

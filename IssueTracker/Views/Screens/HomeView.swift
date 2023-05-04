@@ -72,11 +72,17 @@ private extension HomeView {
         showingAddProjectView = true
     }
 }
-
+import CoreData
 struct HomeView_Previews: PreviewProvider {
+    static var context: NSManagedObjectContext {
+        let viewContext = PersistenceController.preview.container.viewContext
+        let projects = Project.makePreviews(count: 1)
+        return viewContext
+    }
+    
     static var previews: some View {
         HomeView()
-            .environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
+            .environment(\.managedObjectContext, context)
             .environmentObject(PersistenceController.preview)
     }
 }

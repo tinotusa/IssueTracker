@@ -24,6 +24,6 @@ struct TagView: View {
 
 struct TagView_Previews: PreviewProvider {
     static var previews: some View {
-        TagView(tag: .example)
+        TagView(tag: .preview)
     }
 }

@@ -130,7 +130,7 @@ struct AddIssueView_Previews: PreviewProvider {
     static var viewContext = PersistenceController.preview.container.viewContext
     
     static var previews: some View {
-        AddIssueView(project: .example)
+        AddIssueView(project: .preview)
             .environment(\.managedObjectContext, viewContext)
             .environmentObject(PersistenceController.preview)
     }

@@ -34,11 +34,8 @@ struct ProjectRowView: View {
     }
 }
 
-struct ProjectRowView_Previews: PreviewProvider {
-    static let viewContext = PersistenceController.preview.container.viewContext
-    
+struct ProjectRowView_Previews: PreviewProvider {    
     static var previews: some View {
-        ProjectRowView(project: .example)
-            .environment(\.managedObjectContext, viewContext)
+        ProjectRowView(project: .preview)
     }
 }

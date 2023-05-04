@@ -297,36 +297,9 @@ extension PersistenceController {
 
 // MARK: - Preview
 extension PersistenceController {
-    /// A preview `PersistenceController` for the ui previews.
+    /// A preview `PersistenceController` for previews.
     static var preview: PersistenceController = {
         let controller = PersistenceController(inMemory: true)
-        let viewContext = controller.container.viewContext
-        
-        let project = Project(name: "Test project", startDate: .now, context: viewContext)
-        
-        var tags = Set<Tag>()
-        for i in 0 ..< Int.random(in: 1 ..< 4) {
-            let tag = Tag(name: "Tag\(i)", context: viewContext)
-            tags.insert(tag)
-        }
-        
-        var issues = [Issue]()
-        for i in 0 ..< 4 {
-            let issue = Issue(name: "Issue#\(i)", issueDescription: "testing", priority: .low, tags: tags, context: viewContext)
-            issues.append(issue)
-            
-            var comments = Set<Comment>()
-            for i in 0 ..< 3 {
-                let comment = Comment(comment: "Comment #\(i)", context: viewContext)
-                comments.insert(comment)
-            }
-            issue.addToComments(.init(set: comments))
-            
-        }
-        project.addToIssues(.init(set: Set(issues)))
-
-        try? viewContext.save()
-        
         return controller
     }()
 }

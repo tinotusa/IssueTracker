@@ -120,9 +120,10 @@ private extension IssueSummary {
         }
     }
 }
+
 struct IssueSummary_Previews: PreviewProvider {
     static var previews: some View {
-        IssueSummary(issue: .example)
+        IssueSummary(issue: .preview)
             .environmentObject(PersistenceController.preview)
     }
 }

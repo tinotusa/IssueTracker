@@ -282,7 +282,7 @@ struct IssuesView_Previews: PreviewProvider {
     
     static var previews: some View {
         NavigationStack {
-            IssuesListView(project: .example)
+            IssuesListView(project: .preview)
                 .environment(\.managedObjectContext, viewContext)
                 .environmentObject(PersistenceController.preview)
         }

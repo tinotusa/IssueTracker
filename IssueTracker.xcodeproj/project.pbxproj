@@ -45,10 +45,10 @@
 		2167EA002A026FEC001A2221 /* AttachmentLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2167E9FF2A026FEC001A2221 /* AttachmentLoader.swift */; };
 		2167EA022A027888001A2221 /* AttachmentLoadingState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2167EA012A027888001A2221 /* AttachmentLoadingState.swift */; };
 		2167EA052A0278D2001A2221 /* AttachmentLoadingErrorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2167EA042A0278D2001A2221 /* AttachmentLoadingErrorView.swift */; };
-		2168A62D29CC373D004CF64B /* Issue+Example.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2168A62C29CC373D004CF64B /* Issue+Example.swift */; };
-		2168A62F29CC72F0004CF64B /* Project+Example.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2168A62E29CC72F0004CF64B /* Project+Example.swift */; };
-		2168A63129CC75B7004CF64B /* Comment+Example.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2168A63029CC75B7004CF64B /* Comment+Example.swift */; };
-		2168A63329CC763B004CF64B /* Tag+Example.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2168A63229CC763B004CF64B /* Tag+Example.swift */; };
+		2168A62D29CC373D004CF64B /* Issue+preview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2168A62C29CC373D004CF64B /* Issue+preview.swift */; };
+		2168A62F29CC72F0004CF64B /* Project+preview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2168A62E29CC72F0004CF64B /* Project+preview.swift */; };
+		2168A63129CC75B7004CF64B /* Comment+preview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2168A63029CC75B7004CF64B /* Comment+preview.swift */; };
+		2168A63329CC763B004CF64B /* Tag+preview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2168A63229CC763B004CF64B /* Tag+preview.swift */; };
 		216A276A29F3815C00C3B9C4 /* ProjectProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 216A276929F3815C00C3B9C4 /* ProjectProperties.swift */; };
 		21734A8D29764D8400EB3942 /* AddProjectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21734A8C29764D8400EB3942 /* AddProjectView.swift */; };
 		21734A8F29764E4E00EB3942 /* ProjectListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21734A8E29764E4E00EB3942 /* ProjectListView.swift */; };
@@ -186,10 +186,10 @@
 		2167E9FF2A026FEC001A2221 /* AttachmentLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttachmentLoader.swift; sourceTree = "<group>"; };
 		2167EA012A027888001A2221 /* AttachmentLoadingState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttachmentLoadingState.swift; sourceTree = "<group>"; };
 		2167EA042A0278D2001A2221 /* AttachmentLoadingErrorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttachmentLoadingErrorView.swift; sourceTree = "<group>"; };
-		2168A62C29CC373D004CF64B /* Issue+Example.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Issue+Example.swift"; sourceTree = "<group>"; };
-		2168A62E29CC72F0004CF64B /* Project+Example.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Project+Example.swift"; sourceTree = "<group>"; };
-		2168A63029CC75B7004CF64B /* Comment+Example.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Comment+Example.swift"; sourceTree = "<group>"; };
-		2168A63229CC763B004CF64B /* Tag+Example.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Tag+Example.swift"; sourceTree = "<group>"; };
+		2168A62C29CC373D004CF64B /* Issue+preview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Issue+preview.swift"; sourceTree = "<group>"; };
+		2168A62E29CC72F0004CF64B /* Project+preview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Project+preview.swift"; sourceTree = "<group>"; };
+		2168A63029CC75B7004CF64B /* Comment+preview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Comment+preview.swift"; sourceTree = "<group>"; };
+		2168A63229CC763B004CF64B /* Tag+preview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Tag+preview.swift"; sourceTree = "<group>"; };
 		216A276929F3815C00C3B9C4 /* ProjectProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProjectProperties.swift; sourceTree = "<group>"; };
 		21734A8C29764D8400EB3942 /* AddProjectView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddProjectView.swift; sourceTree = "<group>"; };
 		21734A8E29764E4E00EB3942 /* ProjectListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProjectListView.swift; sourceTree = "<group>"; };
@@ -383,10 +383,10 @@
 			children = (
 				21CB0C8129CD48EA006BF4FF /* bulbasaur.png */,
 				2150C844295972E2006CD7D2 /* Preview Assets.xcassets */,
-				2168A62C29CC373D004CF64B /* Issue+Example.swift */,
-				2168A62E29CC72F0004CF64B /* Project+Example.swift */,
-				2168A63029CC75B7004CF64B /* Comment+Example.swift */,
-				2168A63229CC763B004CF64B /* Tag+Example.swift */,
+				2168A62C29CC373D004CF64B /* Issue+preview.swift */,
+				2168A62E29CC72F0004CF64B /* Project+preview.swift */,
+				2168A63029CC75B7004CF64B /* Comment+preview.swift */,
+				2168A63229CC763B004CF64B /* Tag+preview.swift */,
 				21CB0C8329CD4902006BF4FF /* URL+previewImage.swift */,
 			);
 			path = "Preview Content";
@@ -900,9 +900,9 @@
 			files = (
 				21BBEBFB295ECF8B008F237B /* Comment+Extensions.swift in Sources */,
 				217D506D29FD08340064FE8A /* ImageAttachmentsRow.swift in Sources */,
-				2168A62D29CC373D004CF64B /* Issue+Example.swift in Sources */,
+				2168A62D29CC373D004CF64B /* Issue+preview.swift in Sources */,
 				21BBEBF3295E8465008F237B /* Tag+Extensions.swift in Sources */,
-				2168A63329CC763B004CF64B /* Tag+Example.swift in Sources */,
+				2168A63329CC763B004CF64B /* Tag+preview.swift in Sources */,
 				211246C729B9B84500D0EB01 /* AudioRecorder.swift in Sources */,
 				21BBEBF5295E9A5E008F237B /* IssueRowView.swift in Sources */,
 				21BBEBF7295EC963008F237B /* IssueDetail.swift in Sources */,
@@ -936,14 +936,14 @@
 				2132CB7629C5D0FC003D5C12 /* AudioAttachmentView.swift in Sources */,
 				2167EA022A027888001A2221 /* AttachmentLoadingState.swift in Sources */,
 				21654BC629605245009C434B /* AddIssueView.swift in Sources */,
-				2168A62F29CC72F0004CF64B /* Project+Example.swift in Sources */,
+				2168A62F29CC72F0004CF64B /* Project+preview.swift in Sources */,
 				218F93D729C8044500F9D62A /* ImageDetailView.swift in Sources */,
 				2132CB6C29C56785003D5C12 /* AudioAttachmentPreview.swift in Sources */,
 				211246C529B9B82900D0EB01 /* AudioPlayer.swift in Sources */,
 				2167EA052A0278D2001A2221 /* AttachmentLoadingErrorView.swift in Sources */,
 				21D031F429F109A300F20E1B /* TextFieldValidation.swift in Sources */,
 				2179A40629EBEA3D00D69C82 /* IssueSummary.swift in Sources */,
-				2168A63129CC75B7004CF64B /* Comment+Example.swift in Sources */,
+				2168A63129CC75B7004CF64B /* Comment+preview.swift in Sources */,
 				21BBEBF1295E8176008F237B /* TagSelectionView.swift in Sources */,
 				2167EA002A026FEC001A2221 /* AttachmentLoader.swift in Sources */,
 				21E6D2BF295C4DD900BB4AA6 /* AddProjectView.swift in Sources */,

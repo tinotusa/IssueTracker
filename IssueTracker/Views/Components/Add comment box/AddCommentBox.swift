@@ -143,7 +143,7 @@ private extension AddCommentBox {
 
 struct AddCommentBox_Previews: PreviewProvider {
     static var previews: some View {
-        AddCommentBox(issue: .example)
+        AddCommentBox(issue: .preview)
             .environmentObject(PersistenceController.preview)
     }
 }
