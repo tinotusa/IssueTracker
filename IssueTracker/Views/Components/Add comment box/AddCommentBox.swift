@@ -40,6 +40,7 @@ struct AddCommentBox: View {
                     .focused($isFocused)
                 Button("Post") {
                     postAction(commentProperties)
+                    audioRecorder.deleteRecording()
                 }
                 .disabled(!commentProperties.hasValidComment)
             }
@@ -55,6 +56,10 @@ struct AddCommentBox: View {
                     errorWrapper = .init(error: error, message: "Failed to load images")
                 }
             }
+        }
+        .onChange(of: audioRecorder.isRecording) { isRecording in
+            if isRecording { return }
+            commentProperties.audioURL = audioRecorder.url
         }
         .toolbar {
             ToolbarItem(placement: .keyboard) {

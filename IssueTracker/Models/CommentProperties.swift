@@ -90,17 +90,21 @@ extension CommentProperties {
     }
     
     func getAttachmentsTransferables() async throws -> [AttachmentTransferable] {
-        var attachmentTransferables = [AttachmentTransferable]()
-        
-        for photo in photoPickerItems {
-            let transferable = try await photo.loadTransferable(type: AttachmentTransferable.self)
-            guard let transferable else {
-                logger.debug("failed to get image data")
-                continue
+        try await withThrowingTaskGroup(of: AttachmentTransferable?.self) { group in
+            for photo in photoPickerItems {
+                group.addTask {
+                    try await photo.loadTransferable(type: AttachmentTransferable.self)
+                }
             }
-            attachmentTransferables.append(transferable)
+            
+            var attachmentTransferables = [AttachmentTransferable]()
+            for try await transferable in group {
+                guard let transferable else {
+                    continue
+                }
+                attachmentTransferables.append(transferable)
+            }
+            return attachmentTransferables
         }
-        
-        return attachmentTransferables
     }
 }
