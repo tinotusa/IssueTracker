@@ -11,7 +11,7 @@ struct AudioAttachmentView: View {
     let url: URL
     @StateObject private var audioPlayer = AudioPlayer()
     private let attachmentLoader = AttachmentLoader()
-    @State private var loadingState: AttachmentLoadingState = .urlNotFound
+    @State private var loadingState: AttachmentLoadingState = .loading
     
     let size = 80.0
     
