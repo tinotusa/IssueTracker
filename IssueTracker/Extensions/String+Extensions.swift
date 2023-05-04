@@ -54,4 +54,11 @@ extension String {
             .filter { !$0.isEmpty}
             .joined(separator: " ")
     }
+    
+    func leftPadding(toLength length: Int, withPad paddingCharacter: Character) -> Self {
+        if self.count < length {
+            return String(repeating: paddingCharacter, count: length - self.count) + self
+        }
+        return self
+    }
 }

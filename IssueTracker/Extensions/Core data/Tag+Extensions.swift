@@ -13,14 +13,16 @@ extension Tag {
         self.init(context: context)
         self.name = name
     }
+    
     #if os(macOS)
     convenience init(name: String, colour: Color, context: NSManagedObjectContext) {
         self.init(name: name, context: context)
         let (r, g, b) = colour.rgbComponents
+        let redHex = String(r, radix: 16).leftPadding(toLength: 2, withPad: "0")
+        let greenHex = String(g, radix: 16).leftPadding(toLength: 2, withPad: "0")
+        let blueHex = String(b, radix: 16).leftPadding(toLength: 2, withPad: "0")
         let opacity = colour.opacityValue
-        self.red = r
-        self.green = g
-        self.blue = b
+        self.colour = "\(redHex)\(greenHex)\(blueHex)"
         self.opacity = opacity
     }
     #endif
@@ -38,19 +40,9 @@ extension Tag {
         set { self.dateCreated = newValue }
     }
     
-    var wrappedRed: Double {
-        get { self.red }
-        set { self.red = newValue }
-    }
-    
-    var wrappedGreen: Double {
-        get { self.green }
-        set { self.green = newValue }
-    }
-    
-    var wrappedBlue: Double {
-        get { self.blue }
-        set { self.blue = newValue }
+    var wrappedColour: String {
+        get { self.colour ?? "ffffff" }
+        set { self.colour = newValue }
     }
     
     public var wrappedId: UUID {

@@ -19,9 +19,7 @@ extension Tag {
             tag.dateCreated = .now
             tag.id = UUID()
             tag.name = String.generateLorem(ofLength: 1)
-            tag.blue = 0
-            tag.red = 0
-            tag.green = 0
+            tag.colour = "ffffff"
             tag.opacity = 1
             
             tags.append(tag)
