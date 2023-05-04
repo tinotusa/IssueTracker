@@ -21,6 +21,7 @@ extension String {
             interdum dolor.
         """
             .components(separatedBy: .whitespaces.union(.punctuationCharacters))
+            .map{ $0.trimmingCharacters(in: .whitespacesAndNewlines) }
             .filter { !$0.isEmpty }
         
         var words = [String]()
