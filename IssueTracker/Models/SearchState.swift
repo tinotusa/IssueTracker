@@ -12,8 +12,6 @@ struct SearchState {
     var searchText = ""
     /// The search scope for the search bar.
     var searchScope = SearchScopes.name
-    /// The issue status being listed.
-    var searchIssueStatus = Issue.Status.open
     /// The predicate used for the FilteredIssuesListView
     var predicate: NSPredicate = .init()
     
@@ -42,20 +40,20 @@ extension SearchState {
     mutating func runSearch(_ project: Project) {
         if searchText.isEmpty {
             predicate = NSPredicate(
-                format: "(project == %@) AND (status == %@)", project, searchIssueStatus.rawValue)
+                format: "(project == %@)", project)
             return
         }
-        var format = "(project == %@) AND (status == %@)"
+        var format = "(project == %@)"
         switch searchScope {
         case .description:
             format += "AND (issueDescription CONTAINS[cd] %@)"
-            predicate = NSPredicate(format: format,  project, searchIssueStatus.rawValue, searchText)
+            predicate = NSPredicate(format: format,  project, searchText)
         case .name:
             format += "AND (name CONTAINS[cd] %@)"
-            predicate = NSPredicate(format: format,  project, searchIssueStatus.rawValue, searchText)
+            predicate = NSPredicate(format: format,  project, searchText)
         case .tag:
             format += "AND (ANY tags.name CONTAINS[cd] %@)"
-            predicate = NSPredicate(format: format,  project, searchIssueStatus.rawValue, searchText)
+            predicate = NSPredicate(format: format,  project, searchText)
         }
     }
 }

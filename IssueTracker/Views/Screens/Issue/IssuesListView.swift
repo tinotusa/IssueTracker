@@ -71,9 +71,6 @@ struct IssuesListView: View {
         .onChange(of: searchState.searchScope) { _ in
             handleChange()
         }
-        .onChange(of: searchState.searchIssueStatus) { _ in
-            handleChange()
-        }
         .navigationTitle("Issues")
         .toolbarBackground(Color.customBackground, for: .navigationBar, .bottomBar) // this doesn't seem to change the bottom bar at all.
         .background(Color.customBackground)
