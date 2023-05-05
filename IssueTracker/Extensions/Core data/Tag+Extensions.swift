@@ -14,18 +14,12 @@ extension Tag {
         self.name = name
     }
     
-    #if os(macOS)
     convenience init(name: String, colour: Color, context: NSManagedObjectContext) {
         self.init(name: name, context: context)
-        let (r, g, b) = colour.rgbComponents
-        let redHex = String(r, radix: 16).leftPadding(toLength: 2, withPad: "0")
-        let greenHex = String(g, radix: 16).leftPadding(toLength: 2, withPad: "0")
-        let blueHex = String(b, radix: 16).leftPadding(toLength: 2, withPad: "0")
+        self.colour = colour.hexValue
         let opacity = colour.opacityValue
-        self.colour = "\(redHex)\(greenHex)\(blueHex)"
         self.opacity = opacity
     }
-    #endif
     
     public override func awakeFromInsert() {
         self.dateCreated = .now
@@ -41,7 +35,7 @@ extension Tag {
     }
     
     var wrappedColour: String {
-        get { self.colour ?? "ffffff" }
+        get { self.colour ?? "0000FF" }
         set { self.colour = newValue }
     }
     

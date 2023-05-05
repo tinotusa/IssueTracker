@@ -12,7 +12,7 @@ extension String {
     /// - Parameter length: The number of words in the text.
     /// - Returns: The lorem ipsum text.
     static func generateLorem(ofLength length: Int = 5) -> String {
-        let lorem = """
+        let loremWords = """
             Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent rhoncus ligula eget
             velit semper scelerisque. Ut augue sem, elementum eget dui at, dignissim vulputate leo. Phasellus
             eget sagittis metus, eu ullamcorper erat. Morbi sed efficitur est, et sollicitudin turpis. Donec
@@ -24,6 +24,7 @@ extension String {
             .map{ $0.trimmingCharacters(in: .whitespacesAndNewlines) }
             .filter { !$0.isEmpty }
         
+        let lorem = Set(loremWords)
         var words = [String]()
         
         for _ in 0 ..< length {

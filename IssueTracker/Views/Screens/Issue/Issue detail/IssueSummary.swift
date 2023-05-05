@@ -69,7 +69,7 @@ private extension IssueSummary {
                 } else {
                     HStack {
                         ForEach(tags) { tag in
-                            TagView(tag: tag)
+                            ProminentTagView(tag: tag, isSelected: true)
                         }
                     }
                 }

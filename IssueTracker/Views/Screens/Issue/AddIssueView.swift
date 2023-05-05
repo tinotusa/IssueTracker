@@ -12,7 +12,7 @@ struct AddIssueView: View {
     @ObservedObject var project: Project
     @State private var issueProperties = IssueProperties()
     @State private var errorWrapper: ErrorWrapper?
-    
+    @State private var showingTagsSheet = false
     @Environment(\.dismiss) private var dismiss
     @EnvironmentObject private var persistenceController: PersistenceController
     
@@ -26,8 +26,10 @@ struct AddIssueView: View {
                     nameSection
                     descriptionSection
                     prioritySection
-                    addTagsSection
-                    selectedTagsSection
+                    AddTagsButton(
+                        action: showTagsSheet,
+                        tagCount: issueProperties.tags.count
+                    )
                 }
                 .listRowSeparator(.hidden)
                 .listRowBackground(Color.customBackground)
@@ -37,6 +39,10 @@ struct AddIssueView: View {
             .background(Color.customBackground)
             .sheet(item: $errorWrapper) { error in
                 ErrorView(errorWrapper: error)
+                    .sheetWithIndicator()
+            }
+            .sheet(isPresented: $showingTagsSheet) {
+                TagSelectionView(selection: $issueProperties.tags)
             }
             .toolbarBackground(Color.customBackground)
             .toolbar {
@@ -84,21 +90,6 @@ private extension AddIssueView {
         }
     }
     
-    var selectedTagsSection: some View {
-        Section("Selected tags") {
-            if issueProperties.tags.isEmpty {
-                Text("No tags selected.")
-                    .foregroundColor(.customSecondary)
-                    .frame(maxWidth: .infinity, alignment: .center)
-            }
-            WrappingHStack {
-                ForEach(Array(issueProperties.tags)) { tag in
-                    Text(tag.wrappedName)
-                }
-            }
-        }
-    }
-    
     @ToolbarContentBuilder
     var toolbarItems: some ToolbarContent {
         ToolbarItem(placement: .cancellationAction) {
@@ -123,6 +114,10 @@ private extension AddIssueView {
                 errorWrapper = ErrorWrapper(error: error, message: "Failed to add issue.")
             }
         }
+    }
+    
+    func showTagsSheet() {
+        showingTagsSheet = true
     }
 }
 

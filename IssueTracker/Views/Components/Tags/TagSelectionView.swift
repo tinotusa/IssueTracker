@@ -9,72 +9,101 @@ import SwiftUI
 import CoreData
 
 struct TagSelectionView: View {
-    @State private var tagName = ""
+    @State private var searchText = ""
     @State private var errorWrapper: ErrorWrapper?
+    @State private var draftTags: Set<Tag> = []
+    @State private var tagColour = Color.blue
     @Binding private(set) var selectedTags: Set<Tag>
     @Environment(\.managedObjectContext) private var viewContext
     
     @EnvironmentObject private var persistenceController: PersistenceController
+    @Environment(\.dismiss) private var dismiss
     
     @FetchRequest(sortDescriptors: [.init(\.dateCreated, order: .reverse)])
     private var allTags: FetchedResults<Tag>
     
     init(selection selectedTags: Binding<Set<Tag>>) {
         _selectedTags = selectedTags
+        draftTags = selectedTags.wrappedValue
     }
     
     var body: some View {
-        VStack(alignment: .leading) {
-            TextField("Search tags", text: $tagName)
-                .textFieldStyle(.roundedBorder)
-            
-            if allTags.isEmpty && tagName.isEmpty {
-                Text("No tags.\nType a new tag.")
-                    .foregroundColor(.customSecondary)
-                    .multilineTextAlignment(.center)
-                    .frame(maxWidth: .infinity, alignment: .center)
-            } else if allTags.isEmpty {
-                PlainButton("Add \"\(tagName)\"") {
-                    Task {
-                        do {
-                            try await persistenceController.addTag(named: tagName)
-                        } catch {
-                            errorWrapper = ErrorWrapper(error: error, message: "Failed to add new tag.")
+        NavigationStack {
+            VStack(alignment: .leading) {
+                WrappingHStack {
+                    ForEach(allTags) { tag in
+                        Button {
+                            addTagToSelection(tag)
+                        } label: {
+                            ProminentTagView(tag: tag, isSelected: draftTags.contains(where: { $0.wrappedName == tag.wrappedName }))
                         }
+                        .buttonStyle(.borderless)
                     }
                 }
-            }
-            WrappingHStack {
-                ForEach(allTags) { tag in
-                    Button {
-                        addTagToSelection(tag)
-                    } label: {
-                        ProminentTagView(title: tag.wrappedName, isSelected: selectedTags.contains(tag))
-                    }
-                    .buttonStyle(.borderless)
+                
+                TextField("Add new tag", text: $searchText)
+                    .textFieldStyle(.roundedBorder)
+                    .onSubmit(addNewTag)
+                ColorPicker(selection: $tagColour) {
+                    Text("Tag colour")
                 }
             }
-        }
-        .onChange(of: tagName) { text in
-            let text = text.trimmingCharacters(in: .whitespacesAndNewlines)
-            let predicate = NSPredicate(format: "name CONTAINS[cd] %@", text)
-            allTags.nsPredicate = text.isEmpty ? nil : predicate
+            .navigationTitle("Tags")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .cancellationAction) {
+                    Button("Cancel", action: dismiss.callAsFunction)
+                }
+                ToolbarItem(placement: .confirmationAction) {
+                    Button("Done", action: saveTags)
+                }
+            }
+            .onAppear {
+                draftTags = selectedTags
+            }
         }
     }
 }
 
+// MARK: - Views
 private extension TagSelectionView {
-    func addTagToSelection(_ tag: Tag) {
-        if selectedTags.contains(tag) {
-            selectedTags.remove(tag)
-        } else {
-            selectedTags.insert(tag)
+    func addNewTag() {
+        defer { searchText = "" }
+        let searchText = searchText.trimmingCharacters(in: .whitespacesAndNewlines)
+        if searchText.isEmpty { return }
+        if draftTags.contains(where: { $0.wrappedName == searchText }) {
+            return
         }
+        let tag = Tag(context: viewContext)
+        tag.name = searchText
+        tag.id = UUID()
+        tag.dateCreated = .now
+        tag.colour = tagColour.hexValue
+        tag.opacity = tagColour.opacityValue
+        
+        addTagToSelection(tag)
+    }
+    
+    func addTagToSelection(_ tag: Tag) {
+        if draftTags.contains(tag) {
+            draftTags.remove(tag)
+        } else {
+            draftTags.insert(tag)
+        }
+    }
+    
+    func saveTags() {
+        selectedTags = draftTags
+        dismiss()
     }
 }
 
 struct TagSelectionView_Previews: PreviewProvider {
-    static var viewContext = PersistenceController.preview.container.viewContext
+    static var viewContext = {
+        let viewContext = PersistenceController.preview.container.viewContext
+        let tag = Tag.makePreviews(count: 1)
+        return viewContext
+    }()
     
     struct ContainerView: View {
         @State private var selectedTags: Set<Tag> = []

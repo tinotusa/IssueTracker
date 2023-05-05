@@ -93,6 +93,7 @@
 		21C0A5C629F7BC8B00166499 /* SFSymbol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21C0A5C529F7BC8B00166499 /* SFSymbol.swift */; };
 		21CB0C8229CD48EA006BF4FF /* bulbasaur.png in Resources */ = {isa = PBXBuildFile; fileRef = 21CB0C8129CD48EA006BF4FF /* bulbasaur.png */; };
 		21CB0C8429CD4902006BF4FF /* URL+previewImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21CB0C8329CD4902006BF4FF /* URL+previewImage.swift */; };
+		21CE5BD52A04A77400C1CB47 /* AddTagsButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21CE5BD42A04A77400C1CB47 /* AddTagsButton.swift */; };
 		21CEAAC2297D4EC500A7A344 /* EditIssueView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21CEAAC1297D4EC500A7A344 /* EditIssueView.swift */; };
 		21D031F229F1098C00F20E1B /* MandatoryFormField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21D031F129F1098C00F20E1B /* MandatoryFormField.swift */; };
 		21D031F429F109A300F20E1B /* TextFieldValidation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21D031F329F109A300F20E1B /* TextFieldValidation.swift */; };
@@ -228,6 +229,7 @@
 		21C0A5C529F7BC8B00166499 /* SFSymbol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SFSymbol.swift; sourceTree = "<group>"; };
 		21CB0C8129CD48EA006BF4FF /* bulbasaur.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bulbasaur.png; sourceTree = "<group>"; };
 		21CB0C8329CD4902006BF4FF /* URL+previewImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "URL+previewImage.swift"; sourceTree = "<group>"; };
+		21CE5BD42A04A77400C1CB47 /* AddTagsButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddTagsButton.swift; sourceTree = "<group>"; };
 		21CEAAC1297D4EC500A7A344 /* EditIssueView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditIssueView.swift; sourceTree = "<group>"; };
 		21D031F129F1098C00F20E1B /* MandatoryFormField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MandatoryFormField.swift; sourceTree = "<group>"; };
 		21D031F329F109A300F20E1B /* TextFieldValidation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextFieldValidation.swift; sourceTree = "<group>"; };
@@ -434,6 +436,7 @@
 				21BBEBF0295E8176008F237B /* TagSelectionView.swift */,
 				21BBEBFE295EE1E9008F237B /* TagView.swift */,
 				2127AD65295FBD0E005893DE /* ProminentTagView.swift */,
+				21CE5BD42A04A77400C1CB47 /* AddTagsButton.swift */,
 			);
 			path = Tags;
 			sourceTree = "<group>";
@@ -913,6 +916,7 @@
 				211104AB297239DB00FB8CD1 /* EditTagView.swift in Sources */,
 				2179A40329EBCA2700D69C82 /* SheetWithIndicator.swift in Sources */,
 				21562B9F29F3E4D6006AB379 /* CommentProperties.swift in Sources */,
+				21CE5BD52A04A77400C1CB47 /* AddTagsButton.swift in Sources */,
 				218FD5EC29E65BD50029E1E6 /* PersistenceError.swift in Sources */,
 				2150C840295972E0006CD7D2 /* ContentView.swift in Sources */,
 				2150C84A295972E2006CD7D2 /* IssueTracker.xcdatamodeld in Sources */,

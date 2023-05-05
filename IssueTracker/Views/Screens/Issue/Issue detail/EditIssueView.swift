@@ -10,11 +10,10 @@ import SwiftUI
 struct EditIssueView: View {
     @Binding var issueProperties: IssueProperties
     @State private var errorWrapper: ErrorWrapper?
-    
+    @State private var showingTagsSheet = false
     @Environment(\.editMode) private var editMode
     @Environment(\.managedObjectContext) private var viewContext
     @EnvironmentObject private var persistenceController: PersistenceController
-    
     
     var body: some View {
         List {
@@ -22,7 +21,7 @@ struct EditIssueView: View {
                 nameSection
                 descriptionSection
                 prioritySection
-                tagsSection
+                AddTagsButton(action: showTagsSheet, tagCount: issueProperties.tags.count)
             }
             .listRowSeparator(.hidden)
             .listRowBackground(Color.customBackground)
@@ -34,6 +33,11 @@ struct EditIssueView: View {
         .navigationTitle("Edit issue")
         .sheet(item: $errorWrapper) { error in
             ErrorView(errorWrapper: error)
+                .sheetWithIndicator()
+        }
+        .sheet(isPresented: $showingTagsSheet) {
+            TagSelectionView(selection: $issueProperties.tags)
+                .sheetWithIndicator()
         }
         .safeAreaInset(edge: .bottom) {
             ProminentButton("Done", action: cancel)
@@ -80,12 +84,6 @@ private extension EditIssueView {
             .pickerStyle(.segmented)
         }
     }
-    
-    var tagsSection: some View {
-        Section("Tags") {
-            TagSelectionView(selection: $issueProperties.tags)
-        }
-    }
 }
 
 // MARK: - Functions
@@ -93,6 +91,11 @@ private extension EditIssueView {
     func cancel() {
         editMode?.wrappedValue = .inactive
     }
+    
+    func showTagsSheet() {
+        showingTagsSheet = true
+    }
+    
 }
 
 struct IssueEditView_Previews: PreviewProvider {

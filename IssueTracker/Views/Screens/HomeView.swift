@@ -76,7 +76,7 @@ import CoreData
 struct HomeView_Previews: PreviewProvider {
     static var context: NSManagedObjectContext {
         let viewContext = PersistenceController.preview.container.viewContext
-        let projects = Project.makePreviews(count: 1)
+        let _ = Project.makePreviews(count: 1)
         return viewContext
     }
     
