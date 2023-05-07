@@ -1,0 +1,46 @@
+{
+  "configurations" : [
+    {
+      "id" : "B6DCFD3C-D2B1-4D92-BF46-829DEF46177B",
+      "name" : "Configuration 1",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+    "codeCoverage" : {
+      "targets" : [
+        {
+          "containerPath" : "container:IssueTracker.xcodeproj",
+          "identifier" : "2150C839295972E0006CD7D2",
+          "name" : "IssueTracker"
+        }
+      ]
+    },
+    "targetForVariableExpansion" : {
+      "containerPath" : "container:IssueTracker.xcodeproj",
+      "identifier" : "2150C839295972E0006CD7D2",
+      "name" : "IssueTracker"
+    }
+  },
+  "testTargets" : [
+    {
+      "parallelizable" : true,
+      "target" : {
+        "containerPath" : "container:IssueTracker.xcodeproj",
+        "identifier" : "2150C84E295972E2006CD7D2",
+        "name" : "IssueTrackerTests"
+      }
+    },
+    {
+      "parallelizable" : true,
+      "target" : {
+        "containerPath" : "container:IssueTracker.xcodeproj",
+        "identifier" : "2150C858295972E2006CD7D2",
+        "name" : "IssueTrackerUITests"
+      }
+    }
+  ],
+  "version" : 1
+}

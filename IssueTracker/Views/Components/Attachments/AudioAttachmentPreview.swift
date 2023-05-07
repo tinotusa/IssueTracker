@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import AVFoundation
 
 struct AudioAttachmentPreview: View {
     let url: URL
@@ -13,13 +14,7 @@ struct AudioAttachmentPreview: View {
     
     var body: some View {
         VStack {
-            Button {
-                if audioPlayer.isPlaying {
-                    audioPlayer.stop()
-                } else {
-                    audioPlayer.play()
-                }
-            } label: {
+            Button(action: playAction) {
                 Image(systemName: playIcon)
                     .font(.title)
             }
@@ -31,7 +26,12 @@ struct AudioAttachmentPreview: View {
         .shadow(radius: 2, x: 0, y: 1)
         .onAppear {
             // TODO: look up how others play audio. (maybe audioPlayer.play(url: url))
-            audioPlayer.setUpPlayer(url: url)
+            do {
+                let player = try AVAudioPlayer(contentsOf: url)
+                audioPlayer.setUpPlayer(player: player)
+            } catch {
+                print("Failed to create player: \(error)")
+            }
         }
     }
 }
@@ -39,6 +39,10 @@ struct AudioAttachmentPreview: View {
 private extension AudioAttachmentPreview {
     var playIcon: String {
         audioPlayer.isPlaying ? "pause.circle.fill" : "play.circle.fill"
+    }
+    
+    func playAction() {
+        audioPlayer.isPlaying ? audioPlayer.stop() : audioPlayer.play()
     }
 }
 

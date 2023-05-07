@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import AVFoundation
 
 struct AudioAttachmentView: View {
     let url: URL
@@ -54,7 +55,14 @@ private extension AudioAttachmentView {
         .background(.white)
         .cornerRadius(10)
         .onAppear {
-            audioPlayer.setUpPlayer(url: URL(filePath: assetURL.path()))
+            do {
+                let url = URL(filePath: assetURL.path())
+                let player = try AVAudioPlayer(contentsOf: url)
+                audioPlayer.setUpPlayer(player: player)
+            } catch {
+                print("Failed to create audio player. \(error)")
+            }
+            
         }
     }
 }

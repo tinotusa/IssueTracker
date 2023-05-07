@@ -101,8 +101,9 @@ extension PersistenceController {
     ///   - issue: The issue to add the comment to.
     ///   - attachmentTransferables: The image attachment(s) of the comment.
     ///   - audioURL: The audio attachment of the comment.
+    @MainActor
     func addComment(_ commentProperties: CommentProperties, to issue: Issue) async throws {
-        let comment = Comment(comment: await commentProperties.comment, context: viewContext)
+        let comment = Comment(comment: commentProperties.comment, context: viewContext)
         
         let attachmentTransferables = try await commentProperties.getAttachmentsTransferables()
         logger.debug("Adding comment with id: \(comment.wrappedId)")
@@ -132,7 +133,7 @@ extension PersistenceController {
         }
         
         // adding audio
-        if let audioURL = await commentProperties.audioURL {
+        if let audioURL = commentProperties.audioURL {
             // cloudkit audio attachment
             let audioAttachmentRecord = CKRecord(recordType: "Attachment")
             let asset = CKAsset(fileURL: audioURL)
