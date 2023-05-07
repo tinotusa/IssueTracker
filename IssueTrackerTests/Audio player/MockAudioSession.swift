@@ -10,6 +10,7 @@ import AVFoundation
 
 class MockAudioSession: AVAudioSessionProtocol {
     private var category: AVAudioSession.Category = .playAndRecord
+    var hasPermission = true
     var throwSessionError: Bool = false
     
     func setCategory(_ category: AVAudioSession.Category) throws {
@@ -17,5 +18,9 @@ class MockAudioSession: AVAudioSessionProtocol {
         if throwSessionError {
             throw NSError(domain: "Error thrown", code: 1)
         }
+    }
+    
+    func requestRecordPermission(_ response: @escaping (Bool) -> Void) {
+        response(hasPermission)
     }
 }

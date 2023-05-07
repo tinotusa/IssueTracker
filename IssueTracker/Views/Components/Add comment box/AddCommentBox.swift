@@ -106,7 +106,17 @@ private extension AddCommentBox {
                 if audioRecorder.isRecording {
                     audioRecorder.stopRecording()
                 } else {
-                    audioRecorder.startRecording()
+                    let attachmentsFolder = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appending(path: "attachmentsFolder")
+                    do {
+                        if !FileManager.default.fileExists(atPath: attachmentsFolder.path()) {
+                            try FileManager.default.createDirectory(at: attachmentsFolder, withIntermediateDirectories: true)
+                        }
+                        let audioFileURL = attachmentsFolder.appending(path: "\(UUID().uuidString).m4a")
+                        let recorder = try AVAudioRecorder(url: audioFileURL, settings: [:])
+                        audioRecorder.startRecording(recorder: recorder)
+                    } catch {
+                        
+                    }
                 }
             } label: {
                 Label(

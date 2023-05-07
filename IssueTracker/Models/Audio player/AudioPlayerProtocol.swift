@@ -44,6 +44,7 @@ protocol AVAudioSessionProtocol {
     /// Sets the sessions category.
     /// - Parameter category: The category to set.
     func setCategory(_ category: AVAudioSession.Category) throws
+    func requestRecordPermission(_ response: @escaping (Bool) -> Void)
 }
 
 extension AVAudioSession: AVAudioSessionProtocol { }

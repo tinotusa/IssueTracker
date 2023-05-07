@@ -9,30 +9,33 @@ import Foundation
 import AVFoundation
 import os
 
-class AudioRecorder: ObservableObject {
-    private var recorder: AVAudioRecorder?
+final class AudioRecorder: ObservableObject {
+    private(set) var recorder: AudioRecorderProtocol?
     @Published private(set) var isRecording = false
     private let logger = Logger(
         subsystem: Bundle.main.bundleIdentifier!,
         category: String(describing: AudioRecorder.self)
     )
     @Published private(set) var url: URL?
-    private var session: AVAudioSession
+    private var session: AVAudioSessionProtocol
     
-    init() {
-        session = AVAudioSession.sharedInstance()
+    init(session: AVAudioSessionProtocol = AVAudioSession.sharedInstance()) {
+        self.session = session
         do {
             try session.setCategory(.record)
         } catch {
             logger.error("Failed to init audio recorder.")
         }
     }
-    
+}
+
+extension AudioRecorder {
     func requestPermission() -> Bool {
         var hasPermission = false
         session.requestRecordPermission { [weak self] granted in
+            guard let self else { return }
             if !granted {
-                self?.logger.debug("Use denied recording.")
+                self.logger.debug("Use denied recording.")
                 hasPermission = false
                 return
             }
@@ -42,36 +45,23 @@ class AudioRecorder: ObservableObject {
     }
     
     @MainActor
-    func startRecording() {
+    func startRecording(recorder: AudioRecorderProtocol) {
         if !requestPermission() {
             return
         }
         logger.debug("Starting to record audio.")
-        do {
-            let attachmentsFolder = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appending(path: "attachmentsFolder")
-            if !FileManager.default.fileExists(atPath: attachmentsFolder.path()) {
-                try FileManager.default.createDirectory(at: attachmentsFolder, withIntermediateDirectories: true)
-            }
-            let audioFileURL = attachmentsFolder.appending(path: "\(UUID().uuidString).m4a")
-            url = audioFileURL
-            recorder = try .init(url: audioFileURL, settings: [:])
-            
-            if isRecording {
-                logger.debug("Already recording.")
-                return
-            }
-            
-            guard let recorder else {
-                logger.debug("Failed to start recorder. recorder is nil.")
-                return
-            }
-            
-            recorder.prepareToRecord()
-            recorder.record()
-            isRecording = recorder.isRecording
-        } catch {
-            logger.error("Failed to start recording. \(error)")
+        
+        url = recorder.url
+        self.recorder = recorder
+        
+        if isRecording {
+            logger.debug("Already recording.")
+            return
         }
+        
+        recorder.prepareToRecord()
+        recorder.record()
+        isRecording = recorder.isRecording
     }
     
     @MainActor
