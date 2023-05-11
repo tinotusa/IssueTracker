@@ -9,38 +9,23 @@ import Foundation
 import CloudKit
 import os
 
+/// Manager for cloud kit operations.
 struct CloudKitManager {
     private let logger = Logger(
         subsystem: Bundle.main.bundleIdentifier!,
         category: String(describing: CloudKitManager.self)
     )
-    var cloudKitError: CloudKitManagerError?
-    var isSignedIn = false
-    
-    enum CloudKitManagerError: Error, LocalizedError {
-        case couldNotDetermine
-        case noAccount
-        case restricted
-        case temporarilyUnavailable
-        case unknownError
-        
-        var errorDescription: String? {
-            switch self {
-            case .couldNotDetermine: return "Couldn't determine the account status for cloud kit."
-            case .noAccount: return "Error no cloud kit account."
-            case .restricted: return "The cloud kit account is restricted."
-            case .temporarilyUnavailable: return "The cloud kit account is temporarily restricted."
-            case .unknownError: return "Unknown error."
-            }
-        }
-    }
 }
 
 extension CloudKitManager {
+    /// Returns the account status for the user.
+    /// - Returns: The iCloud account status.
     func getAccountStatus() async throws -> CKAccountStatus {
         try await CKContainer.default().accountStatus()
     }
     
+    /// Deletes the comment's attachments from iCloud.
+    /// - Parameter comments: Comments to delete.
     func deleteComments(_ comments: [Comment]) async throws {
         logger.debug("Deleting \(comments.count) comments")
         try await withThrowingTaskGroup(of: Void.self) { group in
@@ -53,6 +38,8 @@ extension CloudKitManager {
         }
     }
     
+    /// Delets the given issues from iCloud.
+    /// - Parameter issues: The issues to delete.
     func deleteIssues(_ issues: [Issue]) async throws {
         try await withThrowingTaskGroup(of: Void.self) { group in
             for issue in issues {
@@ -64,10 +51,14 @@ extension CloudKitManager {
         }
     }
     
+    /// Deletes the given issue from iCloud.
+    /// - Parameter issue: The issue to delete.
     func deleteIssue(_ issue: Issue) async throws {
         try await deleteComments(issue.wrappedComments)
     }
     
+    /// Deletes the given comment from iCloud.
+    /// - Parameter comment: The comment to delete.
     func deleteComment(_ comment: Comment) async throws {
         logger.debug("Deleting comment with id: \(comment.wrappedId)")
         logger.debug("\(comment.wrappedAttachments.count) attachment")
@@ -86,6 +77,8 @@ extension CloudKitManager {
         }
     }
     
+    /// Deletes an attachment from iCloud.
+    /// - Parameter assetURL: The asset url to delete.
     func deleteAttachment(withURL assetURL: URL) async throws {
         logger.debug("Deleting record with asset url: \(assetURL)")
         let database = CKContainer.default().privateCloudDatabase
@@ -108,6 +101,8 @@ extension CloudKitManager {
         try await deleteRecords(recordIDs)
     }
     
+    /// An async wrapper for deleting records from iCloud database.
+    /// - Parameter recordIDs: The record IDs to delete.
     private func deleteRecords(_ recordIDs: [CKRecord.ID]) async throws {
         try await withCheckedThrowingContinuation { continuation in
             let database = CKContainer.default().privateCloudDatabase
