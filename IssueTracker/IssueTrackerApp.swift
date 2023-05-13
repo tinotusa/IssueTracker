@@ -10,7 +10,7 @@ import CoreData
 
 @main
 struct IssueTrackerApp: App {
-    @StateObject private var persistenceController = PersistenceController.shared
+    @StateObject private var persistenceController = UITestingHelper.isUITesting ? PersistenceController(inMemory: true) : PersistenceController.shared
     
     var body: some Scene {
         WindowGroup {

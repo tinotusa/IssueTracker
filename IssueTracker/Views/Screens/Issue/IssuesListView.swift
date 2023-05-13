@@ -96,6 +96,7 @@ struct IssuesListView: View {
         }
         .confirmationDialog("Delete project", isPresented: $showingDeleteProjectConfirmation) {
             Button("Delete", role: .destructive, action: deleteProject)
+                .accessibilityIdentifier("confimationDeleteButton")
         } message: {
             Text("Are you sure you want to delete this project?")
         }
@@ -181,9 +182,11 @@ private extension IssuesListView {
                 Button(role: .destructive, action: showDeleteConfirmation) {
                     Label("Delete project", systemImage: SFSymbol.trash)
                 }
+                .accessibilityIdentifier("deleteProjectButton")
             } label: {
                 Label("Options", systemImage: SFSymbol.ellipsisCircle)
             }
+            .accessibilityIdentifier("toolbarMenuButton")
         }
         
         ToolbarItemGroup(placement: .bottomBar) {
@@ -225,8 +228,8 @@ private extension IssuesListView {
     func deleteProject() {
         Task {
             do {
-                try await persistenceController.deleteObject(project)
                 dismiss()
+                try await persistenceController.deleteObject(project)
             } catch {
                 errorWrapper = .init(error: error, message: "Failed to delete project.")
             }

@@ -22,6 +22,7 @@ struct AddProjectView: View {
                     CustomTextField("Project name",text: $projectData.name)
                         .isMandatoryFormField(true)
                         .textFieldInputValidationHandler(ProjectProperties.validateProjectName)
+                        .accessibilityIdentifier("AddProjectView-projectName")
                 }
                 .listRowSeparator(.hidden)
                 .listRowBackground(Color.customBackground)
@@ -37,13 +38,13 @@ struct AddProjectView: View {
                     .listRowSeparator(.hidden)
                     .listRowBackground(Color.customBackground)
                     .labelsHidden()
+                    .accessibilityIdentifier("datePicker")
                 }
-            }
-            .listStyle(.plain)
-            .safeAreaInset(edge: .bottom) {
                 ProminentButton("Add project", action: addProject)
                     .disabled(!projectData.isValidForm())
+                    .accessibilityIdentifier("AddProjectView-addProjectButton")
             }
+            .listStyle(.plain)
             .sheet(item: $errorWrapper) { error in
                 ErrorView(errorWrapper: error)
             }
@@ -53,10 +54,12 @@ struct AddProjectView: View {
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
                     Button("Close", action: dismiss.callAsFunction)
+                        .accessibilityIdentifier("AddProjectView-closeButton")
                 }
                 ToolbarItem(placement: .confirmationAction) {
                     Button("Add project", action: addProject)
                         .disabled(!projectData.isValidForm())
+                        .accessibilityIdentifier("AddProjectView-addProjectToolbarButton")
                 }
             }
         }

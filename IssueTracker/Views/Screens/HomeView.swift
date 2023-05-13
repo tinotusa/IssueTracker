@@ -25,10 +25,12 @@ struct HomeView: View {
                         .foregroundColor(.customSecondary)
                         .frame(maxWidth: .infinity, alignment: .center)
                         .listRowBackground(Color.customBackground)
+                        .accessibilityIdentifier("No projects")
                 } else {
                     ForEach(projects) { project in
                         NavigationLink(value: project) {
                             ProjectRowView(project: project)
+                                .accessibilityIdentifier(project.wrappedName)
                         }
                     }
                     .listRowBackground(Color.customBackground)
@@ -45,6 +47,7 @@ struct HomeView: View {
                             .labelStyle(.titleAndIcon)
                     }
                     .frame(maxWidth: .infinity, alignment: .trailing)
+                    .accessibilityIdentifier("HomeView-addProjectButton")
                 }
             }
             .listStyle(.plain)

@@ -9,7 +9,6 @@ import SwiftUI
 
 struct ErrorView: View {
     let errorWrapper: ErrorWrapper
-    @Environment(\.openURL) private var openURL
     @Environment(\.dismiss) private var dismiss
     
     var body: some View {
@@ -17,6 +16,7 @@ struct ErrorView: View {
             VStack {
                 Text("An error has occurred")
                     .font(.title)
+                    .accessibilityIdentifier("Error title")
                 Divider()
                 Text(errorWrapper.error.localizedDescription)
                     .font(.headline)
@@ -28,21 +28,12 @@ struct ErrorView: View {
             .background(.ultraThinMaterial)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
-                    cancelButton
+                    Button("Cancel", role: .cancel, action: dismiss.callAsFunction)
                 }
             }
         }
     }
 }
-
-private extension ErrorView {
-    var cancelButton: some View {
-        Button("Cancel", role: .cancel) {
-            dismiss()
-        }
-    }
-}
-
 
 struct ErrorView_Previews: PreviewProvider {
     enum TestError: LocalizedError {

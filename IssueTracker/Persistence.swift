@@ -20,7 +20,7 @@ final class PersistenceController: ObservableObject {
     private let cloudKitManager = CloudKitManager()
     
     init(inMemory: Bool = false) {
-        container =  NSPersistentCloudKitContainer(name: "IssueTracker")
+        container = NSPersistentCloudKitContainer(name: "IssueTracker")
         if inMemory {
             container.persistentStoreDescriptions.first!.url = URL(fileURLWithPath: "/dev/null")
         }
