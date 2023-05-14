@@ -27,6 +27,33 @@
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       shouldUseLaunchSchemeArgsEnv = "YES">
+      <PreActions>
+         <ExecutionAction
+            ActionType = "Xcode.IDEStandardExecutionActionsCore.ExecutionActionType.ShellScriptAction">
+            <ActionContent
+               title = "Run Script"
+               scriptText = "xcrun cktool reset-schema \&#10;    --team-id SVNZBC4323 \&#10;    --container-id iCloud.com.gmail.tusatino.IssueTracker&#10;    &#10;xcrun cktool import-schema \&#10;    --team-id SVNZBC4323 \&#10;    --container-id iCloud.com.gmail.tusatino.IssueTracker \&#10;    --environment development \&#10;    --file $PROJECT_DIR/CloudKitSchema.ckdb&#10;">
+               <EnvironmentBuildable>
+                  <BuildableReference
+                     BuildableIdentifier = "primary"
+                     BlueprintIdentifier = "2150C839295972E0006CD7D2"
+                     BuildableName = "IssueTracker.app"
+                     BlueprintName = "IssueTracker"
+                     ReferencedContainer = "container:IssueTracker.xcodeproj">
+                  </BuildableReference>
+               </EnvironmentBuildable>
+            </ActionContent>
+         </ExecutionAction>
+      </PreActions>
+      <PostActions>
+         <ExecutionAction
+            ActionType = "Xcode.IDEStandardExecutionActionsCore.ExecutionActionType.ShellScriptAction">
+            <ActionContent
+               title = "Run Script"
+               scriptText = "xcrun cktool reset-schema \&#10;    --team-id SVNZBC4323 \&#10;    --container-id iCloud.com.gmail.tusatino.IssueTracker&#10;">
+            </ActionContent>
+         </ExecutionAction>
+      </PostActions>
       <TestPlans>
          <TestPlanReference
             reference = "container:IssueTrackerTests/IssueTracker.xctestplan"

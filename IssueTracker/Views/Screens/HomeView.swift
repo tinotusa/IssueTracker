@@ -25,7 +25,7 @@ struct HomeView: View {
                         .foregroundColor(.customSecondary)
                         .frame(maxWidth: .infinity, alignment: .center)
                         .listRowBackground(Color.customBackground)
-                        .accessibilityIdentifier("No projects")
+                        .accessibilityIdentifier("noProjectsText")
                 } else {
                     ForEach(projects) { project in
                         NavigationLink(value: project) {
@@ -75,6 +75,7 @@ private extension HomeView {
         showingAddProjectView = true
     }
 }
+
 import CoreData
 struct HomeView_Previews: PreviewProvider {
     static var context: NSManagedObjectContext {

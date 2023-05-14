@@ -16,12 +16,13 @@ struct ErrorView: View {
             VStack {
                 Text("An error has occurred")
                     .font(.title)
-                    .accessibilityIdentifier("Error title")
+                    .accessibilityIdentifier("errorTitle")
                 Divider()
                 Text(errorWrapper.error.localizedDescription)
                     .font(.headline)
                 Text(errorWrapper.message)
                     .multilineTextAlignment(.center)
+                    .accessibilityIdentifier("errorMessage")
             }
             .padding()
             .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)

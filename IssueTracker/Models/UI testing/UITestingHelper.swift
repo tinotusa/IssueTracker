@@ -11,4 +11,12 @@ enum UITestingHelper {
     static var isUITesting: Bool {
         CommandLine.arguments.contains(CommandLineArgument.uiTesting)
     }
+    
+    static var addIssueViewThrowsError: Bool {
+        let shouldThrow = ProcessInfo.processInfo.environment["addIssueViewThrowsError"]
+        guard let shouldThrow else {
+            return false
+        }
+        return shouldThrow == "true"
+    }
 }

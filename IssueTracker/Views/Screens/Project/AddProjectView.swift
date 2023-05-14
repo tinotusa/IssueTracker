@@ -43,6 +43,9 @@ struct AddProjectView: View {
                 ProminentButton("Add project", action: addProject)
                     .disabled(!projectData.isValidForm())
                     .accessibilityIdentifier("AddProjectView-addProjectButton")
+                    .listRowSeparator(.hidden)
+                    .listRowBackground(Color.customBackground)
+                    .frame(maxWidth: .infinity, alignment: .center)
             }
             .listStyle(.plain)
             .sheet(item: $errorWrapper) { error in
@@ -69,6 +72,10 @@ struct AddProjectView: View {
 // MARK: - Functions
 private extension AddProjectView {
     func addProject() {
+        if UITestingHelper.addIssueViewThrowsError {
+            errorWrapper = .init(error: PersistenceError.noICloudAccount, message: "Failed to add project.")
+            return
+        }
         Task  {
             do {
                 try await persistenceController.addProject(projectData)

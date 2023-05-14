@@ -200,9 +200,7 @@ extension PersistenceController {
                 }
             }
             
-            for try await _ in group {
-                
-            }
+            try await group.next()
         }
     }
     
@@ -223,6 +221,8 @@ extension PersistenceController {
         logger.debug("Deleting object with id: \(object.objectID)")
 
         if let issue = object as? Issue {
+            // TODO: Add task group?
+            // TODO: make these if elses their own functions.
             for comment in issue.wrappedComments {
                 for attachment in comment.wrappedAttachments {
                     guard let assetURL = attachment.assetURL else {

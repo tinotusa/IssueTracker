@@ -22,7 +22,8 @@
       "containerPath" : "container:IssueTracker.xcodeproj",
       "identifier" : "2150C839295972E0006CD7D2",
       "name" : "IssueTracker"
-    }
+    },
+    "testExecutionOrdering" : "random"
   },
   "testTargets" : [
     {
