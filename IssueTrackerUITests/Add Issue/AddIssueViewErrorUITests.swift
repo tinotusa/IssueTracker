@@ -27,6 +27,6 @@ final class AddIssueViewErrorUITests: XCTestCase {
     func testAddIssueThrowsError() throws {
         let project = try app.tapProject(named: "New project")
         let issueSheet = try project.tapAddIssueButton()
-        try issueSheet.closeSheet()
+        try issueSheet.tapCancelButton()
     }
 }

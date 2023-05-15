@@ -84,6 +84,7 @@ extension PersistenceController {
     }
     
     /// Checks that the users is logged in to iCloud.
+    @MainActor
     func iCloudAccountCheck() async throws {
         let status = try await cloudKitManager.getAccountStatus()
         if status == .available {
@@ -274,7 +275,9 @@ extension PersistenceController {
     @MainActor
     /// Commits the changes made to core data.
     func save() async throws {
-        try await iCloudAccountCheck()
+        if !UITestingHelper.isUITesting {
+            try await iCloudAccountCheck()
+        }
         if !viewContext.hasChanges {
             logger.debug("Failed to save. managed object has no changes.")
             return

@@ -51,6 +51,7 @@ struct TagSelectionView: View {
                 }
                 .accessibilityIdentifier("colourPicker")
             }
+            .accessibilityElement(children: .contain)
             .navigationTitle("Tags")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
