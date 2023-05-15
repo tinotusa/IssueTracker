@@ -23,4 +23,24 @@ class Project: IssueTrackerUIElement {
         
         return AddIssueSheet(app: app, element: element)
     }
+    
+    func tapMenuButton() throws -> ProjectMenu {
+        let menuButton = app.buttons["toolbarMenuButton"]
+        if !menuButton.waitForExistence(timeout: 5) {
+            throw IssueTrackerError.elementDoesNotExist(message: "Menu button doesn't exist.")
+        }
+        menuButton.tap()
+        
+        return ProjectMenu(app: app, element: menuButton)
+    }
+}
+
+class ProjectMenu: IssueTrackerUIElement {
+    func tapDeleteButton() throws {
+        let button = app.buttons["deleteProjectButton"]
+        if !button.waitForExistence(timeout: 5) {
+            throw IssueTrackerError.elementDoesNotExist(message: "Delete menu button doesn't exist.")
+        }
+        button.tap()
+    }
 }

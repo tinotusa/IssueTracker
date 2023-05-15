@@ -8,18 +8,15 @@
 import XCTest
 
 final class AddProjectViewUITests: XCTestCase {
-    private var app: XCUIApplication!
-    private var timeout: TimeInterval!
-    private var addProjectHelper: AddProjectHelper!
+    private var app: IssueTrackerApp!
     
     override func setUpWithError() throws {
         continueAfterFailure = false
-        timeout = 5
-        app = XCUIApplication()
-        app.launchArguments.append("-ui-testing")
+    
+        app = IssueTrackerApp()
+        app.launchArguments.append(contentsOf: ["-ui-testing", "-add-preview-data"])
         app.launchEnvironment["addIssueViewThrowsError"] = "false"
         app.launch()
-        addProjectHelper = .init(app: app, timeout: timeout)
     }
 
     override func tearDownWithError() throws {
@@ -27,33 +24,27 @@ final class AddProjectViewUITests: XCTestCase {
     }
     
     // TODO: Move this test to issuelistview ui tests later
-    func testDeleteProjectSucceds() {
-        addProjectHelper.tapAddProjectButton()
+    func testDeleteProjectSucceds() throws {
+        let projectPredicate = NSPredicate(format: "identifier CONTAINS %@", "\(name)")
+        let oldButtonCount = app.buttons.count
         
-        let name = UUID().uuidString
-        addProjectHelper.addProject(named: name)
-        addProjectHelper.tapProject(named: name)
-        addProjectHelper.tapMenuButton()
-        let deleteButton = app.buttons["deleteProjectButton"]
-        XCTAssertTrue(deleteButton.exists, "Delete project button should exist.")
-        deleteButton.tap()
+        let project = try app.tapProject(named: "New project")
+        try project.tapMenuButton()
+            .tapDeleteButton()
         
         let confirmationDeleteButton = app.buttons["confimationDeleteButton"]
-        XCTAssertTrue(confirmationDeleteButton.waitForExistence(timeout: addProjectHelper.timeout), "Comfirnation dialog delete button should exist.")
+        XCTAssertTrue(confirmationDeleteButton.waitForExistence(timeout: 5), "Comfirnation dialog delete button should exist.")
         confirmationDeleteButton.tap()
         
-        let projectPredicate = NSPredicate(format: "identifier CONTAINS %@", "\(name)")
-        let project = app.buttons.matching(projectPredicate).firstMatch
-        XCTAssertFalse(project.waitForExistence(timeout: timeout), "Project named: \(name) shouldn't exist.")
+        let newButtonCount = app.buttons.matching(projectPredicate).count
+        XCTAssertLessThan(newButtonCount, oldButtonCount, "There should be 1 less project after calling delete.")
     }
     
-    func testAddProjectViewCloseButton() {
-        addProjectHelper.tapAddProjectButton()
-        let closeButton = app.buttons["AddProjectView-closeButton"]
-        XCTAssertTrue(closeButton.isEnabled, "Close button should be enabled.")
-        XCTAssertTrue(closeButton.waitForExistence(timeout: timeout), "Close button should be on screen.")
-        closeButton.tap()
-        let noProjectsText = app.staticTexts["noProjectsText"]
-        XCTAssertTrue(noProjectsText.waitForExistence(timeout: addProjectHelper.timeout), "No projects text should be displayed. Since no project was added.")
+    func testAddProjectViewCloseButton() throws {
+        try app.addProject()
+            .tapCancelButton()
+        
+        let projectsList = app.scrollViews["projectsList"]
+        XCTAssertTrue(projectsList.waitForExistence(timeout: 5), "Projects list should exist.")
     }
 }

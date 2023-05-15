@@ -18,7 +18,7 @@ struct HomeView: View {
     
     var body: some View {
         NavigationStack {
-            List {
+            ScrollView {
                 if projects.isEmpty {
                     Text("🗒\nNo projects.\nAdd one to start tracking.")
                         .multilineTextAlignment(.center)
