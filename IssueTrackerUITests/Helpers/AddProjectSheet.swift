@@ -36,4 +36,12 @@ class AddProjectSheet: IssueTrackerUIElement {
         }
         closeButton.tap()
     }
+    
+    func tapAddProjectButton() throws {
+        let button = app.buttons["AddProjectView-addProjectToolbarButton"]
+        if !button.waitForExistence(timeout: 5) {
+            throw IssueTrackerError.elementDoesNotExist(message: "Add project button doesn't exist.")
+        }
+        button.tap()
+    }
 }

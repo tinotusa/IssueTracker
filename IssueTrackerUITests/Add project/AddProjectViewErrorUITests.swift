@@ -8,30 +8,29 @@
 import XCTest
 
 final class AddProjectViewErrorUITests: XCTestCase {
-    private var app: XCUIApplication!
-    private var addProjectHelper: AddProjectHelper!
+    private var app: IssueTrackerApp!
     
     override func setUpWithError() throws {
         continueAfterFailure = false
-        app = XCUIApplication()
+        app = IssueTrackerApp()
         app.launchArguments.append("-ui-testing")
         app.launchEnvironment["addIssueViewThrowsError"] = "true"
         app.launch()
-        addProjectHelper = .init(app: app, timeout: 5)
     }
 
     override func tearDownWithError() throws {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
     }
     
-    func testAddProjectThrowsError() {
-        addProjectHelper.tapAddProjectButton()
-        let name = UUID().uuidString
-        addProjectHelper.addProject(named: name)
+    func testAddProjectThrowsError() throws {
+        let project = try app.addProject()
+        try project.enterProjectName("New project")
+        try project.tapAddProjectButton()
+        
         let errorTitle = app.staticTexts["errorTitle"]
-        XCTAssertTrue(errorTitle.waitForExistence(timeout: addProjectHelper.timeout), "An error sheet should be shown.")
+        XCTAssertTrue(errorTitle.waitForExistence(timeout: 5), "An error sheet should be shown.")
         let errorMessage = app.staticTexts["errorMessage"]
-        XCTAssertTrue(errorMessage.waitForExistence(timeout: addProjectHelper.timeout), "Error sheet with error message should exist.")
+        XCTAssertTrue(errorMessage.waitForExistence(timeout: 5), "Error sheet with error message should exist.")
         let expectedErrorMessage = "Failed to add project."
         XCTAssertEqual(errorMessage.label, expectedErrorMessage, "Recieved incorrect error message. Expected: \(expectedErrorMessage) got: \(errorMessage.label)")
     }
