@@ -21,7 +21,6 @@
 		211246CB29B9B8EF00D0EB01 /* AttachmentType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 211246CA29B9B8EF00D0EB01 /* AttachmentType.swift */; };
 		2120061A2A0E47420018BC3D /* CommandLineArgument.swift in Sources */ = {isa = PBXBuildFile; fileRef = 212006192A0E47420018BC3D /* CommandLineArgument.swift */; };
 		2120061D2A0E477E0018BC3D /* UITestingHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2120061C2A0E477E0018BC3D /* UITestingHelper.swift */; };
-		2120061F2A0E47F30018BC3D /* ContentViewUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2120061E2A0E47F30018BC3D /* ContentViewUITests.swift */; };
 		212006212A0E4B9B0018BC3D /* HomeViewUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 212006202A0E4B9B0018BC3D /* HomeViewUITests.swift */; };
 		2122A7D82A107D6200F51BA7 /* AddProjectViewUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2122A7D72A107D6200F51BA7 /* AddProjectViewUITests.swift */; };
 		2122A7DA2A10863F00F51BA7 /* AddProjectViewErrorUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2122A7D92A10863F00F51BA7 /* AddProjectViewErrorUITests.swift */; };
@@ -182,7 +181,6 @@
 		211246CA29B9B8EF00D0EB01 /* AttachmentType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttachmentType.swift; sourceTree = "<group>"; };
 		212006192A0E47420018BC3D /* CommandLineArgument.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommandLineArgument.swift; sourceTree = "<group>"; };
 		2120061C2A0E477E0018BC3D /* UITestingHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITestingHelper.swift; sourceTree = "<group>"; };
-		2120061E2A0E47F30018BC3D /* ContentViewUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentViewUITests.swift; sourceTree = "<group>"; };
 		212006202A0E4B9B0018BC3D /* HomeViewUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewUITests.swift; sourceTree = "<group>"; };
 		2122A7D72A107D6200F51BA7 /* AddProjectViewUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddProjectViewUITests.swift; sourceTree = "<group>"; };
 		2122A7D92A10863F00F51BA7 /* AddProjectViewErrorUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddProjectViewErrorUITests.swift; sourceTree = "<group>"; };
@@ -492,7 +490,6 @@
 				2122A7E32A10DBE900F51BA7 /* Add Issue */,
 				2122A7E02A10D8AD00F51BA7 /* Tags */,
 				2122A7DB2A10889C00F51BA7 /* Add project */,
-				2120061E2A0E47F30018BC3D /* ContentViewUITests.swift */,
 				212006202A0E4B9B0018BC3D /* HomeViewUITests.swift */,
 			);
 			path = IssueTrackerUITests;
@@ -1126,7 +1123,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2120061F2A0E47F30018BC3D /* ContentViewUITests.swift in Sources */,
 				21C361E72A1212BE00D47841 /* AddIssueViewErrorUITests.swift in Sources */,
 				2122A7E22A10D8C200F51BA7 /* TagsEditViewUITests.swift in Sources */,
 				21C361EE2A12374500D47841 /* AddProjectSheet.swift in Sources */,
