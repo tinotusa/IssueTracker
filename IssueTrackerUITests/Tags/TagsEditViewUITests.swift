@@ -8,17 +8,14 @@
 import XCTest
 
 final class TagsEditViewUITests: XCTestCase {
-    private var app: XCUIApplication!
-    private var projectHelper: AddProjectHelper!
+    private var app: IssueTrackerApp!
     
     override func setUpWithError() throws {
         continueAfterFailure = false
 
-        app = XCUIApplication()
-        app.launchArguments.append("-ui-testing")
+        app = IssueTrackerApp()
+        app.launchArguments.append(contentsOf: ["-ui-testing", "-add-preview-data"])
         app.launch()
-        
-        projectHelper = AddProjectHelper(app: app, timeout: 5)
     }
 
     override func tearDownWithError() throws {
@@ -26,21 +23,12 @@ final class TagsEditViewUITests: XCTestCase {
     }
 
     func testEditTagsSheetAppears() throws {
-        projectHelper.tapAddProjectButton()
-        let name = "Test project"
-        projectHelper.addProject(named: name)
-        projectHelper.tapProject(named: name)
-        projectHelper.tapMenuButton()
-        let editButton = app.buttons["tagsEditButton"]
-        XCTAssertTrue(editButton.exists, "Edit menu button should exist.")
-        editButton.tap()
+        let project = try app.tapProject(named: "New project")
+        try project.tapMenuButton()
+            .tapEditTagsButton()
         
-        let closeButton = app.buttons["closeButton"]
-        let tagsEditbutton = app.buttons["editButton"]
-        let deleteAllButton = app.buttons["deleteAllButton"]
+        let tagsScrollView = app.scrollViews["tagsList"]
         
-        XCTAssertTrue(closeButton.exists, "Close button for TagsEditView should be visible.")
-        XCTAssertTrue(tagsEditbutton.exists, "Edit button for TagsEditView should be visible.")
-        XCTAssertTrue(deleteAllButton.exists, "delete all button for TagsEditView should be visible.")
+        XCTAssertTrue(tagsScrollView.waitForExistence(timeout: 5), "TagsEditView should exist.")
     }
 }

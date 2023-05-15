@@ -43,4 +43,12 @@ class ProjectMenu: IssueTrackerUIElement {
         }
         button.tap()
     }
+    
+    func tapEditTagsButton() throws {
+        let button = app.buttons["tagsEditButton"]
+        if !button.waitForExistence(timeout: 5) {
+            throw IssueTrackerError.elementDoesNotExist(message: "Edit tags buttons doesn't exiest.")
+        }
+        button.tap()
+    }
 }
