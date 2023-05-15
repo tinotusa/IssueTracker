@@ -30,7 +30,7 @@ struct HomeView: View {
                     ForEach(projects) { project in
                         NavigationLink(value: project) {
                             ProjectRowView(project: project)
-                                .accessibilityIdentifier(project.wrappedName)
+                                .accessibilityIdentifier("projectRow_\(project.wrappedName)")
                         }
                     }
                     .listRowBackground(Color.customBackground)
@@ -38,6 +38,7 @@ struct HomeView: View {
                     .id(refreshID) // TODO: See if there is another way to update ui without doing this.
                 }
             }
+            .accessibilityIdentifier("projectsList")
             .navigationTitle("Projects")
             .toolbarBackground(Color.customBackground)
             .toolbar {

@@ -38,24 +38,29 @@ struct TagSelectionView: View {
                             ProminentTagView(tag: tag, isSelected: draftTags.contains(where: { $0.wrappedName == tag.wrappedName }))
                         }
                         .buttonStyle(.borderless)
+                        .accessibilityIdentifier(tag.wrappedName)
                     }
                 }
                 
                 TextField("Add new tag", text: $searchText)
                     .textFieldStyle(.roundedBorder)
                     .onSubmit(addNewTag)
+                    .accessibilityIdentifier("tagInputField")
                 ColorPicker(selection: $tagColour) {
                     Text("Tag colour")
                 }
+                .accessibilityIdentifier("colourPicker")
             }
             .navigationTitle("Tags")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
                     Button("Cancel", action: dismiss.callAsFunction)
+                        .accessibilityIdentifier("TagSelectionView-cancelButton")
                 }
                 ToolbarItem(placement: .confirmationAction) {
                     Button("Done", action: saveTags)
+                        .accessibilityIdentifier("TagSelectionView-doneButton")
                 }
             }
             .onAppear {

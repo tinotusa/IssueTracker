@@ -28,26 +28,27 @@ final class AddProjectViewUITests: XCTestCase {
     
     // TODO: Move this test to issuelistview ui tests later
     func testDeleteProjectSucceds() {
-        addProjectHelper.tapAddButton()
+        addProjectHelper.tapAddProjectButton()
         
         let name = UUID().uuidString
         addProjectHelper.addProject(named: name)
         addProjectHelper.tapProject(named: name)
         addProjectHelper.tapMenuButton()
         let deleteButton = app.buttons["deleteProjectButton"]
-        XCTAssertTrue(deleteButton.waitForExistence(timeout: timeout), "Delete project button should exist.")
+        XCTAssertTrue(deleteButton.exists, "Delete project button should exist.")
         deleteButton.tap()
         
         let confirmationDeleteButton = app.buttons["confimationDeleteButton"]
-        XCTAssertTrue(confirmationDeleteButton.waitForExistence(timeout: timeout), "Comfirnation dialog delete button should exist.")
+        XCTAssertTrue(confirmationDeleteButton.waitForExistence(timeout: addProjectHelper.timeout), "Comfirnation dialog delete button should exist.")
         confirmationDeleteButton.tap()
         
-        let project = app.buttons["\(name)-\(name)"].firstMatch
+        let projectPredicate = NSPredicate(format: "identifier CONTAINS %@", "\(name)")
+        let project = app.buttons.matching(projectPredicate).firstMatch
         XCTAssertFalse(project.waitForExistence(timeout: timeout), "Project named: \(name) shouldn't exist.")
     }
     
     func testAddProjectViewCloseButton() {
-        addProjectHelper.tapAddButton()
+        addProjectHelper.tapAddProjectButton()
         let closeButton = app.buttons["AddProjectView-closeButton"]
         XCTAssertTrue(closeButton.isEnabled, "Close button should be enabled.")
         XCTAssertTrue(closeButton.waitForExistence(timeout: timeout), "Close button should be on screen.")

@@ -25,7 +25,7 @@ final class AddProjectViewErrorUITests: XCTestCase {
     }
     
     func testAddProjectThrowsError() {
-        addProjectHelper.tapAddButton()
+        addProjectHelper.tapAddProjectButton()
         let name = UUID().uuidString
         addProjectHelper.addProject(named: name)
         let errorTitle = app.staticTexts["errorTitle"]

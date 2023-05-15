@@ -47,6 +47,14 @@ extension Issue {
             case .high: return "High"
             }
         }
+        
+        var identifier: String {
+            switch self {
+            case .low: return "Low"
+            case .medium: return "Medium"
+            case .high: return "High"
+            }
+        }
     }
 }
 

@@ -301,6 +301,12 @@ extension PersistenceController {
     /// A preview `PersistenceController` for previews.
     static var preview: PersistenceController = {
         let controller = PersistenceController(inMemory: true)
+        let project = Project(context: controller.viewContext)
+        project.name = "New project"
+        project.dateCreated = .now
+        project.startDate = .now
+        project.id = UUID()
+        
         return controller
     }()
 }

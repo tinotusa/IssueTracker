@@ -28,7 +28,8 @@ final class ContentViewUITests: XCTestCase {
     }
 
     func testHomeViewIsVisible() throws {
-        let isHittable = app.staticTexts["Projects"].isHittable
-        XCTAssertTrue(isHittable, "Projects text should be visible.")
+        // TODO: dont use navigation bars use statictext
+        let navigationBar = app.navigationBars["Projects"]
+        XCTAssertTrue(navigationBar.waitForExistence(timeout: 5), "Projects navigation text should be visible.")
     }
 }

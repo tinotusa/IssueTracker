@@ -35,7 +35,7 @@ struct IssuesListView: View {
     }
     
     var body: some View {
-        List {
+        ScrollView {
             if issues.isEmpty {
                 Text("No issues.")
                     .font(.headline)
@@ -45,12 +45,14 @@ struct IssuesListView: View {
                 ForEach(issues) { issue in
                     NavigationLink(value: issue) {
                         IssueRowView(issueProperties: issue.issueProperties)
+                            .accessibilityIdentifier(issue.wrappedName)
                     }
                     .listRowBackground(Color.customBackground)
                 }
                 .onDelete(perform: deleteIssue)
             }
         }
+        .accessibilityIdentifier("issuesList")
         .navigationDestination(for: Issue.self) { issue in
             IssueDetail(issue: issue)
         }
@@ -179,6 +181,7 @@ private extension IssuesListView {
                 Button(action: showEditTagsView) {
                     Label("Edit tags", systemImage: SFSymbol.tag)
                 }
+                .accessibilityIdentifier("tagsEditButton")
                 Button(role: .destructive, action: showDeleteConfirmation) {
                     Label("Delete project", systemImage: SFSymbol.trash)
                 }
@@ -195,6 +198,7 @@ private extension IssuesListView {
                     .labelStyle(.titleAndIcon)
             }
             .frame(maxWidth: .infinity, alignment: .trailing)
+            .accessibilityIdentifier("addIssueButton")
         }
     }
 }

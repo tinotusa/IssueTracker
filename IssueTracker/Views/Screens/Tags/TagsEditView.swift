@@ -49,11 +49,13 @@ struct TagsEditView: View {
             .toolbar {
                 ToolbarItem {
                     EditButton()
+                        .accessibilityIdentifier("editButton")
                 }
                 ToolbarItem(placement: .cancellationAction) {
                     Button("Close") {
                         dismiss()
                     }
+                    .accessibilityIdentifier("closeButton")
                 }
                 ToolbarItem(placement: .bottomBar) {
                     Button(role: .destructive) {
@@ -64,6 +66,7 @@ struct TagsEditView: View {
                     .disabled(tags.isEmpty)
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .foregroundColor(.red)
+                    .accessibilityIdentifier("deleteAllButton")
                 }
             }
         }

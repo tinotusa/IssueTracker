@@ -1,0 +1,26 @@
+//
+//  Project.swift
+//  IssueTrackerUITests
+//
+//  Created by Tino on 15/5/2023.
+//
+
+import Foundation
+
+class Project: IssueTrackerUIElement {
+    func tapAddIssueButton() throws -> AddIssueSheet {
+        let button = app.buttons["addIssueButton"]
+        
+        if !button.waitForExistence(timeout: 5) {
+            throw IssueTrackerError.elementDoesNotExist(message: "Add issue button doesn't exist.")
+        }
+        button.tap()
+        let issueScrollView = app.scrollViews["issuesList"]
+        
+        if !issueScrollView.waitForExistence(timeout: 5) {
+            throw IssueTrackerError.elementDoesNotExist(message: "Issue form doesn't exist.")
+        }
+        
+        return AddIssueSheet(app: app, element: element)
+    }
+}

@@ -19,4 +19,8 @@ enum UITestingHelper {
         }
         return shouldThrow == "true"
     }
+    
+    static var shouldAddPreveiwData: Bool {
+        return CommandLine.arguments.contains(CommandLineArgument.addPreviewData)
+    }
 }

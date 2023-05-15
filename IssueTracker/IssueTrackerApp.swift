@@ -10,8 +10,20 @@ import CoreData
 
 @main
 struct IssueTrackerApp: App {
-    @StateObject private var persistenceController = UITestingHelper.isUITesting ? PersistenceController(inMemory: true) : PersistenceController.shared
+    @StateObject private var persistenceController: PersistenceController
     
+    init() {
+        let controller: PersistenceController
+        if UITestingHelper.shouldAddPreveiwData {
+            controller = .preview
+        } else if UITestingHelper.isUITesting {
+            controller = .init(inMemory: true)
+        } else {
+            controller = .shared
+        }
+        
+        _persistenceController = StateObject(wrappedValue: controller)
+    }
     var body: some Scene {
         WindowGroup {
             ContentView()

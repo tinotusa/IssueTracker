@@ -17,7 +17,7 @@ struct AddProjectView: View {
     
     var body: some View {
         NavigationStack {
-            List {
+            ScrollView {
                 Section("Project name") {
                     CustomTextField("Project name",text: $projectData.name)
                         .isMandatoryFormField(true)
@@ -47,6 +47,7 @@ struct AddProjectView: View {
                     .listRowBackground(Color.customBackground)
                     .frame(maxWidth: .infinity, alignment: .center)
             }
+            .accessibilityIdentifier("projectForm")
             .listStyle(.plain)
             .sheet(item: $errorWrapper) { error in
                 ErrorView(errorWrapper: error)

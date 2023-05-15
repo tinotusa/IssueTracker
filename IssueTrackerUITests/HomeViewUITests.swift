@@ -9,11 +9,9 @@ import XCTest
 
 final class HomeViewUITests: XCTestCase {
     private var app: XCUIApplication!
-    private var timeout: TimeInterval!
     
     override func setUpWithError() throws {
         continueAfterFailure = false
-        timeout = 5
         app = XCUIApplication()
         app.launchArguments.append("-ui-testing")
         app.launch()
@@ -25,12 +23,12 @@ final class HomeViewUITests: XCTestCase {
     
     func testNoProjectsTextIsVisible() {
         let text = app.staticTexts["noProjectsText"]
-        XCTAssertTrue(text.waitForExistence(timeout: timeout), "No projects text should be visible.")
+        XCTAssertTrue(text.exists, "No projects text should be visible.")
     }
     
     func testAddProjectShowsAddProjectSheet() {
         let addProjectButton = app.buttons["HomeView-addProjectButton"]
-        XCTAssertTrue(addProjectButton.waitForExistence(timeout: timeout), "Add project button should exist.")
+        XCTAssertTrue(addProjectButton.exists, "Add project button should exist.")
         addProjectButton.tap()
     }
 }

@@ -21,7 +21,7 @@ struct AddIssueView: View {
     
     var body: some View {
         NavigationStack {
-            List {
+            ScrollView {
                 Group {
                     nameSection
                     descriptionSection
@@ -30,10 +30,16 @@ struct AddIssueView: View {
                         action: showTagsSheet,
                         tagCount: issueProperties.tags.count
                     )
+                    .accessibilityIdentifier("addTagsButton")
+                    
+                    ProminentButton("Add Issue", action: addIssue)
+                        .disabled(!issueProperties.allFieldsFilled)
+                        .frame(maxWidth: .infinity, alignment: .center)
                 }
                 .listRowSeparator(.hidden)
                 .listRowBackground(Color.customBackground)
             }
+            .accessibilityIdentifier("issueForm")
             .listStyle(.plain)
             .navigationTitle("Add issue")
             .background(Color.customBackground)
@@ -48,10 +54,6 @@ struct AddIssueView: View {
             .toolbar {
                 toolbarItems
             }
-            .safeAreaInset(edge: .bottom) {
-                ProminentButton("Add Issue", action: addIssue)
-                    .disabled(!issueProperties.allFieldsFilled)
-            }
         }
     }
 }
@@ -62,6 +64,7 @@ private extension AddIssueView {
         Section("Name") {
             CustomTextField("Issue name", text: $issueProperties.name)
                 .isMandatoryFormField(true)
+                .accessibilityIdentifier("nameField")
         }
     }
     
@@ -70,6 +73,7 @@ private extension AddIssueView {
             TextField("Issue description", text: $issueProperties.issueDescription, axis: .vertical)
                 .lineLimit(4 ... 8)
                 .textFieldStyle(.roundedBorder)
+                .accessibilityIdentifier("descriptionField")
         }
     }
     
@@ -78,15 +82,11 @@ private extension AddIssueView {
             Picker("Issue priority", selection: $issueProperties.priority) {
                 ForEach(Issue.Priority.allCases) { priority in
                     Text(priority.title)
+                        .accessibilityIdentifier(priority.identifier)
                 }
             }
             .pickerStyle(.segmented)
-        }
-    }
-    
-    var addTagsSection: some View {
-        Section("Add tags") {
-            TagSelectionView(selection: $issueProperties.tags)
+            .accessibilityIdentifier("priorityPicker")
         }
     }
     
@@ -94,11 +94,13 @@ private extension AddIssueView {
     var toolbarItems: some ToolbarContent {
         ToolbarItem(placement: .cancellationAction) {
             Button("Cancel", action: dismiss.callAsFunction)
+                .accessibilityIdentifier("cancelButton")
         }
         
         ToolbarItem(placement: .confirmationAction) {
             Button("Add Issue", action: addIssue)
                 .disabled(!issueProperties.allFieldsFilled)
+                .accessibilityIdentifier("AddIssueView-addIssueButton")
         }
     }
 }
@@ -106,10 +108,8 @@ private extension AddIssueView {
 // MARK: - Functions
 private extension AddIssueView {
     func addIssue() {
-        if UITestingHelper.isUITesting {
-            if UITestingHelper.addIssueViewThrowsError {
-                errorWrapper = .init(error: NSError(domain: "UI testing error", code: 1), message: "This is a testing error")
-            }
+        if UITestingHelper.addIssueViewThrowsError {
+            errorWrapper = .init(error: NSError(domain: "UI testing error", code: 1), message: "This is a testing error")
             return
         }
         
