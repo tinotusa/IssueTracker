@@ -98,7 +98,7 @@ struct IssuesListView: View {
         }
         .confirmationDialog("Delete project", isPresented: $showingDeleteProjectConfirmation) {
             Button("Delete", role: .destructive, action: deleteProject)
-                .accessibilityIdentifier("confimationDeleteButton")
+                .accessibilityIdentifier("confirmationDeleteButton")
         } message: {
             Text("Are you sure you want to delete this project?")
         }
@@ -172,6 +172,7 @@ private extension IssuesListView {
                 Button(action: showEditProjectView) {
                     Label("Edit project", systemImage: SFSymbol.infoCircle)
                 }
+                .accessibilityIdentifier("editProjectButton")
                 Menu {
                     sortBySection
                     sortTypeSection

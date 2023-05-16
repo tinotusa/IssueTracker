@@ -29,6 +29,7 @@
 		2122A7E52A10DBFF00F51BA7 /* AddIssueViewUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2122A7E42A10DBFF00F51BA7 /* AddIssueViewUITests.swift */; };
 		2127AD62295FB421005893DE /* EditIssueView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2127AD61295FB421005893DE /* EditIssueView.swift */; };
 		2127AD66295FBD0E005893DE /* ProminentTagView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2127AD65295FBD0E005893DE /* ProminentTagView.swift */; };
+		21317D682A13490F00CE0B1D /* EditProjectViewUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21317D672A13490F00CE0B1D /* EditProjectViewUITests.swift */; };
 		2132CB6C29C56785003D5C12 /* AudioAttachmentPreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2132CB6B29C56785003D5C12 /* AudioAttachmentPreview.swift */; };
 		2132CB7429C5CF9A003D5C12 /* ImageAttachmentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2132CB7329C5CF9A003D5C12 /* ImageAttachmentView.swift */; };
 		2132CB7629C5D0FC003D5C12 /* AudioAttachmentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2132CB7529C5D0FC003D5C12 /* AudioAttachmentView.swift */; };
@@ -188,6 +189,7 @@
 		2122A7E42A10DBFF00F51BA7 /* AddIssueViewUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddIssueViewUITests.swift; sourceTree = "<group>"; };
 		2127AD61295FB421005893DE /* EditIssueView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditIssueView.swift; sourceTree = "<group>"; };
 		2127AD65295FBD0E005893DE /* ProminentTagView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProminentTagView.swift; sourceTree = "<group>"; };
+		21317D672A13490F00CE0B1D /* EditProjectViewUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProjectViewUITests.swift; sourceTree = "<group>"; };
 		2132CB6B29C56785003D5C12 /* AudioAttachmentPreview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioAttachmentPreview.swift; sourceTree = "<group>"; };
 		2132CB7329C5CF9A003D5C12 /* ImageAttachmentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageAttachmentView.swift; sourceTree = "<group>"; };
 		2132CB7529C5D0FC003D5C12 /* AudioAttachmentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioAttachmentView.swift; sourceTree = "<group>"; };
@@ -375,13 +377,14 @@
 			path = "UI testing";
 			sourceTree = "<group>";
 		};
-		2122A7DB2A10889C00F51BA7 /* Add project */ = {
+		2122A7DB2A10889C00F51BA7 /* Project */ = {
 			isa = PBXGroup;
 			children = (
 				2122A7D72A107D6200F51BA7 /* AddProjectViewUITests.swift */,
 				2122A7D92A10863F00F51BA7 /* AddProjectViewErrorUITests.swift */,
+				21317D672A13490F00CE0B1D /* EditProjectViewUITests.swift */,
 			);
-			path = "Add project";
+			path = Project;
 			sourceTree = "<group>";
 		};
 		2122A7E02A10D8AD00F51BA7 /* Tags */ = {
@@ -486,7 +489,7 @@
 				21C361E82A12365200D47841 /* Helpers */,
 				2122A7E32A10DBE900F51BA7 /* Add Issue */,
 				2122A7E02A10D8AD00F51BA7 /* Tags */,
-				2122A7DB2A10889C00F51BA7 /* Add project */,
+				2122A7DB2A10889C00F51BA7 /* Project */,
 				212006202A0E4B9B0018BC3D /* HomeViewUITests.swift */,
 			);
 			path = IssueTrackerUITests;
@@ -1124,6 +1127,7 @@
 				2122A7E22A10D8C200F51BA7 /* TagsEditViewUITests.swift in Sources */,
 				21C361EE2A12374500D47841 /* AddProjectSheet.swift in Sources */,
 				2122A7D82A107D6200F51BA7 /* AddProjectViewUITests.swift in Sources */,
+				21317D682A13490F00CE0B1D /* EditProjectViewUITests.swift in Sources */,
 				21C361F22A12377A00D47841 /* Project.swift in Sources */,
 				2122A7DA2A10863F00F51BA7 /* AddProjectViewErrorUITests.swift in Sources */,
 				212006212A0E4B9B0018BC3D /* HomeViewUITests.swift in Sources */,

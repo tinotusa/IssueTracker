@@ -33,11 +33,7 @@ class IssueTrackerApp: XCUIApplication {
             throw IssueTrackerError.elementDoesNotExist(message: "No project with name: \(name)")
         }
         project.tap()
-        let issuesList = scrollViews["issuesList"]
         
-        if !issuesList.waitForExistence(timeout: 5) {
-            throw IssueTrackerError.elementDoesNotExist(message: "Project issues list doesn't exist.")
-        }
-        return Project(app: self, element: issuesList)
+        return Project(app: self, element: project)
     }
 }

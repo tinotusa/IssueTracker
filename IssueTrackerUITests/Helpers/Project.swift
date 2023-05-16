@@ -36,7 +36,7 @@ class Project: IssueTrackerUIElement {
 }
 
 class ProjectMenu: IssueTrackerUIElement {
-    func tapDeleteButton() throws {
+    func tapDeleteProjectButton() throws {
         let button = app.buttons["deleteProjectButton"]
         if !button.waitForExistence(timeout: 5) {
             throw IssueTrackerError.elementDoesNotExist(message: "Delete menu button doesn't exist.")
@@ -48,6 +48,57 @@ class ProjectMenu: IssueTrackerUIElement {
         let button = app.buttons["tagsEditButton"]
         if !button.waitForExistence(timeout: 5) {
             throw IssueTrackerError.elementDoesNotExist(message: "Edit tags buttons doesn't exiest.")
+        }
+        button.tap()
+    }
+    
+    func tapEditProjectButton() throws -> EditProjectSheet {
+        let button = app.buttons["editProjectButton"]
+        if !button.waitForExistence(timeout: 5) {
+            throw IssueTrackerError.elementDoesNotExist(message: "Edit project button doesn't exist.")
+        }
+        button.tap()
+        
+        return EditProjectSheet(app: app, element: element)
+    }
+}
+
+class EditProjectSheet: IssueTrackerUIElement {
+    func enterName(_ name: String) throws -> EditProjectSheet {
+        let field = app.textFields["editProject-nameField"]
+        if !field.waitForExistence(timeout: 5) {
+            throw IssueTrackerError.elementDoesNotExist(message: "Project name field does't exist.")
+        }
+        field.tap()
+        field.tap(withNumberOfTaps: 3, numberOfTouches: 1)
+        
+        app.keys["delete"].tap()
+        field.typeText(name)
+        
+        return EditProjectSheet(app: app, element: element)
+    }
+    
+    func selectDate(predicate: NSPredicate) throws -> EditProjectSheet {
+        let dateButton = app.buttons.matching(predicate).firstMatch
+        if !dateButton.waitForExistence(timeout: 5) {
+            throw IssueTrackerError.elementDoesNotExist(message: "Date button doesn't exist.")
+        }
+        dateButton.tap()
+        return EditProjectSheet(app: app, element: element)
+    }
+    
+    func tapCancelButton() throws {
+        let button = app.buttons["editProject-cancelButton"]
+        if !button.waitForExistence(timeout: 5) {
+            throw IssueTrackerError.elementDoesNotExist(message: "Cancel button doesn't exist.")
+        }
+        button.tap()
+    }
+    
+    func tapSaveButton() throws {
+        let button = app.buttons["saveChangesButton"]
+        if !button.waitForExistence(timeout: 5) {
+            throw IssueTrackerError.elementDoesNotExist(message: "Save changes button doesn't exist.")
         }
         button.tap()
     }

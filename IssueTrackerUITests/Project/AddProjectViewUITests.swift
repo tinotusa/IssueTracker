@@ -29,7 +29,7 @@ final class AddProjectViewUITests: XCTestCase {
         
         let project = try app.tapProject(named: "New project")
         try project.tapMenuButton()
-            .tapDeleteButton()
+            .tapDeleteProjectButton()
         
         let confirmationDeleteButton = app.buttons["confimationDeleteButton"]
         XCTAssertTrue(confirmationDeleteButton.waitForExistence(timeout: 5), "Comfirnation dialog delete button should exist.")

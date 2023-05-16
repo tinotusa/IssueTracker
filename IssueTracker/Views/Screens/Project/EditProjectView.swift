@@ -19,6 +19,7 @@ struct EditProjectView: View {
                     Section("Project name") {
                         TextField("Project name", text: $projectProperties.name)
                             .textFieldStyle(.roundedBorder)
+                            .accessibilityIdentifier("editProject-nameField")
                     }
                     
                     Section("Start date") {
@@ -29,10 +30,12 @@ struct EditProjectView: View {
                             displayedComponents: [.date]
                         )
                         .datePickerStyle(.graphical)
+                        .accessibilityIdentifier("editProject-datePicker")
                     }
                     
                     ProminentButton("Save changes", action: dismiss.callAsFunction)
                         .frame(maxWidth: .infinity, alignment: .center)
+                        .accessibilityIdentifier("saveChangesButton")
                 }
                 .listRowSeparator(.hidden)
                 .listRowBackground(Color.customBackground)
@@ -45,10 +48,12 @@ struct EditProjectView: View {
                         cancelAction()
                         dismiss()
                     }
+                    .accessibilityIdentifier("editProject-cancelButton")
                 }
                 
                 ToolbarItem(placement: .primaryAction) {
                     Button("Done", action: dismiss.callAsFunction)
+                        .accessibilityIdentifier("editProject-doneButton")
                 }
             }
             .background(Color.customBackground)
