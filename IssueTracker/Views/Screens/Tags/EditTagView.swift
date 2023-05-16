@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct EditTagView: View {
-    @ObservedObject var tag: Tag
+    @ObservedObject private(set) var tag: Tag
     @State private var name: String = ""
     @State private var showingCancelDialog = false
     @State private var errorWrapper: ErrorWrapper?
@@ -104,7 +104,11 @@ struct EditTagView_Previews: PreviewProvider {
         }
     }
     
-    static var viewContext = PersistenceController.preview.container.viewContext
+    static var viewContext = {
+        let context = PersistenceController.preview.container.viewContext
+        _ = Tag.makePreviews(count: 3)
+        return context
+    }()
     
     static var previews: some View {
         ContainerView()
