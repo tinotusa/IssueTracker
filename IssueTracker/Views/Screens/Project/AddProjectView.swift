@@ -73,10 +73,6 @@ struct AddProjectView: View {
 // MARK: - Functions
 private extension AddProjectView {
     func addProject() {
-        if UITestingHelper.addIssueViewThrowsError {
-            errorWrapper = .init(error: PersistenceError.noICloudAccount, message: "Failed to add project.")
-            return
-        }
         Task  {
             do {
                 try await persistenceController.addProject(projectData)

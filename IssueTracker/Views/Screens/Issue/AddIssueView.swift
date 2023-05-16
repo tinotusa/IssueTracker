@@ -108,11 +108,6 @@ private extension AddIssueView {
 // MARK: - Functions
 private extension AddIssueView {
     func addIssue() {
-        if UITestingHelper.addIssueViewThrowsError {
-            errorWrapper = .init(error: NSError(domain: "UI testing error", code: 1), message: "This is a testing error")
-            return
-        }
-        
         Task {
             do {
                 try await persistenceController.addIssue(issueProperties, project: project)

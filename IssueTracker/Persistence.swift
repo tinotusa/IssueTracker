@@ -278,6 +278,9 @@ extension PersistenceController {
         if !UITestingHelper.isUITesting {
             try await iCloudAccountCheck()
         }
+        if UITestingHelper.saveThrowsError {
+            throw PersistenceError.noICloudAccount
+        }
         if !viewContext.hasChanges {
             logger.debug("Failed to save. managed object has no changes.")
             return

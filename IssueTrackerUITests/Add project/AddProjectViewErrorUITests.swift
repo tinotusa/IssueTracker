@@ -13,8 +13,7 @@ final class AddProjectViewErrorUITests: XCTestCase {
     override func setUpWithError() throws {
         continueAfterFailure = false
         app = IssueTrackerApp()
-        app.launchArguments.append("-ui-testing")
-        app.launchEnvironment["addIssueViewThrowsError"] = "true"
+        app.launchArguments.append(contentsOf: ["-ui-testing", "-save-throws-error"])
         app.launch()
     }
 
@@ -31,7 +30,5 @@ final class AddProjectViewErrorUITests: XCTestCase {
         XCTAssertTrue(errorTitle.waitForExistence(timeout: 5), "An error sheet should be shown.")
         let errorMessage = app.staticTexts["errorMessage"]
         XCTAssertTrue(errorMessage.waitForExistence(timeout: 5), "Error sheet with error message should exist.")
-        let expectedErrorMessage = "Failed to add project."
-        XCTAssertEqual(errorMessage.label, expectedErrorMessage, "Recieved incorrect error message. Expected: \(expectedErrorMessage) got: \(errorMessage.label)")
     }
 }

@@ -15,7 +15,6 @@ final class AddProjectViewUITests: XCTestCase {
     
         app = IssueTrackerApp()
         app.launchArguments.append(contentsOf: ["-ui-testing", "-add-preview-data"])
-        app.launchEnvironment["addIssueViewThrowsError"] = "false"
         app.launch()
     }
 

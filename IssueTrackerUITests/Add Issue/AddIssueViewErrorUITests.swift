@@ -14,8 +14,7 @@ final class AddIssueViewErrorUITests: XCTestCase {
         continueAfterFailure = false
         
         app = IssueTrackerApp()
-        app.launchArguments.append(contentsOf: ["-ui-testing", "-add-preview-data"])
-        app.launchEnvironment["addIssueViewThrowsError"] = "true"
+        app.launchArguments.append(contentsOf: ["-ui-testing", "-add-preview-data", "-save-throws-error"])
         app.launch()
         
     }

@@ -9,5 +9,6 @@ import Foundation
 
 enum CommandLineArgument {
     static let uiTesting = "-ui-testing"
-    static var addPreviewData = "-add-preview-data"
+    static let addPreviewData = "-add-preview-data"
+    static let saveThrowsError = "-save-throws-error"
 }
