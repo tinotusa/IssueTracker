@@ -96,7 +96,7 @@ class EditProjectSheet: IssueTrackerUIElement {
     }
     
     func tapSaveButton() throws {
-        let button = app.buttons["saveChangesButton"]
+        let button = app.buttons["editProject-saveButton"]
         if !button.waitForExistence(timeout: 5) {
             throw IssueTrackerError.elementDoesNotExist(message: "Save changes button doesn't exist.")
         }

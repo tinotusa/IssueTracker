@@ -26,11 +26,6 @@ struct EditTagView: View {
                 }
                 .listRowSeparator(.hidden)
                 .listRowBackground(Color.customBackground)
-                
-                ProminentButton("Save", action: save)
-                    .disabled(!hasChanges)
-                    .listRowSeparator(.hidden)
-                    .listRowBackground(Color.customBackground)
             }
             .listStyle(.plain)
             .listRowBackground(Color.customBackground)

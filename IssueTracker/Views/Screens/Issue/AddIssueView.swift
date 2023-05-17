@@ -31,10 +31,6 @@ struct AddIssueView: View {
                         tagCount: issueProperties.tags.count
                     )
                     .accessibilityIdentifier("addTagsButton")
-                    
-                    ProminentButton("Add Issue", action: addIssue)
-                        .disabled(!issueProperties.allFieldsFilled)
-                        .frame(maxWidth: .infinity, alignment: .center)
                 }
                 .listRowSeparator(.hidden)
                 .listRowBackground(Color.customBackground)
@@ -98,7 +94,7 @@ private extension AddIssueView {
         }
         
         ToolbarItem(placement: .confirmationAction) {
-            Button("Add Issue", action: addIssue)
+            Button("Add", action: addIssue)
                 .disabled(!issueProperties.allFieldsFilled)
                 .accessibilityIdentifier("AddIssueView-addIssueButton")
         }

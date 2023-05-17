@@ -32,10 +32,6 @@ struct EditProjectView: View {
                         .datePickerStyle(.graphical)
                         .accessibilityIdentifier("editProject-datePicker")
                     }
-                    
-                    ProminentButton("Save changes", action: dismiss.callAsFunction)
-                        .frame(maxWidth: .infinity, alignment: .center)
-                        .accessibilityIdentifier("saveChangesButton")
                 }
                 .listRowSeparator(.hidden)
                 .listRowBackground(Color.customBackground)
@@ -52,8 +48,9 @@ struct EditProjectView: View {
                 }
                 
                 ToolbarItem(placement: .primaryAction) {
-                    Button("Done", action: dismiss.callAsFunction)
-                        .accessibilityIdentifier("editProject-doneButton")
+                    Button("Save", action: dismiss.callAsFunction)
+                        .disabled(!projectProperties.isValidForm())
+                        .accessibilityIdentifier("editProject-saveButton")
                 }
             }
             .background(Color.customBackground)

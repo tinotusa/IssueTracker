@@ -39,9 +39,6 @@ struct EditIssueView: View {
             TagSelectionView(selection: $issueProperties.tags)
                 .sheetWithIndicator()
         }
-        .safeAreaInset(edge: .bottom) {
-            ProminentButton("Done", action: cancel)
-        }
         .toolbar {
             toolbarItems
         }
@@ -53,7 +50,8 @@ private extension EditIssueView {
     @ToolbarContentBuilder
     var toolbarItems: some ToolbarContent {
         ToolbarItem(placement: .confirmationAction) {
-            Button("Done", action: cancel)
+            Button("Save", action: cancel)
+                .disabled(!issueProperties.allFieldsFilled)
         }
     }
 }

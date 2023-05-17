@@ -40,12 +40,6 @@ struct AddProjectView: View {
                     .labelsHidden()
                     .accessibilityIdentifier("datePicker")
                 }
-                ProminentButton("Add project", action: addProject)
-                    .disabled(!projectData.isValidForm())
-                    .accessibilityIdentifier("AddProjectView-addProjectButton")
-                    .listRowSeparator(.hidden)
-                    .listRowBackground(Color.customBackground)
-                    .frame(maxWidth: .infinity, alignment: .center)
             }
             .accessibilityIdentifier("projectForm")
             .listStyle(.plain)
