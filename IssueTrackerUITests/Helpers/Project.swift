@@ -100,6 +100,9 @@ class EditProjectSheet: IssueTrackerUIElement {
         if !button.waitForExistence(timeout: 5) {
             throw IssueTrackerError.elementDoesNotExist(message: "Save changes button doesn't exist.")
         }
+        if !button.isEnabled {
+            throw IssueTrackerError.disabledButton(message: "Save changes button is disabled.")
+        }
         button.tap()
     }
 }
