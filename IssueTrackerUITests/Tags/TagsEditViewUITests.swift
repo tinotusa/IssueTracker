@@ -27,7 +27,7 @@ final class TagsEditViewUITests: XCTestCase {
         try project.tapMenuButton()
             .tapEditTagsButton()
         
-        let tagsScrollView = app.scrollViews["tagsList"]
+        let tagsScrollView = app.navigationBars["Edit tags"]
         
         XCTAssertTrue(tagsScrollView.waitForExistence(timeout: 5), "TagsEditView should exist.")
     }

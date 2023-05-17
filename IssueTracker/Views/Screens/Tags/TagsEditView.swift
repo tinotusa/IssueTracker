@@ -20,7 +20,7 @@ struct TagsEditView: View {
     
     var body: some View {
         NavigationStack {
-            ScrollView {
+            List {
                 if tags.isEmpty {
                     Text("No tags to edit.\n🏷")
                         .frame(maxWidth: .infinity, alignment: .center)
@@ -44,7 +44,6 @@ struct TagsEditView: View {
                 }
             }
             .background(Color.customBackground)
-            .accessibilityIdentifier("tagsList")
             .navigationTitle("Edit tags")
             .listStyle(.plain)
             .toolbar {
