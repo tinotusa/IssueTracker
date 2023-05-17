@@ -27,8 +27,8 @@ final class AddIssueViewUITests: XCTestCase {
         try project.tapAddIssueButton()
             .tapCancelButton()
         
-        let issuesList = app.scrollViews["issuesList"]
-        XCTAssertTrue(issuesList.waitForExistence(timeout: 5), "Issues list should exist.")
+        let issuesNavigationBar = app.navigationBars["Issues"]
+        XCTAssertTrue(issuesNavigationBar.waitForExistence(timeout: 5), "Issues list should exist.")
     }
     
     func testAddIssue() throws {

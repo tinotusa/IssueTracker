@@ -35,7 +35,7 @@ struct IssuesListView: View {
     }
     
     var body: some View {
-        ScrollView {
+        List {
             if issues.isEmpty {
                 Text("No issues.")
                     .font(.headline)

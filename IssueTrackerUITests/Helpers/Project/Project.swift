@@ -15,11 +15,6 @@ class Project: IssueTrackerUIElement {
             throw IssueTrackerError.elementDoesNotExist(message: "Add issue button doesn't exist.")
         }
         button.tap()
-        let issueScrollView = app.scrollViews["issuesList"]
-        
-        if !issueScrollView.waitForExistence(timeout: 5) {
-            throw IssueTrackerError.elementDoesNotExist(message: "Issue form doesn't exist.")
-        }
         
         return AddIssueSheet(app: app, element: element)
     }
