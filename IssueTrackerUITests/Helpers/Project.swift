@@ -44,12 +44,14 @@ class ProjectMenu: IssueTrackerUIElement {
         button.tap()
     }
     
-    func tapEditTagsButton() throws {
+    func tapEditTagsButton() throws -> TagsEditSheet {
         let button = app.buttons["tagsEditButton"]
         if !button.waitForExistence(timeout: 5) {
             throw IssueTrackerError.elementDoesNotExist(message: "Edit tags buttons doesn't exiest.")
         }
         button.tap()
+        
+        return TagsEditSheet(app: app, element: element)
     }
     
     func tapEditProjectButton() throws -> EditProjectSheet {
@@ -60,6 +62,66 @@ class ProjectMenu: IssueTrackerUIElement {
         button.tap()
         
         return EditProjectSheet(app: app, element: element)
+    }
+}
+
+class TagsEditSheet: IssueTrackerUIElement {
+    func tapEditButton() throws -> TagsEditSheet {
+        let editButton = app.buttons["editButton"]
+        if !editButton.waitForExistence(timeout: 5) {
+            throw IssueTrackerError.elementDoesNotExist(message: "Edit button doesn't exist.")
+        }
+        editButton.tap()
+        
+        return TagsEditSheet(app: app, element: element)
+    }
+    
+    func deleteTag(named name: String) throws {
+        let predicate = NSPredicate(format: "identifier CONTAINS %@", name)
+        let tag = app.buttons.matching(predicate).firstMatch
+        if !tag.waitForExistence(timeout: 5) {
+            throw IssueTrackerError.elementDoesNotExist(message: "Tag with name: \(name) doesn't exist.")
+        }
+        
+        tag.swipeLeft()
+        
+        app.buttons["Delete"].tap()
+    }
+    
+    func tapTag(named name: String) throws -> TagEditSheet {
+        let button = app.buttons[name]
+        if !button.waitForExistence(timeout: 5) {
+            throw IssueTrackerError.elementDoesNotExist(message: "Tag named \(name) doesn't exist.")
+        }
+        button.tap()
+        return TagEditSheet(app: app, element: element)
+    }
+}
+
+class TagEditSheet: IssueTrackerUIElement {
+    func enterName(_ name: String) throws -> TagEditSheet {
+        let field = app.textFields["editTagView-nameField"]
+        if !field.waitForExistence(timeout: 5) {
+            throw IssueTrackerError.elementDoesNotExist(message: "Name input field doesn't exist.")
+        }
+        field.tap()
+        field.tap(withNumberOfTaps: 3, numberOfTouches: 1)
+        
+        app.keys["delete"].tap()
+        field.typeText(name)
+        
+        return TagEditSheet(app: app, element: element)
+    }
+    
+    func tapSaveButton() throws {
+        let button = app.buttons["editTagView-saveButton"]
+        if !button.waitForExistence(timeout: 5) {
+            throw IssueTrackerError.elementDoesNotExist(message: "Save button doesn't exist.")
+        }
+        if !button.isEnabled {
+            throw IssueTrackerError.disabledButton(message: "Save button is disabled.")
+        }
+        button.tap()
     }
 }
 

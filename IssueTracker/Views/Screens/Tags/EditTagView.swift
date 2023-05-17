@@ -23,6 +23,7 @@ struct EditTagView: View {
                 Section("Tag name") {
                     TextField("Tag name", text: $name)
                         .textFieldStyle(.roundedBorder)
+                        .accessibilityIdentifier("editTagView-nameField")
                 }
                 .listRowSeparator(.hidden)
                 .listRowBackground(Color.customBackground)
@@ -43,6 +44,7 @@ struct EditTagView: View {
                             dismiss()
                         }
                     }
+                    .accessibilityIdentifier("editTagView-cancelButton")
                 }
                 
                 ToolbarItem(placement: .primaryAction) {
@@ -51,6 +53,7 @@ struct EditTagView: View {
                         dismiss()
                     }
                     .disabled(!hasChanges)
+                    .accessibilityIdentifier("editTagView-saveButton")
                 }
             }
         }

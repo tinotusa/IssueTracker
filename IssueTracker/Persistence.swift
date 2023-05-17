@@ -312,7 +312,12 @@ extension PersistenceController {
         project.dateCreated = .now
         project.startDate = .now
         project.id = UUID()
-        
+        let tag = Tag(context: controller.viewContext)
+        tag.name = "test"
+        tag.id = UUID()
+        tag.dateCreated = .now
+        tag.colour = "ffaaff"
+        tag.opacity = 1
         return controller
     }()
 }

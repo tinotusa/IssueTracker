@@ -39,6 +39,7 @@ struct TagsEditView: View {
                             }
                         }
                         .listRowBackground(Color.customBackground)
+                        .accessibilityIdentifier(tag.wrappedName)
                     }
                     .onDelete(perform: deleteTag)
                 }
