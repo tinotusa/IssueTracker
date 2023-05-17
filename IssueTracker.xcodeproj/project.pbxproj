@@ -38,6 +38,10 @@
 		213EDD9B29814C9A00012198 /* TagTableColumn.swift in Sources */ = {isa = PBXBuildFile; fileRef = 213EDD9A29814C9A00012198 /* TagTableColumn.swift */; };
 		2141D3C229E6B5A000113CA0 /* IssueProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2141D3C129E6B5A000113CA0 /* IssueProperties.swift */; };
 		2146EEDD2A14816900D4F33E /* EditProjectViewErrrorUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2146EEDC2A14816900D4F33E /* EditProjectViewErrrorUITests.swift */; };
+		2146EEDF2A14D68F00D4F33E /* ProjectMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2146EEDE2A14D68F00D4F33E /* ProjectMenu.swift */; };
+		2146EEE12A14D6A300D4F33E /* TagsEditSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2146EEE02A14D6A300D4F33E /* TagsEditSheet.swift */; };
+		2146EEE32A14D6BB00D4F33E /* TagEditSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2146EEE22A14D6BB00D4F33E /* TagEditSheet.swift */; };
+		2146EEE52A14D6C900D4F33E /* EditProjectSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2146EEE42A14D6C900D4F33E /* EditProjectSheet.swift */; };
 		2150C83E295972E0006CD7D2 /* IssueTrackerApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2150C83D295972E0006CD7D2 /* IssueTrackerApp.swift */; };
 		2150C840295972E0006CD7D2 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2150C83F295972E0006CD7D2 /* ContentView.swift */; };
 		2150C842295972E2006CD7D2 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2150C841295972E2006CD7D2 /* Assets.xcassets */; };
@@ -199,6 +203,10 @@
 		213EDD9A29814C9A00012198 /* TagTableColumn.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagTableColumn.swift; sourceTree = "<group>"; };
 		2141D3C129E6B5A000113CA0 /* IssueProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IssueProperties.swift; sourceTree = "<group>"; };
 		2146EEDC2A14816900D4F33E /* EditProjectViewErrrorUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProjectViewErrrorUITests.swift; sourceTree = "<group>"; };
+		2146EEDE2A14D68F00D4F33E /* ProjectMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProjectMenu.swift; sourceTree = "<group>"; };
+		2146EEE02A14D6A300D4F33E /* TagsEditSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagsEditSheet.swift; sourceTree = "<group>"; };
+		2146EEE22A14D6BB00D4F33E /* TagEditSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagEditSheet.swift; sourceTree = "<group>"; };
+		2146EEE42A14D6C900D4F33E /* EditProjectSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProjectSheet.swift; sourceTree = "<group>"; };
 		2150C83A295972E0006CD7D2 /* IssueTracker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = IssueTracker.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2150C83D295972E0006CD7D2 /* IssueTrackerApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IssueTrackerApp.swift; sourceTree = "<group>"; };
 		2150C83F295972E0006CD7D2 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -413,6 +421,34 @@
 				2179A40229EBCA2700D69C82 /* SheetWithIndicator.swift */,
 			);
 			path = "View modifiers";
+			sourceTree = "<group>";
+		};
+		2146EEE62A14D6E000D4F33E /* Project */ = {
+			isa = PBXGroup;
+			children = (
+				2146EEE42A14D6C900D4F33E /* EditProjectSheet.swift */,
+				21C361ED2A12374500D47841 /* AddProjectSheet.swift */,
+				21C361F12A12377A00D47841 /* Project.swift */,
+				2146EEDE2A14D68F00D4F33E /* ProjectMenu.swift */,
+			);
+			path = Project;
+			sourceTree = "<group>";
+		};
+		2146EEE72A14D6F100D4F33E /* Tag */ = {
+			isa = PBXGroup;
+			children = (
+				2146EEE02A14D6A300D4F33E /* TagsEditSheet.swift */,
+				2146EEE22A14D6BB00D4F33E /* TagEditSheet.swift */,
+			);
+			path = Tag;
+			sourceTree = "<group>";
+		};
+		2146EEE82A14D70E00D4F33E /* Issue */ = {
+			isa = PBXGroup;
+			children = (
+				21C361EF2A12376D00D47841 /* AddIssueSheet.swift */,
+			);
+			path = Issue;
 			sourceTree = "<group>";
 		};
 		2150C831295972E0006CD7D2 = {
@@ -733,9 +769,9 @@
 			children = (
 				21C361E92A12365F00D47841 /* IssueTrackerApp.swift */,
 				21C361EB2A12369400D47841 /* IssueTrackerUIElement.swift */,
-				21C361ED2A12374500D47841 /* AddProjectSheet.swift */,
-				21C361EF2A12376D00D47841 /* AddIssueSheet.swift */,
-				21C361F12A12377A00D47841 /* Project.swift */,
+				2146EEE82A14D70E00D4F33E /* Issue */,
+				2146EEE72A14D6F100D4F33E /* Tag */,
+				2146EEE62A14D6E000D4F33E /* Project */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -1126,17 +1162,21 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2146EEE52A14D6C900D4F33E /* EditProjectSheet.swift in Sources */,
 				21C361E72A1212BE00D47841 /* AddIssueViewErrorUITests.swift in Sources */,
 				2122A7E22A10D8C200F51BA7 /* TagsEditViewUITests.swift in Sources */,
 				21C361EE2A12374500D47841 /* AddProjectSheet.swift in Sources */,
 				2122A7D82A107D6200F51BA7 /* AddProjectViewUITests.swift in Sources */,
 				21317D682A13490F00CE0B1D /* EditProjectViewUITests.swift in Sources */,
 				21C361F22A12377A00D47841 /* Project.swift in Sources */,
+				2146EEDF2A14D68F00D4F33E /* ProjectMenu.swift in Sources */,
 				2122A7DA2A10863F00F51BA7 /* AddProjectViewErrorUITests.swift in Sources */,
+				2146EEE32A14D6BB00D4F33E /* TagEditSheet.swift in Sources */,
 				212006212A0E4B9B0018BC3D /* HomeViewUITests.swift in Sources */,
 				2146EEDD2A14816900D4F33E /* EditProjectViewErrrorUITests.swift in Sources */,
 				2122A7E52A10DBFF00F51BA7 /* AddIssueViewUITests.swift in Sources */,
 				21C361EC2A12369400D47841 /* IssueTrackerUIElement.swift in Sources */,
+				2146EEE12A14D6A300D4F33E /* TagsEditSheet.swift in Sources */,
 				21C361F02A12376D00D47841 /* AddIssueSheet.swift in Sources */,
 				21C361EA2A12365F00D47841 /* IssueTrackerApp.swift in Sources */,
 			);
