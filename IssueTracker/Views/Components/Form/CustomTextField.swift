@@ -34,14 +34,17 @@ struct CustomTextField: View {
             }
             HStack {
                 TextField(title, text: $text)
-                    .textFieldStyle(.roundedBorder)
                     .focused($isFocused)
                 if textIsEmpty && isMandatory {
-                    Text("*")
+                    Image(systemName: "asterisk")
+                        .font(.footnote)
                         .foregroundColor(.red)
                 }
             }
         }
+        .padding()
+        .background(Color(uiColor: UIColor.systemGray6))
+        .cornerRadius(6)
         .onAppear {
             validate()
         }

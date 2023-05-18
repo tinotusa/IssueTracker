@@ -7,6 +7,21 @@
 
 import SwiftUI
 import Combine
+import PhotosUI
+
+struct LabeledForm<Content: View>: View {
+    let title: LocalizedStringKey
+    let content: () -> Content
+    
+    var body: some View {
+        VStack(alignment: .leading) {
+            Text(title)
+                .font(.footnote.smallCaps())
+                .foregroundColor(.secondary)
+            content()
+        }
+    }
+}
 
 struct AddProjectView: View {
     @State private var errorWrapper: ErrorWrapper?
@@ -18,49 +33,48 @@ struct AddProjectView: View {
     var body: some View {
         NavigationStack {
             ScrollView {
-                Section("Project name") {
-                    CustomTextField("Project name",text: $projectData.name)
-                        .isMandatoryFormField(true)
-                        .textFieldInputValidationHandler(ProjectProperties.validateProjectName)
-                        .accessibilityIdentifier("AddProjectView-projectName")
+                VStack(alignment: .leading) {
+                    LabeledForm(title: "Name") {
+                        CustomTextField("Project name",text: $projectData.name)
+                            .isMandatoryFormField(true)
+                            .textFieldInputValidationHandler(ProjectProperties.validateProjectName)
+                            .accessibilityIdentifier("AddProjectView-projectName")
+                    }
+                    
+                    LabeledForm(title: "Start date") {
+                        DatePicker(
+                            "Start date",
+                            selection: $projectData.startDate,
+                            in: ...Date(),
+                            displayedComponents: [.date]
+                        )
+                        .datePickerStyle(.graphical)
+                        .listRowSeparator(.hidden)
+                        .listRowBackground(Color.customBackground)
+                        .labelsHidden()
+                        .accessibilityIdentifier("datePicker")
+                    }
                 }
-                .listRowSeparator(.hidden)
-                .listRowBackground(Color.customBackground)
-                
-                Section("Start date") {
-                    DatePicker(
-                        "Start date",
-                        selection: $projectData.startDate,
-                        in: ...Date(),
-                        displayedComponents: [.date]
-                    )
-                    .datePickerStyle(.graphical)
-                    .listRowSeparator(.hidden)
-                    .listRowBackground(Color.customBackground)
-                    .labelsHidden()
-                    .accessibilityIdentifier("datePicker")
+                .padding()
+                .navigationTitle("New project")
+                .accessibilityIdentifier("projectForm")
+                .sheet(item: $errorWrapper) { error in
+                    ErrorView(errorWrapper: error)
                 }
-            }
-            .accessibilityIdentifier("projectForm")
-            .listStyle(.plain)
-            .sheet(item: $errorWrapper) { error in
-                ErrorView(errorWrapper: error)
-            }
-            .background(Color.customBackground)
-            .toolbarBackground(Color.customBackground)
-            .navigationTitle("New project")
-            .toolbar {
-                ToolbarItem(placement: .cancellationAction) {
-                    Button("Close", action: dismiss.callAsFunction)
-                        .accessibilityIdentifier("AddProjectView-closeButton")
-                }
-                ToolbarItem(placement: .confirmationAction) {
-                    Button("Add project", action: addProject)
-                        .disabled(!projectData.isValidForm())
-                        .accessibilityIdentifier("AddProjectView-addProjectToolbarButton")
+                .toolbar {
+                    ToolbarItem(placement: .cancellationAction) {
+                        Button("Close", action: dismiss.callAsFunction)
+                            .accessibilityIdentifier("AddProjectView-closeButton")
+                    }
+                    ToolbarItem(placement: .confirmationAction) {
+                        Button("Add", action: addProject)
+                            .disabled(!projectData.isValidForm())
+                            .accessibilityIdentifier("AddProjectView-addProjectToolbarButton")
+                    }
                 }
             }
         }
+        .interactiveDismissDisabled(projectData.isValidForm())
     }
 }
 
